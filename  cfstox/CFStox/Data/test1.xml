@@ -1,0 +1,12 @@
+
+		
+		<chart palette="1" numPDivLines="5" caption="XYZ - 3 Months" numberPrefix="$" 
+		bearBorderColor="E33C3C" bearFillColor="E33C3C" bullBorderColor="1F3165" PYAxisName="Price" 
+			VYAxisName="Volume (In Millions)">
+		<categories>
+<category label="2006" x="1"/>
+<category label="Feb" x="31"/></categories>
+		<dataset><set open="24.6" high="25.24" low="24.58" close="25.19" x="1" /></dataset>
+		</chart>
+		
+	
