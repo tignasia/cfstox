@@ -5,6 +5,13 @@ Analyses selected stocks and gives buy/sell orders.
 3. issue buy sell orders and limits and alert settings 
 4. dont get carried away, just make version .01 work 
 
+at very least: calculate pivot points
+add generated indicators to grid
+
+1/19/10
+give list of entry point (entry stops) and stop loss points for given list
+
+
 future enhancements:
 store data in Derby
 get associated options data

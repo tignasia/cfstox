@@ -1,76 +1,67 @@
-<!--- get the data  --->
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>FusionCharts Free Documentation</title>
-<link rel="stylesheet" href="FusionChartsFree/Contents/Style.css" type="text/css" /> 
-<script language="JavaScript" src="FusionChartsFree/JSClass/FusionCharts.js"></script>
-</head>
-<cfsilent>
-<cfset httpService = createObject("component","cfstox.model.http")>
-<cfset results = httpService.gethttp(sym:"CSX") />
-<cfset application.XMLGenerator = createobject("component","model.XMLGenerator").init() />
-<cfset application.Indicators 	= createobject("component","model.Indicators").init() />
-<cfset application.Utility 	= createobject("component","model.Utility").init() />
-<!--- <cfloop query="results">
-	<cfset results[ "date" ][ results.currentRow ] = (results.date * 1) />
-</cfloop> 
-<cfdump var="#results#"> --->
+<!--- this generates an excel spreadsheet of historical technical indicators  --->
+<script language="javascript" type="text/javascript" src="niceforms.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="niceforms-default.css" />
+<style type="text/css">
+#form1 fieldset {
+	height: 20em;
+	width: 11em;
+	border: 0;
+	margin: 0;
+	padding: 1em;
+	float: left;
+	}
+</style>
+<div>
+<form action="controllers/controller.cfm" method="post" id="form1">
+<fieldset title="historical data"  ><legend>Historical Data</legend>
+<input type="hidden" id="action" name"action" value="historical">
+<label for="StartDate" style="width=30%" >Start Date:</label>
+<input type="text" id="StartDate" value="1/1/2010">
+<label for="EndDate" style="width=30%">End Date:</label>
+<cfoutput><input type="text" id="StartDate" value="#dateformat(now(),"mm/dd/yyyy")#"></cfoutput>
+<label for="Symbol" style="width=30%">Symbol:</label>
+<input type="text" name="Symbol" id="Symbol" value="">
+</fieldset>
 
-<cfquery   dbtype="query"  name="yahoo" >
-select * from results order by DateOne
-</cfquery>
+<fieldset>
+<label for="input1" style="width=30%">Symbol:</label>
+<input type="text" name="input1" id="input1" value="">
+<label for="input2" style="width=30%">Symbol:</label>
+<input type="text" name="input2" id="input2" value="">
+</fieldset>
 
-<!--- 
-<cfdump var="#yahoo#"> --->
-<cfset aMomentum = arrayNew(1) />
-<cfset period = 14 />
-<cfset i = 1 />
-<cfloop query="yahoo">
-	<!--- <cfoutput>#yahoo.close# #yahoo.dateone#</cfoutput> --->
-	<cfif i GT period>
-		<cfset momentum = (yahoo.close - yahoo.close[(yahoo.currentrow - period) ] ) />
-		<cfset aMomentum[i] = round(momentum*100)/100>
-		<!--- <cfoutput>#momentum# <br></cfoutput> --->
-	</cfif>
-	<cfset i = i + 1 />
-</cfloop>
-<cfset queryAddColumn(yahoo,"momentum",'Decimal',aMomentum) >
-</cfsilent>
-<cfform format="flash">
-<cfgrid  format="flash" name="myGrid" query="yahoo" rowheaders="false" height="125" autowidth="true">
-	<!--- loop over the columns and populate the columns! --->
-	<!--- <cfloop from="1" to="#ArrayLen(thisTag.columns)#" index="x">
-	<cfif NOT thisTag.columns[x].visible>
-		<cfgridcolumn name="#thisTag.columns[x].columnName#" header="#thisTag.columns[x].Header#" display="no">
-	<cfelseif IsNumeric(thisTag.columns[x].width)>
-		<cfgridcolumn name="#thisTag.columns[x].columnName#" header="#thisTag.columns[x].Header#" width="#thisTag.columns[x].width#">
-	<cfelse>
-		<cfgridcolumn name="#thisTag.columns[x].columnName#" header="#thisTag.columns[x].Header#">
-	</cfif>
-	</cfloop> --->
-</cfgrid>
-</cfform>
+<input type="submit" name="submit" id="submit" value="Submit" />
 
-<cfset xmldata = application.XMLGenerator.GenerateXML(name:"CSX",symbol:"CSX",qrydata:yahoo)>
-		<div id="chartdiv" align="center"> 
-        FusionCharts. </div>
-      <script type="text/javascript">
-		   var chart = new FusionCharts("FusionChartsFree/Charts/FCF_Candlestick.swf", "ChartId", "800", "600");
-		  <cfoutput>chart.setDataXML("#xmldata#");</cfoutput>		   
-		   chart.render("chartdiv");
-		</script> 
-  <a href="Data/Col3DLineDY.xml" target="_blank"><img src="../Contents/Images/BtnViewXML.gif" alt="View XML for the above chart" width="75" height="25" border="0" /></a>
+</form>
+</div>
+<br style="clear:both">
+<div style ="width:100%">
+<!--- this generates a summary and trading action based on the chosen system with entry and stoploss targets --->
+<form action="controller/controller.cfm" method="post">
+<fieldset title="Summary"  style="float:left" >
+<legend>Summary</legend>
+<input type="hidden" id="action" name"action" value="summary">
+<label for="Symbol" style="width=30%">Symbol:</label>
+<input type="text" name="Symbol" id="Symbol" value="">
 
-<!--- QueryAddColumn(query, column-name[, datatype], array-name)
- --->
+<input type="submit" name="submit" id="submit" value="Submit" />
+</fieldset>
+</form>
+<!--- this runs a historical backtest of the chosen system  --->
+<form action="controller/controller.cfm" method="post">
+<fieldset title="Backtest"  >Backtest
+<input type="hidden" id="action" name"action" value="backtest">
+<label for="Symbol" style="width=30%">Symbol:</label>
+<input type="text" name="Symbol" id="Symbol" value="">
 
-<!--- display in datagrid --->
-
-
-<!--- get a specific row ---->
-
-<!--- loop and calculate momentum and ROC --->
-
-
-
-
+<input type="submit" name="submit" id="submit" value="Submit" />
+</fieldset>
+</form>
+</div>
+<!--- this runs a summary of trading actions and analysis against the watchlist --->
+<form action="controller/controller.cfm" method="post">
+<fieldset title="Watchlist"  >Watchlist
+<input type="hidden" id="action" name"action" value="watchlist">
+<input type="submit" name="submit" id="submit" value="Run watchlist analysis" />
+</fieldset>
+</form>

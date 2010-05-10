@@ -1,5 +1,17 @@
 <cfcomponent output="true">
+<!--- 
+Supported indicators:
+SMA - Smple moving average 
+DX - Directional Movement Index
+ADX - Average Directional Movement Index
+CCI - Commodity Channel Index
+Plus DI - Plus Directional Indicator
+Plus DM - Plus Directional Movement
 
+
+Coming Soon:
+
+ --->
 <cffunction  name="init">
 	<cfset paths[1] =  "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\model\ta-lib.jar">
 	<cfset server.loader = createObject("component", "cfstox.model.JavaLoader").init(paths) />
@@ -84,7 +96,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
    }
 --->
 
-<cffunction  name="sma" hint="array of prices you want to average ie high, low, close">
+<cffunction  name="sma" hint="simple moving average - array of prices you want to average ie high, low, close">
 	<!--- 
 		int outBegIdx;
 		int outNbElement;
@@ -132,7 +144,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	<cfreturn local.aryOut />
 </cffunction>
 
-<cffunction  name="DX">
+<cffunction  name="DX" hint="Directional ">
 	<cfargument name="startIdx" 	type="Numeric"  default="1" required="false"  hint="where to start calculating"/> 
 	<cfargument name="qryPrices" 	type="query" required="true"  hint="the array of prices to base on"/>
 	<cfargument name="endIdx" 		type="Numeric"  default="#arguments.qryprices.recordcount - 1#" required="false" />
@@ -196,7 +208,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	<cfreturn local.aryOut />
 </cffunction>
 
-<cffunction  name="ADX">
+<cffunction  name="CCI">
 	<cfargument name="startIdx" 	type="Numeric"  default="1" required="false"  hint="where to start calculating"/> 
 	<cfargument name="qryPrices" 	type="query" required="true"  hint="the array of prices to base on"/>
 	<cfargument name="endIdx" 		type="Numeric"  default="#arguments.qryprices.recordcount - 1#" required="false" />
@@ -211,10 +223,10 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	Minteger2  = server.loader.create("com.tictactec.ta.lib.MInteger"); 
  	Minteger1.value = 1;
 	Minteger2.value = 2;
-	/* dx(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)  */
+	/* cci(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)   */
 	</cfscript>
 	<!--- JavaCast("int", "1")) --->
-	<cfset variables.talib.ADX(arguments.startIdx,arguments.endIdx,strArrays.aryHigh, strArrays.aryLow, strArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,strArrays.aryOut) />
+	<cfset variables.talib.CCI(arguments.startIdx,arguments.endIdx,strArrays.aryHigh, strArrays.aryLow, strArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,strArrays.aryOut) />
 	<cfreturn local.aryOut />
 </cffunction>
 
@@ -262,7 +274,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	<cfreturn local.aryOut />
 </cffunction>
 
-<cffunction  name="PLUS_DM">
+<!--- <cffunction  name="PLUS_DM">
 	<cfargument name="startIdx" 	type="Numeric"  default="1" required="false"  hint="where to start calculating"/> 
 	<cfargument name="qryPrices" 	type="query" required="true"  hint="the array of prices to base on"/>
 	<cfargument name="endIdx" 		type="Numeric"  default="#arguments.qryprices.recordcount - 1#" required="false" />
@@ -282,7 +294,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	<!--- JavaCast("int", "1")) --->
 	<cfset variables.talib.PLUS_DI(arguments.startIdx,arguments.endIdx,strArrays.aryHigh, strArrays.aryLow, strArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,strArrays.aryOut) />
 	<cfreturn local.aryOut />
-</cffunction>
+</cffunction> --->
 
 <cffunction  name="ProcessArrays">
 	<cfargument name="qryPrices" 	type="query" required="true"  hint="the array of prices to base on"/>
@@ -306,6 +318,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	local.aryHigh 	= javacast("double[]",local.aryHigh);
 	local.aryLow 	= javacast("double[]",local.aryLow);
 	local.aryClose 	= javacast("double[]",local.aryClose);
+	</cfscript>
 	<cfreturn local />
 </cffunction>
 
