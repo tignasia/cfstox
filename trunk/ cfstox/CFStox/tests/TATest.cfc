@@ -43,7 +43,6 @@
 		</cfscript>
 	</cffunction>
 
-
 	<cffunction name="testSMA" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
@@ -78,6 +77,7 @@
 		debug(local.num); 
 		</cfscript>
 	</cffunction>
+
 	<cffunction name="testAdd2" access="public" returntype="void">
 		<cfscript>
 		var num = this.mycomp.add(1,1);

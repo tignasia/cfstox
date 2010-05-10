@@ -1,0 +1,8 @@
+<!--- This application uses Sean Corfield's FW/1 framework --->
+
+<cfcomponent extends="org.corfield.framework">  
+	<cfset this.name = "myfirstfw1app"> 
+
+
+</cfcomponent> 
+
