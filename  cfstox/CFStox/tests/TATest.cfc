@@ -13,7 +13,7 @@
 		<cfscript>
 		 this.TA = createObject("component","cfstox.model.TA").init();
 		 this.http = createObject("component","cfstox.model.http").init();
-		
+		this.indicators = createObject("component","cfstox.model.indicators").init();
 		</cfscript>
 	</cffunction>
 
@@ -77,13 +77,34 @@
 		debug(local.num); 
 		</cfscript>
 	</cffunction>
-
+	
+	<cffunction name="testGetIndicator" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data = this.http.gethttp("ABX");
+		/* local.num = this.TA.GetIndicator(Indicator:"SMA",qryPrices:local.data); */
+		/* local.num = this.TA.GetIndicator(Indicator:"DX",qryPrices:local.data); */
+		/* local.num = this.TA.GetIndicator(Indicator:"ADX",qryPrices:local.data);
+		local.num = this.TA.GetIndicator(Indicator:"CCI",qryPrices:local.data);
+		local.num = this.TA.GetIndicator(Indicator:"PLUS_DI",qryPrices:local.data);
+		local.num = this.TA.GetIndicator(Indicator:"PLUS_DM",qryPrices:local.data); */
+		local.num = this.TA.GetIndicator(Indicator:"linearReg",qryPrices:local.data);
+		local.num = this.TA.GetIndicator(Indicator:"linearRegAngle",qryPrices:local.data);
+		local.num = this.TA.GetIndicator(Indicator:"linearRegSlope",qryPrices:local.data);
+		local.num = this.TA.GetIndicator(Indicator:"linearRegIntercept",qryPrices:local.data);
+		local.num = this.TA.GetIndicator(Indicator:"Momentum",qryPrices:local.data);
+		local.num = this.TA.GetIndicator(Indicator:"RSI",qryPrices:local.data); 
+		debug(local.num);
+		
+		</cfscript>
+	</cffunction>
+	
 	<cffunction name="testAdd2" access="public" returntype="void">
 		<cfscript>
 		var num = this.mycomp.add(1,1);
 		addTrace("num == " & num );
 		assertEquals(num,3,"Intentionally failing so you can see what a failure looks like.");
-	</cfscript>
+		</cfscript>
 	</cffunction>
 
 	<cffunction name="testSomethingElse2" access="public" returntype="void">
@@ -119,6 +140,26 @@
 	</cfscript>
 	</cffunction>
 	
+	<cffunction name="testPercentChange" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.array = arrayNew(2);
+		local.data = this.http.gethttp("ABX");
+		debug(local.data);
+		</cfscript>
+		<cfloop query="local.data">
+			<cfset local.array[local.data.CurrentRow][1] = local.data.dateone />
+   			<cfset local.array[local.data.CurrentRow][2] = local.data.open />
+			<cfset local.array[local.data.CurrentRow][3] = local.data.high />
+			<cfset local.array[local.data.CurrentRow][4] = local.data.low />
+			<cfset local.array[local.data.CurrentRow][5] = local.data.close />
+		</cfloop>
+		<cfscript>	
+		local.num = this.Indicators.PercentChange(values:local.array, period:5); 
+		debug(local.num); 
+		</cfscript>
+	</cffunction>
+
 	<!--- End Specific Test Cases --->
 
 	<cffunction name="tearDown" access="public" returntype="void">

@@ -10,7 +10,15 @@ Plus DM - Plus Directional Movement
 
 
 Coming Soon:
-
+MACD                Moving Average Convergence/Divergence
+MAX                 Highest value over a specified period
+MIN                 Lowest value over a specified period
+ROC                 Rate of change : ((price/prevPrice)-1)*100
+RSI                 Relative Strength Index
+STOCH               Stochastic
+BBANDS              Bollinger Bands
+Bar Counter - coldfusion
+Pivot Points - coldfusion
  --->
 <cffunction  name="init">
 	<cfset paths[1] =  "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\model\ta-lib.jar">
@@ -111,28 +119,26 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	<cfargument name="optInTimePeriod" type="Numeric"  default="2" required="false" hint="length of MA" />
 	<cfargument name="outBegIdx" type="Numeric"  default="1" required="false" />
 	<cfargument name="outNBElement" type="Numeric"  default="1" required="false" /> --->
-	<cfargument name="startIdx" type="Numeric"  default="1" required="false"  hint="where to start calculating"/> 
-	<cfargument name="aryPrices" type="Array" required="true"  hint="the array of prices to base on"/>
-	<cfargument name="endIdx" type="Numeric"  default="10" required="false" />
-	<cfargument name="maLen" type="Numeric"  default="3" required="false"  hint="must be greater than 1"/>
+	<cfargument name="startIdx" 	type="Numeric"  required="false" default="1" hint="where to start calculating"/> 
+	<cfargument name="aryPrices" 	type="Array" 	required="true"  hint="the array of prices to base on"/>
+	<cfargument name="endIdx" 		type="Numeric"  required="false" default="10" />
+	<cfargument name="maLen" 		type="Numeric"  required="false" default="3" hint="must be greater than 1"/>
 	<cfargument name="optInTimePeriod" type="Numeric"  default="1" required="false" hint="length of MA" />
-	<cfargument name="outBegIdx" type="Numeric"  default="1" required="false" />
+	<cfargument name="outBegIdx" 	type="Numeric"  default="1" required="false" />
 	<cfargument name="outNBElement" type="Numeric"  default="1" required="false" />
-	
 	<cfscript>
-		
 	var local = structNew();
 	local.aryOut = ArrayNew(1);
 	For (i=1;i LTE arguments.aryPrices.size(); i=i+1)
           local.aryOut[i] = 0;
     /* return local.aryout; */
-    arguments.startIdx = javacast("int",arguments.startIdx);
-    arguments.endIdx = javacast("int",arguments.endIdx);
-    arguments.outBegIdx = javacast("int",arguments.outBegIdx);
-    arguments.outNBElement = javacast("int",arguments.outNBElement);
-    arguments.maLen = javacast("int",arguments.maLen);
-	local.aryOut = javacast("double[]",local.aryout);
-	local.aryPrices = javacast("double[]",arguments.aryPrices);
+    arguments.startIdx 		= javacast("int",arguments.startIdx);
+    arguments.endIdx 		= javacast("int",arguments.endIdx);
+    arguments.outBegIdx 	= javacast("int",arguments.outBegIdx);
+    arguments.outNBElement 	= javacast("int",arguments.outNBElement);
+    arguments.maLen 		= javacast("int",arguments.maLen);
+	local.aryOut 			= javacast("double[]",local.aryout);
+	local.aryPrices 		= javacast("double[]",arguments.aryPrices);
 	Minteger1  = server.loader.create("com.tictactec.ta.lib.MInteger"); 
 	Minteger2  = server.loader.create("com.tictactec.ta.lib.MInteger"); 
 	Minteger1.value = 1;
@@ -204,7 +210,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	/* dx(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)  */
 	</cfscript>
 	<!--- JavaCast("int", "1")) --->
-	<cfset variables.talib.ADX(arguments.startIdx,arguments.endIdx,strArrays.aryHigh, strArrays.aryLow, strArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,strArrays.aryOut) />
+	<cfset variables.talib.ADX(arguments.startIdx,arguments.endIdx,srtArrays.aryHigh, srtArrays.aryLow, srtArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,srtArrays.aryOut) />
 	<cfreturn local.aryOut />
 </cffunction>
 
@@ -226,8 +232,97 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	/* cci(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)   */
 	</cfscript>
 	<!--- JavaCast("int", "1")) --->
-	<cfset variables.talib.CCI(arguments.startIdx,arguments.endIdx,strArrays.aryHigh, strArrays.aryLow, strArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,strArrays.aryOut) />
-	<cfreturn local.aryOut />
+	<cfset variables.talib.CCI(arguments.startIdx, arguments.endIdx, srtArrays.aryHigh, srtArrays.aryLow, srtArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,srtArrays.aryOut) />
+	<cfreturn srtArrays.aryOut />
+</cffunction>
+
+<cffunction  name="GetIndicator">
+	<!--- data should be passed into the function  --->
+	<cfargument name="Indicator" 	type="String"  required="true" />
+	<cfargument name="startIdx" 	type="Numeric"  default="1" required="false"  hint="where to start calculating"/> 
+	<cfargument name="qryPrices" 	type="query" required="true"  hint="the array of prices to base on"/>
+	<cfargument name="endIdx" 		type="Numeric"  default="#arguments.qryprices.recordcount - 1#" required="false" />
+	<cfargument name="optInTimePeriod" type="Numeric"  default="14" required="false" hint="length of MA" />
+	<cfargument name="outBegIdx" 	type="Numeric"  default="1" required="false" />
+	<cfargument name="outNBElement" type="Numeric"  default="1" required="false" />
+	
+	<cfscript>
+	var local = structNew();
+	local.srtArrays = ProcessArrays(qryPrices: arguments.qryPrices);
+	/* dump(srtArrays); */
+	DoJavaCast(arguments);
+    Minteger1  = server.loader.create("com.tictactec.ta.lib.MInteger"); 
+	Minteger2  = server.loader.create("com.tictactec.ta.lib.MInteger"); 
+ 	Minteger1.value = 1;
+	Minteger2.value = 2;
+	/* 	linearReg(int startIdx, int endIdx, float[] inReal, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)    */
+	</cfscript>
+	<cftry>
+	<cfswitch expression="#arguments.Indicator#">
+		<cfcase value="SMA">
+			<!--- sma(int startIdx, int endIdx, double[] inReal, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)   --->
+			<cfset variables.talib.sma(arguments.startIdx,arguments.endIdx, local.srtArrays.aryClose, arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+		</cfcase>
+		<cfcase value="DX">
+			<!--- 	dx(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)   --->
+			<cfset variables.talib.DX(arguments.startIdx,arguments.endIdx,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+		</cfcase>
+		<cfcase value="ADX">
+			<!--- adx(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)   --->
+			<cfset variables.talib.ADX(arguments.startIdx,arguments.endIdx,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+		</cfcase>
+		<cfcase value="CCI">
+			<!--- cci(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)   --->
+			<cfset variables.talib.CCI(arguments.startIdx, arguments.endIdx, local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+		</cfcase>
+		<cfcase value="PLUS_DI">
+			<!--- plusDI(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)   --->
+			<cfset variables.talib.plusDI(arguments.startIdx,arguments.endIdx,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+		</cfcase>
+		<cfcase value="PLUS_DM">
+			<!--- plusDM(int startIdx, int endIdx, double[] inHigh, double[] inLow, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)   --->
+			<cfset variables.talib.plusDM(arguments.startIdx,arguments.endIdx,local.srtArrays.aryHigh, local.srtArrays.aryLow, arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+		</cfcase>
+		<cfcase value="linearReg">
+			<cfset variables.talib.linearReg(arguments.startIdx,arguments.endIdx, local.srtArrays.aryClose, arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+		</cfcase>
+		<cfcase value="linearRegAngle">
+			<cfset variables.talib.linearRegAngle(arguments.startIdx,arguments.endIdx, local.srtArrays.aryClose, arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+		</cfcase>
+		<cfcase value="linearRegSlope">
+			<cfset variables.talib.linearRegSlope(arguments.startIdx,arguments.endIdx, local.srtArrays.aryClose, arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+		</cfcase>
+		<cfcase value="linearRegIntercept">
+			<cfset variables.talib.linearRegIntercept(arguments.startIdx,arguments.endIdx, local.srtArrays.aryClose, arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+		</cfcase>
+		<cfcase value="Momentum">
+			<!--- mom(int startIdx, int endIdx, double[] inReal, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)  --->
+			<cfset variables.talib.mom(arguments.startIdx,arguments.endIdx, local.srtArrays.aryClose, arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+		</cfcase>
+		<cfcase value="RSI">
+			<!--- rsi(int startIdx, int endIdx, double[] inReal, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal) --->
+			<cfset variables.talib.rsi(arguments.startIdx,arguments.endIdx, local.srtArrays.aryClose, arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+		</cfcase>
+		<cfdefaultcase>
+			<cfthrow type="Application" message="Invalid indicator type">
+		</cfdefaultcase>
+	</cfswitch>
+	<cfcatch type="application">
+	   <h3>Invalid indicator type passed to GetIndicator</h3>
+	</cfcatch>
+	</cftry>
+	
+	<cfset foobar = duplicate(local.srtArrays.aryOut) />
+	<cfset bar = ArraytoList(foobar) >
+	<cfset foo = ListToArray(bar, ",", true) >
+	<cfloop from="1" to="#arguments.optInTimePeriod#" index="i">
+		<cfset ArrayPrepend(foo,"0")>
+	</cfloop>  
+
+	<cfloop from="1" to="#arguments.optInTimePeriod#" index="i">
+		<cfset ArrayDeleteAt(foo,foo.size() )>
+	</cfloop>  
+	<cfreturn  foo />
 </cffunction>
 
 <cffunction  name="PLUS_DI">
@@ -240,6 +335,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	<cfscript>
 	var local = structNew();
 	srtArrays = ProcessArrays(qryPrices: arguments.qryPrices);
+	dump(local.srtArrays);
 	DoJavaCast(arguments);
     Minteger1  = server.loader.create("com.tictactec.ta.lib.MInteger"); 
 	Minteger2  = server.loader.create("com.tictactec.ta.lib.MInteger"); 
@@ -248,7 +344,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	/* dx(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)  */
 	</cfscript>
 	<!--- JavaCast("int", "1")) --->
-	<cfset variables.talib.PLUS_DI(arguments.startIdx,arguments.endIdx,strArrays.aryHigh, strArrays.aryLow, strArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,strArrays.aryOut) />
+	<cfset variables.talib.PLUS_DI(arguments.startIdx,arguments.endIdx,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
 	<cfreturn local.aryOut />
 </cffunction>
 
@@ -270,7 +366,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	/* dx(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)  */
 	</cfscript>
 	<!--- JavaCast("int", "1")) --->
-	<cfset variables.talib.PLUS_DI(arguments.startIdx,arguments.endIdx,strArrays.aryHigh, strArrays.aryLow, strArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,strArrays.aryOut) />
+	<cfset variables.talib.PLUS_DM(arguments.startIdx,arguments.endIdx,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
 	<cfreturn local.aryOut />
 </cffunction>
 
@@ -298,26 +394,31 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 
 <cffunction  name="ProcessArrays">
 	<cfargument name="qryPrices" 	type="query" required="true"  hint="the array of prices to base on"/>
+	<!--- <cfargument name="offset" 		type="query" required="true"  hint="the array of prices to base on"/> --->
 	<cfscript>
 	var local = structNew();
 	local.aryOut 	= ArrayNew(1);
+	local.aryOpen 	= ArrayNew(1);
 	local.aryHigh 	= ArrayNew(1);
 	local.aryLow 	= ArrayNew(1);
 	local.aryClose 	= ArrayNew(1);
+	
 	for (
-	 intRow = 1 ;
-	 intRow LTE qryPrices.RecordCount ;
-	 intRow = (intRow + 1) )
+	 local.intRow = 1 ;
+	 local.intRow LTE qryPrices.RecordCount ;
+	 local.intRow = (local.intRow + 1) )
 	 {
-		local.aryOut[intRow]	= 0;
-		local.aryHigh[introw]	= arguments.qryPrices[high][introw]; 
-		local.aryLow[introw]	= arguments.qryPrices[low][introw];
-		local.aryClose[introw]	= arguments.qryPrices[close][introw];
+		local.aryOut[local.introw]	= 0;
+		local.aryOpen[local.introw]	= arguments.qryPrices['open'][local.introw]; 
+		local.aryHigh[local.introw]	= arguments.qryPrices['high'][local.introw]; 
+		local.aryLow[local.introw]	= arguments.qryPrices['low'][local.introw];
+		local.aryClose[local.introw]	= arguments.qryPrices['close'][local.introw];
 	}
-    local.aryOut	= javacast("double[]",local.aryout);
 	local.aryHigh 	= javacast("double[]",local.aryHigh);
 	local.aryLow 	= javacast("double[]",local.aryLow);
 	local.aryClose 	= javacast("double[]",local.aryClose);
+	local.aryOut	= javacast("double[]",local.aryout);
+	local.aryOpen 	= javacast("double[]",local.aryOpen);
 	</cfscript>
 	<cfreturn local />
 </cffunction>
@@ -332,7 +433,18 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
     arguments.argStruct.optInTimePeriod = javacast("int",arguments.argStruct.optInTimePeriod);
     </cfscript>
 </cffunction>
+
+<cffunction  name="Dump">
+	<cfargument name="target" type="Any" required="true"  hint="the object to be dumped"/>
+	<cfargument name="abort"  type="Boolean" required="false" default="false" hint="if true, performs cfabort" />
+	<cfargument name="theLabel"  type="String" required="false" default="cfdump label" />
 	
+	<cfdump label="#arguments.theLabel#" var="#arguments.target#" />
+	<cfif arguments.abort>
+		<cfabort>
+	</cfif>
+	<cfreturn />
+</cffunction>
 <!--- 
 
 AD                  Chaikin A/D Line
