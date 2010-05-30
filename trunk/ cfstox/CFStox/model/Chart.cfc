@@ -25,7 +25,7 @@
 	var local = structNew();
 	local.crlf = chr(10) & chr(13); 
 	local.data = "";
-	local.header = '<chart palette="1" numPDivLines="5" caption="XYZ - 3 Months" numberPrefix="$" 
+	local.header = '<chart palette="1" numPDivLines="5" caption="XYZ - 6 Months" numberPrefix="$" 
 		bearBorderColor="E33C3C" bearFillColor="E33C3C" bullBorderColor="1F3165" PYAxisName="Price" 
 			VYAxisName="Volume (In Millions)">';
 	local.categories = '<categories>';
@@ -48,4 +48,31 @@
 	<cfreturn chartoutput />
 	</cffunction>
 
+<cffunction name="writeXMLfile" access="public" output="false">
+	<cfscript>
+	var local = structNew();
+	local.crlf = chr(10) & chr(13); 
+	local.data = "";
+	local.header = '<chart palette="1" numPDivLines="5" caption="XYZ - 6 Months" numberPrefix="$" 
+		bearBorderColor="E33C3C" bearFillColor="E33C3C" bullBorderColor="1F3165" PYAxisName="Price" 
+			VYAxisName="Volume (In Millions)">';
+	local.categories = '<categories>';
+	local.categories = local.categories & #local.crlf# & '<category label="2006" x="1"/>' 
+	& #local.crlf# & '<category label="Feb" x="31"/>' ;
+	local.categories = local.categories & & #local.crlf# & '</categories>';
+	local.data = local.data & "<dataset>" & #local.crlf#;
+	local.data = local.data & '<set open="24.6" high="25.24" low="24.58" close="25.19" x="1" />' & #local.crlf#;
+	local.data = local.data & "</dataset>" & #local.crlf#;
+	local.footer = "</chart>";
+	</cfscript>
+	<cfsavecontent  variable="chartoutput" >
+		<cfoutput>
+		#local.header#
+		#local.categories#
+		#local.data#
+		#local.footer#
+		</cfoutput>
+	</cfsavecontent>
+	<cfreturn chartoutput />
+	</cffunction>
 </cfcomponent>
