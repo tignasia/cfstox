@@ -24,11 +24,13 @@ Pivot Points - coldfusion
 	<cfset paths[1] =  "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\model\ta-lib.jar">
 	<cfset server.loader = createObject("component", "cfstox.model.JavaLoader").init(paths) />
 	<cfset talib  = server.loader.create("com.tictactec.ta.lib.Core") />
-	<cfset Minteger1  = server.loader.create("com.tictactec.ta.lib.MInteger") />
-	<cfset Minteger2  = server.loader.create("com.tictactec.ta.lib.MInteger") />
+	<cfset Minteger1  	= server.loader.create("com.tictactec.ta.lib.MInteger") />
+	<cfset Minteger2  	= server.loader.create("com.tictactec.ta.lib.MInteger") />
+	<cfset RetCode 		= server.loader.create("com.tictactec.ta.lib.RetCode") />
 	<cfdump var="#Minteger1#"> 
 	<cfdump var="#talib#">
 	<cfdump var="#this#">
+	<cfdump label="retcode" var="#retcode#" />
 	<cfset foo = getMetaData(this) />
 	<cfdump var="#this#">
 	<!--- <cfabort> --->
@@ -237,43 +239,54 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 </cffunction>
 
 <cffunction  name="GetIndicator">
-	<!--- data should be passed into the function  --->
+	<!--- data should be passed into the function oldest first --->
 	<cfargument name="Indicator" 	type="String"  required="true" />
-	<cfargument name="startIdx" 	type="Numeric"  default="1" required="false"  hint="where to start calculating"/> 
+	<cfargument name="startIdx" 	type="Numeric"  default="0" required="false"  hint="where to start calculating"/> 
 	<cfargument name="qryPrices" 	type="query" required="true"  hint="the array of prices to base on"/>
-	<cfargument name="endIdx" 		type="Numeric"  default="#arguments.qryprices.recordcount - 1#" required="false" />
+	<cfargument name="endIdx" 		type="Numeric"  default="#arguments.qryprices.recordcount-1#" required="false" />
 	<cfargument name="optInTimePeriod" type="Numeric"  default="14" required="false" hint="length of MA" />
 	<cfargument name="outBegIdx" 	type="Numeric"  default="1" required="false" />
 	<cfargument name="outNBElement" type="Numeric"  default="1" required="false" />
 	
 	<cfscript>
 	var local = structNew();
+	var returndata = Structnew();
 	local.srtArrays = ProcessArrays(qryPrices: arguments.qryPrices);
-	/* dump(srtArrays); */
+	/* arguments is a struct so it's passed by reference */
 	DoJavaCast(arguments);
     Minteger1  = server.loader.create("com.tictactec.ta.lib.MInteger"); 
 	Minteger2  = server.loader.create("com.tictactec.ta.lib.MInteger"); 
- 	Minteger1.value = 1;
-	Minteger2.value = 2;
+	Minteger1.value = 0;
+	Minteger2.value = 0;
+	
 	/* 	linearReg(int startIdx, int endIdx, float[] inReal, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)    */
 	</cfscript>
 	<cftry>
 	<cfswitch expression="#arguments.Indicator#">
 		<cfcase value="SMA">
 			<!--- sma(int startIdx, int endIdx, double[] inReal, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)   --->
-			<cfset variables.talib.sma(arguments.startIdx,arguments.endIdx, local.srtArrays.aryClose, arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+			<cfset local.result = variables.talib.sma(arguments.startIdx,arguments.endIdx, local.srtArrays.aryClose, arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+			<cfset local.lookback = variables.talib.smaLookback(arguments.optInTimePeriod) />
 		</cfcase>
 		<cfcase value="DX">
 			<!--- 	dx(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)   --->
-			<cfset variables.talib.DX(arguments.startIdx,arguments.endIdx,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+			<cfset local.result = variables.talib.DX(arguments.startIdx,arguments.endIdx,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+			<cfset local.lookback = variables.talib.dxLookback(arguments.optInTimePeriod) />
 		</cfcase>
 		<cfcase value="ADX">
 			<!--- adx(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)   --->
-			<cfset variables.talib.ADX(arguments.startIdx,arguments.endIdx,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+			<cfset local.result = variables.talib.ADX(arguments.startIdx,arguments.endIdx,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+			<cfset local.lookback = variables.talib.adxLookback(arguments.optInTimePeriod) />
+		</cfcase>
+		<cfcase value="ADXR">
+			<!--- adxr(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)    --->
+			<cfset local.result = variables.talib.ADXR(arguments.startIdx,arguments.endIdx,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+			<cfset local.lookback = variables.talib.adxrLookback(arguments.optInTimePeriod) />
 		</cfcase>
 		<cfcase value="CCI">
 			<!--- cci(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)   --->
-			<cfset variables.talib.CCI(arguments.startIdx, arguments.endIdx, local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+			<cfset local.result =  variables.talib.CCI(arguments.startIdx, arguments.endIdx, local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+			<cfset local.lookback = variables.talib.cciLookback(arguments.optInTimePeriod) />
 		</cfcase>
 		<cfcase value="PLUS_DI">
 			<!--- plusDI(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)   --->
@@ -301,7 +314,8 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 		</cfcase>
 		<cfcase value="RSI">
 			<!--- rsi(int startIdx, int endIdx, double[] inReal, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal) --->
-			<cfset variables.talib.rsi(arguments.startIdx,arguments.endIdx, local.srtArrays.aryClose, arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+			<cfset local.result = variables.talib.rsi(arguments.startIdx,arguments.endIdx, local.srtArrays.aryClose, arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+			<cfset local.lookback = variables.talib.rsiLookback(arguments.optInTimePeriod) />
 		</cfcase>
 		<cfdefaultcase>
 			<cfthrow type="Application" message="Invalid indicator type">
@@ -311,17 +325,24 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	   <h3>Invalid indicator type passed to GetIndicator</h3>
 	</cfcatch>
 	</cftry>
-	
+	<cfset returndata.outBegIdx = MInteger1.value />
+	<cfset returndata.outNBElement = MInteger2.value />
 	<cfset foobar = duplicate(local.srtArrays.aryOut) />
 	<cfset bar = ArraytoList(foobar) >
 	<cfset foo = ListToArray(bar, ",", true) >
-	<cfloop from="1" to="#arguments.optInTimePeriod#" index="i">
+	<!--- 'for loop' should stop prior to outNbElement, not dataLen --->
+	<!--- outNBElement is the numer of the last cell containing data --->
+	<!--- outBegIndex is the number of starting rows to pad with zeros --->
+	
+	<cfloop from="1" to="#returndata.outBegIdx#" index="i">
 		<cfset ArrayPrepend(foo,"0")>
 	</cfloop>  
-
-	<cfloop from="1" to="#arguments.optInTimePeriod#" index="i">
+ 	<cfloop from="1" to="#returndata.outBegIdx#" index="i">
 		<cfset ArrayDeleteAt(foo,foo.size() )>
-	</cfloop>  
+	</cfloop> 
+	
+	<cfset returndata.outData = foo />
+	<cfset returndata.dataType = arguments.Indicator />
 	<cfreturn  foo />
 </cffunction>
 
