@@ -81,19 +81,30 @@
 	<cffunction name="testGetIndicator" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
-		local.data = this.http.gethttp("ABX");
-		/* local.num = this.TA.GetIndicator(Indicator:"SMA",qryPrices:local.data); */
-		/* local.num = this.TA.GetIndicator(Indicator:"DX",qryPrices:local.data); */
-		/* local.num = this.TA.GetIndicator(Indicator:"ADX",qryPrices:local.data);
-		local.num = this.TA.GetIndicator(Indicator:"CCI",qryPrices:local.data);
-		local.num = this.TA.GetIndicator(Indicator:"PLUS_DI",qryPrices:local.data);
-		local.num = this.TA.GetIndicator(Indicator:"PLUS_DM",qryPrices:local.data); */
-		local.num = this.TA.GetIndicator(Indicator:"linearReg",qryPrices:local.data);
-		local.num = this.TA.GetIndicator(Indicator:"linearRegAngle",qryPrices:local.data);
-		local.num = this.TA.GetIndicator(Indicator:"linearRegSlope",qryPrices:local.data);
-		local.num = this.TA.GetIndicator(Indicator:"linearRegIntercept",qryPrices:local.data);
-		local.num = this.TA.GetIndicator(Indicator:"Momentum",qryPrices:local.data);
-		local.num = this.TA.GetIndicator(Indicator:"RSI",qryPrices:local.data); 
+		var sortedData = "";
+		var dataraw = this.http.gethttp("SPY");
+		</cfscript>
+		<cfquery   dbtype="query"  name="sortedData" >
+			select * from dataraw order by DateOne asc
+		</cfquery>
+		<cfscript>
+		local.num = this.TA.GetIndicator(Indicator:"SMA",qryPrices:sortedData); 
+		debug(local.num);
+		
+		local.num = this.TA.GetIndicator(Indicator:"DX",qryPrices:sortedData); 
+		debug(local.num);
+		local.num = this.TA.GetIndicator(Indicator:"ADX",qryPrices:sortedData); 
+		debug(local.num);
+		local.num = this.TA.GetIndicator(Indicator:"CCI",qryPrices:sortedData); 
+		debug(local.num);
+		/* local.num = this.TA.GetIndicator(Indicator:"PLUS_DI",qryPrices:sortedData); */
+	/* 	local.num = this.TA.GetIndicator(Indicator:"PLUS_DM",qryPrices:sortedData);  */
+		/* local.num = this.TA.GetIndicator(Indicator:"linearReg",qryPrices:sortedData);
+		local.num = this.TA.GetIndicator(Indicator:"linearRegAngle",qryPrices:sortedData);
+		local.num = this.TA.GetIndicator(Indicator:"linearRegSlope",qryPrices:sortedData);
+		local.num = this.TA.GetIndicator(Indicator:"linearRegIntercept",qryPrices:sortedData); */
+		/* local.num = this.TA.GetIndicator(Indicator:"Momentum",qryPrices:sortedData); */
+		local.num = this.TA.GetIndicator(Indicator:"RSI",qryPrices:sortedData); 
 		debug(local.num);
 		
 		</cfscript>

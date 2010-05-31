@@ -15,7 +15,7 @@
 		local.qryrows = arguments.qrydata.recordcount;
 		//Convert data to XML and append
        	for(i=1;i<=local.qryrows;i++){   
-			local.strXML = local.strXML & "<set open='#qrydata['open'][i]#' high='#qrydata['high'][i]#' low='#qrydata['low'][i]#' close='#qrydata['close'][i]#' />";
+			local.strXML = local.strXML & "<set open='#qrydata['open'][i]#' high='#qrydata['high'][i]#' low='#qrydata['low'][i]#' close='#qrydata['close'][i]#' date='#qrydata['DateOne'][i]#' />";
        	}
            	//Close <graph> element
        	local.strXML = local.strXML & "</data></graph>";
