@@ -4,18 +4,28 @@
 <cfset session.controller = createObject("component","controller").init() />
 <cfset session.controllerLoaded = True />
 
-<!--- load the objects that we might need if not already loaded and set the loaded flag in session --->
-<cfset session.ta 		= createObject("component","cfstox.model.ta").init() />
-<cfset session.objects.ta = "ta">
-<cfset session.http 	= createObject("component","cfstox.model.http").init() />
-<cfset session.objects.http = "http">
-<cfset session.utility 	= createObject("component","cfstox.model.utility").init() />
-<cfset session.objects.utility = "utility">
+<!--- <cfset request.startmonth = month(form.startdate) />
+<cfset request.startday 	= day(form.startdate) />
+<cfset request.startyear 	= year(form.startdate) />
+
+<cfdump label="request" var="#request#">
+<cfabort> --->
 <!--- test the objects, if fail, report error and unload them--->
 <!--- figure out what we want to do --->
+<!--- <cfdump var="#session#">
+<cfdump var="#form#" >
+<cftry> --->
+<cfinvoke component="#session.controller#" method="#form.action#"  argumentcollection="#form#"  returnvariable="resultData" />
+<!--- 
+<cfcatch type="any">
+<cfdump var="#cfcatch#">
+</cfcatch>
+</cftry>
+<cfdump  label="resultdata" var="#resultdata#">
+<cfdump label="request" var="#request#">
+ --->
 
-<cfinvoke  component="controller" method="#form.action#"  argumentcollection="form"  returnvariable="resultData" />
-<cflocation url="views/#resultdata.view#.cfm">
+<cfinclude template="../views/#resultdata.view#.cfm" >
 
 <cffunction name="init" description="init" returntype="void">
 		<!--- <cfif NOT StructKeyExists("session.controllerLoaded") OR session.controllerLoaded IS FALSE >

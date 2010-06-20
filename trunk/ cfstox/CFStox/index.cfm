@@ -16,17 +16,17 @@
 <fieldset title="historical data"><legend>Historical Data</legend>
 <input type="hidden" id="action" name="action" value="historical">
 <label for="StartDate" style="width=30%" >Start Date:</label>
-<input type="text" id="StartDate" value="1/1/2010">
+<input type="text" name="StartDate" id="StartDate" value="1/1/2010">
 <label for="EndDate" style="width=30%">End Date:</label>
-<cfoutput><input type="text" id="StartDate" value="#dateformat(now(),"mm/dd/yyyy")#"></cfoutput>
+<cfoutput><input type="text" name="EndDate" id="EndDate" value="#dateformat(now(),"mm/dd/yyyy")#"></cfoutput>
 <label for="Symbol" style="width=30%">Symbol:</label>
 <input type="text" name="Symbol" id="Symbol" value="">
 </fieldset>
 
 <fieldset>
-<label for="input1" style="width=30%">Symbol:</label>
+<label for="input1" style="width=30%">PLaceholder:</label>
 <input type="text" name="input1" id="input1" value="">
-<label for="input2" style="width=30%">Symbol:</label>
+<label for="input2" style="width=30%">Placeholder:</label>
 <input type="text" name="input2" id="input2" value="">
 </fieldset>
 
