@@ -13,8 +13,8 @@
 </style>
 <div>
 <form action="controllers/controller.cfm" method="post" id="form1">
-<fieldset title="historical data"  ><legend>Historical Data</legend>
-<input type="hidden" id="action" name"action" value="historical">
+<fieldset title="historical data"><legend>Historical Data</legend>
+<input type="hidden" id="action" name="action" value="historical">
 <label for="StartDate" style="width=30%" >Start Date:</label>
 <input type="text" id="StartDate" value="1/1/2010">
 <label for="EndDate" style="width=30%">End Date:</label>
