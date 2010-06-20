@@ -23,6 +23,11 @@
 select * from results order by DateOne asc
 </cfquery>
 
+<cfset falseArray = ArrayNew(1) >
+
+<cfloop from="1" to="#yahoo.recordcount#" index="i">
+	<cfset falseArray[i] = "false">
+</cfloop>
 <cfset stockdata = duplicate(yahoo) />
 <cfset num = application.TA.GetIndicator(Indicator:"linearReg",qryPrices:yahoo) />
 <cfset queryAddColumn(stockdata,"linearReg",'Decimal',num) > 
@@ -40,6 +45,10 @@ select * from results order by DateOne asc
 <cfset queryAddColumn(stockdata,"ADX",'Decimal',num) >
 <cfset num = application.TA.GetIndicator(Indicator:"CCI",qryPrices:yahoo) />
 <cfset queryAddColumn(stockdata,"CCI",'Decimal',num) >
+<cfset queryAddColumn(stockdata,"TestResult","VarChar",falsearray) >
+<cfset LRSArray = application.TA.LRSDelta(qryData:stockdata) />
+<cfset queryAddColumn(stockdata,"LRSdelta","Decimal", LRSarray) >
+
 <!--- 
 <cfdump var="#yahoo#"> --->
 <!--- <cfset aMomentum = arrayNew(1) />

@@ -244,7 +244,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	<cfargument name="startIdx" 	type="Numeric"  default="0" required="false"  hint="where to start calculating"/> 
 	<cfargument name="qryPrices" 	type="query" required="true"  hint="the array of prices to base on"/>
 	<cfargument name="endIdx" 		type="Numeric"  default="#arguments.qryprices.recordcount-1#" required="false" />
-	<cfargument name="optInTimePeriod" type="Numeric"  default="14" required="false" hint="length of MA" />
+	<cfargument name="optInTimePeriod" type="Numeric"  default="5" required="false" hint="length of MA" />
 	<cfargument name="outBegIdx" 	type="Numeric"  default="1" required="false" />
 	<cfargument name="outNBElement" type="Numeric"  default="1" required="false" />
 	
@@ -389,6 +389,64 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	<!--- JavaCast("int", "1")) --->
 	<cfset variables.talib.PLUS_DM(arguments.startIdx,arguments.endIdx,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
 	<cfreturn local.aryOut />
+</cffunction>
+
+<cffunction name="LRSDelta" description="get change in LRSlope" access="public" displayname="" output="false" returntype="Array">
+	<cfargument name="qryData" required="true" />
+	<cfset var local = structNew() />
+	<cfset local.qryLen = arguments.qryData.recordcount />
+	<cfset local.dataArray = ArrayNew(1) />
+	<cfset local.dataArray[1] = 0 />
+	<cfloop from="2" to="#local.qryLen#" index="i">
+		<cfset local.dataArray[i] = arguments.qrydata.linearRegSlope[i-1]- arguments.qrydata.linearRegSlope[i]> 
+	</cfloop>
+	<cfreturn local.dataArray />
+</cffunction>
+
+<cffunction name="RVI" description="Relative Volatility Index" access="public" displayname="" output="false" returntype="Array">
+	<!--- 
+	The calculation is identical  to the Relative Strength Index (RSI) except that the RVI measures the 
+	standard deviation of daily price changes rather than absolute price changes.
+				   100
+    RSI = 100 - --------
+                 1 + RS
+    RS = Average Gain / Average Loss
+
+					100
+	RVI = 100 - ----------
+					1 + SD
+	Formula Parameters:      Default:
+    Period                              10
+    UpperBand                           80
+    LowerBand                           20
+
+	set d,u = 0
+	if close > close[1]
+		u = stddev(x1-9 prev (close) )
+		d = 0 
+	else
+		d = stddev(x1-9prev (close) )
+		u = 0
+		
+	upavg = upavg x (n-1) +up 
+			---------
+				n
+				 
+	dnavg = dnavg x (n-1) +dn
+				------
+				n
+				
+	RVIorg = 100 x (upavg / upavg - dnagv)
+	
+	RVI = (RVIorg(high) + RVIorg(lo) ) / 2  
+	Only act on buy signals when RVI > 50.
+    Only act on sell signals when RVI < 50.
+    If a buy signal is ignored, enter long if RVI > 60.
+    If a sell signal is ignored, enter short if RVI < 40.
+    Close a long position if RVI falls below 40.
+    Close a short position if RVI rises above 60.
+ --->	
+	<cfreturn />
 </cffunction>
 
 <!--- <cffunction  name="PLUS_DM">
