@@ -244,7 +244,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	<cfargument name="startIdx" 	type="Numeric"  default="0" required="false"  hint="where to start calculating"/> 
 	<cfargument name="qryPrices" 	type="query" required="true"  hint="the array of prices to base on"/>
 	<cfargument name="endIdx" 		type="Numeric"  default="#arguments.qryprices.recordcount-1#" required="false" />
-	<cfargument name="optInTimePeriod" type="Numeric"  default="5" required="false" hint="length of MA" />
+	<cfargument name="optInTimePeriod" type="Numeric"  default="14" required="false" hint="length of MA" />
 	<cfargument name="outBegIdx" 	type="Numeric"  default="1" required="false" />
 	<cfargument name="outNBElement" type="Numeric"  default="1" required="false" />
 	
@@ -470,6 +470,47 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	<cfset variables.talib.PLUS_DI(arguments.startIdx,arguments.endIdx,strArrays.aryHigh, strArrays.aryLow, strArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,strArrays.aryOut) />
 	<cfreturn local.aryOut />
 </cffunction> --->
+
+<cffunction name="convertHK" description="" access="public" displayname="" output="false" returntype="Query">
+	<cfargument name="qrydata"  required="true">
+	<cfset var local = structNew() />
+	
+	<cfset local.hkquery = duplicate(arguments.qrydata) >
+	<cfscript> 
+		local.qryrows = arguments.qrydata.recordcount;
+		local.open 	= arguments.qrydata['open'][1];
+		local.high 	= arguments.qrydata['high'][1];
+		local.low 	= arguments.qrydata['low'][1];
+		local.close = arguments.qrydata['close'][1];
+		local.openp	= arguments.qrydata['open'][1]; 
+		local.closep = arguments.qrydata['close'][1];
+		//Convert data to XML and append
+       	for(i=2;i<=local.qryrows;i++){ 
+       		local.close = (local.open + local.high + local.low + local.close) / 4;
+       		local.open 	= (local.closep + local.openp) / 2;
+       		local.high 	= max(local.high, local.openp);
+       		local.high 	= max(local.high, local.closep);
+       		local.low	= min(local.low, local.openp);
+       		local.low	= min(local.low, local.closep);
+			local.hkquery["open"][i] 	= local.open;
+			local.hkquery["high"][i]	= local.high;
+			local.hkquery["low"][i] 	= local.low;
+			local.hkquery["close"][i]	= local.close;
+
+       		local.openp		= local.open;
+       		local.closep	= local.close;
+       		local.highp		= local.high;
+       		local.lowp		= local.low;
+       		local.open		= qrydata['open'][i];
+       		local.close		= qrydata['close'][i];
+       		local.high		= qrydata['high'][i];
+       		local.low		= qrydata['low'][i];
+       	}
+       	
+			</cfscript>
+		
+	<cfreturn local.hkquery />
+</cffunction>
 
 <cffunction  name="ProcessArrays">
 	<cfargument name="qryPrices" 	type="query" required="true"  hint="the array of prices to base on"/>

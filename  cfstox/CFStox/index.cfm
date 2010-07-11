@@ -1,4 +1,7 @@
-<!--- this generates an excel spreadsheet of historical technical indicators  --->
+<!--- todo: confirm accuracy of technical indicators --->
+<!--- todo: generate entry/stop points/profit targets --->
+<!--- todo: develop backtesting system --->
+
 <script language="javascript" type="text/javascript" src="niceforms.js"></script>
 <link rel="stylesheet" type="text/css" media="all" href="niceforms-default.css" />
 <style type="text/css">
@@ -37,10 +40,10 @@
 <br style="clear:both">
 <div style ="width:100%">
 <!--- this generates a summary and trading action based on the chosen system with entry and stoploss targets --->
-<form action="controller/controller.cfm" method="post">
+<form action="controllers/controller.cfm" method="post" id="summary_form">
 <fieldset title="Summary"  style="float:left" >
 <legend>Summary</legend>
-<input type="hidden" id="action" name"action" value="summary">
+<input type="hidden" id="action" name="action" value="summary">
 <label for="Symbol" style="width=30%">Symbol:</label>
 <input type="text" name="Symbol" id="Symbol" value="">
 
@@ -48,20 +51,23 @@
 </fieldset>
 </form>
 <!--- this runs a historical backtest of the chosen system  --->
-<form action="controller/controller.cfm" method="post">
+<form action="controllers/controller.cfm" method="post" id="backtest_form">
 <fieldset title="Backtest"  >Backtest
-<input type="hidden" id="action" name"action" value="backtest">
+<input type="hidden" id="action" name="action" value="backtest">
 <label for="Symbol" style="width=30%">Symbol:</label>
 <input type="text" name="Symbol" id="Symbol" value="">
-
+<label for="StartDate" style="width=30%" >Start Date:</label>
+<input type="text" name="StartDate" id="StartDate" value="1/1/2010">
+<label for="EndDate" style="width=30%">End Date:</label>
+<cfoutput><input type="text" name="EndDate" id="EndDate" value="#dateformat(now(),"mm/dd/yyyy")#"></cfoutput>
 <input type="submit" name="submit" id="submit" value="Submit" />
 </fieldset>
 </form>
 </div>
 <!--- this runs a summary of trading actions and analysis against the watchlist --->
-<form action="controller/controller.cfm" method="post">
+<form action="controllers/controller.cfm" method="post" id="watchlist_form">
 <fieldset title="Watchlist"  >Watchlist
-<input type="hidden" id="action" name"action" value="watchlist">
+<input type="hidden" id="action" name="action" value="watchlist">
 <input type="submit" name="submit" id="submit" value="Run watchlist analysis" />
 </fieldset>
 </form>

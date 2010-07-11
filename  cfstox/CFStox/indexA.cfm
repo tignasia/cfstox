@@ -11,7 +11,7 @@
 <cfset application.Indicators 	= createobject("component","model.Indicators").init() />
 <cfset application.Utility 		= createobject("component","model.Utility").init() />
 <cfset application.TA 		= createobject("component","model.TA").init() />
-<!--- ToDo:add start and end dates --->
+
 <cfset results = httpService.gethttp(sym:"SPY") />
 
 <!--- <cfloop query="results">
