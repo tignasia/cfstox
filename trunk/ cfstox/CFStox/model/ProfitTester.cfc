@@ -107,6 +107,7 @@
 	 	return local;
 		</cfscript>
 	</cffunction>
+
 	<cffunction name="trace" description="" access="private" displayname="" output="false" returntype="void">
 		<cfargument  name="thingToTrace">
 		<cfargument  name="desc">
