@@ -23,17 +23,10 @@ Pivot Points - coldfusion
 <cffunction  name="init">
 	<cfset paths[1] =  "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\model\ta-lib.jar">
 	<cfset server.loader = createObject("component", "cfstox.model.JavaLoader").init(paths) />
-	<cfset talib  = server.loader.create("com.tictactec.ta.lib.Core") />
+	<cfset talib  		= server.loader.create("com.tictactec.ta.lib.Core") />
 	<cfset Minteger1  	= server.loader.create("com.tictactec.ta.lib.MInteger") />
 	<cfset Minteger2  	= server.loader.create("com.tictactec.ta.lib.MInteger") />
 	<cfset RetCode 		= server.loader.create("com.tictactec.ta.lib.RetCode") />
-	<cfdump var="#Minteger1#"> 
-	<cfdump var="#talib#">
-	<cfdump var="#this#">
-	<cfdump label="retcode" var="#retcode#" />
-	<cfset foo = getMetaData(this) />
-	<cfdump var="#this#">
-	<!--- <cfabort> --->
 	<cfreturn this />
 </cffunction>
 
@@ -492,10 +485,10 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
        		local.high 	= max(local.high, local.closep);
        		local.low	= min(local.low, local.openp);
        		local.low	= min(local.low, local.closep);
-			local.hkquery["open"][i] 	= local.open;
-			local.hkquery["high"][i]	= local.high;
-			local.hkquery["low"][i] 	= local.low;
-			local.hkquery["close"][i]	= local.close;
+			local.hkquery["open"][i-1] 	= local.open;
+			local.hkquery["high"][i-1]	= local.high;
+			local.hkquery["low"][i-1] 	= local.low;
+			local.hkquery["close"][i-1]	= local.close;
 
        		local.openp		= local.open;
        		local.closep	= local.close;

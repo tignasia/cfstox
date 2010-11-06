@@ -5,15 +5,24 @@
 	</cffunction>
 	
 	<cffunction name="historical" description="return historical data" access="public" displayname="" output="false" returntype="Struct">
-		<cfargument name="argumentData">
+		<!--- <cfargument name="argumentData"> --->
 		<cfargument name="hkconvert" required="false" default="false">  
 		<cfset var local = structnew() />
 		<cfset local.view = "historical">
 		<!--- get historical data ---->
-		<cfset local.results = session.objects.http.gethttp(sym:"#arguments.Symbol#",startdate:"#arguments.startdate#") />
+		<cfset local.results = session.objects.http.gethttp(sym:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") />
 		<cfquery   dbtype="query"  name="yahoo" >
 			select * from [local].results order by DateOne asc
 		</cfquery>
+		<cfquery   dbtype="query"  name="high1" >
+			select high from [local].results order by high asc
+		</cfquery>
+		<cfquery   dbtype="query"  name="low1" >
+			select low from [local].results order by low desc
+		</cfquery>
+		
+		<cfset local.high = high1.high />
+		<cfset local.low = low1.low />
 		<cfif arguments.hkconvert>
 			<cfset yahoo = session.objects.TA.convertHK(qrydata:yahoo) >
 		</cfif>
@@ -48,7 +57,7 @@
 		</cfquery>
 		
 		<cfset local.stockdata = stockdata />
-		<cfset local.xmldata = session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.symbol#",qrydata:yahoo,startdate:"#arguments.startdate#")>
+		<cfset local.xmldata = session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.symbol#",qrydata:yahoo,startdate:"#arguments.startdate#", high:local.high, low:local.low)>
 		<cfset local.xmldataHA = session.objects.XMLGenerator.GenerateXMLha(name:"#arguments.Symbol#",symbol:"#arguments.Symbol#",qrydata:yahoo,startdate:"#arguments.startdate#")>
 		<cfif arguments.hkconvert>
 			<cfset local.xmldataHA = local.xmldata >
@@ -65,23 +74,21 @@
 	</cffunction>
 
 	<cffunction name="backtest" description="provide results using given system" access="public" displayname="" output="false" returntype="struct">
-		<cfargument name="argumentData">
+		<!---- todo: add entry exit excel output ---->
+		<!--- <cfargument name="argumentData"> --->
 		<cfset var local = structnew() />
-		<!--- <cfdump label="arguments" var="#arguments#">
-		<cfabort> --->
 		<cfset local.returndata = historical(Symbol:arguments.symbol,startdate:arguments.startdate,enddate:arguments.enddate,hkconvert:"true") />
 		<cfset local.stockdata = local.returndata.stockdata />
 		<cfquery   dbtype="query"  name="stockdata" >
 			select * from [local].stockdata order by DateOne asc
 		</cfquery>
 		<cfset local.stockdata = stockdata>
-		<cfset local.stockdata = session.objects.system.System_hekin_ashi(queryData:local.stockdata )>
-		<!--- <cfdump label="returndata1" var="#local.returndata1#">
-		<cfabort>  --->
+		<cfset local.stockdata = session.objects.system.System_hekin_ashi(queryData:local.stockdata ) />
+	 	<cfset local.exceldata = session.objects.utility.genExcel(exceldata:local.stockdata) />  
+		<cfset session.objects.Utility.writedata(filepath:"excel", filename:"#arguments.symbol#.xls", filedata:local.exceldata) /> 
 		<cfset local.view = "backtest">
 		<cfset structAppend(request,local.returndata) />
 		<cfset structAppend(request,arguments) />
-		<!--- <cfset request.stockdata = local.returndata.stockdata /> --->
 		<cfset request.stockdata = local.stockdata /> 
 		<cfreturn local />
 	</cffunction>
@@ -89,7 +96,6 @@
 	<cffunction name="watchlist" description="run systems agains watchlist" access="public" displayname="" output="false" returntype="struct">
 		<cfargument name="argumentData">
 		<cfset var local = structnew() />
-		
 		<cfreturn this/>
 	</cffunction>
 
