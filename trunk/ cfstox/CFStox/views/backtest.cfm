@@ -14,7 +14,7 @@
 
 <div id="chartdiv" align="center"> Historical Data : #request.symbol# </div>
 <script type="text/javascript">
-  var chart = new FusionCharts("../FusionChartsFree/Charts/FCF_Candlestick.swf", "ChartId", "600", "400");
+  var chart = new FusionCharts("../FusionChartsFree/Charts/FCF_Candlestick.swf", "ChartId", "600", "400", "1");
   <cfoutput>chart.setDataXML("#request.xmldata#");</cfoutput>		   
    chart.render("chartdiv");
 </script> 

@@ -310,6 +310,12 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 			<cfset local.result = variables.talib.rsi(arguments.startIdx,arguments.endIdx, local.srtArrays.aryClose, arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
 			<cfset local.lookback = variables.talib.rsiLookback(arguments.optInTimePeriod) />
 		</cfcase>
+		<cfcase value="SAR">
+			<cfset local.acceleration = 0.02 />
+			<cfset local.optInMaximum = 0.2 />
+			<!--- (int startIdx, int endIdx, double[] inHigh, double[] inLow, double optInAcceleration, double optInMaximum, MInteger outBegIdx, MInteger outNBElement, double[] outReal)  --->
+			<cfset local.result = variables.talib.sar(arguments.startIdx,arguments.endIdx,local.srtArrays.aryHigh,local.srtArrays.aryLow,local.acceration,local.optInMaximum,Minteger1,Minteger2,local.srtArrays.aryOut) />
+		</cfcase>
 		<cfdefaultcase>
 			<cfthrow type="Application" message="Invalid indicator type">
 		</cfdefaultcase>
