@@ -1,6 +1,8 @@
 <cfcomponent  displayname="system" hint="I test systems using given data" output="false">
 
 <cffunction name="init" description="init method" access="public" displayname="init" output="false" returntype="system">
+	<!--- persistent variable to store trades and results --->
+	<cfset variables.TradeArray = ArrayNew(2) />
 	<cfreturn this/>
 </cffunction>
 
@@ -62,8 +64,8 @@ this function expects a single query row as an argument
 	<cfset local.longexit 	= 0 />
 	<cfset local.shortentry = 0 />
 	<cfset local.shortexit 	= 0 />
-	<cfset local.tlongp 	= 0 />
-	<cfset local.tshortp 	= 0 />
+	<cfset local.longprofit 	= 0 />
+	<cfset local.shortprofit 	= 0 />
 	<cfset queryAddColumn(arguments.QueryData, "hklong"  ,'cf_sql_varchar', arrayNew( 1 ) ) />
 	<cfset queryAddColumn(arguments.QueryData, "hkshort" ,'cf_sql_varchar', arrayNew( 1 ) ) />
 	<cfset queryAddColumn(arguments.QueryData, "longp"  ,'cf_sql_varchar', arrayNew( 1 ) ) />
@@ -74,6 +76,7 @@ this function expects a single query row as an argument
 	<cfset queryAddColumn(arguments.QueryData, "tshortp" ,'cf_sql_varchar', arrayNew( 1 ) ) />
 	<!--- typically our systems will look for crossovers, values greater than or less than something. --->
 	<cfloop  query="arguments.QueryData">
+		<cfset local.rowcount = arguments.QueryData.currentrow />
 		<cfif arguments.QueryData.currentrow GTE 3>
 			<!--- close greater than open; go long --->
 			<cfif arguments.QueryData.close GT arguments.QueryData.open>
@@ -115,12 +118,16 @@ this function expects a single query row as an argument
 	<cfreturn arguments.QueryData />
 </cffunction>
 
+<cffunction name="SystemHKBreakdown" description="catch drops in stocks" access="public" displayname="SystemHKBreakdown" output="false" returntype="Any">
+	<!--watch for two red candles and inside day ; set short entry at S1 pivot point of the two candles combined 
+	use reverse SAR as exit (give it more room the longer the move lasts) --->
+	<cfreturn />
+</cffunction>
+
 <cffunction name="TrackTrades" description="I extract the trades from the querydata" access="public" displayname="TrackTrades" output="false" returntype="Query">
 	<cfargument name="QueryData" required="true" />
 	<cfset var local = structNew() />
 	<cfset local.QueryData = duplicate(arguments.QueryData) />
-	<!--- <cfset local.qry_Trades  = queryAddColumn(local.queryData, CF_SQL_VARCHAR)> --->
-		
 	<cfloop index = "currentRow" from = "#local.QueryData.recordCount#" to = "1" step = "-1">
 		<!--- if no trade, delete row --->
 		<cfif local.QueryData.longe EQ "" AND local.QueryData.shorte EQ "" >
@@ -130,78 +137,48 @@ this function expects a single query row as an argument
 	<cfreturn local.QueryData />
 </cffunction>
 
-<cffunction name="NewHighLow" description="I find new highs and lows" access="public" displayname="" output="false" returntype="Array">
+<cffunction name="NewHL3" description="I find new highs and lows" access="public" displayname="" output="false" returntype="Array">
 	<cfargument name="queryData" required="true"  />
 	<cfset var local = Structnew() />
-	<cfset local.previousHighValue 	= 0 />
-	<cfset local.newHighDate 	= 0 />
-	<cfset local.previousLowValue 	= 1000 />
-	<cfset local.newLowDate 	= 0 />
-	<cfset local.previousNewHigh = 0 />
-	<cfset local.previousNewLow	 = 0 />
-	<cfset local.newHighFlag = true />
-	<cfset local.newLowFlag = true />
-	<cfset local.HLData 		= arrayNew(2) />
-	<cfset local.BreakOutData	= arrayNew(2) />
-	<cfset local.BreakOutFlag	= false />
-	<cfset local.arrayCounter 	= 1 />
-	<cfset local.breakoutCounter 	= 1 />
+	<cfset local.HLData = arrayNew(2) />
+	<cfset local.arrayCounter= 1 />
+	<cfset local.PrevHigh 	= 0 />
+	<cfset local.PrevLow 	= 10000 />
 	<!--- New High Low algorythm 
-	Set NewHighFlag and NewLowFlag
-	Use the first bar to establish new high and low starting values
-	loop over the data 
-	if the high is greater than currentHigh and NewLowFlag reset currentHigh and set NewHighFlag true and NewLowFlag false
-	if the low is less than currentLow and NewHighFlag reset currentLow and set NewLowFlag true and newHighFlag false
+	If low -2 > low-1 AND low -1 < low, save low -1 and date to array
+	If low -1 < last saved value, flag as breakdown 
+	If high -2 < high-1 AND high -1 > high, save high -1 and date to array
+	If high -1 > last saved value, flag as breakout 
 	--->
-	<cfloop  query="arguments.QueryData">
-		<cfif arguments.queryData.high GT local.previousHighValue >
-			<cfset local.newHighValue = arguments.queryData.high />
-			<cfset local.newHighDate = arguments.queryData.DateOne />
-			<cfset local.newHighFlag = true />
-			<!--- <cfif local.newLowFlag> --->
-				<cfset local.HLData[local.arrayCounter][1] = "high" />
-				<cfset local.HLData[local.arrayCounter][2] = local.newHighValue />
-				<cfset local.HLData[local.arrayCounter][3] = local.newHighDate />	
-				<cfset local.arrayCounter = local.arrayCounter + 1 />
-			<!--- </cfif> --->
-			<!--- check for breakout 
-				<cfif arguments.querydata.high GT local.previousNewHigh and NOT local.breakoutFlag>
-					<cfset local.breakoutdata[local.breakoutCounter][1] = "new high" />
-					<cfset local.breakoutdata[local.breakoutCounter][2] =  arguments.querydata.DateOne />
-					<cfset local.breakoutdata[local.breakoutCounter][3] =  arguments.querydata.high />
-					<cfset local.breakoutCounter = local.breakoutCounter + 1 />
-					<cfset local.breakoutFlag = true />
-					<cfset local.previousNewHigh = arguments.querydata.high />
-				<cfelse>
-					<cfset breakoutFlag = false />
-				</cfif>   --->
+	<cfloop  query="arguments.QueryData" startrow="3">
+		<cfset local.rowcount = arguments.QueryData.currentrow />
+		<cfif arguments.queryData.high[local.rowcount-2] LT arguments.queryData.high[local.rowcount-1] AND
+			arguments.queryData.high[local.rowcount-1] GT arguments.queryData.high  >
+			<cfset local.HLData[local.arrayCounter][1] = "high" />
+			<cfset local.HLData[local.arrayCounter][2] = arguments.queryData.high[local.rowcount-1] />
+			<cfset local.HLData[local.arrayCounter][3] = arguments.queryData.DateOne[local.rowcount-1] />	
+			<!--- check for breakout --->
+			<cfif arguments.queryData.high[local.rowcount-1] GT local.prevHigh >
+				<cfset local.HLData[local.arrayCounter][4] = "breakout" />
+			</cfif>
+		   <cfset local.prevHigh = arguments.queryData.high[local.rowcount-1] />
+		   <cfset local.arrayCounter = local.arrayCounter + 1 />
 		</cfif>
-		<cfif arguments.queryData.low GT local.previouslowValue >
-			<cfset local.newlowValue = arguments.queryData.low />
-			<cfset local.newlowDate = arguments.queryData.DateOne />
-			<cfset local.newlowFlag = true />
-			<!--- <cfif local.newLowFlag> --->
-				<cfset local.HLData[local.arrayCounter][1] = "low" />
-				<cfset local.HLData[local.arrayCounter][2] = local.newlowValue />
-				<cfset local.HLData[local.arrayCounter][3] = local.newlowDate />	
-				<cfset local.arrayCounter = local.arrayCounter + 1 />
-			<!--- </cfif> --->
-			<!--- check for breakout 
-				<cfif arguments.querydata.high GT local.previousNewHigh and NOT local.breakoutFlag>
-					<cfset local.breakoutdata[local.breakoutCounter][1] = "new high" />
-					<cfset local.breakoutdata[local.breakoutCounter][2] =  arguments.querydata.DateOne />
-					<cfset local.breakoutdata[local.breakoutCounter][3] =  arguments.querydata.high />
-					<cfset local.breakoutCounter = local.breakoutCounter + 1 />
-					<cfset local.breakoutFlag = true />
-					<cfset local.previousNewHigh = arguments.querydata.high />
-				<cfelse>
-					<cfset breakoutFlag = false />
-				</cfif>   --->
+		<cfif arguments.queryData.low[local.rowcount-2] GT arguments.queryData.low[local.rowcount-1] AND
+			arguments.queryData.low[local.rowcount-1] LT arguments.queryData.low  >
+			<cfset local.HLData[local.arrayCounter][1] = "low" />
+			<cfset local.HLData[local.arrayCounter][2] = arguments.queryData.low[local.rowcount-1] />
+			<cfset local.HLData[local.arrayCounter][3] = arguments.queryData.DateOne[local.rowcount-1] />	
+			<!--- check for breakout --->
+			<cfif arguments.queryData.low[local.rowcount-1] LT local.prevLow >
+				<cfset local.HLData[local.arrayCounter][4] = "breakdown" />
+			</cfif>
+		   <cfset local.prevLow = arguments.queryData.low[local.rowcount-1] />
+		   <cfset local.arrayCounter = local.arrayCounter + 1 />
 		</cfif>
-		<cfset local.previousHighValue = arguments.queryData.high />
-		<cfset local.previousLowValue = arguments.queryData.low />
-		</cfloop>
+	</cfloop>
 	<cfreturn local.hldata />
 </cffunction>
+
 
 </cfcomponent>

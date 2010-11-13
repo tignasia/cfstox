@@ -20,7 +20,7 @@
 	<cfset local.startmonth = month(arguments.startdate) -1 />
 	<cfset local.startday 	= day(arguments.startdate) />
 	<cfset local.startyear 	= year(arguments.startdate) />
-	<cfset local.endmonth 	= month(arguments.enddate) +1 />
+	<cfset local.endmonth 	= month(arguments.enddate) -1 />
 	<cfset local.endday 	= day(arguments.enddate) />
 	<cfset local.endyear 	= year(arguments.enddate) />
 	<!--- 

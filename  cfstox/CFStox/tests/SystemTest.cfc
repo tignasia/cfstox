@@ -24,7 +24,7 @@
 	<cffunction name="testSystemNewHighLow" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
-		local.dataarray = this.controller.historical(Symbol:"ABX",startdate:"1/1/2009",enddate:"10/5/2010",hkconvert:"true");
+		local.dataarray = this.controller.historical(Symbol:"akam",startdate:"5/1/2010",enddate:"11/10/2010",hkconvert:"true");
 		local.data = local.dataarray.stockdata;
 		</cfscript>
 		<cfquery   dbtype="query"  name="local.reverse">
@@ -33,7 +33,7 @@
 		<cfscript>
 		local.data = local.reverse; 
 		local.data = this.System.System_hekin_ashi(queryData: local.data);
-		local.query = this.System.NewHighLow(queryData: local.data);
+		local.query = this.System.NewHL3(queryData: local.data);
 		debug(local.query);
 		</cfscript>
 	</cffunction>
