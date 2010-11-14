@@ -47,7 +47,7 @@
 	<cfset local.num = session.objects.TA.GetIndicator(Indicator:"CCI",qryPrices:arguments.query) />
 	<cfset queryAddColumn(arguments.query,"CCI",'Decimal',local.num) >
 	<cfset local.falseArray = ArrayNew(1) >
-	<cfloop from="1" to="#arguments.query#" index="i">
+	<cfloop from="1" to="#arguments.query.recordcount#" index="i">
 		<cfset local.falseArray[i] = "false">
 	</cfloop>
 		<cfset queryAddColumn(arguments.query,"TestResult","VarChar",local.falsearray) >

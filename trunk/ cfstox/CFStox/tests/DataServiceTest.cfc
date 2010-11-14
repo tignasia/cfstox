@@ -52,8 +52,7 @@
 		debug(local.data);
 		</cfscript>
 	</cffunction>
-	
-	
+
 	<cffunction name="testSystemNewHighLow" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();

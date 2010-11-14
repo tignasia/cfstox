@@ -5,20 +5,43 @@
 	</cffunction>
 
 	<cffunction name="QryToArray" access="public" output="false" returntype="Array">
-		<cfargument name="qryData" required="true">
+		<cfargument name="query" required="true">
 		<cfset var local = structNew() />
 		<cfset local.returnArray = ArrayNew(2) />
+		<cfdump var="#arguments.query#">
 		<cfscript>
-		local.qryrows = arguments.qrydata.recordcount;
-		//Convert data to XML and append
+		local.qryrows = arguments.query.recordcount;
+		//Convert data and append
+		local.cols = listToArray(arguments.query.columnList);
        	for(i=1;i<=local.qryrows;i++){   
-			local.returnArray[i][1] = qrydata['open'][i];
-			local.returnArray[i][2] = qrydata['high'][i];
-			local.returnArray[i][3] = qrydata['low'][i];
-			local.returnArray[i][4] = qrydata['close'][i];
+			for (j=1;j <= local.cols.size(); j++) { 
+				local.returnArray[i][j] = query["#local.cols[j]#"][i];
+    		}
        	}
        	</cfscript>
 		<cfreturn local.returnArray />
+	</cffunction>
+	
+	<cffunction name="QrytoStruct" description="" access="public" displayname="" output="false" returntype="Struct">
+		<cfargument name="query" required="true" />
+		<cfargument name="rownumber" required="false"  default=1 />
+    	<cfscript>
+		var local = StructNew();
+    	//a var for looping
+    	local.ii = 1;
+    	//the cols to loop over
+    	local.cols = listToArray(arguments.query.columnList);
+    	//the struct to return
+    	local.stReturn = structnew();
+    	//if there is a second argument, use that for the row number
+    	local.row = arguments.rownumber;
+    	//loop over the cols and build the struct from the query row    
+    	for(local.ii = 1; local.ii <= local.cols.size(); local.ii++){
+        	local.stReturn[local.cols[local.ii]] = arguments.query[local.cols[local.ii]][local.row];
+    	}        
+    	//return the struct
+    	return local.stReturn;
+    	</cfscript>
 	</cffunction>
 
 	<cffunction name="testPath" access="public" returntype="String">

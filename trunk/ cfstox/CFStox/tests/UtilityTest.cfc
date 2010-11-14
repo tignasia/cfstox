@@ -11,16 +11,33 @@
 	 <!---  <cfset super.TestCase(this) /> --->
 	  <!--- Place additional setUp and initialization code here --->
 		<cfscript>
-		 this.mycomp = createObject("component","cfstox.model.Utility");
-		 debug(this.mycomp);
+		this.controller = createObject("component","cfstox.controllers.controller").init();
+		this.System 	= createObject("component","cfstox.model.System").init();
+		this.http 		= createObject("component","cfstox.model.http").init();
+		this.Utility	= createObject("component","cfstox.model.Utility").init();
+		this.DataService	= createObject("component","cfstox.model.DataService").init();
 		</cfscript>
 	</cffunction>
 
-	<cffunction name="testAdd" access="public" returntype="void">
+	<cffunction name="testQryToArray" access="public" returntype="void">
 		<cfscript>
-		var num = this.mycomp.add(1,1);
-		addTrace("num == " & num );
-		assertEquals(num,2);
+		var local = structNew();
+		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
+		local.data = this.Utility.QryToArray(query:local.data.HKData);
+		debug(local.data);
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testQrytoStruct" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
+		local.data1 = this.Utility.QryToStruct(query:local.data.HKData, rownumber:11);
+		local.data2 = this.Utility.QryToStruct(query:local.data.HKData, rownumber:12);
+		local.data3 = this.Utility.QryToStruct(query:local.data.HKData, rownumber:13);
+		debug(local.data1);
+		debug(local.data2);
+		debug(local.data3);
 		</cfscript>
 	</cffunction>
 

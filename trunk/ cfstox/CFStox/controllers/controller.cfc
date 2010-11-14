@@ -8,10 +8,10 @@
 		<!--- <cfargument name="argumentData"> --->
 		<cfset var local = structnew() />
 		<cfset local.view = "historical">
-		<cfset local.results = session.objects.DataService.GetStockData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") />
-		<cfset local.returned.HKData = session.objects.DataService.GetTechnicalIndicators(query:local.results.HKData) />
-		<cfset local.xmldata = session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.symbol#",qrydata:local.results.CandleData,startdate:"#arguments.startdate#", high:local.results.high, low:local.results.low)>
-		<cfset local.xmldataha = session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.Symbol#",qrydata:local.returned.HKData ,startdate:"#arguments.startdate#", high:local.results.high, low:local.results.low)>
+		<cfset local.results 			= session.objects.DataService.GetStockData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") />
+		<cfset local.returned.HKData 	= session.objects.DataService.GetTechnicalIndicators(query:local.results.HKData) />
+		<cfset local.xmldata 			= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.symbol#",qrydata:local.results.CandleData,startdate:"#arguments.startdate#", high:local.results.high, low:local.results.low)>
+		<cfset local.xmldataha 			= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.Symbol#",qrydata:local.returned.HKData ,startdate:"#arguments.startdate#", high:local.results.high, low:local.results.low)>
 		<cfset structAppend(request,local) />
 		<cfset structAppend(request,arguments) />
 		<cfreturn local />
@@ -29,7 +29,7 @@
 		<cfset var local = structnew() />
 		<cfset local.returndata = historical(Symbol:arguments.symbol,startdate:arguments.startdate,enddate:arguments.enddate,hkconvert:"true") />
 		<cfset local.stockdata = local.returndata.returned.HKData />
-		<cfset local.stockdata = session.objects.system.System_hekin_ashi(queryData:local.stockdata ) />
+		<cfset local.stockdata = session.objects.system.System_hekin_ashiII(queryData:local.stockdata ) />
 	 	<cfset local.exceldata = session.objects.utility.genExcel(exceldata:local.stockdata) />  
 		<cfset session.objects.Utility.writedata(filepath:"excel", filename:"#arguments.symbol#.xls", filedata:local.exceldata) /> 
 		<cfset local.view = "backtest">
