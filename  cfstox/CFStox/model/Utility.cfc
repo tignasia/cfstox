@@ -8,7 +8,6 @@
 		<cfargument name="query" required="true">
 		<cfset var local = structNew() />
 		<cfset local.returnArray = ArrayNew(2) />
-		<cfdump var="#arguments.query#">
 		<cfscript>
 		local.qryrows = arguments.query.recordcount;
 		//Convert data and append
@@ -80,29 +79,27 @@
 	<cffunction name="genExcel" description="" access="public" displayname="" output="false" returntype="Any">
 		<cfargument name="exceldata" required="true"  />
 		<cfset var local = StructNew()  />
+		<cfset local.columnList = arguments.exceldata.columnlist	/>
+		<cfset local.columnArray = listToArray(arguments.exceldata.columnList) />
 		<cfsavecontent variable="local.exceldata">
 		<cfoutput>
 		<!--- <cfcontent type="application/vnd.ms-excel"> --->
 		<!--- <cfheader name="Content-Disposition" value="inline; filename=Stockdata.xls"> --->
 		<table border="2">
 		<tr>
-		<td>Date</td> <td>Open</td> <td>high</td> <td>low</td> <td>close</td> <td>LinReg</td> <td>LinRegAngle</td>
-		<td>LinRegSlope</td> <td>LinRegIntercept</td> <td>LRSDelta</td>
-		<td>Momentum</td> <td>RSI</td> <td>ADX</td> <td>CCI</td>
-		<td>TestResult</td> <td>HKLong</td> <td>HKShort</td> <td>longp</td> <td>shortp</td> <td>longe</td>
-		<td>shorte</td> <td>tlongp</td> <td>tshortp</td> 
-		<!--- <td>Position</td><td>Profit</td> --->
-		</tr>
- 		<cfloop query="arguments.exceldata">
-		<tr>
-		<td>#DateOne#</td><td>#Open#</td><td>#high#</td><td>#low#</td><td>#close#</td><td>#LinearReg#</td><td>#LinearRegAngle#</td>
-		<td>#LinearRegSlope#</td><td>#LinearRegIntercept#</td><td>#LRSDelta#</td>
-		<td>#Momentum#</td><td>#RSI#</td><td>#ADX#</td><td>#CCI#</td>
-		<td>#TestResult#</td> <td>#HKLong#</td> <td>#HKShort#</td> <td>#longp#</td> <td>#shortp#</td> <td>#longe#</td>
-		<td>#shorte#</td> <td>#tlongp#</td> <td>#tshortp#</td> 
-		<!--- <td>#Position#</td><td>#Profit#</td> --->
-		</tr>
+		<cfloop index="symbol" list="#local.columnList#">
+			<td>#symbol#</td>
 		</cfloop>
+		</tr>
+		<tr>
+		<cfset local.qryrows = arguments.exceldata.recordcount />
+		<cfset local.colArray = listToArray(arguments.exceldata.columnList) />
+      	<cfloop from="1" to="#local.qryrows#" index="i">
+			<cfloop from="1" to="#local.colArray.size()#" index="j">
+			 <td><cfoutput>#exceldata["#local.colArray[j]#"][i]#</cfoutput></td>
+			</cfloop>
+		</cfloop>	
+		</tr>	
 		</table>
 		</cfoutput>
 		</cfsavecontent>
@@ -114,8 +111,12 @@
 		<cfargument name="filepath" required="true">
 		<cfargument name="filename" required="true">
 		<cfargument name="filedata" required="true">
-		<cfset var rootpath= GetDirectoryFromPath(GetBaseTemplatePath()) /> >
-		<cffile action="write" file="#rootpath##arguments.filePath#\#arguments.filename#" output="#arguments.filedata#"  />
+		<cfset var rootpath= GetDirectoryFromPath(GetBaseTemplatePath()) />
+		<cfif FileExists("#rootpath##arguments.filePath#\#arguments.filename#") > 
+			<cffile action="append" file="#rootpath##arguments.filePath#\#arguments.filename#" output="#arguments.filedata#"  />
+		<cfelse>
+			<cffile action="write" file="#rootpath##arguments.filePath#\#arguments.filename#" output="#arguments.filedata#"  />
+		</cfif>
 		<cfreturn arguments.filename />
 	</cffunction>
 </cfcomponent>

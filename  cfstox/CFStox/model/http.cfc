@@ -27,6 +27,7 @@
 	d  - This parameter is to get the input for end month, and again '00' is for January, '02' is for February and so on.
 	e - This parameter is to get the input for the end day
 	f - This parameter is to get the input for the end year --->
+	<cftrace text="symbol: #arguments.sym#" var="arguments.sym">
 	
 	<cfhttp
 	columns="DateOne,Open,High,Low,Close,Volume,Adj_Close"		   

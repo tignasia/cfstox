@@ -40,6 +40,19 @@
 		debug(local.data3);
 		</cfscript>
 	</cffunction>
+	
+	<cffunction name="testGenExcel" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
+		local.exceldata = this.DataService.GetTechnicalIndicators(query:local.data.HKData);
+		debug(local.data);
+		debug(local.exceldata);
+		local.data1 = this.Utility.genExcel(exceldata:local.excelData);
+		debug(local.data1);
+		</cfscript>
+	</cffunction>
+
 
 	<cffunction name="testAdd2" access="public" returntype="void">
 		<cfscript>
