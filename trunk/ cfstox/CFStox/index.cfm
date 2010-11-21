@@ -66,7 +66,7 @@
 </div>
 <!--- this runs a summary of trading actions and analysis against the watchlist --->
 <form action="controllers/controller.cfm" method="post" id="watchlist_form">
-<fieldset title="Watchlist"  >Watchlist
+<fieldset title="Watchlist">Watchlist
 <input type="hidden" id="action" name="action" value="watchlist">
 <input type="submit" name="submit" id="submit" value="Run watchlist analysis" />
 </fieldset>
