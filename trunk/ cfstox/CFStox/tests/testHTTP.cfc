@@ -16,7 +16,14 @@
 
 	<cffunction name="testHTTP" returntype="void" access="public">
 		<cfscript>
-		var results = this.httpService.gethttp(sym:"CSX");
+		var results = this.httpService.gethttp(sym:"CSX",enddate:Now());
+		debug(results);
+		</cfscript>	
+	</cffunction>
+	
+	<cffunction name="testHTTPGoogle" returntype="void" access="public">
+		<cfscript>
+		var results = this.httpService.gethttpGoogle(sym:"CSX",enddate:Now());
 		debug(results);
 		</cfscript>	
 	</cffunction>
@@ -30,7 +37,7 @@
 		</cfscript>	
 	</cffunction>
 	
-	<cffunction name="testMAindicator" returntype="void" access="private">
+	<!--- <cffunction name="testMAindicator" returntype="void" access="private">
 		<cfscript>
 		paths = arrayNew(1);
 paths[1] = expandPath("ta-lib-0.4.0.jar");
@@ -40,8 +47,7 @@ talib = loader.create("com.tictactec.ta.lib.Core");
 <cfdump label="loader" var="#loader#">
 <cfdump label="talib" var="#talib#">
 
-	</cffunction>
-	
+	</cffunction> --->
 
 	<cffunction name="tearDown" returntype="void" access="public">
 		<!--- Any code needed to return your environment to normal goes here --->

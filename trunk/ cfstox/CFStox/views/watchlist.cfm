@@ -19,6 +19,7 @@
 		<cfset sym = #request.tradedata[i]# />
 	<cfelse>
 		<cfloop from="#arraylen(request.tradedata[i])#" to="#arraylen(request.tradedata[i])#" index="j">
+			<cfif #request.tradedata[i][j][1]# EQ "open">
 			<tr>
 			<cfoutput><td>#sym#</td></cfoutput>
 			<cfoutput><td>#request.tradedata[i][j][1]#</td></cfoutput>
@@ -26,6 +27,7 @@
 			<cfoutput><td>#request.tradedata[i][j][3]#</td></cfoutput>
 			<cfoutput><td>#request.tradedata[i][j][4]#</td></cfoutput>
 			</tr>
+			</cfif>
 		</cfloop>
 		
 	</cfif>
