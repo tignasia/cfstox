@@ -91,15 +91,16 @@
 			<td>#symbol#</td>
 		</cfloop>
 		</tr>
-		<tr>
 		<cfset local.qryrows = arguments.exceldata.recordcount />
 		<cfset local.colArray = listToArray(arguments.exceldata.columnList) />
       	<cfloop from="1" to="#local.qryrows#" index="i">
+			<tr>
 			<cfloop from="1" to="#local.colArray.size()#" index="j">
 			 <td><cfoutput>#exceldata["#local.colArray[j]#"][i]#</cfoutput></td>
 			</cfloop>
+			</tr>	
 		</cfloop>	
-		</tr>	
+		
 		</table>
 		</cfoutput>
 		</cfsavecontent>
