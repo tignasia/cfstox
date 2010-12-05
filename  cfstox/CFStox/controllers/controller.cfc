@@ -31,7 +31,7 @@
 		<cfset local.stockdata = local.returndata.returned.HKData />
 		<!--- <cfset local.stockdata = session.objects.system.System_hekin_ashiII(queryData:local.stockdata ) /> --->
 	 	<cfset local.exceldata = session.objects.utility.genExcel(exceldata:local.stockdata) />  
-		<cfset session.objects.Utility.writedata(filepath:"excel", filename:"#arguments.symbol#.xls", filedata:local.exceldata) /> 
+		<cfset session.objects.Utility.writedata(filepath:"..\data\excel", filename:"#arguments.symbol#.xls", filedata:local.exceldata) /> 
 		<cfset local.view = "backtest">
 		<cfset structAppend(request,local.returndata) />
 		<cfset structAppend(request,arguments) />
