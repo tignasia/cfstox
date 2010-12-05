@@ -33,8 +33,8 @@
 	columns="DateOne,Open,High,Low,Close,Volume,Adj_Close"		   
 	url="http://ichart.finance.yahoo.com/table.csv?s=#arguments.sym#&a=#local.startmonth#&b=#local.startday#&c=#local.startyear#&d=#local.endmonth#&e=#local.endday#&f=#local.endyear#&ignore=.csv" 
 	method="get" result="stockdata" name="yahoo" firstrowasheaders="Yes" />
-	<cfset local.yahoo = stockdata />
-	<cfreturn local />
+	<cfset local.yahoo = yahoo />
+	<cfreturn local.yahoo />
 </cffunction>
 
 <cffunction name="getHTTPGoogle" output="false"  returntype="Any">
