@@ -244,7 +244,4 @@ this function expects a single query row as an argument
 	<cfreturn local.hldata />
 </cffunction>
 
-
-
-
 </cfcomponent>
