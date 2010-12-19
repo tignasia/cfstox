@@ -23,6 +23,11 @@
 	<cfset local.high = high1.high />
 	<cfset local.low = low1.low />	
 	<cfset local.HKData = session.objects.TA.convertHK(qrydata:resorted) />
+	<cfset local.symbolArray = ArrayNew(1) >
+	<cfloop from="1" to="#local.HKData.recordcount#" index="i">
+		<cfset local.symbolArray[i] = arguments.symbol>
+	</cfloop>
+	<cfset queryAddColumn(local.HKData,"Symbol",'VarChar',local.symbolArray) > 
 	<cfreturn local />
 </cffunction>
 
@@ -50,9 +55,8 @@
 	<cfloop from="1" to="#arguments.query.recordcount#" index="i">
 		<cfset local.falseArray[i] = "false">
 	</cfloop>
-		<cfset queryAddColumn(arguments.query,"TestResult","VarChar",local.falsearray) >
-		<cfreturn arguments.query />	
-	<cfreturn />
-</cffunction>
+	<cfset queryAddColumn(arguments.query,"TestResult","VarChar",local.falsearray) >
+	<cfreturn arguments.query />	
+	</cffunction>
 
 </cfcomponent>

@@ -26,6 +26,10 @@
 	<cffunction name="backtest" description="provide results using given system" access="public" displayname="" output="false" returntype="struct">
 		<!---- todo: add entry exit excel output ---->
 		<!--- <cfargument name="argumentData"> --->
+		<!--- the query is loaded with all indicators/rules run. this simplifies the application of a 
+		particular set of rules in the trading system. We also can display on a chart the indicator values
+		ie how much it went outside the bollinger band, went over under pivot points, etc
+		 --->
 		<cfset var local = structnew() />
 		<cfset local.returndata = historical(Symbol:arguments.symbol,startdate:arguments.startdate,enddate:arguments.enddate,hkconvert:"true") />
 		<cfset local.stockdata = local.returndata.returned.HKData />
@@ -73,6 +77,8 @@
 	<cfset session.objects.http 	= createObject("component","cfstox.model.http").init() />
 	<cfset session.objects.System 	= createObject("component","cfstox.model.system").init() />
 	<cfset session.objects.DataService 	= createObject("component","cfstox.model.Dataservice").init() />
+	<cfset session.objects.SystemService 	= createObject("component","cfstox.model.SystemService").init() />
+	<cfset session.objects.SystemRunner 	= createObject("component","cfstox.model.SystemRunner").init() />
 	<cfreturn />
 	</cffunction>	
 

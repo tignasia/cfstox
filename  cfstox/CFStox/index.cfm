@@ -25,14 +25,14 @@
 <label for="Symbol" style="width=30%">Symbol:</label>
 <input type="text" name="Symbol" id="Symbol" value="">
 </fieldset>
-
+<!---
 <fieldset>
-<label for="input1" style="width=30%">PLaceholder:</label>
+<label for="input1" style="width=30%">PlLaceholder:</label>
 <input type="text" name="input1" id="input1" value="">
 <label for="input2" style="width=30%">Placeholder:</label>
 <input type="text" name="input2" id="input2" value="">
 </fieldset>
-
+---->
 <input type="submit" name="submit" id="submit" value="Submit" />
 
 </form>
@@ -50,6 +50,10 @@
 <input type="submit" name="submit" id="submit" value="Submit" />
 </fieldset>
 </form>
+
+</div>
+<br style="clear:both">
+<div style ="width:100%">
 <!--- this runs a historical backtest of the chosen system  --->
 <form action="controllers/controller.cfm" method="post" id="backtest_form">
 <fieldset title="Backtest"  >Backtest
