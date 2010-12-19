@@ -4,117 +4,23 @@
 	<!--- persistent variable to store trades and results --->
 	<cfreturn this/>
 </cffunction>
-
-<!--- 
-loop through the query and determine when the given conditions are true 
-When they are true , put "open" in the results field.
-When the close condition is activated, put "close" in the field
-this function expects a single query row as an argument
---->
-<cffunction name="testSystem" description="I test the system" access="public" displayname="test" output="false" returntype="Any">
-	<cfargument name="qryData" required="true" />
-	<cfargument name="fieldnames" required="true" />
-	<cfset var local = structnew() />
-	<cfset local.boolResult = true>
-	<cfset local.counter = 1 />
-	<cfset local.qryLen = arguments.qryData.recordcount />
-	<!--- init array of last 30 results --->
-	<!--- typically our systems will look for crossovers, values greater than or less than something. --->
-	<!--- test if linear regression slope is less than .25 and stock made a new two week low --->
-	<cfloop from="1" to="#local.qryLen#" index="i">
-		<cfif NOT arguments.qrydata.LSRdelta[i] LTE -.25> 
-			<cfset local.boolResult = false>
-		</cfif>
-		<cfif NOT arguments.qrydata.newOneWeekLow[i] > 
-			<cfset local.boolResult = false>
-		</cfif>
-		<cfset local.counter = local.counter + 1 >
-		<cfset arguments.qrydata.testresult[i] = local.boolResult />
-	</cfloop>
-	<cfreturn local.boolResult />
-</cffunction>
-
-<cffunction name="testSystem2" description="I test the system" access="public" displayname="test" output="false" returntype="Any">
-	<cfargument name="theQuery" required="true" />
-	<cfargument name="fieldnames" required="true" />
-	<cfargument name="conditions" required="true" />
-	<cfset var local = structNew() />
-	<cfset indicator1 = arraynew(1) />
-	<!--- typically our systems will look for crossovers, values greater than or less than something. --->
-	<cfloop  query="arguments.theQuery">
-		<cfset local.currRow = arguments.theQuery.currentrow />
-		<cfif local.currow LTE 3>
-			<cfset indicator1[local.currRow] = arguments.theQuery.fieldname />
-		<cfelse>
-			<cfset indicator1[1] =  indicator1[2] />
-			<cfset indicator1[2] =  indicator1[3] />
-			<cfset indicator1[3] =  arguments.theQuery.fieldname />
-		</cfif>
-	</cfloop>
-	<cfreturn />
-</cffunction>
 	
-<cffunction name="System_hekin_ashi" description="heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
-	<cfargument name="QueryData" required="true" />
-	<cfset var local = structNew() />
-	<cfset local.longtrade = false />
-	<cfset local.shorttrade = false />
-	<cfset local.longentry 	= 0 />
-	<cfset local.longexit 	= 0 />
-	<cfset local.shortentry = 0 />
-	<cfset local.shortexit 	= 0 />
-	<cfset local.longprofit 	= 0 />
-	<cfset local.shortprofit 	= 0 />
-	<cfset queryAddColumn(arguments.QueryData, "hklong"  ,'cf_sql_varchar', arrayNew( 1 ) ) />
-	<cfset queryAddColumn(arguments.QueryData, "hkshort" ,'cf_sql_varchar', arrayNew( 1 ) ) />
-	<cfset queryAddColumn(arguments.QueryData, "longp"  ,'cf_sql_varchar', arrayNew( 1 ) ) />
-	<cfset queryAddColumn(arguments.QueryData, "shortp" ,'cf_sql_varchar', arrayNew( 1 ) ) />
-	<cfset queryAddColumn(arguments.QueryData, "longe"  ,'cf_sql_varchar', arrayNew( 1 ) ) />
-	<cfset queryAddColumn(arguments.QueryData, "shorte" ,'cf_sql_varchar', arrayNew( 1 ) ) />
-	<cfset queryAddColumn(arguments.QueryData, "tlongp" ,'cf_sql_varchar', arrayNew( 1 ) ) />
-	<cfset queryAddColumn(arguments.QueryData, "tshortp" ,'cf_sql_varchar', arrayNew( 1 ) ) />
-	<!--- typically our systems will look for crossovers, values greater than or less than something. --->
-	<cfloop  query="arguments.QueryData">
-		<cfset local.rowcount = arguments.QueryData.currentrow />
-		<cfif arguments.QueryData.currentrow GTE 3>
-			<!--- close greater than open; go long --->
-			<cfif arguments.QueryData.close GT arguments.QueryData.open>
-				<cfif local.longentry EQ 0>
-					<cfset local.longentry 	= arguments.QueryData.open />
-				</cfif>
-				<cfif local.shorttrade >
-					<cfset local.shortexit 	= arguments.QueryData.open>
-					<cfset arguments.queryData["shortp"][arguments.queryData.currentrow] = local.shortentry - local.shortexit />
-					<cfset arguments.queryData["shorte"][arguments.queryData.currentrow] = local.shortentry />
-					<cfset local.shortentry = 0 />
-					<cfset local.tshortp =  local.tshortp + arguments.queryData["shortp"][arguments.queryData.currentrow] />
-				</cfif>
-				<cfset local.longtrade = "true" />
-				<cfset local.shorttrade = "false" />
-			</cfif>
-			<!---- close less than open; go short ---->
-			<cfif arguments.QueryData.close LT arguments.QueryData.open>
-				<cfif local.shortentry EQ 0>
-					<cfset local.shortentry = arguments.QueryData.open />
-				</cfif>
-				<cfif local.longtrade >
-					<cfset local.longexit	= arguments.QueryData.open /> 
-					<cfset arguments.queryData["longp"][arguments.queryData.currentrow] = local.longexit - local.longentry  />
-					<cfset arguments.queryData["longe"][arguments.queryData.currentrow] = local.longentry  />
-					<cfset local.longentry 	= 0 />
-					<cfset local.tlongp = local.tlongp + arguments.queryData["longp"][arguments.queryData.currentrow] />
-				</cfif>
-				<cfset local.shorttrade = "true" />
-				<cfset local.longtrade 	= "false" />
-			</cfif>
-			<cfset arguments.queryData["hklong"][arguments.queryData.currentrow] = local.longtrade />
-			<cfset arguments.queryData["hkshort"][arguments.queryData.currentrow] =  local.shorttrade />
-		</cfif>
-		<cfset arguments.queryData["tlongp"][arguments.queryData.currentrow] = local.tlongp /> 
-		<cfset arguments.queryData["tshortp"][arguments.queryData.currentrow] = local.tshortp />					
-	</cfloop>
-			
-	<cfreturn arguments.QueryData />
+<cffunction name="System_hekin_ashi_long" description="heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
+	<cfargument name="TradeBeanTwoDaysAgo" required="true" />
+	<cfargument name="TradeBeanOneDayAgo" required="true" />
+	<cfargument name="TradeBeanToday" required="true" />
+	<cfif TradeBeanTwoDaysAgo.Get("HKLow") GT TradeBeanOneDayAgo.Get("HKLow") AND TradeBeanToday.Get("HKLow") GT TradeBeanOneDayAgo.Get("HKLow")>		
+		<cfset TradeBeanToday.Set("HKGoLong",true) />
+	</cfif>
+	<cfreturn TradeBeanToday />
+</cffunction>
+
+<cffunction name="System_hekin_ashi_short" description="heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
+	<cfargument name="TradeBean" required="true" />
+	<cfif TradeBean.GetHKLowTwoDaysAgo() LT TradeBean.GetHKLowOneDayAgo() AND TradeBean.GetHKLowToday() LT TradeBean.GetHKLowOneDayAgo()>		
+		<cfset TradeBean.SetHKGoShort(true) />
+	</cfif>
+	<cfreturn TradeBean />
 </cffunction>
 
 <cffunction name="System_hekin_ashiII" description="heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
@@ -132,12 +38,10 @@ this function expects a single query row as an argument
 		<cfset local.DataArray[2] = session.objects.Utility.QrytoStruct(query:arguments.QueryData,rownumber:local.rowcount-1) />
 		<cfset local.DataArray[3] = session.objects.Utility.QrytoStruct(query:arguments.QueryData,rownumber:local.rowcount) />
 		<!--- close greater than open; go long --->
-		<cfset local.longOpenResult = testHKLongOpen(local.dataArray) />
-		<cfif local.longOpenResult>
+		<cfif testHKLongOpen(local.dataArray) >
 			<cfset makeTrade(tradetype:"long",action:"open", date:local.DataArray[3].dateOne, price:local.DataArray[3].close )>
 		</cfif>
-		<cfset local.longCloseResult = testHKLongClose(local.dataArray) /> 
-		<cfif local.longCloseResult>
+		<cfif testHKLongClose(local.dataArray) >
 			<cfset makeTrade(tradetype:"long",action:"close", date:local.DataArray[3].dateOne, price:local.DataArray[3].close )>
 		</cfif>
 		<!---- close less than open; go short ---->

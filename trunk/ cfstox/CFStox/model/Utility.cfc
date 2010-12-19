@@ -120,4 +120,11 @@
 		</cfif>
 		<cfreturn arguments.filename />
 	</cffunction>
+	
+	<cffunction name="trace" description="" access="public" displayname="" output="false" returntype="void">
+		<cfargument  name="thingToTrace">
+		<cfargument  name="desc">
+		<cftrace  category="information" inline="false" text="#arguments.desc#" var="arguments.thingToTrace">
+		<cfreturn />
+	</cffunction>
 </cfcomponent>
