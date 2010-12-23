@@ -17,6 +17,8 @@
 			<cfset local.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:local.rowcount-2) />
 			<cfset local.DataArray[2] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:local.rowcount-1) />
 			<cfset local.DataArray[3] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:local.rowcount) />
+			<!---- check the conditions such as new local high/low, bollinger bands, MACD bollinsger band deviations, etc. --->
+			<!---- use these conditions to populate the rest of the bean--->
 			<cfset local.TradeBeanTwoDaysAgo = createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]) /> 
 			<cfset local.TradeBeanOneDayAgo = createObject("component","cfstox.model.TradeBean").init(local.DataArray[2]) /> 
 			<cfset local.TradeBeanToday 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[3]) /> 
@@ -38,6 +40,7 @@
 		<cfset variables.TradeArray[#local.alength#][2] = "open" /> <!--- trade type --->
 		<cfset variables.TradeArray[#local.alength#][3] = TradeBean.Get("Date") /> <!--- date --->
 		<cfset variables.TradeArray[#local.alength#][4] = TradeBean.Get("HKClose") /> <!--- price --->
+		<!--- send the bean to the output component so it can capture the bean state--->
 		</cfif>
 		<cfreturn />
 	</cffunction>
