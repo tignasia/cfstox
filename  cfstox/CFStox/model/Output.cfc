@@ -13,4 +13,14 @@
 	<cfreturn />
 </cffunction>
 
+<!--- save comments  --->
+
+<!--- get file storage path --->
+
+<!--- flush comment array --->
+
+<!--- loop thru table header array and write th headers --->
+<!--- loop over methods array and call methods on the tradebean to get info --->
+
+
 </cfcomponent>
