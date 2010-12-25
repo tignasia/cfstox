@@ -187,6 +187,43 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	<cfreturn local.aryOut />
 </cffunction>
 
+<cffunction  name="PivotPoints" hint="Pivot Points">
+	<cfargument name="qryData" required="true" />
+	<!--- 
+	R2 = P + (H - L) = P + (R1 - S1)
+	R1 = (P x 2) - L
+	P = (H + L + C) / 3
+	S1 = (P x 2) - H
+	S2 = P - (H - L) = P - (R1 - S1) 
+	 --->
+	<cfscript>
+	var local = structNew();
+	local.qryrows = arguments.qrydata.recordcount;
+	local.PP = arrayNew(1);
+	local.S1 = arraynew(1);
+	local.S2 = arraynew(1);
+	local.R1 = arrayNew(1);
+	local.R2 = arrayNew(1);
+	for(i=1;i<=local.qryrows;i++){ 
+	    local.PP[i] = ((arguments.qryData.high[i] + arguments.qryData.low[i] + arguments.qrydata.close[i] ) / 3);
+		local.S1[i] = (local.pp[i] * 2) - arguments.qryData.high[i];
+		local.S2[i] = local.pp[i] - (arguments.qryData.high[i] - arguments.qryData.low[i]) ;
+		local.R1[i] = (local.pp[i] * 2) - arguments.qryData.low[i];
+		local.R2[i] = local.pp[i] + (arguments.qryData.high[i] - arguments.qryData.low[i]);
+    }
+	</cfscript>
+	<cfreturn local />
+</cffunction>
+
+<cffunction name="CandleSticksFunction" description="" access="public" displayname="" output="false" returntype="Numeric">
+	<!--- 
+	> 0 the bullish version of the pattern detected (price trend interpreted going up)
+	= 0 No pattern detected
+	< 0 the bearish version of the pattern detected (price trend interpreted going down)
+	 --->
+	<cfreturn />
+</cffunction>
+
 <cffunction  name="ADX">
 	<cfargument name="startIdx" 	type="Numeric"  default="1" required="false"  hint="where to start calculating"/> 
 	<cfargument name="qryPrices" 	type="query" required="true"  hint="the array of prices to base on"/>
@@ -315,6 +352,27 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 			<cfset local.optInMaximum = 0.2 />
 			<!--- (int startIdx, int endIdx, double[] inHigh, double[] inLow, double optInAcceleration, double optInMaximum, MInteger outBegIdx, MInteger outNBElement, double[] outReal)  --->
 			<cfset local.result = variables.talib.sar(arguments.startIdx,arguments.endIdx,local.srtArrays.aryHigh,local.srtArrays.aryLow,local.acceration,local.optInMaximum,Minteger1,Minteger2,local.srtArrays.aryOut) />
+		</cfcase>
+		<cfcase value="Stoch">
+		<cfset	local.aryOutSlowK	= javacast("double[]",arrayNew(1) ) />
+		<cfset	local.aryOutSlowD 	= javacast("double[]",arrayNew(1) ) />
+		<cfset local.optInFastK_Period = 2 />
+		<cfset local.optInSlowK_Period = 15 />	
+		<cfset local.optInSlowK_MAType = 1 />
+		<cfset local.optInSlowD_Period = 5 />
+		<cfset local.optInSlowD_MAType = 1 />	
+		<!--- stoch(int startIdx, int endIdx, double[] inHigh, 
+		double[] inLow, double[] inClose, int optInFastK_Period, int optInSlowK_Period, 
+		MAType optInSlowK_MAType, int optInSlowD_Period, MAType optInSlowD_MAType, 
+		MInteger outBegIdx, MInteger outNBElement, double[] outSlowK, 
+		double[] outSlowD) 
+		 --->
+		<cfset local.result = variables.talib.sar(arguments.startIdx,arguments.endIdx,local.srtArrays.aryHigh,
+		local.srtArrays.aryLow,local.srtArrays.aryClose,local.optInFastK_Period,local.optInSlowK_Period, 
+		local.optInSlowK_MAType, local.optInSlowD_Period, local.optInSlowD_MAType, Minteger1, Minteger2,
+		local.aryOutSlowK, local.aryOutSlowD ) />
+		<cfset returndata.SlowK = local.aryOutSlowK />
+		<cfset returndata.SlowD = local.aryOutSlowD />
 		</cfcase>
 		<cfdefaultcase>
 			<cfthrow type="Application" message="Invalid indicator type">

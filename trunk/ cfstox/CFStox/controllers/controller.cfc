@@ -79,6 +79,7 @@
 	<cfset session.objects.DataService 	= createObject("component","cfstox.model.Dataservice").init() />
 	<cfset session.objects.SystemService 	= createObject("component","cfstox.model.SystemService").init() />
 	<cfset session.objects.SystemRunner 	= createObject("component","cfstox.model.SystemRunner").init() />
+	<cfset session.objects.Output 	= createObject("component","cfstox.model.Output").init() />
 	<cfreturn />
 	</cffunction>	
 

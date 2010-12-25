@@ -51,6 +51,12 @@
 	<cfset queryAddColumn(arguments.query,"ADX",'Decimal',local.num) >
 	<cfset local.num = session.objects.TA.GetIndicator(Indicator:"CCI",qryPrices:arguments.query) />
 	<cfset queryAddColumn(arguments.query,"CCI",'Decimal',local.num) >
+	<cfset local.Pivots = session.objects.TA.PivotPoints(qryData:arguments.query) />
+	<cfset queryAddColumn(arguments.query,"PP",'Decimal',local.pivots.pp) >
+	<cfset queryAddColumn(arguments.query,"R1",'Decimal',local.pivots.r1) >
+	<cfset queryAddColumn(arguments.query,"R2",'Decimal',local.pivots.r2) >
+	<cfset queryAddColumn(arguments.query,"S1",'Decimal',local.pivots.s1) >
+	<cfset queryAddColumn(arguments.query,"S2",'Decimal',local.pivots.s2) >
 	<cfset local.falseArray = ArrayNew(1) >
 	<cfloop from="1" to="#arguments.query.recordcount#" index="i">
 		<cfset local.falseArray[i] = "false">
