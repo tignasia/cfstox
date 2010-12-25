@@ -12,6 +12,9 @@
 		<cfargument name="qryData" required="true" />
 		<cfset var local = structnew() />
 		<cfset local.results = session.objects.systemRunner.testSystem(SystemToRun:arguments.systemtorun,qryData:arguments.qryData) >
+		<cfset local.ReportHeaders = "Date,Entry Price,NewHighReversal,RSIStatus,CCIStatus">
+		<cfset local.ReportMethods = "Date,EntryPrice,NewHighReversal,RSIStatus,CCIStatus">
+		<cfset session.objects.Output.TradeReport(local) />
 		<cfreturn local.results />
 	</cffunction>
 	

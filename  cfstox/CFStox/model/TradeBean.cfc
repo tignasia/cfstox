@@ -19,7 +19,15 @@
 		set("LRSDelta",strData.LRSDelta);
 		set("Momentum",strData.Momentum);
 		set("RSI",strData.RSI); 
+		set("S1",strData.S1);
+		set("S2",strData.S2);
+		set("R1",strData.R1);
+		set("R2",strData.R2); 
 		// trade info
+		Set("NewHighBreakout","false"); //high greater than prev local high
+		Set("NewHighReversal","false"); // bounce off new local high 
+		Set("NewLowBreakDown","false"); //new low greater than previous local low
+		Set("NewLowReversal","false"); // bounce off new local low
 		Set("HKGoShort","false");
 		Set("HKGoLong","false");
 		Set("EntryDate","00/00/0000");
@@ -28,6 +36,15 @@
 		Set("ExitPrice",0);
 		Set("StopLossPrice",0);
 		Set("StopLossTriggered",false);
+		Set("RSIstatus","");
+		Set("CCIstatus","");
+		Set("MomentumStatus","");
+		Set("BolBandStatus","");
+		Set("MACDStatus","");
+		Set("R1Status","");
+		Set("R2Status","");
+		Set("S1Status","");
+		Set("S2Status","");
 		return this;
 		</cfscript>
 	</cffunction>

@@ -2,7 +2,9 @@
 
 	<cffunction name="init" description="init method" access="public" displayname="init" output="false" returntype="systemRunner">
 		<!--- persistent variable to store trades and results --->
+		<cfset variables.trackHighLows = StructNew() />
 		<cfset variables.tradeArray = ArrayNew(2) />
+		<cfset variables.BeanArray = arraynew(1) />
 		<cfreturn this/>
 	</cffunction>
 	
@@ -22,29 +24,74 @@
 			<cfset local.TradeBeanTwoDaysAgo = createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]) /> 
 			<cfset local.TradeBeanOneDayAgo = createObject("component","cfstox.model.TradeBean").init(local.DataArray[2]) /> 
 			<cfset local.TradeBeanToday 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[3]) /> 
+			<!--- <cfset TrackHighLows(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)> --->
+			<!--- <cfset local.TradeBeanToday = RecordIndicators(tradeBean:local.TradeBeanToday) /> --->
 			<cfset session.objects.system.System_hekin_ashi_long(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)>
+			<cfset session.objects.system.System_NewHigh(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)>
 			<!--- record system name, date, entry price --->
+			<cfset local.tradebeanToday = RecordIndicators(local.tradebeantoday) />
 			<cfset recordTrades(local.TradeBeanToday) /> 
 		</cfloop>
 		<!--- return the action results ---->
 		<cfset local.trades = variables.TradeArray />
+		<cfset local.BeanCollection = variables.BeanArray />
+		<cfset local.symbol = local.tradeBeanToday.Get("symbol") />
 		<cfreturn local />
 	</cffunction>
 
 	<cffunction name="RecordTrades" description="" access="private" displayname="" output="false" returntype="Any">
 		<cfargument name="TradeBean" required="true" />
 		<cfset var local = StructNew() />
-		<cfif arguments.TradeBean.Get("HKGoLong",true) >
-		<cfset local.aLength = variables.TradeArray.Size() + 1 />
-		<cfset variables.TradeArray[#local.alength#][1] = "HKGoLong" /> <!--- Action --->
-		<cfset variables.TradeArray[#local.alength#][2] = "open" /> <!--- trade type --->
-		<cfset variables.TradeArray[#local.alength#][3] = TradeBean.Get("Date") /> <!--- date --->
-		<cfset variables.TradeArray[#local.alength#][4] = TradeBean.Get("HKClose") /> <!--- price --->
+		<cfif arguments.TradeBean.Get("HKGoLong",true) OR arguments.TradeBean.Get("NewHighReversal",true)>
+			<cfscript>
+			local.aLength 			= variables.TradeArray.Size() + 1 ;
+			local.strTrade 			= StructNew() ;
+			local.strTrade.Action 	= "HKGoLong" ;
+			local.strTrade.TradeType = "open" ;
+			local.strTrade.OpenDate 	= arguments.TradeBean.Get("Date") ;
+			local.strTrade.OpenPrice = arguments.TradeBean.Get("HKClose") ;
+			arguments.TradeBean.Set("EntryDate", arguments.TradeBean.Get("Date") );
+			arguments.TradeBean.Set("EntryPrice",arguments.TradeBean.Get("HKClose") );
+			variables.TradeArray[#local.alength#][1] = local.strTrade ; 
+			local.BeanArrayLen = variables.Beanarray.size() + 1 ;
+			variables.BeanArray[#local.BeanArrayLen#] = arguments.tradeBean ;
+			</cfscript>
 		<!--- send the bean to the output component so it can capture the bean state--->
 		</cfif>
 		<cfreturn />
 	</cffunction>
 	
+	<cffunction name="RecordIndicators" description="" access="private" displayname="" output="false" returntype="tradebean">
+		<cfargument name="TradeBean" required="true" />
+		<cfset var local = StructNew() />
+		<cfset local.rsi = arguments.tradeBean.Get("RSI") />
+		<cfset local.cci = arguments.tradeBean.Get("CCI") />
+		<cfif local.rsi GTE 70>
+			<cfset tradeBean.Set("RSIStatus","RSI is Overbought at #local.rsi# ")>
+		</cfif>
+		<cfif local.rsi LTE 30>
+			<cfset tradeBean.Set("RSIStatus","RSI is Oversold at #local.rsi# ")>
+		</cfif>
+		<cfif local.rsi GT 30 AND local.rsi LT 70>
+			<cfset tradeBean.Set("RSIStatus","RSI is at #local.rsi# ")>
+		</cfif>
+		<!--- <cfif tradeBean.Get("Stolchastic") GT 80>
+			<cfset tradeBean.Set("STOStatus","Stolchastic is Overbought")>
+		</cfif>
+		<cfif tradeBean.Get("Stolchastic") LT 20>
+			<cfset tradeBean.Set("STOStatus","Stochastic is Oversold")>
+		</cfif> --->
+		<cfif local.cci GTE 100>
+			<cfset tradeBean.Set("CCIStatus","CCI is Overbought at #local.cci#")>
+		</cfif>
+		<cfif local.cci LTE -100>
+			<cfset tradeBean.Set("CCIStatus","CCI is Oversold at #local.cci#")>
+		</cfif>
+		<cfif local.cci GT -100 AND local.cci LT 100>
+			<cfset tradeBean.Set("CCIStatus","CCI is at #local.cci#")>
+		</cfif>
+		<cfreturn tradebean />
+	</cffunction>
 	
 	<cffunction name="testSystema" description="I test the system" access="public" displayname="test" output="false" returntype="Any">
 	<cfargument name="qryData" required="true" />

@@ -4,6 +4,7 @@
 	 <!---  <cfset super.TestCase(this) /> --->
 	  <!--- Place additional setUp and initialization code here --->
 		<cfscript>
+		this.Output 	= createObject("component","cfstox.model.Output").init();
 		this.SystemService 	= createObject("component","cfstox.model.systemService").init();
 		this.SystemRunner 	= createObject("component","cfstox.model.systemRunner").init();
 		this.DataService 	= createObject("component","cfstox.model.DataService").init();
@@ -36,7 +37,36 @@
 		//local.query = this.System.TrackTrades(queryData: local.data);
 		//local.beandata = local.result.;
 		debug(local.result);
-		
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testOutputPath" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"11/01/2010",enddate:"12/15/2010"); 
+		//debug(local.data);
+		local.data = this.DataService.GetTechnicalIndicators(query:local.data.HKData); 
+		///debug(local.data);
+		local.result = this.SystemRunner.TestSystem(SystemToRun:"test",qryData: local.data);
+		debug(local.result);
+		local.outputpath = this.Output.GetPDFPath(data:local.result);
+		debug(local.outputpath);
+		//local.query = this.System.TrackTrades(queryData: local.data);
+		//local.beandata = local.result.;
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testRunSystem" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"1/01/2010",enddate:"12/15/2010"); 
+		//debug(local.data);
+		local.data = this.DataService.GetTechnicalIndicators(query:local.data.HKData); 
+		///debug(local.data);
+		local.result = this.SystemService.RunSystem(SystemToRun:"test",qryData: local.data);
+		debug(local.result);
+		//local.query = this.System.TrackTrades(queryData: local.data);
+		//local.beandata = local.result.;
 		</cfscript>
 	</cffunction>
 	<!--- 
