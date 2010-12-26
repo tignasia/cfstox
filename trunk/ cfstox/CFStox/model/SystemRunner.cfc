@@ -5,6 +5,7 @@
 		<cfset variables.trackHighLows = StructNew() />
 		<cfset variables.tradeArray = ArrayNew(2) />
 		<cfset variables.BeanArray = arraynew(1) />
+		<cfset variables.HiLoBeanArray = arraynew(1) />
 		<cfreturn this/>
 	</cffunction>
 	
@@ -14,6 +15,9 @@
 		<cfset var local = structNew() />
 		<cfset local.boolResult = false />
 		<cfset local.dataArray = ArrayNew(1) />
+		<cfset local.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:1) />
+		<cfset local.TrackingBean 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]) /> 
+			
 		<cfloop  query="arguments.qryData" startrow="3">
 			<cfset local.rowcount = arguments.qryData.currentrow />
 			<cfset local.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:local.rowcount-2) />
@@ -26,32 +30,85 @@
 			<cfset local.TradeBeanToday 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[3]) /> 
 			<!--- <cfset TrackHighLows(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)> --->
 			<!--- <cfset local.TradeBeanToday = RecordIndicators(tradeBean:local.TradeBeanToday) /> --->
-			<cfset session.objects.system.System_hekin_ashi_long(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)>
+			<cfset session.objects.system.System_hekin_ashi_long(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday,local.TrackingBean)>
 			<cfset session.objects.system.System_NewHigh(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)>
+			<cfset session.objects.system.System_PivotPoints(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)>
+			<cfset session.objects.system.System_Max_Profit(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)>
+			<cfset CheckNewHiLo(Local.TradeBeanOneDayAgo) />
 			<!--- record system name, date, entry price --->
-			<cfset local.tradebeanToday = RecordIndicators(local.tradebeantoday) />
-			<cfset recordTrades(local.TradeBeanToday) /> 
+			<cfset local.TradeBeanToday = RecordIndicators(local.TradeBeanToday) />
+			<cfset recordTrades(local.TradeBeanToday,local.trackingBean) /> 
 		</cfloop>
 		<!--- return the action results ---->
+		<cfset local.HiLoBeanArray = variables.HiLoBeanArray />
 		<cfset local.trades = variables.TradeArray />
 		<cfset local.BeanCollection = variables.BeanArray />
 		<cfset local.symbol = local.tradeBeanToday.Get("symbol") />
 		<cfreturn local />
 	</cffunction>
 
+	<cffunction name="CheckNewHiLo" description="" access="public" displayname="" output="false" returntype="any">
+		<cfargument name="TradeBean" required="true"  />
+		<cfset var local = structNew() />
+		<cfset local.ArraySize = variables.HiLoBeanArray.size() />	
+		<cfif arguments.TradeBean.Get("NewLocalHigh") OR arguments.TradeBean.Get("NewLocalLow") >
+			<cfset variables.hiloBeanArray[local.ArraySize + 1] = arguments.tradeBean />
+		</cfif>
+		<cfreturn />
+	</cffunction>
+	
 	<cffunction name="RecordTrades" description="" access="private" displayname="" output="false" returntype="Any">
 		<cfargument name="TradeBean" required="true" />
+		<cfargument name="TrackingBean" required="true"  />
 		<cfset var local = StructNew() />
-		<cfif arguments.TradeBean.Get("HKGoLong",true) OR arguments.TradeBean.Get("NewHighReversal",true)>
+		<cfif arguments.TradeBean.Get("HKGoLong") OR arguments.TradeBean.Get("NewHighReversal")
+				OR arguments.TradeBean.Get("NewHighBreakout")
+				OR arguments.TradeBean.Get("R1Breakout1Day")	
+				OR arguments.TradeBean.Get("R2Breakout1Day")
+				OR arguments.TradeBean.Get("R1Breakout2Days")
+				OR arguments.TradeBean.Get("R2Breakout2Days")	
+					>
 			<cfscript>
 			local.aLength 			= variables.TradeArray.Size() + 1 ;
 			local.strTrade 			= StructNew() ;
 			local.strTrade.Action 	= "HKGoLong" ;
 			local.strTrade.TradeType = "open" ;
-			local.strTrade.OpenDate 	= arguments.TradeBean.Get("Date") ;
+			local.strTrade.OpenDate = arguments.TradeBean.Get("Date") ;
 			local.strTrade.OpenPrice = arguments.TradeBean.Get("HKClose") ;
-			arguments.TradeBean.Set("EntryDate", arguments.TradeBean.Get("Date") );
-			arguments.TradeBean.Set("EntryPrice",arguments.TradeBean.Get("HKClose") );
+			</cfscript>
+			<!--- cancel long trade if already long --->
+			<cfif arguments.TradeBean.Get("HKGoLong") AND arguments.TrackingBean.Get("HKGoLong")>
+				<cfscript>
+				arguments.TradeBean.Set("HKGoLong",false );
+				</cfscript>
+			</cfif>
+			<cfif arguments.TradeBean.Get("HKGoLong") AND NOT arguments.TrackingBean.Get("HKGoLong")>
+				<cfscript>
+				arguments.TrackingBean.Set("HKGoLong",true);
+				arguments.TradeBean.Set("EntryDate",arguments.TradeBean.Get("Date") );
+				arguments.TradeBean.Set("EntryPrice",arguments.TradeBean.Get("HKClose"));
+				arguments.TrackingBean.Set("EntryDate",arguments.TradeBean.Get("Date") );
+				arguments.TrackingBean.Set("EntryPrice",arguments.TradeBean.Get("HKClose"));
+				</cfscript>
+			</cfif>
+			<cfif arguments.TradeBean.Get("HKCloseLong") AND arguments.TrackingBean.Get("HKGoLong")>
+				<cfscript>
+				arguments.TrackingBean.Set("HKGoLong",false);
+				arguments.TrackingBean.Set("ExitDate",arguments.TradeBean.Get("date") );
+				arguments.TrackingBean.Set("ExitPrice",arguments.TradeBean.Get("HKClose") );
+				local.profitloss =  arguments.TrackingBean.Get("ExitPrice") - arguments.TrackingBean.Get("EntryPrice") ;
+				arguments.TrackingBean.Set("ProfitLoss",local.profitloss); 
+				local.NetProfitLoss = arguments.TrackingBean.Get("NetProfitLoss") + local.profitloss;
+				arguments.TrackingBean.Set("NetProfitLoss",local.Netprofitloss); 
+				arguments.TradeBean.Set("EntryDate",arguments.TrackingBean.Get("EntryDate") );
+				arguments.TradeBean.Set("EntryPrice",arguments.TrackingBean.Get("EntryPrice"));
+				arguments.TradeBean.Set("ExitDate",arguments.TradeBean.Get("date") );
+				arguments.TradeBean.Set("ExitPrice",arguments.TradeBean.Get("HKClose") );
+				arguments.TradeBean.Set("ProfitLoss",local.profitloss); 
+				arguments.TradeBean.Set("NetProfitLoss",local.Netprofitloss); 
+				</cfscript>
+			</cfif>
+			<cfscript>	
 			variables.TradeArray[#local.alength#][1] = local.strTrade ; 
 			local.BeanArrayLen = variables.Beanarray.size() + 1 ;
 			variables.BeanArray[#local.BeanArrayLen#] = arguments.tradeBean ;
@@ -64,6 +121,8 @@
 	<cffunction name="RecordIndicators" description="" access="private" displayname="" output="false" returntype="tradebean">
 		<cfargument name="TradeBean" required="true" />
 		<cfset var local = StructNew() />
+		<cfset arguments.tradeBean.Set("RSI",decimalFormat(arguments.tradeBean.Get("RSI") )) />
+		<cfset arguments.tradeBean.Set("CCI",decimalFormat(arguments.tradeBean.Get("CCI") )) />
 		<cfset local.rsi = arguments.tradeBean.Get("RSI") />
 		<cfset local.cci = arguments.tradeBean.Get("CCI") />
 		<cfif local.rsi GTE 70>

@@ -10,11 +10,16 @@
 	</cffunction>
 	
 	<cffunction name="System_hekin_ashi_long" description="called from systemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
+		<!--- based on new lower high --->
 		<cfargument name="TradeBeanTwoDaysAgo" required="true" />
 		<cfargument name="TradeBeanOneDayAgo" required="true" />
 		<cfargument name="TradeBeanToday" required="true" />
+		<cfargument name="TrackingBean" required="true" />
 		<cfif TradeBeanTwoDaysAgo.Get("HKLow") GT TradeBeanOneDayAgo.Get("HKLow") AND TradeBeanToday.Get("HKLow") GT TradeBeanOneDayAgo.Get("HKLow")>		
 			<cfset TradeBeanToday.Set("HKGoLong",true) />
+		</cfif>
+		<cfif TradeBeanTwoDaysAgo.Get("HKLow") LT TradeBeanOneDayAgo.Get("HKLow") AND TradeBeanToday.Get("HKLow") LT TradeBeanOneDayAgo.Get("HKLow")>		
+			<cfset TradeBeanToday.Set("HKCloseLong",true) />
 		</cfif>
 		<cfreturn TradeBeanToday />
 	</cffunction>
@@ -115,6 +120,7 @@
 	<cfargument name="TBeanTwoDaysAgo" required="true" />
 	<cfargument name="TBeanOneDayAgo" required="true" />
 	<cfargument name="TBeanToday" required="true" />
+	<cfargument name="TrackingBean" required="false" />
 	<cfset var local = Structnew() />
 	<!--- New High Low algorythm 
 	If low -2 > low-1 AND low -1 < low, save low -1 and date to array
@@ -127,6 +133,10 @@
 	Set("NewLowReversal","false");
 	--->
 	<!--- new local high ---->
+	<cfif (variables.arraycounter -1) AND  arguments.TBeanToday.Get("HKhigh") GT variables.HLData[variables.arrayCounter-1][2]
+			AND arguments.TBeanOneDayAgo.get("HKhigh") LT variables.HLData[variables.arrayCounter-1][2] >
+		<cfset arguments.TBeanToday.set("NewHighBreakout",true)>	
+	</cfif>
 	<cfif arguments.TBeanTwoDaysAgo.get("HKhigh") LT arguments.TBeanOneDayAgo.get("HKhigh") AND
 			arguments.TBeanOneDayAgo.Get("HKhigh") GT arguments.TBeanToday.Get("HKhigh")  >
 		<cfset variables.HLData[variables.arrayCounter][1] = "high" />
@@ -135,27 +145,55 @@
 		<cfset arguments.TBeanToday.set("NewHighReversal",true)>	
 		<cfset variables.arrayCounter = variables.arrayCounter + 1 />
 	</cfif>
-	<!--- check for breakout --->
-	<!--- <cfif arguments.TBeanToday.get("high") GT variables.prevHigh >
-		<cfset variables.HLData[local.arrayCounter][4] = "new high breakout" />
-		<cfset arguments.TBeanToday.set("newhighbreakout",true)>
-	</cfif>
-	<cfset variables.prevHigh = arguments.TBeanOneDayAgo.Get("high") /> --->
-	
-	<!--- <cfif arguments.TBeanTwoDaysAgo.get("low") GT arguments.TBeanOneDayAgo.get("low") AND
-		arguments.TBeanOneDayAgo.get("low")  LT arguments.queryData.low  >
-		<cfset local.HLData[local.arrayCounter][1] = "low" />
-		<cfset local.HLData[local.arrayCounter][2] = arguments.queryData.low[local.rowcount-1] />
-		<cfset local.HLData[local.arrayCounter][3] = arguments.queryData.DateOne[local.rowcount-1] />	
-		<!--- check for breakout --->
-		<cfif arguments.queryData.low[local.rowcount-1] LT local.prevLow >
-			<cfset local.HLData[local.arrayCounter][4] = "breakdown" />
-		</cfif>
-		<cfset local.prevLow = arguments.queryData.low[local.rowcount-1] />
-	   <cfset local.arrayCounter = local.arrayCounter + 1 />
-	</cfif>
-	 --->
-	<cfreturn  />
+	<cfreturn />
 	</cffunction>
 	
+	<cffunction name="System_Max_Profit" description="I find optimum entries and exits" access="public" displayname="" output="false" returntype="any">
+	<cfargument name="TBeanTwoDaysAgo" required="true" />
+	<cfargument name="TBeanOneDayAgo" required="true" />
+	<cfargument name="TBeanToday" required="true" />
+	
+	<cfset var local = Structnew() />
+	<!--- New High Low algorythm 
+	If low -2 > low-1 AND low -1 < low, save low -1 and date to array
+	If low -1 < last saved value, flag as breakdown 
+	If high -2 < high-1 AND high -1 > high, save high -1 and date to array
+	If high -1 > last saved value, flag as breakout 
+	Set("NewHighReversal","false");
+	Set("NewHighBreakout","false");
+	Set("NewLowBreakDown","false");
+	Set("NewLowReversal","false");
+	--->
+	<!--- new local high ---->
+	<cfif  arguments.TBeanTwoDaysAgo.Get("HKlow") GT arguments.TBeanOneDayAgo.get("HKlow")
+			AND arguments.TBeanOneDayAgo.get("HKlow") LT arguments.TBeanToday.get("HKlow") >
+		<cfset arguments.TBeanOneDayAgo.set("NewLocalLow",true) />
+	</cfif>
+	<cfif  arguments.TBeanTwoDaysAgo.Get("HKhigh") LT arguments.TBeanOneDayAgo.get("HKHigh")
+			AND arguments.TBeanOneDayAgo.get("HKHigh") GT arguments.TBeanToday.get("HKHigh") >
+		<cfset arguments.TBeanOneDayAgo.set("NewLocalHigh",true) />	
+	</cfif>
+	<cfreturn  arguments.TBeanToday />
+	</cffunction>
+	
+	<cffunction name="System_PivotPoints" description="I find new highs and lows" access="public" displayname="" output="false" returntype="Void">
+		<cfargument name="TBeanTwoDaysAgo" required="true" />
+		<cfargument name="TBeanOneDayAgo" required="true" />
+		<cfargument name="TBeanToday" required="true" />
+		<cfset var local = Structnew() />
+			<!--- new local high ---->
+		<cfif arguments.TBeanToday.Get("HKhigh") GT arguments.TBeanOneDayAgo.get("R1") >
+			<cfset arguments.TBeanToday.set("R1Breakout1Day",true)>	
+		</cfif>
+		<cfif arguments.TBeanToday.Get("HKhigh") GT arguments.TBeanOneDayAgo.get("R2") >
+			<cfset arguments.TBeanToday.set("R2Breakout1Day",true)>	
+		</cfif>
+		<cfif arguments.TBeanToday.Get("HKhigh") GT arguments.TBeanTwoDaysAgo.get("R1") >
+			<cfset arguments.TBeanToday.set("R1Breakout2Day",true)>	
+		</cfif>
+		<cfif arguments.TBeanToday.Get("HKhigh") GT arguments.TBeanTwoDaysAgo.get("R2") >
+			<cfset arguments.TBeanToday.set("R2Breakout2Day",true)>	
+		</cfif>
+		<cfreturn  />
+	</cffunction>
 </cfcomponent>
