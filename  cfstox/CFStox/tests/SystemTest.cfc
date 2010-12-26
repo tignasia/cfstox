@@ -59,7 +59,7 @@
 	<cffunction name="testRunSystem" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
-		local.data = this.DataService.GetStockData(symbol:"RIG",startdate:"7/01/2010",enddate:"12/15/2010"); 
+		local.data = this.DataService.GetStockData(symbol:"AKAM",startdate:"7/01/2010",enddate:"12/15/2010"); 
 		//debug(local.data);
 		local.data = this.DataService.GetTechnicalIndicators(query:local.data.HKData); 
 		///debug(local.data);
