@@ -28,12 +28,18 @@
 		Set("NewHighReversal","false"); // bounce off new local high 
 		Set("NewLowBreakDown","false"); //new low greater than previous local low
 		Set("NewLowReversal","false"); // bounce off new local low
+		Set("NewLocalLow",false);
+		Set("NewLocalHigh",false);
 		Set("HKGoShort","false");
+		Set("HKCloseShort","false");
 		Set("HKGoLong","false");
+		Set("HKCloseLong","false");
 		Set("EntryDate","00/00/0000");
 		Set("EntryPrice",0);
 		Set("ExitDate","00/00/0000");
 		Set("ExitPrice",0);
+		Set("ProfitLoss",0);
+		Set("NetProfitLoss",0);
 		Set("StopLossPrice",0);
 		Set("StopLossTriggered",false);
 		Set("RSIstatus","");
@@ -41,6 +47,10 @@
 		Set("MomentumStatus","");
 		Set("BolBandStatus","");
 		Set("MACDStatus","");
+		Set("R1Breakout1Day",false);
+		Set("R1BreakOut2Days",false);
+		Set("R2Breakout1Day",false);
+		Set("R2BreakOut2Days",false);
 		Set("R1Status","");
 		Set("R2Status","");
 		Set("S1Status","");
