@@ -12,13 +12,13 @@
 		set("HKVolume",strData.Volume);
 		set("ADX",strData.ADX);
 		set("CCI",strData.CCI);
+		set("RSI",strData.RSI); 
 		set("LinearReg",strData.LinearReg);
 		set("LinearRegAngle",strData.LinearRegAngle);
 		set("LinearRegIntercept",strData.LinearRegIntercept);
 		set("LinearRegSlope",strData.LinearRegSlope);
 		set("LRSDelta",strData.LRSDelta);
 		set("Momentum",strData.Momentum);
-		set("RSI",strData.RSI); 
 		set("S1",strData.S1);
 		set("S2",strData.S2);
 		set("R1",strData.R1);
@@ -34,6 +34,10 @@
 		Set("HKCloseShort","false");
 		Set("HKGoLong","false");
 		Set("HKCloseLong","false");
+		Set("UseR1Entry","false");
+		Set("UseR2Entry","false");
+		Set("UseS1Entry","false");
+		Set("UseS2Entry","false");
 		Set("EntryDate","00/00/0000");
 		Set("EntryPrice",0);
 		Set("ExitDate","00/00/0000");
