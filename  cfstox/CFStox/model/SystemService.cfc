@@ -18,6 +18,7 @@
 		<!--- todo: add fib analysis  --->
 		<!--- todo: add trading range - results of last trades  --->
 		<!--- todo: add notes capablity --->
+		<!--- todo: use yahoo or google data stream --->
 		<cfargument name="SystemToRun" required="true"  />
 		<cfargument name="qryData" required="true" />
 		<cfargument name="ReportType" required="false" default="backtest" hint="backtest,watchlist"/>

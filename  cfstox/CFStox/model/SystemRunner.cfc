@@ -91,6 +91,12 @@
 				arguments.TrackingBean.Set("EntryPrice",arguments.TradeBean.Get("HKClose"));
 				</cfscript>
 			</cfif>
+			<!--- dont try to close non-existant trades--->
+			<cfif arguments.TradeBean.Get("HKCloseLong") AND NOT arguments.TrackingBean.Get("HKGoLong")>
+				<cfscript>
+				arguments.TradeBean.Set("HKCloseLong",false);
+				</cfscript>
+			</cfif>
 			<cfif arguments.TradeBean.Get("HKCloseLong") AND arguments.TrackingBean.Get("HKGoLong")>
 				<cfscript>
 				arguments.TrackingBean.Set("HKGoLong",false);
@@ -108,6 +114,7 @@
 				arguments.TradeBean.Set("NetProfitLoss",local.Netprofitloss); 
 				</cfscript>
 			</cfif>
+			
 			<cfscript>	
 			variables.TradeArray[#local.alength#][1] = local.strTrade ; 
 			local.BeanArrayLen = variables.Beanarray.size() + 1 ;
