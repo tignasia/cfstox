@@ -33,6 +33,13 @@
 		<cfset local.ReportHeaders = "Date,High,Low,Price,High,Difference">
 		<cfset local.ReportMethods = "Date,NewLocalHigh,NewLocalLow,HKHigh">
 		<cfset session.objects.Output.HiLoReport(local) />
+		<!--- this belongs in a watchlist runner method --->
+		<cfif arguments.ReportType EQ "watchlist">
+		<!---- loop over the BeanArray and get open and close setups and entries/exits--->
+		<!--- loop backwards over the array and find the last two entry/exit setups 
+		delete everything above them and do a structappend to the watchlist struct
+		once all symbols have been run, fire off the Watchlist Report and send it the watchlist struct--->
+		</cfif>
 		<cfreturn local.results />
 	</cffunction>
 	

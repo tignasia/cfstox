@@ -116,11 +116,66 @@
 			</cfif>
 			
 			<cfscript>	
-			variables.TradeArray[#local.alength#][1] = local.strTrade ; 
 			local.BeanArrayLen = variables.Beanarray.size() + 1 ;
 			variables.BeanArray[#local.BeanArrayLen#] = arguments.tradeBean ;
 			</cfscript>
 		<!--- send the bean to the output component so it can capture the bean state--->
+		</cfif>
+		<cfreturn />
+	</cffunction>
+	
+	<cffunction name="Open_Trade" description="" access="private" displayname="" output="false" returntype="Any">
+		<cfargument name="TradeBean" required="true" />
+		<cfargument name="TrackingBean" required="true"  />
+		<cfset var local = StructNew() />
+		<cfif arguments.TradeBean.Get("LongPositionTriggered") >
+			<cfscript>
+			local.entryPoint = arguments.TradeBean.Get("EntryPoint"); // open,R1,R2
+			arguments.TrackingBean.Set("LongPositionTriggered",true);
+			arguments.TrackingBean.Set("EntryDate",arguments.TradeBean.Get("Date") );
+			arguments.TrackingBean.Set("EntryPrice",arguments.TradeBean.Get("#local.entryPoint#""));
+			</cfscript>
+		</cfif>
+		<cfif arguments.TradeBean.Get("ShortPositionTriggered") >
+			<cfscript>
+			local.entryPoint = arguments.TradeBean.Get("EntryPoint"); // open,S1,S2
+			arguments.TrackingBean.Set("ShortPositionTriggered",true);
+			arguments.TrackingBean.Set("EntryDate",arguments.TradeBean.Get("Date") );
+			arguments.TrackingBean.Set("EntryPrice",arguments.TradeBean.Get("#local.entryPoint#""));
+			</cfscript>
+		</cfif>
+		<cfreturn />
+	</cffunction>
+	
+	<cffunction name="Close_Trade" description="I update the TrackingBean to keep track of trading state" access="private" displayname="" output="false" returntype="Any">
+		<cfargument name="TradeBean" required="true" />
+		<cfargument name="TrackingBean" required="true"  />
+		<cfset var local = StructNew() />
+		<cfset local.exitPoint = arguments.TradeBean.Get("ExitPoint") />  <!--- open,S1,S2,r1,r2 --->
+		<cfif arguments.TradeBean.Get("CloseLong") >
+			<cfscript>
+			arguments.TrackingBean.Set("CloseLong",true);
+			arguments.TrackingBean.Set("ExitDate",arguments.TradeBean.Get("Date") );
+			arguments.TrackingBean.Set("ExitPrice",arguments.TradeBean.Get("#local.ExitPoint#"));
+			</cfscript>
+		</cfif>
+			
+		<cfif arguments.TradeBean.Get("CloseShort") >
+			<cfscript>
+			arguments.TrackingBean.Set("CloseShort",true);
+			arguments.TrackingBean.Set("ExitDate",arguments.TradeBean.Get("date") );
+			arguments.TrackingBean.Set("ExitPrice",arguments.TradeBean.Get("#local.ExitPoint#") );
+			local.profitloss = arguments.TrackingBean.Get("EntryPrice") - arguments.TrackingBean.Get("ExitPrice")   ;
+			arguments.TrackingBean.Set("ProfitLoss",local.profitloss); 
+			local.NetProfitLoss = arguments.TrackingBean.Get("NetProfitLoss") + local.profitloss;
+			arguments.TrackingBean.Set("NetProfitLoss",local.Netprofitloss); 
+			arguments.TradeBean.Set("EntryDate",arguments.TrackingBean.Get("EntryDate") );
+			arguments.TradeBean.Set("EntryPrice",arguments.TrackingBean.Get("EntryPrice"));
+			arguments.TradeBean.Set("ExitDate",arguments.TradeBean.Get("date") );
+			arguments.TradeBean.Set("ExitPrice",arguments.TradeBean.Get("#local.ExitPoint#") );
+			arguments.TradeBean.Set("ProfitLoss",local.profitloss); 
+			arguments.TradeBean.Set("NetProfitLoss",local.Netprofitloss); 
+			</cfscript>
 		</cfif>
 		<cfreturn />
 	</cffunction>
