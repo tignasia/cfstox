@@ -28,6 +28,10 @@
 		Set("NewHighReversal","false"); // bounce off new local high 
 		Set("NewLowBreakDown","false"); //new low greater than previous local low
 		Set("NewLowReversal","false"); // bounce off new local low
+		Set("PreviousLocalHigh",0);
+		Set("PreviousLocalLow",0);
+		Set("PreviousLocalHighDate","00/00/0000");
+		Set("PreviousLocalLowDate","00/00/0000");
 		Set("NewLocalLow",false);
 		Set("NewLocalHigh",false);
 		Set("HKGoShort","false");
