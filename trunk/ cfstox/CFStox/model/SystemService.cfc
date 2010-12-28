@@ -36,12 +36,89 @@
 		<!--- this belongs in a watchlist runner method --->
 		<cfif arguments.ReportType EQ "watchlist">
 		<!---- loop over the BeanArray and get open and close setups and entries/exits--->
-		<!--- loop backwards over the array and find the last two entry/exit setups 
+		<!--- make seperate containers for breakouts, breakdowns, each report category
+		loop backwards over the array and find the last two entry/exit setups 
 		delete everything above them and do a structappend to the watchlist struct
 		once all symbols have been run, fire off the Watchlist Report and send it the watchlist struct--->
 		</cfif>
 		<cfreturn local.results />
 	</cffunction>
 	
+	<cffunction name="RunWatchlist" description="" access="public" displayname="" output="false" returntype="Any">
+		<cfargument name="SystemToRun" required="true"  />
+		<cfargument name="ReportType" required="false" default="backtest" hint="backtest,watchlist"/>
+		<cfargument name="TargetDate" required="false" default="#dateformat(now()-1,"mm/dd/yyyy")#" />
+		<cfset var local = structnew() />
+		<!--- <cfset local.arrGoLong = arrayNew(1) />
+		<cfset local.arrHighBreakout = arrayNew(1) />
+		<cfset local.arrOpenTrade = arrayNew(1) />
+		<cfset local.arrCloseTrade = arrayNew(1) />
+		<cfset local.arrLowBreakdown = arrayNew(1) />
+		<cfset local.arrMoveStop = arrayNew(1) /> --->
+		<!--- array of structurss of arrays --->
+		<cfset local.arrStrBeanSets = arrayNew(1)/>
+		<cfset local.watchlist = 
+"A,ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX"
+>
+		
+		<cfloop list="#local.watchlist#" index="i">
+			<cfset local.data = session.objects.DataService.GetStockData(symbol:"#i#",startdate:"7/01/2010",enddate:"12/28/2010") /> 
+			<cfset local.data = session.objects.DataService.GetTechnicalIndicators(query:local.data.HKData) />
+			<cfset local.results = session.objects.systemRunner.testSystem(SystemToRun:arguments.systemtorun,qryData:local.data) >
+			<cfset local.Events = processBeanCollection(beancollection:local.results.BeanCollection,TargetDate:arguments.TargetDate) />
+			<cfset local.arrStrBeanSets[local.arrStrBeanSets.size() + 1] = local.events />
+		<!--- HKGoLong, NewHighBreakout, OpenTrade, CloseTrade, HKGoShort, NewLowBreakdown, MoveStop --->
+		<!--- Loop over BeanArray and move beans to correct category --->
+		</cfloop>
+		<cfreturn local.arrStrBeanSets />
+	</cffunction>
+	
+	<cffunction name="ProcessBeanCollection" description="" access="private" displayname="" output="false" returntype="Any">
+		<cfargument name="TargetDate" required="false" default="#dateformat(now()-1,"mm/dd/yyyy")#" />
+		<cfargument name="beancollection" required="true" />
+		<cfset var local = structnew() />
+		<cfset local.arrGoLong = arrayNew(1) />
+		<cfset local.arrGoShort = arrayNew(1) />
+		<cfset local.arrHighBreakout = arrayNew(1) />
+		<cfset local.arrOpenTrade = arrayNew(1) />
+		<cfset local.arrCloseTrade = arrayNew(1) />
+		<cfset local.arrLowBreakdown = arrayNew(1) />
+		<cfset local.arrMoveStop = arrayNew(1) />
+		<cfset local.strBeanCollection = structNew() />
+		
+		<!--- HKGoLong, NewHighBreakout, OpenTrade, CloseTrade, HKGoShort, NewLowBreakdown, MoveStop --->
+		<!--- Loop over BeanArray and move beans to correct category --->
+		<!--- add symbol --->
+		<cfloop  array="#arguments.beancollection#" index="i">
+			<cfif i.get("HKGoLong") AND i.get("Date") EQ dateformat(arguments.targetdate,"mm/dd/yyyy") >
+				<cfset local.arrGoLong[local.arrGoLong.Size() +1] = i>
+			</cfif>
+			<cfif i.get("NewHighBreakout") AND i.get("Date") EQ dateformat(arguments.targetdate,"mm/dd/yyyy")>
+				 <cfset local.arrHighBreakout[local.arrHighBreakout.Size() +1] = i>
+			</cfif>
+			<!--- <cfif i.get("OpenTrade")>
+				 <cfset local.arrOpenTrade[local.arrGoLong.Size() +1] = i>
+			</cfif>
+			<cfif i.get("CloseTrade")>
+				 <cfset local.arrCloseTrade[local.arrGoLong.Size() +1] = i>
+			</cfif> --->
+			<cfif i.get("HKGoShort") AND i.get("Date") EQ dateformat(arguments.targetdate,"mm/dd/yyyy")>
+				 <cfset local.arrGoShort[local.arrGoShort +1] = i>
+			</cfif>
+			<cfif i.get("NewLowBreakdown") AND i.get("Date") EQ dateformat(arguments.targetdate,"mm/dd/yyyy")>
+				 <cfset local.arrLowBreakdown[local.arrLowBreakdown +1] = i>
+			</cfif>
+			<!--- <cfif i.get("MoveStop")>
+				 <cfset local.arrGoLong[arrGoLong.Size +1] = i>
+			</cfif> --->
+		</cfloop>
+		<cfset local.strBeanCollection.goLong 		= local.arrGoLong />
+		<cfset local.strBeanCollection.HighBreakOut = local.arrHighBreakout />
+		<cfset local.strBeanCollection.OpenTrade 	= local.arrOpenTrade>
+		<cfset local.strBeanCollection.CloseTrade 	= local.arrCloseTrade>
+		<cfset local.strBeanCollection.GoShort		= local.arrGoShort>
+		<cfset local.strBeanCollection.GoLong  		= local.arrGoLong>
+		<cfreturn local.strBeanCollection />
+	</cffunction>
 	
 </cfcomponent>

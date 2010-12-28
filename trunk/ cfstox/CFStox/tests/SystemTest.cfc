@@ -64,7 +64,18 @@
 		local.data = this.DataService.GetTechnicalIndicators(query:local.data.HKData); 
 		///debug(local.data);
 		local.result = this.SystemService.RunSystem(SystemToRun:"test",qryData: local.data);
-		//debug(local.result);
+		debug(local.result);
+		//local.query = this.System.TrackTrades(queryData: local.data);
+		//local.beandata = local.result.;
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testRunWatchlist" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		///debug(local.data);
+		local.result = this.SystemService.RunWatchlist(SystemToRun:"test");
+		debug(local.result);
 		//local.query = this.System.TrackTrades(queryData: local.data);
 		//local.beandata = local.result.;
 		</cfscript>

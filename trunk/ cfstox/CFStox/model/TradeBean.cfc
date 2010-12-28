@@ -40,8 +40,10 @@
 		Set("UseS2Entry","false");
 		Set("EntryDate","00/00/0000");
 		Set("EntryPrice",0);
+		Set("EntryPoint","R2");
 		Set("ExitDate","00/00/0000");
 		Set("ExitPrice",0);
+		Set("ExitPoint","S1");
 		Set("ProfitLoss",0);
 		Set("NetProfitLoss",0);
 		Set("StopLossPrice",0);

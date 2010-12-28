@@ -133,7 +133,7 @@
 			local.entryPoint = arguments.TradeBean.Get("EntryPoint"); // open,R1,R2
 			arguments.TrackingBean.Set("LongPositionTriggered",true);
 			arguments.TrackingBean.Set("EntryDate",arguments.TradeBean.Get("Date") );
-			arguments.TrackingBean.Set("EntryPrice",arguments.TradeBean.Get("#local.entryPoint#""));
+			arguments.TrackingBean.Set("EntryPrice",arguments.TradeBean.Get("#local.entryPoint#"));
 			</cfscript>
 		</cfif>
 		<cfif arguments.TradeBean.Get("ShortPositionTriggered") >
@@ -141,7 +141,7 @@
 			local.entryPoint = arguments.TradeBean.Get("EntryPoint"); // open,S1,S2
 			arguments.TrackingBean.Set("ShortPositionTriggered",true);
 			arguments.TrackingBean.Set("EntryDate",arguments.TradeBean.Get("Date") );
-			arguments.TrackingBean.Set("EntryPrice",arguments.TradeBean.Get("#local.entryPoint#""));
+			arguments.TrackingBean.Set("EntryPrice",arguments.TradeBean.Get("#local.entryPoint#"));
 			</cfscript>
 		</cfif>
 		<cfreturn />
