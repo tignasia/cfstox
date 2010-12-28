@@ -76,9 +76,17 @@
 		///debug(local.data);
 		local.result = this.SystemService.RunWatchlist(SystemToRun:"test");
 		debug(local.result);
+		
 		//local.query = this.System.TrackTrades(queryData: local.data);
 		//local.beandata = local.result.;
+		local.result1 = local.result[1]["golong"].GetMemento();
+		local.result2 = local.result[2]["golong"].GetMemento();
+		local.result3 = local.result[3]["golong"].GetMemento();
+		debug(local.result1);
+		debug(local.result2);
+		debug(local.result3);
 		</cfscript>
+		
 	</cffunction>
 	<!--- 
 <cffunction name="testSystemHKII" access="public" returntype="void">

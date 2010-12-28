@@ -115,6 +115,53 @@
 		<cfreturn />
 	</cffunction>
 	
+	<cffunction name="WatchListReport" description="I output a PDF of the bean status" access="public" displayname="" output="false" returntype="void">
+		<cfargument name="data" required="true">
+		<cfset var local = structNew() />
+		<cfset local.filename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "WatchList" & ".pdf"/>
+		<cfdocument  format="PDF" filename="#local.filename#" overwrite="true">
+		<cfoutput>
+		Watchlist Report <br/>
+		Breakout Highs <br/>
+		<table>
+		<th>Symbol</th><th>ClosingPrice</th><th>Previous High</th><th>Previous High Date</th><th>Previous High Date</th><th>GoLong</th>		
+		<cfloop array="#arguments.data#" index="i">
+		<cfset local.TradeBean = i />
+			<cfif local.TradeBean["highbreakout"].Get("NewHighBreakOut") > --->
+		<tr>
+			<td>#local.tradebean["highbreakout"].Get("Symbol")#</td>
+			<td>#local.tradebean["highbreakout"].Get("HKClose")#</td>
+			<td>#local.tradebean["highbreakout"].Get("PreviousLocalHigh")#</td>
+			<td>#local.tradebean["highbreakout"].Get("PreviousLocalHighDate")#</td>
+			<td>#local.tradebean["highbreakout"].Get("HKGoLong")#</td>
+		</tr>
+		</cfif> 
+		</cfloop>
+		</table>
+		</cfoutput>
+		<cfoutput>
+		New Long Positions <br/>
+		<table>
+		<th>Symbol</th><th>ClosingPrice</th> <th>R1</th> <th>Previous High</th><th>Previous High Date</th>
+		
+		<cfloop array="#arguments.data#" index="j">
+		<cfset local.TradeBean =  j />	
+		<cfif local.TradeBean["golong"].Get("HKGoLong") >
+		<tr>
+			<td>#local.tradebean["golong"].Get("Symbol")#</td>
+			<td>#local.tradebean["golong"].Get("HKClose")#</td>
+			<td>#local.tradebean["golong"].Get("R1")#</td>
+			<td>#local.tradebean["golong"].Get("PreviousLocalHigh")#</td>
+			<td>#local.tradebean["golong"].Get("PreviousLocalHighDate")#</td>
+		</tr>
+		</cfif>
+		</cfloop>
+		</table>
+		</cfoutput>
+		</cfdocument>
+		<cfreturn />
+	</cffunction>
+	
 	
 	<cffunction name="GetPDFPath" description="I get the absolute path for the PDF" access="public" displayname="" output="false" returntype="String">
 		<cfargument name="data" required="true">
