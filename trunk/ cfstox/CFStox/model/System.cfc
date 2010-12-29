@@ -50,6 +50,75 @@
 		<cfreturn TradeBeanToday />
 	</cffunction>
 	
+	<cffunction name="System_ha_longIII" description="called from systemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
+		<!--- based on optimum trades in X - US Steel --->
+		<!--- based on two down days followed by up day --->
+		<cfargument name="TradeBeanTwoDaysAgo" required="true" />
+		<cfargument name="TradeBeanOneDayAgo" required="true" />
+		<cfargument name="TradeBeanToday" required="true" />
+		<cfargument name="TrackingBean" required="true" />
+		<cfset var local = StructNew() />
+		<cfset local.boolGoLong = true>
+		<cfif arguments.TradeBeanTwoDaysAgo.Get("HKClose") GT arguments.TradeBeanTwoDaysAgo.Get("HKOpen")>
+			<cfset local.boolGoLong = false />
+		</cfif>   
+		<cfif local.boolGoLong AND arguments.TradeBeanOneDayAgo.Get("HKClose") GT arguments.TradeBeanOneDayAgo.Get("HKOpen")>
+			<cfset local.boolGoLong = false />
+		</cfif>
+		<cfif local.boolGoLong AND arguments.TradeBeanToday.Get("HKClose") GT arguments.TradeBeanToday.Get("HKOpen")>
+			<cfset TradeBeanToday.Set("HKGoLong",true) />
+			<cfset TradeBeanToday.Set("UseR2Entry",true) />
+		</cfif> 
+		<cfif arguments.TradeBeanToday.Get("HKClose") LT arguments.TradeBeanToday.Get("HKOpen")>
+			<cfset TradeBeanToday.Set("HKCloseLong",true) />
+			<cfset TradeBeanToday.Set("UseS2Entry",true) />
+		</cfif>     		
+		<cfreturn TradeBeanToday />
+	</cffunction>
+	
+	<cffunction name="System_ha_III" description="called from systemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
+		<!--- based on optimum trades in X - US Steel --->
+		<!--- based on two down days followed by up day --->
+		<cfargument name="TradeBeanTwoDaysAgo" required="true" />
+		<cfargument name="TradeBeanOneDayAgo" required="true" />
+		<cfargument name="TradeBeanToday" required="true" />
+		<cfargument name="TrackingBean" required="true" />
+		<cfset var local = StructNew() />
+		<cfscript>
+		local.boolGoLong = false;
+		local.tb2open = arguments.TradeBeanTwoDaysAgo.Get("HKOpen");
+		local.tb2close = arguments.TradeBeanTwoDaysAgo.Get("HKClose");
+		local.tb1open = arguments.TradeBeanOneDayAgo.Get("HKOpen");
+		local.tb1close = arguments.TradeBeanOneDayAgo.Get("HKClose");
+		local.tbopen = arguments.TradeBeanToday.Get("HKOpen");
+		local.tbclose = arguments.TradeBeanToday.Get("HKClose");
+		if (
+		local.tb2open GT local.tb2close 
+		AND  
+		local.tb1open LT local.tb1close AND 
+		local.tbopen LT local.tbclose 
+		) 
+		{
+			local.boolGoLong = true;
+			TradeBeanToday.Set("HKGoLong",true); 
+			TradeBeanToday.Set("UseR2Entry",true); 
+		}
+		
+		if (
+		local.tb2open LT local.tb2close 
+		AND  
+		local.tb1open GT local.tb1close AND 
+		local.tbopen GT local.tbclose 
+		) 
+		{
+			local.boolGoShort = true;
+			TradeBeanToday.Set("HKGoShort",true); 
+			TradeBeanToday.Set("UseR2Entry",true); 
+		}
+		</cfscript>
+		<cfreturn TradeBeanToday />
+	</cffunction>
+	
 	<cffunction name="System_hekin_ashi_short" description="called from SystemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
 		<cfargument name="TradeBeanTwoDaysAgo" required="true" />
 		<cfargument name="TradeBeanOneDayAgo" required="true" />
