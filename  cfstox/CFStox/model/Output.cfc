@@ -170,6 +170,31 @@
 		</cfloop>
 		</table>
 		</cfoutput>
+		<cfoutput>
+		New Short Positions <br/>
+		<table>
+		<th>Symbol</th>
+		<th>ClosingPrice</th> 
+		<th>Date</th>
+		<th>R1</th> 
+		<th>Previous Low</th>
+		<th>Previous Low Date</th>
+		
+		<cfloop array="#arguments.data#" index="k">
+		<cfset local.TradeBean =  k />	
+		<cfif local.TradeBean["goshort"].Get("HKGoShort") > 
+		<tr>
+			<td>#local.tradebean["goshort"].Get("Symbol")#</td>
+			<td>#local.tradebean["goshort"].Get("HKClose")#</td>
+			<td>#local.tradebean["goshort"].Get("Date")#</td>
+			<td>#DecimalFormat(local.tradebean["goshort"].Get("R1"))#</td>
+			<td>#local.tradebean["goshort"].Get("PreviousLocalHigh")#</td>
+			<td>#local.tradebean["goshort"].Get("PreviousLocalHighDate")#</td>
+		</tr>
+		</cfif> 
+		</cfloop>
+		</table>
+		</cfoutput>
 		</cfdocument>
 		<cfreturn />
 	</cffunction>

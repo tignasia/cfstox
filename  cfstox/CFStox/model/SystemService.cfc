@@ -146,16 +146,17 @@
 		<cfargument name="TargetDate" required="false" default="#dateformat(now()-5,"mm/dd/yyyy")#" />
 		<cfargument name="beancollection" required="true" />
 		<cfset var local = structnew() />
-		<cfset local.arrGoLong = arrayNew(1) />
-		<cfset local.arrGoShort = arrayNew(1) />
-		<cfset local.arrHighBreakout = arrayNew(1) />
-		<cfset local.arrOpenTrade = arrayNew(1) />
-		<cfset local.arrCloseTrade = arrayNew(1) />
-		<cfset local.arrLowBreakdown = arrayNew(1) />
-		<cfset local.arrMoveStop = arrayNew(1) />
+		<cfset local.GoLong = "" />
+		<cfset local.GoShort = "" />
+		<cfset local.HighBreakout = "" />
+		<cfset local.OpenTrade = "" />
+		<cfset local.CloseTrade = "" />
+		<cfset local.LowBreakdown = "" />
+		<cfset local.arrMoveStop = "" />
 		<cfset local.strBeanCollection1 = structNew() />
 		<cfset local.highbreakout = "">
 		<cfset local.getlong = ""/>
+		<cfset local.getshort = ""/>
 		<!--- <cfdump  label="in processbean:beancollection "  var="#arguments.beancollection#"> --->
 		<!--- HKGoLong, NewHighBreakout, OpenTrade, CloseTrade, HKGoShort, NewLowBreakdown, MoveStop --->
 		<!--- Loop over BeanArray and move beans to correct category --->
@@ -167,16 +168,25 @@
 			<cfif x EQ 1>
 				<cfset local.getlong = m>
 			</cfif>
-			<cfif <!--- m.get("HKGoLong") AND ---> 
+			<cfif 
 			m.get("Date") GTE dateformat(arguments.targetdate,"mm/dd/yyyy") AND 
 			m.get("HKGoLong")>
 				<cfset local.getlong = m>
 			</cfif>
 			<cfif x EQ 1>
-				 <cfset local.HighBreakout = m>
+				 <cfset local.HighBreakout = m />
 			</cfif>
 			<cfif m.get("NewHighBreakout") AND  m.get("Date") GTE dateformat(arguments.targetdate,"mm/dd/yyyy")>
-				 <cfset local.HighBreakout = m>
+				 <cfset local.HighBreakout = m />
+			</cfif>
+			<cfif x EQ 1>
+				<cfset local.getshort = m />
+			</cfif>
+			<cfif 
+			m.get("Date") GTE dateformat(arguments.targetdate,"mm/dd/yyyy") AND 
+			m.get("HKGoShort")
+			>	
+				<cfset local.getShort = m />
 			</cfif>
 			<!--- <cfif i.get("OpenTrade")>
 				 <cfset local.arrOpenTrade[local.arrGoLong.Size() +1] = i>
@@ -202,9 +212,9 @@
 		</cfloop> --->
 		<cfset local.strBeanCollection1.goLong 		= local.getLong />
 		<cfset local.strBeanCollection1.HighBreakOut = local.HighBreakout />
-		<cfset local.strBeanCollection1.OpenTrade 	= local.arrOpenTrade>
-		<cfset local.strBeanCollection1.CloseTrade 	= local.arrCloseTrade>
-		<cfset local.strBeanCollection1.GoShort		= local.arrGoShort>
+		<cfset local.strBeanCollection1.OpenTrade 	= local.OpenTrade>
+		<cfset local.strBeanCollection1.CloseTrade 	= local.CloseTrade>
+		<cfset local.strBeanCollection1.GoShort		= local.getShort>
 		
 		<cfreturn local.strBeanCollection1 />
 	</cffunction>
