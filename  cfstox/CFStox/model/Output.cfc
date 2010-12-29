@@ -124,16 +124,22 @@
 		Watchlist Report <br/>
 		Breakout Highs <br/>
 		<table>
-		<th>Symbol</th><th>ClosingPrice</th><th>Previous High</th><th>Previous High Date</th><th>Previous High Date</th><th>GoLong</th>		
-		<cfloop array="#arguments.data#" index="i">
+		<th>Symbol</th>
+		<th>ClosingPrice</th>
+		<th>High</th>
+		<th>Date</th>
+		<th>Previous High</th>
+		<th>Previous High Date</th>
+		<cfloop array="#arguments.data#" index="i"  >
 		<cfset local.TradeBean = i />
-			<cfif local.TradeBean["highbreakout"].Get("NewHighBreakOut") > --->
+			<cfif local.TradeBean["highbreakout"].Get("NewHighBreakOut") > 
 		<tr>
 			<td>#local.tradebean["highbreakout"].Get("Symbol")#</td>
 			<td>#local.tradebean["highbreakout"].Get("HKClose")#</td>
+			<td>#local.tradebean["highbreakout"].Get("HKHigh")#</td>
+			<td>#local.tradebean["highbreakout"].Get("Date")#</td>
 			<td>#local.tradebean["highbreakout"].Get("PreviousLocalHigh")#</td>
 			<td>#local.tradebean["highbreakout"].Get("PreviousLocalHighDate")#</td>
-			<td>#local.tradebean["highbreakout"].Get("HKGoLong")#</td>
 		</tr>
 		</cfif> 
 		</cfloop>
@@ -142,19 +148,25 @@
 		<cfoutput>
 		New Long Positions <br/>
 		<table>
-		<th>Symbol</th><th>ClosingPrice</th> <th>R1</th> <th>Previous High</th><th>Previous High Date</th>
+		<th>Symbol</th>
+		<th>ClosingPrice</th> 
+		<th>Date</th>
+		<th>R1</th> 
+		<th>Previous High</th>
+		<th>Previous High Date</th>
 		
 		<cfloop array="#arguments.data#" index="j">
 		<cfset local.TradeBean =  j />	
-		<cfif local.TradeBean["golong"].Get("HKGoLong") >
+		<cfif local.TradeBean["golong"].Get("HKGoLong") > 
 		<tr>
 			<td>#local.tradebean["golong"].Get("Symbol")#</td>
 			<td>#local.tradebean["golong"].Get("HKClose")#</td>
-			<td>#local.tradebean["golong"].Get("R1")#</td>
+			<td>#local.tradebean["golong"].Get("Date")#</td>
+			<td>#DecimalFormat(local.tradebean["golong"].Get("R1"))#</td>
 			<td>#local.tradebean["golong"].Get("PreviousLocalHigh")#</td>
 			<td>#local.tradebean["golong"].Get("PreviousLocalHighDate")#</td>
 		</tr>
-		</cfif>
+		</cfif> 
 		</cfloop>
 		</table>
 		</cfoutput>

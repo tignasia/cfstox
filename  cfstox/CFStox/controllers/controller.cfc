@@ -47,24 +47,16 @@
 		<cfargument name="argumentData">
 		<cfset var local = structnew() />
 		<cfset local.view = "watchlist">
-		<cfset local.tradesArray = ArrayNew(1) />
-		<cfset local.tradeArrayLen = 1 />
-		<cfset local.theList = 
+		<!--- <cfset local.theList = 
 "A,ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH"
+> --->
+<cfset local.theList = 
+"A,ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM"
 >
-	<!--- ,SII,SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF --->
+	<!--- SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF --->
 		<cfset local.startDate = dateformat(now()-30,"mm/dd/yyyy") />
 		<cfset local.endDate = dateformat(now(),"mm/dd/yyyy") />
-		<cfloop index="symbol" list="#local.theList#">
-			<cfset local.TradesArray[#local.tradeArrayLen#] = symbol />
-			<cfset local.tradeArrayLen = local.tradeArrayLen+1 />
-			<cfset local.queryData = historical(symbol:symbol,startdate:local.startdate,enddate:local.enddate)/>
-			<cfset local.stockdata = local.queryData.returned.HKData />
-			<cfset local.stockdata = session.objects.system.System_hekin_ashiII(queryData:local.stockdata ) />
-			<cfset local.TradesArray[#local.tradeArrayLen#] = local.stockdata />
-			<cfset local.tradeArrayLen = local.tradeArrayLen+1 />
-		</cfloop>
-		<cfset request.tradedata = local.TradesArray />
+		<cfset request.data = session.objects.systemservice.RunWatchList(SystemToRun:"test") />
 		<cfreturn local />
 	</cffunction>
 
