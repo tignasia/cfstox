@@ -5,6 +5,10 @@
 	sessiontimeout="#CreateTimeSpan(0,0,30,0)#" 	
 	clientmanagement="Yes">
 
+ <cfsetting
+ requesttimeout="120"
+ showdebugoutput="true"
+ />
 <!--- <cfparam name="url.appReload" type="string" default="false" />
 <cfif not structKeyExists( application, 'appInitialized' ) or url.appReload>
 <cfif FindNoCase(".xml.cfm", GetFileFromPath(GetBaseTemplatePath()))>

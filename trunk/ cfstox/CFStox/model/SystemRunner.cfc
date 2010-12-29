@@ -9,9 +9,19 @@
 		<cfreturn this/>
 	</cffunction>
 	
+	<cffunction name="reset" description="init method" access="public" displayname="init" output="false" returntype="systemRunner">
+		<!--- persistent variable to store trades and results --->
+		<cfset variables.trackHighLows = StructNew() />
+		<cfset variables.tradeArray = ArrayNew(2) />
+		<cfset variables.BeanArray = arraynew(1) />
+		<cfset variables.HiLoBeanArray = arraynew(1) />
+		<cfreturn this/>
+	</cffunction>
+	
 	<cffunction name="TestSystem" description="called from SystemService.RunSystem" access="public" displayname="" output="false" returntype="Any">
 		<cfargument name="qryData" required="true" />
 		<cfargument name="SystemToRun" required="true" />
+		<cfset reset() />
 		<cfset var local = structNew() />
 		<cfset local.boolResult = false />
 		<cfset local.dataArray = ArrayNew(1) />
@@ -114,13 +124,12 @@
 				arguments.TradeBean.Set("NetProfitLoss",local.Netprofitloss); 
 				</cfscript>
 			</cfif>
-			
-			<cfscript>	
+		<!--- send the bean to the output component so it can capture the bean state--->
+		</cfif>
+		<cfscript>	
 			local.BeanArrayLen = variables.Beanarray.size() + 1 ;
 			variables.BeanArray[#local.BeanArrayLen#] = arguments.tradeBean ;
 			</cfscript>
-		<!--- send the bean to the output component so it can capture the bean state--->
-		</cfif>
 		<cfreturn />
 	</cffunction>
 	

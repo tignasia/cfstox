@@ -17,7 +17,7 @@
 	<cffunction name="testSystemService" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
-		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"12/01/2010",enddate:"12/15/2010"); 
+		local.data = this.DataService.GetStockData(symbol:"AKAM",startdate:"09/01/2010",enddate:"12/15/2010"); 
 		local.data = this.DataService.GetTechnicalIndicators(query:local.data.HKData); 
 		debug(local.data);
 		local.result = this.SystemService.RunSystem(SystemToRun:"test",qryData: local.data);
@@ -79,9 +79,9 @@
 		
 		//local.query = this.System.TrackTrades(queryData: local.data);
 		//local.beandata = local.result.;
-		local.result1 = local.result[1]["golong"].GetMemento();
-		local.result2 = local.result[2]["golong"].GetMemento();
-		local.result3 = local.result[3]["golong"].GetMemento();
+		local.result1 = local.result[2]["golong"].GetMemento();
+		local.result2 = local.result[3]["golong"].GetMemento();
+		local.result3 = local.result[4]["golong"].GetMemento();
 		debug(local.result1);
 		debug(local.result2);
 		debug(local.result3);

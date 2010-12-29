@@ -1,6 +1,6 @@
-<cfcomponent  displayname="SystemService" output="false">
+<cfcomponent  displayname="SystemService" output="true">
 
-	<cffunction name="init" description="init method" access="public" displayname="init" output="false" returntype="SystemService">
+	<cffunction name="init" description="init method" access="public" displayname="init" output="true" returntype="SystemService">
 	<!--- persistent variable to store trades and results --->
 		<cfreturn this/>
 	</cffunction>
@@ -44,7 +44,7 @@
 		<cfreturn local.results />
 	</cffunction>
 	
-	<cffunction name="RunWatchlist" description="" access="public" displayname="" output="false" returntype="Any">
+	<cffunction name="RunWatchlist" description="" access="public" displayname="" output="true" returntype="Any">
 		<cfargument name="SystemToRun" required="true"  />
 		<cfargument name="ReportType" required="false" default="backtest" hint="backtest,watchlist"/>
 		<cfargument name="TargetDate" required="false" default="#dateformat(now()-1,"mm/dd/yyyy")#" />
@@ -69,8 +69,12 @@
 		<!--- array of structurss of arrays --->
 		<cfset local.arrStrBeanSets = arrayNew(1)/>
 		<cfset local.arrResults = arrayNew(1)/>
-		<cfset local.watchlist = 
-"A,ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH"
+		<!--- <cfset local.watchlist = 
+"ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH"
+> --->
+
+<cfset local.watchlist = 
+"A,ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH,SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF"
 >
 
 		<cfset local.x = 1>
@@ -80,13 +84,25 @@
 			<cfset local.results = session.objects.systemRunner.testSystem(SystemToRun:arguments.systemtorun,qryData:local.data) >
 			
 			<cfset local.Eventsx = processBeanCollection(beancollection:local.results.BeanCollection,TargetDate:arguments.TargetDate) />
+			<!--- <cftry>
+			<cfdump label="from systemservice:processing symbol " var="#i#">
+			<cfdump label="from systemservice:local.eventsx " var="#local.Eventsx#">
+			
+			<cfset local.sym = local.eventsx["golong"].Get("Symbol") />
+			 ---><!--- <cfdump label="from systemservice:local.eventsx symbol " var="#local.sym#">
+			<cfcatch type="any">
+				<cfdump label="in cfcatch sym:#i#" var="#local.eventsx#">
+			</cfcatch>
+			</cftry> --->
 			<cfset local.arrStrBeanSets[local.x] = local.eventsx />
 			<cfset local.x = local.x + 1>
 		<!--- HKGoLong, NewHighBreakout, OpenTrade, CloseTrade, HKGoShort, NewLowBreakdown, MoveStop --->
 		<!--- Loop over BeanArray and move beans to correct category --->
 		</cfloop>
-		
-		
+		<!--- <cfdump label="from systemservice out of loop : eventgsx final" var="#local.Eventsx#">
+		<cfdump label="from systemservice out of loop : local.arrStrBeanSets " var="#local.arrStrBeanSets#">
+		<cfabort>
+		 --->
 		<!--- <cfloop array="#local.arrStrBeanSets#" index="j">
 			<cfif j["golong"].size()  >
 				<cfset local.arrGoLong[x] = j["golong"]>
@@ -121,12 +137,13 @@
 		<cfset local.strBeanCollection.GoShort		= local.arrGoShort> --->
 		<cfset local.ReportHeaders = "Date,Trade,Entry Price,New High Reversal,New High Breakout,R1 Breakout, R2 Breakout,RSIStatus,CCIStatus">
 		<cfset local.ReportMethods = "Date,HKGoLong,EntryPrice,NewHighReversal,NewHighBreakout,R1Breakout1Day,R2Breakout1Day,RSIStatus,CCIStatus">
-		<cfset session.objects.Output.WatchlistReport(local.arrStrBeanSets ) />    
+		<cfset session.objects.Output.WatchlistReport(local.arrStrBeanSets ) /> 
+		<cfset request.data = local.arrStrBeanSets />   
 		<cfreturn local.arrStrBeanSets  />
 	</cffunction>
 	
-	<cffunction name="ProcessBeanCollection" description="" access="private" displayname="" output="false" returntype="Any">
-		<cfargument name="TargetDate" required="false" default="#dateformat(now()-1,"mm/dd/yyyy")#" />
+	<cffunction name="ProcessBeanCollection" description="" access="private" displayname="" output="true" returntype="Any">
+		<cfargument name="TargetDate" required="false" default="#dateformat(now()-5,"mm/dd/yyyy")#" />
 		<cfargument name="beancollection" required="true" />
 		<cfset var local = structnew() />
 		<cfset local.arrGoLong = arrayNew(1) />
@@ -139,6 +156,7 @@
 		<cfset local.strBeanCollection1 = structNew() />
 		<cfset local.highbreakout = "">
 		<cfset local.getlong = ""/>
+		<!--- <cfdump  label="in processbean:beancollection "  var="#arguments.beancollection#"> --->
 		<!--- HKGoLong, NewHighBreakout, OpenTrade, CloseTrade, HKGoShort, NewLowBreakdown, MoveStop --->
 		<!--- Loop over BeanArray and move beans to correct category --->
 		<!--- add symbol --->
@@ -146,13 +164,19 @@
 		<cfset y = 1 >
 		<cfset z = 1 >
 		<cfloop  array="#arguments.beancollection#" index="m">
-			<cfif <!--- m.get("HKGoLong") AND ---> m.get("Date") EQ dateformat(arguments.targetdate,"mm/dd/yyyy") >
+			<cfif x EQ 1>
 				<cfset local.getlong = m>
-				
 			</cfif>
-			<cfif <!--- m.get("NewHighBreakout") AND ---> m.get("Date") EQ dateformat(arguments.targetdate,"mm/dd/yyyy")>
+			<cfif <!--- m.get("HKGoLong") AND ---> 
+			m.get("Date") GTE dateformat(arguments.targetdate,"mm/dd/yyyy") AND 
+			m.get("HKGoLong")>
+				<cfset local.getlong = m>
+			</cfif>
+			<cfif x EQ 1>
 				 <cfset local.HighBreakout = m>
-				
+			</cfif>
+			<cfif m.get("NewHighBreakout") AND  m.get("Date") GTE dateformat(arguments.targetdate,"mm/dd/yyyy")>
+				 <cfset local.HighBreakout = m>
 			</cfif>
 			<!--- <cfif i.get("OpenTrade")>
 				 <cfset local.arrOpenTrade[local.arrGoLong.Size() +1] = i>
@@ -169,7 +193,13 @@
 			<!--- <cfif i.get("MoveStop")>
 				 <cfset local.arrGoLong[arrGoLong.Size +1] = i>
 			</cfif> --->
+			<cfset x = x + 1 />
 		</cfloop>
+		
+		<!--- <cfloop  array="#arguments.beancollection#" index="n" >
+			<cfset xdate = m.get("date") />
+			<cfdump label="loop over tradebeans:" var="#xdate#" >
+		</cfloop> --->
 		<cfset local.strBeanCollection1.goLong 		= local.getLong />
 		<cfset local.strBeanCollection1.HighBreakOut = local.HighBreakout />
 		<cfset local.strBeanCollection1.OpenTrade 	= local.arrOpenTrade>
