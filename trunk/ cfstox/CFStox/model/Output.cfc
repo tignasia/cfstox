@@ -58,6 +58,13 @@
 					</cfloop>
 				</tr>
 			</cfif>
+			<cfif local.tradeBean.Get("HKGoShort") OR local.tradeBean.Get("HKCloseShort") >
+				<tr>
+					<cfloop list="#arguments.data.reportMethods#" index="j">
+					<td>#local.tradebean.Get(j)#</td>
+					</cfloop>
+				</tr>
+			</cfif>
 		</cfloop>
 		</table>
 		</cfoutput>

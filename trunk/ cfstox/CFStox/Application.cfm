@@ -6,7 +6,7 @@
 	clientmanagement="Yes">
 
  <cfsetting
- requesttimeout="120"
+ requesttimeout="12000"
  showdebugoutput="true"
  />
 <!--- <cfparam name="url.appReload" type="string" default="false" />
