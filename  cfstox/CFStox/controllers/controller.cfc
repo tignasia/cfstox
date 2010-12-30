@@ -1,6 +1,7 @@
 <cfcomponent displayname="controller" output="false">
 	<cffunction name="init" description="init method" access="public" displayname="" output="false" returntype="controller">
 		<cfset loadObjects() />
+		<cfset this.diagnostics = false />
 		<cfreturn this/>
 	</cffunction>
 	

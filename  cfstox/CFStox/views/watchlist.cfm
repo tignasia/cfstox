@@ -15,10 +15,10 @@ Breakout Highs <br/>
 <th>Symbol</th>
 <th>ClosingPrice</th>
 <th>High</th>
+<th>Date</th>
 <th>Previous High</th>
 <th>Previous High Date</th>
 <th>Previous High Date</th>
-<th>GoLong</th>		
 
 
 <cfloop array="#request.data#" index="i"  >
@@ -28,9 +28,10 @@ Breakout Highs <br/>
 	<td>#local.tradebean["highbreakout"].Get("Symbol")#</td>
 	<td>#local.tradebean["highbreakout"].Get("HKClose")#</td>
 	<td>#local.tradebean["highbreakout"].Get("HKHigh")#</td>
+	<td>#local.tradebean["highbreakout"].Get("Date")#</td>
 	<td>#local.tradebean["highbreakout"].Get("PreviousLocalHigh")#</td>
 	<td>#local.tradebean["highbreakout"].Get("PreviousLocalHighDate")#</td>
-	<td>#local.tradebean["highbreakout"].Get("HKGoLong")#</td>
+	
 </tr>
 </cfif> 
 </cfloop>
@@ -39,7 +40,12 @@ Breakout Highs <br/>
 <cfoutput>
 New Long Positions <br/>
 <table>
-<th>Symbol</th><th>ClosingPrice</th> <th>R1</th> <th>Previous High</th><th>Previous High Date</th>
+<th>Symbol</th>
+<th>ClosingPrice</th> 
+<th>R1</th> 
+<th>Date</th> 
+<th>Previous High</th>
+<th>Previous High Date</th>
 
 
 <cfloop array="#request.data#" index="j">
@@ -49,6 +55,7 @@ New Long Positions <br/>
 	<td>#local.tradebean["golong"].Get("Symbol")#</td>
 	<td>#local.tradebean["golong"].Get("HKClose")#</td>
 	<td>#DecimalFormat(local.tradebean["golong"].Get("R1"))#</td>
+	<td>#local.tradebean["golong"].Get("Date")#</td>
 	<td>#local.tradebean["golong"].Get("PreviousLocalHigh")#</td>
 	<td>#local.tradebean["golong"].Get("PreviousLocalHighDate")#</td>
 </tr>

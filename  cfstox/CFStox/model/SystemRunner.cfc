@@ -40,7 +40,7 @@
 			<cfset local.TradeBeanToday 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[3]) /> 
 			<!--- <cfset TrackHighLows(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)> --->
 			<!--- <cfset local.TradeBeanToday = RecordIndicators(tradeBean:local.TradeBeanToday) /> --->
-			<cfset session.objects.system.System_ha_III(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday,local.TrackingBean)>
+			<cfset session.objects.system.System_ha_longII(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday,local.TrackingBean)>
 			<cfset session.objects.system.System_NewHigh(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)>
 			<cfset session.objects.system.System_PivotPoints(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)>
 			<cfset session.objects.system.System_Max_Profit(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)>
@@ -71,7 +71,10 @@
 		<cfargument name="TradeBean" required="true" />
 		<cfargument name="TrackingBean" required="true"  />
 		<cfset var local = StructNew() />
-		<cfif arguments.TradeBean.Get("HKGoLong") OR arguments.TradeBean.Get("NewHighReversal")
+		<!--- todo: entering and closing trades on same day is screwing your records up  --->
+		<cfif arguments.TradeBean.Get("HKGoLong") OR arguments.TradeBean.Get("HKGoShort") OR arguments.TradeBean.Get("NewHighReversal")
+				OR arguments.TradeBean.Get("HKCloseLong")
+				OR arguments.TradeBean.Get("HKCloseShort")
 				OR arguments.TradeBean.Get("NewHighBreakout")
 				OR arguments.TradeBean.Get("R1Breakout1Day")	
 				OR arguments.TradeBean.Get("R2Breakout1Day")
@@ -113,6 +116,46 @@
 				arguments.TrackingBean.Set("ExitDate",arguments.TradeBean.Get("date") );
 				arguments.TrackingBean.Set("ExitPrice",arguments.TradeBean.Get("HKClose") );
 				local.profitloss =  arguments.TrackingBean.Get("ExitPrice") - arguments.TrackingBean.Get("EntryPrice") ;
+				arguments.TrackingBean.Set("ProfitLoss",local.profitloss); 
+				local.NetProfitLoss = arguments.TrackingBean.Get("NetProfitLoss") + local.profitloss;
+				arguments.TrackingBean.Set("NetProfitLoss",local.Netprofitloss); 
+				arguments.TradeBean.Set("EntryDate",arguments.TrackingBean.Get("EntryDate") );
+				arguments.TradeBean.Set("EntryPrice",arguments.TrackingBean.Get("EntryPrice"));
+				arguments.TradeBean.Set("ExitDate",arguments.TradeBean.Get("date") );
+				arguments.TradeBean.Set("ExitPrice",arguments.TradeBean.Get("HKClose") );
+				arguments.TradeBean.Set("ProfitLoss",local.profitloss); 
+				arguments.TradeBean.Set("NetProfitLoss",local.Netprofitloss); 
+				</cfscript>
+			</cfif>
+			
+			<!--- short  --->
+			<!--- if we are already short dont re-short --->
+			<cfif arguments.TradeBean.Get("HKGoShort") AND arguments.TrackingBean.Get("HKGoSHort")>
+				<cfscript>
+				arguments.TradeBean.Set("HKGoShort",false );
+				</cfscript>
+			</cfif>
+			<cfif arguments.TradeBean.Get("HKGoShort") AND NOT arguments.TrackingBean.Get("HKGoShort")>
+				<cfscript>
+				arguments.TrackingBean.Set("HKGoShort",true);
+				arguments.TradeBean.Set("EntryDate",arguments.TradeBean.Get("Date") );
+				arguments.TradeBean.Set("EntryPrice",arguments.TradeBean.Get("HKClose"));
+				arguments.TrackingBean.Set("EntryDate",arguments.TradeBean.Get("Date") );
+				arguments.TrackingBean.Set("EntryPrice",arguments.TradeBean.Get("HKClose"));
+				</cfscript>
+			</cfif>
+			<!--- dont try to close non-existant trades--->
+			<cfif arguments.TradeBean.Get("HKCloseShort") AND NOT arguments.TrackingBean.Get("HKGoShort")>
+				<cfscript>
+				arguments.TradeBean.Set("HKCloseShort",false);
+				</cfscript>
+			</cfif>
+			<cfif arguments.TradeBean.Get("HKCloseShort") AND arguments.TrackingBean.Get("HKGoShort")>
+				<cfscript>
+				arguments.TrackingBean.Set("HKGoShort",false);
+				arguments.TrackingBean.Set("ExitDate",arguments.TradeBean.Get("date") );
+				arguments.TrackingBean.Set("ExitPrice",arguments.TradeBean.Get("HKClose") );
+				local.profitloss =  arguments.TrackingBean.Get("EntryPrice") - arguments.TrackingBean.Get("ExitPrice") ;
 				arguments.TrackingBean.Set("ProfitLoss",local.profitloss); 
 				local.NetProfitLoss = arguments.TrackingBean.Get("NetProfitLoss") + local.profitloss;
 				arguments.TrackingBean.Set("NetProfitLoss",local.Netprofitloss); 

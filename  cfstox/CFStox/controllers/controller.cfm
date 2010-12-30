@@ -1,9 +1,9 @@
 <!--- unload everything - do a reload if requested --->
 <cfset init() />
 <!--- load the controller object if not already loaded and set the controller flag  --->
-<cfset session.controller = createObject("component","controller").init() />
+<cfset session.objects.controller = createObject("component","controller").init() />
 <cfset session.controllerLoaded = True />
-<cfinvoke component="#session.controller#" method="#form.action#"  argumentcollection="#form#"  returnvariable="resultData" />
+<cfinvoke component="#session.objects.controller#" method="#form.action#"  argumentcollection="#form#"  returnvariable="resultData" />
 <cfinclude template="../views/#resultdata.view#.cfm" >
 
 <cffunction name="init" description="init" returntype="void">
@@ -24,7 +24,7 @@
 
 <cffunction name="reload" description="reload objects" returntype="void">
 	<cfif isDefined("url.reload") OR development IS TRUE>
-		<cfset structKeyDelete(session.controller) />
+		<cfset structKeyDelete(session.objects.controller) />
 		<cfset session.controllerLoaded = False />
 		<cfif isDefined("session.objects")>
 			<cfset StructKeyDelete("session.objects")>

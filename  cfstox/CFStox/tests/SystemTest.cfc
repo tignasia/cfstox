@@ -11,32 +11,33 @@
 		this.http 		= createObject("component","cfstox.model.http").init();
 		this.indicators = createObject("component","cfstox.model.indicators").init();
 		this.controller = createObject("component","cfstox.controllers.controller").init();
+		session.objects.controller = createObject("component","cfstox.controllers.controller").init();
 		</cfscript>
 	</cffunction>
 
 	<cffunction name="testSystemService" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
-		local.data = this.DataService.GetStockData(symbol:"AKAM",startdate:"09/01/2010",enddate:"12/15/2010"); 
+		local.data = this.DataService.GetStockData(symbol:"MEE",startdate:"12/01/2009",enddate:"12/15/2010"); 
 		local.data = this.DataService.GetTechnicalIndicators(query:local.data.HKData); 
-		debug(local.data);
+		//debug(local.data);
 		local.result = this.SystemService.RunSystem(SystemToRun:"test",qryData: local.data);
 		//local.query = this.System.TrackTrades(queryData: local.data);
-		debug(local.result);
+		//debug(local.result);
 		</cfscript>
 	</cffunction>
 
 	<cffunction name="testTestRunner" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
-		local.data = this.DataService.GetStockData(symbol:"X",startdate:"07/01/2010",enddate:"12/15/2010"); 
-		debug(local.data);
+		local.data = this.DataService.GetStockData(symbol:"AKAM",startdate:"07/01/2010",enddate:"12/15/2010"); 
+		//debug(local.data);
 		local.data = this.DataService.GetTechnicalIndicators(query:local.data.HKData); 
-		debug(local.data);
+		//debug(local.data);
 		local.result = this.SystemRunner.TestSystem(SystemToRun:"test",qryData: local.data);
 		//local.query = this.System.TrackTrades(queryData: local.data);
 		//local.beandata = local.result.;
-		debug(local.result);
+		//debug(local.result);
 		</cfscript>
 	</cffunction>
 	

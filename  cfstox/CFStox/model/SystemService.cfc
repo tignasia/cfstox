@@ -27,8 +27,8 @@
 		<cfset local.ReportHeaders = "Date,Trade,Entry Price,New High Reversal,New High Breakout,R1 Breakout, R2 Breakout,RSIStatus,CCIStatus">
 		<cfset local.ReportMethods = "Date,HKGoLong,EntryPrice,NewHighReversal,NewHighBreakout,R1Breakout1Day,R2Breakout1Day,RSIStatus,CCIStatus">
 		<cfset session.objects.Output.BeanReport(local) />
-		<cfset local.ReportHeaders = "Date,Entry Trade,Exit Trade,Entry Price,Entry Date,Exit Price,Exit Date,Profit/loss,Net Profit/Loss">
-		<cfset local.ReportMethods = "Date,HKGoLong,HKCloseLong,EntryPrice,EntryDate,ExitPrice,ExitDate,ProfitLoss,NetProfitLoss">
+		<cfset local.ReportHeaders = "Date,Long Entry Trade,Long Exit Trade,Short Entry Trade,Short Exit Trade,Entry Price,Entry Date,Exit Price,Exit Date,Profit/loss,Net Profit/Loss">
+		<cfset local.ReportMethods = "Date,HKGoLong,HKCloseLong,HKGoShort,HKCloseShort,EntryPrice,EntryDate,ExitPrice,ExitDate,ProfitLoss,NetProfitLoss">
 		<cfset session.objects.Output.TradeReport(local) />
 		<cfset local.ReportHeaders = "Date,High,Low,Price,High,Difference">
 		<cfset local.ReportMethods = "Date,NewLocalHigh,NewLocalLow,HKHigh">
@@ -73,10 +73,16 @@
 "ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH"
 > --->
 
-<cfset local.watchlist = 
+<cfif NOT session.OBJECTS.controller.diagnostics>
+<!--- <cfset local.watchlist = 
 "A,ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH,SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF"
+> --->
+<cfset local.watchlist = 
+"A,ABX,ADBE,AEM,AKAM,APA,SPY,XLF"
 >
-
+<cfelse>
+<cfset local.watchlist = "AKAM" />
+</cfif>
 		<cfset local.x = 1>
 		<cfloop list="#local.watchlist#" index="i">
 			<cfset local.data = session.objects.DataService.GetStockData(symbol:"#i#",startdate:"#local.start#",enddate:"12/28/2010") /> 
@@ -143,7 +149,7 @@
 	</cffunction>
 	
 	<cffunction name="ProcessBeanCollection" description="" access="private" displayname="" output="true" returntype="Any">
-		<cfargument name="TargetDate" required="false" default="#dateformat(now()-5,"mm/dd/yyyy")#" />
+		<cfargument name="TargetDate" required="false" default="#dateformat(now()-1,"mm/dd/yyyy")#" />
 		<cfargument name="beancollection" required="true" />
 		<cfset var local = structnew() />
 		<cfset local.GoLong = "" />
@@ -157,7 +163,7 @@
 		<cfset local.highbreakout = "">
 		<cfset local.getlong = ""/>
 		<cfset local.getshort = ""/>
-		<!--- <cfdump  label="in processbean:beancollection "  var="#arguments.beancollection#"> --->
+		<cfdump  label="in processbean:beancollection "  var="#arguments.beancollection#">
 		<!--- HKGoLong, NewHighBreakout, OpenTrade, CloseTrade, HKGoShort, NewLowBreakdown, MoveStop --->
 		<!--- Loop over BeanArray and move beans to correct category --->
 		<!--- add symbol --->
@@ -169,8 +175,10 @@
 				<cfset local.getlong = m>
 			</cfif>
 			<cfif 
-			m.get("Date") GTE dateformat(arguments.targetdate,"mm/dd/yyyy") AND 
+			<!---m.get("Date") GTE dateformat(arguments.targetdate,"mm/dd/yyyy") AND --->
 			m.get("HKGoLong")>
+				<cfset mvars = m.getmemento() />
+				<cfdump  label="in processbean:memvars "  var="#mvars#">
 				<cfset local.getlong = m>
 			</cfif>
 			<cfif x EQ 1>
@@ -183,7 +191,7 @@
 				<cfset local.getshort = m />
 			</cfif>
 			<cfif 
-			m.get("Date") GTE dateformat(arguments.targetdate,"mm/dd/yyyy") AND 
+			<!--- m.get("Date") GTE dateformat(arguments.targetdate,"mm/dd/yyyy") AND  --->
 			m.get("HKGoShort")
 			>	
 				<cfset local.getShort = m />

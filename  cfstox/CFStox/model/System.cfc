@@ -33,20 +33,38 @@
 		<cfargument name="TrackingBean" required="true" />
 		<cfset var local = StructNew() />
 		<cfset local.boolGoLong = true>
+		<cfset local.boolGoShort = true>
 		<cfif arguments.TradeBeanTwoDaysAgo.Get("HKClose") GT arguments.TradeBeanTwoDaysAgo.Get("HKOpen")>
 			<cfset local.boolGoLong = false />
 		</cfif>   
 		<cfif local.boolGoLong AND arguments.TradeBeanOneDayAgo.Get("HKClose") GT arguments.TradeBeanOneDayAgo.Get("HKOpen")>
 			<cfset local.boolGoLong = false />
 		</cfif>
-		<cfif local.boolGoLong AND arguments.TradeBeanToday.Get("HKClose") GT arguments.TradeBeanToday.Get("HKOpen")>
+		<cfif local.boolGoLong AND arguments.TradeBeanToday.Get("HKClose") GT arguments.TradeBeanToday.Get("HKOpen")
+		AND arguments.TradeBeanToday.Get("HKHigh") GT arguments.TradeBeanOneDayAgo.Get("R2")>
 			<cfset TradeBeanToday.Set("HKGoLong",true) />
 			<cfset TradeBeanToday.Set("UseR2Entry",true) />
 		</cfif> 
 		<cfif arguments.TradeBeanToday.Get("HKClose") LT arguments.TradeBeanToday.Get("HKOpen")>
 			<cfset TradeBeanToday.Set("HKCloseLong",true) />
 			<cfset TradeBeanToday.Set("UseS2Entry",true) />
-		</cfif>     		
+		</cfif>  
+		<!--- go short --->
+		<cfif arguments.TradeBeanTwoDaysAgo.Get("HKClose") LT arguments.TradeBeanTwoDaysAgo.Get("HKOpen")>
+			<cfset local.boolGoShort = false />
+		</cfif>   
+		<cfif local.boolGoShort AND arguments.TradeBeanOneDayAgo.Get("HKClose") LT arguments.TradeBeanOneDayAgo.Get("HKOpen")>
+			<cfset local.boolGoSHort = false />
+		</cfif>
+		<cfif local.boolGoShort AND arguments.TradeBeanToday.Get("HKClose") LT arguments.TradeBeanToday.Get("HKOpen")
+		AND arguments.TradeBeanToday.Get("HKLow") LT arguments.TradeBeanOneDayAgo.Get("S2")>
+			<cfset TradeBeanToday.Set("HKGoShort",true) />
+			<cfset TradeBeanToday.Set("UseR2Entry",true) />
+		</cfif> 
+		<cfif arguments.TradeBeanToday.Get("HKClose") GT arguments.TradeBeanToday.Get("HKOpen")>
+			<cfset TradeBeanToday.Set("HKCloseShort",true) />
+			<cfset TradeBeanToday.Set("UseS2Entry",true) />
+		</cfif>     	   		
 		<cfreturn TradeBeanToday />
 	</cffunction>
 	
@@ -93,10 +111,9 @@
 		local.tbopen = arguments.TradeBeanToday.Get("HKOpen");
 		local.tbclose = arguments.TradeBeanToday.Get("HKClose");
 		if (
-		local.tb2open GT local.tb2close 
-		AND  
-		local.tb1open LT local.tb1close AND 
-		local.tbopen LT local.tbclose 
+		local.tb2open GT local.tb2close AND  
+		local.tb1open LT local.tb1close //AND 
+		//local.tbopen LT local.tbclose 
 		) 
 		{
 			local.boolGoLong = true;
@@ -105,14 +122,14 @@
 		}
 		
 		if (
-		local.tb2open LT local.tb2close 
-		AND  
-		local.tb1open GT local.tb1close AND 
+		//local.tb2open LT local.tb2close 
+		//AND  
+		//local.tb1open GT local.tb1close AND 
 		local.tbopen GT local.tbclose 
 		) 
 		{
 			local.boolGoShort = true;
-			TradeBeanToday.Set("HKGoShort",true); 
+			TradeBeanToday.Set("HKCloseLong",true); 
 			TradeBeanToday.Set("UseR2Entry",true); 
 		}
 		</cfscript>
