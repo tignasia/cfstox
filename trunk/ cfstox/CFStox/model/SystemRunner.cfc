@@ -21,8 +21,8 @@
 	<cffunction name="TestSystem" description="called from SystemService.RunSystem" access="public" displayname="" output="false" returntype="Any">
 		<cfargument name="qryData" required="true" />
 		<cfargument name="SystemToRun" required="true" />
-		<cfset reset() />
 		<cfset var local = structNew() />
+		<cfset reset() />
 		<cfset local.boolResult = false />
 		<cfset local.dataArray = ArrayNew(1) />
 		<cfset local.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:1) />
@@ -30,6 +30,7 @@
 			
 		<cfloop  query="arguments.qryData" startrow="3">
 			<cfset local.rowcount = arguments.qryData.currentrow />
+			
 			<cfset local.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:local.rowcount-2) />
 			<cfset local.DataArray[2] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:local.rowcount-1) />
 			<cfset local.DataArray[3] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:local.rowcount) />
@@ -41,30 +42,18 @@
 			<!--- <cfset TrackHighLows(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)> --->
 			<!--- <cfset local.TradeBeanToday = RecordIndicators(tradeBean:local.TradeBeanToday) /> --->
 			<cfset session.objects.system.System_ha_longII(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday,local.TrackingBean)>
-			<cfset session.objects.system.System_NewHigh(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)>
+			<cfset session.objects.system.System_NewHighLow(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)>
 			<cfset session.objects.system.System_PivotPoints(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)>
 			<cfset session.objects.system.System_Max_Profit(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)>
-			<cfset CheckNewHiLo(Local.TradeBeanOneDayAgo) />
 			<!--- record system name, date, entry price --->
 			<cfset local.TradeBeanToday = RecordIndicators(local.TradeBeanToday) />
 			<cfset recordTrades(local.TradeBeanToday,local.trackingBean) /> 
 		</cfloop>
 		<!--- return the action results ---->
-		<cfset local.HiLoBeanArray = variables.HiLoBeanArray />
 		<cfset local.trades = variables.TradeArray />
 		<cfset local.BeanCollection = variables.BeanArray />
 		<cfset local.symbol = local.tradeBeanToday.Get("symbol") />
 		<cfreturn local />
-	</cffunction>
-
-	<cffunction name="CheckNewHiLo" description="" access="public" displayname="" output="false" returntype="any">
-		<cfargument name="TradeBean" required="true"  />
-		<cfset var local = structNew() />
-		<cfset local.ArraySize = variables.HiLoBeanArray.size() />	
-		<cfif arguments.TradeBean.Get("NewLocalHigh") OR arguments.TradeBean.Get("NewLocalLow") >
-			<cfset variables.hiloBeanArray[local.ArraySize + 1] = arguments.tradeBean />
-		</cfif>
-		<cfreturn />
 	</cffunction>
 	
 	<cffunction name="RecordTrades" description="" access="private" displayname="" output="false" returntype="Any">
@@ -328,4 +317,5 @@
 	<cfreturn />
 	</cffunction>
 
+	
 </cfcomponent>

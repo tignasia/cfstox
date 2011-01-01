@@ -87,8 +87,30 @@
 		debug(local.result2);
 		debug(local.result3);
 		</cfscript>
-		
 	</cffunction>
+	
+	<cffunction name="testCandlePattern" access="public" returntype="void">
+		<!--- allow at least two days for HA data to be accurate --->
+		<cfscript>
+		var local = structNew();
+		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"10/8/2010",enddate:"11/15/2010"); 
+		//debug(local.data);
+		local.DataArray[1] = session.objects.Utility.QrytoStruct(query:local.data,rownumber:4);
+		local.DataArray[2] = session.objects.Utility.QrytoStruct(query:local.data,rownumber:5);
+		local.DataArray[3] = session.objects.Utility.QrytoStruct(query:local.data,rownumber:6);
+		local.TBean2 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]); 
+		local.TBean1 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[2]); 
+		local.TB 		= createObject("component","cfstox.model.TradeBean").init(local.DataArray[3]); 
+		local.patterns 	= this.SystemRunner.CandlePattern(tb2:local.TBean2 ,tb1:local.TBean1 ,tb:local.TB );
+		debug(local.patterns);
+		//debug(local.DataArray[1]);
+		debug(local.DataArray[2]);
+		debug(local.DataArray[3]);
+		//local.query = this.System.TrackTrades(queryData: local.data);
+		//local.beandata = local.result.;
+		</cfscript>
+	</cffunction>
+	
 	<!--- 
 <cffunction name="testSystemHKII" access="public" returntype="void">
 		<cfscript>

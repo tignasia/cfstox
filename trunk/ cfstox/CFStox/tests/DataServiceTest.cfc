@@ -16,7 +16,6 @@
 		<cfscript>
 		var local = structNew();
 		local.data = this.DataService.GetStockData("ABX");
-		debug(local.data);
 		</cfscript>
 	</cffunction>
 
@@ -24,7 +23,7 @@
 		<cfscript>
 		var local = structNew();
 		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"1/1/2010");
-		debug(local.data);
+		assert(local.data.DateOne[1] EQ "1/1/2010" );
 		</cfscript>
 	</cffunction>
 	
@@ -53,22 +52,24 @@
 		</cfscript>
 	</cffunction>
 
-	<cffunction name="testSystemNewHighLow" access="public" returntype="void">
+`	<cffunction name="testGetOriginalStockData" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
-		local.dataarray = this.controller.historical(Symbol:"akam",startdate:"5/1/2010",enddate:"11/10/2010",hkconvert:"true");
-		local.data = local.dataarray.stockdata;
-		</cfscript>
-		<cfquery   dbtype="query"  name="local.reverse">
-			select * from [local].data order by DateOne asc
-		</cfquery>
-		<cfscript>
-		local.data = local.reverse; 
-		local.data = this.System.System_hekin_ashi(queryData: local.data);
-		local.query = this.System.NewHL3(queryData: local.data);
-		debug(local.query);
+		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
+		local.data = this.DataService.GetOriginalStockData();
+		debug(local.data);
 		</cfscript>
 	</cffunction>
+	
+	<cffunction name="GetHAStockData" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
+		local.data = this.DataService.GetHAStockData();
+		debug(local.data);
+		</cfscript>
+	</cffunction>
+
 
 	<!--- End Specific Test Cases --->
 	<cffunction name="tearDown" access="public" returntype="void">
