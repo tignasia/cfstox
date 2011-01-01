@@ -1,7 +1,7 @@
 <cfcomponent  displayname="TradeBean" output="false"  hint="I represent the values and indicators for a given day" >
 
 	<cffunction name="init" description="init method" access="public" displayname="init" output="false" returntype="TradeBean">
-		<cfargument name="strData" required="true"  />
+		<cfargument name="strData"  />
 		<cfscript>
 		set("Symbol",strData.Symbol);	
 		set("Date",strData.DateOne);	
@@ -61,6 +61,10 @@
 		Set("R1BreakOut2Days",false);
 		Set("R2Breakout1Day",false);
 		Set("R2BreakOut2Days",false);
+		Set("S1Breakdown1Day",false);
+		Set("S1Breakdown2Days",false);
+		Set("S2Breakdown1Day",false);
+		Set("S2Breakdown2Days",false);
 		Set("R1Status","");
 		Set("R2Status","");
 		Set("S1Status","");

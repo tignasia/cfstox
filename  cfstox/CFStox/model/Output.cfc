@@ -13,11 +13,11 @@
 		<cfreturn />
 	</cffunction>
 	
-	<cffunction name="BeanReport" description="I output a PDF of the bean status" access="public" displayname="" output="false" returntype="void">
+	<cffunction name="BeanReportPDF" description="I output a PDF of the bean status" access="public" displayname="" output="false" returntype="void">
 		<cfargument name="data" required="true">
 		<cfset var local = structNew() />
 		<cfset local.filename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "#arguments.data.results.symbol#" & ".pdf"/>
-		<cfdocument  format="PDF" filename="#local.filename#" overwrite="true">
+		<cfdocument  format="PDF" filename="#local.filename#" overwrite="true" orientation = "landscape">
 		<cfoutput>
 		<table>
 		<cfloop list="#arguments.data.ReportHeaders#" index="i">
@@ -37,13 +37,37 @@
 		<cfreturn />
 	</cffunction>
 	
+	<cffunction name="BeanReportExcel" description="I output a Excel of the bean status" access="public" displayname="" output="false" returntype="void">
+		<cfargument name="data" required="true">
+		<cfset var local = structNew() />
+		<cfset local.filename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "#arguments.data.results.symbol#" & ".xls"/>
+		<cfsavecontent variable="exceldata">
+		<cfoutput>
+		<table>
+		<cfloop list="#arguments.data.ReportHeaders#" index="i">
+		<th>#i#</th>
+		</cfloop>
+		<cfloop from="1" to="#arguments.data.results.beancollection.size()#" index="i">
+		<cfset local.TradeBean = arguments.data.results.beancollection[i] />	
+		<tr>
+			<cfloop list="#arguments.data.reportMethods#" index="j">
+			<td>#local.tradebean.Get(j)#</td>
+			</cfloop>
+		</tr>
+		</cfloop>
+		</table>
+		</cfoutput>
+		</cfsavecontent>
+		<cffile action="write" file="#local.filename#" output="#exceldata#"   />
+		<cfreturn />
+	</cffunction>
 	<cffunction name="TradeReport" description="I output a PDF of the trades" access="public" displayname="" output="false" returntype="void">
 		<cfargument name="data" required="true">
 		<cfset var local = structNew() />
 		<cfset local.filename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "#arguments.data.results.symbol#" & "trades" & ".pdf"/>
 		<cfset local.longpostion = false />
 		<cfset local.longEntryPrice = 0 />
-		<cfdocument  format="PDF" filename="#local.filename#" overwrite="true">
+		<cfdocument  format="PDF" filename="#local.filename#" overwrite="true" >
 		<cfoutput>
 		<table>
 		<cfloop list="#arguments.data.ReportHeaders#" index="i">

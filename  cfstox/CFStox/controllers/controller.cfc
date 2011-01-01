@@ -63,16 +63,16 @@
 
 	<cffunction name="loadObjects" description="I load objects" access="private" displayname="" output="false" returntype="void">
 	<!--- load the objects that we might need if not already loaded and set the loaded flag in session --->
-	<cfset session.objects.XMLGenerator = createobject("component","cfstox.model.XMLGenerator").init() />
-	<cfset session.objects.Indicators 	= createobject("component","cfstox.model.Indicators").init() />
-	<cfset session.objects.Utility 		= createobject("component","cfstox.model.Utility").init() />
-	<cfset session.objects.ta 		= createObject("component","cfstox.model.ta").init() />
-	<cfset session.objects.http 	= createObject("component","cfstox.model.http").init() />
-	<cfset session.objects.System 	= createObject("component","cfstox.model.system").init() />
-	<cfset session.objects.DataService 	= createObject("component","cfstox.model.Dataservice").init() />
+	<cfset session.objects.XMLGenerator 	= createobject("component","cfstox.model.XMLGenerator").init() />
+	<cfset session.objects.Indicators 		= createobject("component","cfstox.model.Indicators").init() />
+	<cfset session.objects.Utility 			= createobject("component","cfstox.model.Utility").init() />
+	<cfset session.objects.ta 				= createObject("component","cfstox.model.ta").init() />
+	<cfset session.objects.http 			= createObject("component","cfstox.model.http").init() />
+	<cfset session.objects.System 			= createObject("component","cfstox.model.system").init() />
+	<cfset session.objects.DataService 		= createObject("component","cfstox.model.Dataservice").init() />
 	<cfset session.objects.SystemService 	= createObject("component","cfstox.model.SystemService").init() />
 	<cfset session.objects.SystemRunner 	= createObject("component","cfstox.model.SystemRunner").init() />
-	<cfset session.objects.Output 	= createObject("component","cfstox.model.Output").init() />
+	<cfset session.objects.Output 			= createObject("component","cfstox.model.Output").init() />
 	<cfreturn />
 	</cffunction>	
 
