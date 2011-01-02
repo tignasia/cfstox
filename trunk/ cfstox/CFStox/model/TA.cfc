@@ -581,10 +581,10 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	       		local.high 	= max(local.HAhigh, local.HAclose);
 	       		local.HAlow	= min(local.low, local.HAopen);
 	       		local.HAlow	= min(local.HAlow, local.HAclose);
-				local.hkquery["open"][i-1] 	= local.HAopen;
-				local.hkquery["high"][i-1]	= local.HAhigh;
-				local.hkquery["low"][i-1] 	= local.HAlow;
-				local.hkquery["close"][i-1]	= local.HAclose;
+				local.hkquery["open"][i-1] 	= decimalformat(local.HAopen);
+				local.hkquery["high"][i-1]	= decimalformat(local.HAhigh);
+				local.hkquery["low"][i-1] 	= decimalformat(local.HAlow);
+				local.hkquery["close"][i-1]	= decimalformat(local.HAclose);
 	
 	       		local.openp		= local.HAopen;
 	       		local.closep	= local.HAclose;

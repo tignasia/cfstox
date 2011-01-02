@@ -55,7 +55,7 @@
 	<cffunction name="testRunSystem" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
-		local.HAdata = this.SystemService.GetHAStockData(symbol:"QQQQ",startdate:"10/1/2010",enddate:"1/01/2011"); 
+		local.HAdata = this.SystemService.GetHAStockData(symbol:"SUN",startdate:"10/1/2010",enddate:"1/01/2011"); 
 		//debug(local.data);
 		///debug(local.data);
 		local.result = this.SystemService.RunSystem(SystemToRun:"test",qryData: local.HAdata);
