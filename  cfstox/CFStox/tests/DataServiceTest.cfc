@@ -47,7 +47,7 @@
 		<cfscript>
 		var local = structNew();
 		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
-		local.data = this.DataService.GetTechnicalData(query:local.data.HKData);
+		local.data = this.DataService.GetTechnicalIndicators(query:local.data.HKData);
 		debug(local.data);
 		</cfscript>
 	</cffunction>
