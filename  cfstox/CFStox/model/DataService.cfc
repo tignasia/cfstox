@@ -3,6 +3,8 @@
 <cffunction name="Init" description="" access="public" displayname="" output="true" returntype="DataService">
 	<cfset variables.qryDataOrg = "" />
 	<cfset variables.qryDataHA = "" />
+	<cfset variables.high = "" />
+	<cfset variables.low = "" />
 	<cfreturn this />
 </cffunction>	
 
@@ -22,8 +24,8 @@
 		<cfquery   dbtype="query"  name="low1" >
 			select low from results order by low asc
 		</cfquery>
-		<cfset local.high = high1.high />
-		<cfset local.low = low1.low />	
+		<cfset variables.high = high1.high />
+		<cfset variables.low = low1.low />	
 		<!--- raw data  --->
 		<cfset local.OrgData = resorted />
 		<!--- HAData --->
@@ -81,6 +83,13 @@
 	<cfreturn variables.qryDataHA />
 	</cffunction>
 	
+	<cffunction name="GetHigh" description="" access="public" displayname="" output="false" returntype="Any">
+	<cfreturn variables.high />
+	</cffunction>
+	
+	<cffunction name="GetLow" description="" access="public" displayname="" output="false" returntype="Any">
+	<cfreturn variables.low />
+	</cffunction>
 	
 	
 </cfcomponent>

@@ -7,7 +7,7 @@
 <body>
 <!--- <cfdump label="request" var="#request#"> 
 <cfabort> --->
-<cfset stockdata = request.stockdata />
+
 <cfform >
 <cfgrid  format="flash" name="myGrid" query="request.stockdata" rowheaders="false" height="350" autowidth="true" />
 </cfform>  
