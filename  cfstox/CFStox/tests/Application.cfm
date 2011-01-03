@@ -5,7 +5,7 @@
 	sessiontimeout="#CreateTimeSpan(0,0,30,0)#" 	
 	clientmanagement="Yes">
 <cfsetting
- requesttimeout="12000"
+ requesttimeout="120000"
  showdebugoutput="true"
  />
 <!--- <cfparam name="url.appReload" type="string" default="false" />
