@@ -26,16 +26,17 @@
 		<cfargument name="qryData" required="true" />
 		<cfargument name="ReportType" required="false" default="backtest" hint="backtest,watchlist"/>
 		<cfset var local = structnew() />
-		<cfset local.results = session.objects.systemRunner.testSystem(SystemToRun:arguments.systemtorun,qryData:arguments.qryData) >
-		<cfset local.ReportHeaders = "Date,Open,High,Low,Close,New High Reversal,New High Breakout,R1 Breakout, R2 Breakout,New Low Reversal,New Low Breakdown,S1 Breakdown, S2 Breakdown,RSIStatus,CCIStatus">
-		<cfset local.ReportMethods = "Date,HKOpen,HKHigh,HKLow,HKClose,NewHighReversal,NewHighBreakout,R1Breakout1Day,R2Breakout1Day,NewLowReversal,NewLowBreakdown,S1Breakdown1Day,S2Breakdown1Day,RSIStatus,CCIStatus">
+		<cfset local.results		= session.objects.systemRunner.testSystem(SystemToRun:arguments.systemtorun,qryData:arguments.qryData) >
+		<cfset local.ReportHeaders 	= "Date,Open,High,Low,Close,New High Reversal,New High Breakout,R1 Breakout, R2 Breakout,New Low Reversal,New Low Breakdown,S1 Breakdown, S2 Breakdown,RSIStatus,CCIStatus">
+		<cfset local.ReportMethods 	= "Date,HKOpen,HKHigh,HKLow,HKClose,NewHighReversal,NewHighBreakout,R1Breakout1Day,R2Breakout1Day,NewLowReversal,NewLowBreakdown,S1Breakdown1Day,S2Breakdown1Day,RSIStatus,CCIStatus">
+		<!--- historical technical data  --->
 		<cfset session.objects.Output.BeanReportPDF(local) />
 		<cfset session.objects.Output.BeanReportExcel(local) />
-		<cfset local.ReportHeaders = "Date,Long Entry Trade,Long Exit Trade,Short Entry Trade,Short Exit Trade,Entry Price,Entry Date,Exit Price,Exit Date,Profit/loss,Net Profit/Loss">
-		<cfset local.ReportMethods = "Date,HKGoLong,HKCloseLong,HKGoShort,HKCloseShort,EntryPrice,EntryDate,ExitPrice,ExitDate,ProfitLoss,NetProfitLoss">
+		<cfset local.ReportHeaders 	= "Date,Long Entry Trade,Long Exit Trade,Short Entry Trade,Short Exit Trade,Entry Price,Entry Date,Exit Price,Exit Date,Profit/loss,Net Profit/Loss">
+		<cfset local.ReportMethods 	= "Date,HKGoLong,HKCloseLong,HKGoShort,HKCloseShort,EntryPrice,EntryDate,ExitPrice,ExitDate,ProfitLoss,NetProfitLoss">
 		<cfset session.objects.Output.TradeReport(local) />
-		<cfset local.ReportHeaders = "Date,High,Low,Price,High,Difference">
-		<cfset local.ReportMethods = "Date,NewLocalHigh,NewLocalLow,HKHigh">
+		<cfset local.ReportHeaders 	= "Date,High,Low,Price,High,Difference">
+		<cfset local.ReportMethods 	= "Date,NewLocalHigh,NewLocalLow,HKHigh">
 		<!--- todo:fix <cfset session.objects.Output.HiLoReport(local) /> --->
 		<!--- this belongs in a watchlist runner method --->
 		<cfif arguments.ReportType EQ "watchlist">
@@ -210,6 +211,26 @@
 		</cfscript>
 	</cffunction>
 	
+	<cffunction name="GetOriginalStockData" description="I return original data" access="public" displayname="" output="false" returntype="Any" >
+		<cfscript>
+		local.OriginalData = session.objects.DataService.GetOriginalStockData();
+		return local.OriginalData;
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="GetHigh" description="I return original data" access="public" displayname="" output="false" returntype="Any" >
+		<cfscript>
+		local.High = session.objects.DataService.GetHigh();
+		return local.High;
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="GetLow" description="I return original data" access="public" displayname="" output="false" returntype="Any" >
+		<cfscript>
+		local.Low = session.objects.DataService.GetLow();
+		return local.Low;
+		</cfscript>
+	</cffunction>
 	<cffunction name="GetTradeBeans" description="" access="public" displayname="" output="false" returntype="Any">
 		<cfargument name="qryData" required="true" />
 		<cfargument name="rownumber" required="true"   />

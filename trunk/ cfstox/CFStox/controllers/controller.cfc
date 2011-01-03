@@ -6,24 +6,27 @@
 	</cffunction>
 	
 	<cffunction name="historical" description="return historical data" access="public" displayname="" output="false" returntype="Struct">
-		<!--- <cfargument name="argumentData"> --->
-		<cfset var local = structnew() />
-		<cfset local.view = "historical">
-		<cfset local.results 			= session.objects.DataService.GetStockData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") />
-		<cfset local.returned.HKData 	= session.objects.DataService.GetTechnicalIndicators(query:local.results.HKData) />
-		<cfset local.xmldata 			= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.symbol#",qrydata:local.results.CandleData,startdate:"#arguments.startdate#", high:local.results.high, low:local.results.low)>
-		<cfset local.xmldataha 			= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.Symbol#",qrydata:local.returned.HKData ,startdate:"#arguments.startdate#", high:local.results.high, low:local.results.low)>
-		<cfset structAppend(request,local) />
-		<cfset structAppend(request,arguments) />
-		<cfreturn local />
+		<!--- I generate a hostorical listing of stock prices and indicator readings for a given stock --->
+		<cfargument name="symbol" required="true" />
+		<cfargument name="startdate" required="true" />
+		<cfargument name="enddate" required="true" />
+		<cfscript>
+		var local = structnew(); 
+		local.view = "historical";
+		local.HAdata 		= session.objects.SystemService.GetHAStockData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") ; 
+		local.OriginalData 	= session.objects.SystemService.GetOriginalStockData();
+		local.result 		= session.objects.SystemService.RunSystem(SystemToRun:"test",qryData: local.HAdata);
+		local.high			= session.objects.SystemService.GetHigh();
+		local.low			= session.objects.SystemService.GetLow();
+		local.xmldata 		= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.symbol#",qrydata:local.OriginalData,startdate:"#arguments.startdate#", high:local.high, low:local.low);
+		local.xmldataha 	= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.Symbol#",qrydata:local.HAData ,startdate:"#arguments.startdate#", high:local.high, low:local.low);
+		structAppend(request,local); 
+		structAppend(request,arguments);
+		request.method = "historical";
+		return local;
+		</cfscript> 
 	</cffunction>
 	
-	<cffunction name="summary" description="provide trading actions and analysis" access="public" displayname="" output="false" returntype="struct">
-		<cfargument name="argumentData">
-		<cfset var local = structnew() />
-		<cfreturn this/>
-	</cffunction>
-
 	<cffunction name="backtest" description="provide results using given system" access="public" displayname="" output="false" returntype="struct">
 		<!---- todo: add entry exit excel output ---->
 		<!--- <cfargument name="argumentData"> --->
@@ -31,17 +34,24 @@
 		particular set of rules in the trading system. We also can display on a chart the indicator values
 		ie how much it went outside the bollinger band, went over under pivot points, etc
 		 --->
-		<cfset var local = structnew() />
-		<cfset local.returndata = historical(Symbol:arguments.symbol,startdate:arguments.startdate,enddate:arguments.enddate,hkconvert:"true") />
-		<cfset local.stockdata = local.returndata.returned.HKData />
-		<!--- <cfset local.stockdata = session.objects.system.System_hekin_ashiII(queryData:local.stockdata ) /> --->
-	 	<cfset local.exceldata = session.objects.utility.genExcel(exceldata:local.stockdata) />  
-		<cfset session.objects.Utility.writedata(filepath:"..\data\excel", filename:"#arguments.symbol#.xls", filedata:local.exceldata) /> 
-		<cfset local.view = "backtest">
-		<cfset structAppend(request,local.returndata) />
-		<cfset structAppend(request,arguments) />
-		<cfset request.stockdata = local.stockdata /> 
-		<cfreturn local />
+		<cfargument name="symbol" required="true" />
+		<cfargument name="startdate" required="true" />
+		<cfargument name="enddate" required="true" />
+		<cfscript>
+		var local = structnew(); 
+		local.view = "historical";
+		local.HAdata 		= session.objects.SystemService.GetHAStockData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") ; 
+		local.OriginalData 	= session.objects.SystemService.GetOriginalStockData();
+		local.result 		= session.objects.SystemService.RunSystem(SystemToRun:"test",qryData: local.HAdata);
+		local.high			= session.objects.SystemService.GetHigh();
+		local.low			= session.objects.SystemService.GetLow();
+		local.xmldata 		= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.symbol#",qrydata:local.OriginalData,startdate:"#arguments.startdate#", high:local.high, low:local.low);
+		local.xmldataha 	= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.Symbol#",qrydata:local.HAData ,startdate:"#arguments.startdate#", high:local.high, low:local.low);
+		structAppend(request,local);
+		structAppend(request,arguments); 
+		request.method = "backtest";  
+		return local;
+		</cfscript>
 	</cffunction>
 	
 	<cffunction name="watchlist" description="run systems against watchlist" access="public" displayname="" output="false" returntype="struct">

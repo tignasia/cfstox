@@ -4,7 +4,7 @@
 
 <script language="javascript" type="text/javascript" src="niceforms.js"></script>
 <link rel="stylesheet" type="text/css" media="all" href="niceforms-default.css" />
-<style type="text/css">
+<!-- <style type="text/css">
 #form1 fieldset {
 	height: 20em;
 	width: 11em;
@@ -13,7 +13,7 @@
 	padding: 1em;
 	float: left;
 	}
-</style>
+</style> -->
 <div>
 <form action="controllers/controller.cfm" method="post" id="form1">
 <fieldset title="historical data"><legend>Historical Data</legend>
@@ -38,25 +38,11 @@
 </form>
 </div>
 <br style="clear:both">
-<div style ="width:100%">
-<!--- this generates a summary and trading action based on the chosen system with entry and stoploss targets --->
-<form action="controllers/controller.cfm" method="post" id="summary_form">
-<fieldset title="Summary"  style="float:left" >
-<legend>Summary</legend>
-<input type="hidden" id="action" name="action" value="summary">
-<label for="Symbol" style="width=30%">Symbol:</label>
-<input type="text" name="Symbol" id="Symbol" value="">
 
-<input type="submit" name="submit" id="submit" value="Submit" />
-</fieldset>
-</form>
-
-</div>
-<br style="clear:both">
 <div style ="width:100%">
 <!--- this runs a historical backtest of the chosen system  --->
 <form action="controllers/controller.cfm" method="post" id="backtest_form">
-<fieldset title="Backtest"  >Backtest
+<fieldset title="Backtest">Backtest
 <input type="hidden" id="action" name="action" value="backtest">
 <label for="Symbol" style="width=30%">Symbol:</label>
 <input type="text" name="Symbol" id="Symbol" value="">

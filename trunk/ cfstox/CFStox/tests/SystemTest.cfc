@@ -59,7 +59,36 @@
 		//debug(local.data);
 		///debug(local.data);
 		local.result = this.SystemService.RunSystem(SystemToRun:"test",qryData: local.HAdata);
-		debug(local.result);
+		//debug(local.result);
+		//local.query = this.System.TrackTrades(queryData: local.data);
+		//local.beandata = local.result.;
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testTradeReportBuilder" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.HAdata = this.SystemService.GetHAStockData(symbol:"SUN",startdate:"10/1/2010",enddate:"1/01/2011"); 
+		local.result = this.SystemService.RunSystem(SystemToRun:"test",qryData: local.HAdata);
+		//debug(local.result);
+		local.tradearray = this.Output.TradeReportBuilder(local.result.beancollection);
+		debug(local.tradearray);
+		debug(local.tradearray[1]);
+		//local.query = this.System.TrackTrades(queryData: local.data);
+		//local.beandata = local.result.;
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testTradeReportPDF" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.symbol = "SUN";
+		local.HAdata = this.SystemService.GetHAStockData(symbol:"SUN",startdate:"10/1/2010",enddate:"1/01/2011"); 
+		local.result = this.SystemService.RunSystem(SystemToRun:"test",qryData: local.HAdata);
+		//debug(local.result);
+		local.tradearray = this.Output.TradeReportBuilder(local.result.beancollection);
+		local.tradearray = this.Output.TradeReportPDF(symbol:local.symbol,beanarray:local.tradearray);
+		//debug(local.tradearray);
 		//local.query = this.System.TrackTrades(queryData: local.data);
 		//local.beandata = local.result.;
 		</cfscript>
