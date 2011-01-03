@@ -61,29 +61,27 @@
 		<cfargument name="TrackingBean" required="true"  />
 		<cfset var local = StructNew() />
 		<!--- todo: entering and closing trades on same day is screwing your records up  --->
-		<cfif arguments.TradeBean.Get("HKGoLong") OR arguments.TradeBean.Get("HKGoShort") OR arguments.TradeBean.Get("NewHighReversal")
-				OR arguments.TradeBean.Get("HKCloseLong")
-				OR arguments.TradeBean.Get("HKCloseShort")
-				OR arguments.TradeBean.Get("NewHighBreakout")
-				OR arguments.TradeBean.Get("R1Breakout1Day")	
-				OR arguments.TradeBean.Get("R2Breakout1Day")
-				OR arguments.TradeBean.Get("R1Breakout2Days")
-				OR arguments.TradeBean.Get("R2Breakout2Days")	
-					>
-			<cfscript>
-			local.aLength 			= variables.TradeArray.Size() + 1 ;
-			local.strTrade 			= StructNew() ;
-			local.strTrade.Action 	= "HKGoLong" ;
-			local.strTrade.TradeType = "open" ;
-			local.strTrade.OpenDate = arguments.TradeBean.Get("Date") ;
-			local.strTrade.OpenPrice = arguments.TradeBean.Get("HKClose") ;
-			</cfscript>
+		<!--- todo: stop closing trades that aren't open --->
+		<cfif arguments.TradeBean.Get("HKGoLong") 
+		OR arguments.TradeBean.Get("HKGoShort")
+		OR arguments.TradeBean.Get("HKCloseLong")
+		OR arguments.TradeBean.Get("HKCloseShort")
+		<!--- 
+		OR arguments.TradeBean.Get("NewHighReversal")
+		OR arguments.TradeBean.Get("NewHighBreakout")
+		OR arguments.TradeBean.Get("R1Breakout1Day")	
+		OR arguments.TradeBean.Get("R2Breakout1Day")
+		OR arguments.TradeBean.Get("R1Breakout2Days")
+		OR arguments.TradeBean.Get("R2Breakout2Days")	 --->
+		>
+			<!--- todo:use tracking bean to set entry stop flag; there is always an exit stop on open positions --->
 			<!--- cancel long trade if already long --->
 			<cfif arguments.TradeBean.Get("HKGoLong") AND arguments.TrackingBean.Get("HKGoLong")>
 				<cfscript>
 				arguments.TradeBean.Set("HKGoLong",false );
 				</cfscript>
 			</cfif>
+			<!--- must close short position before going long? --->
 			<cfif arguments.TradeBean.Get("HKGoLong") AND NOT arguments.TrackingBean.Get("HKGoLong")>
 				<cfscript>
 				arguments.TrackingBean.Set("HKGoLong",true);

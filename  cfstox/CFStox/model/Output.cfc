@@ -134,6 +134,7 @@
 				<cfset local.longentry = local.tradeBean.LongOpenPrice  />
 				<cfset local.price = local.tradeBean.LongOpenPrice  />
 				<cfset local.date = local.tradeBean.LongOpenDate  />
+				
 			</cfif> 
 			<cfif local.tradeBean.LongClose >
 				<cfset local.TradeType = "Long Close" />
@@ -162,11 +163,11 @@
 				<cfset local.Date  = local.tradeBean.ShortCloseDate />
 			</cfif> 
 			<tr>
-				<td>#local.TradeType#</td>
-				<td>#local.Price#</td>
-				<td>#local.Date#</td>
-				<td>#local.profitloss#</td>
-				<td>#local.netprofitloss#</td>
+			<td>#local.TradeType#</td>
+			<td>#local.Price#</td>
+			<td>#local.Date#</td>
+			<td>#local.profitloss#</td>
+			<td>#local.netprofitloss#</td>
 			</tr>
 			<cfset local.profitloss =  "" />
 		</cfloop>
@@ -174,6 +175,25 @@
 		</cfoutput>
 		</cfdocument>
 		<cfreturn />
+	</cffunction>
+	
+	<cffunction name="getTradeStruct" access="private" output="false" returntype="Any">
+		<cfscript>
+		 local.tradeStruct = structNew();
+		 local.tradestruct.LongOpen 		= false;
+		 local.tradestruct.LongOpenDate 	= "";
+		 local.tradestruct.LongOpenPrice 	= "";
+		 local.tradestruct.LongClose 		= false;
+		 local.tradestruct.LongCloseDate 	= "";
+		 local.tradestruct.LongClosePrice	= "";
+		 local.tradestruct.ShortOpen 		= false;
+		 local.tradestruct.ShortOpenDate 	= "";
+		 local.tradestruct.ShortOpenPrice	= "";
+		 local.tradestruct.ShortClose 		= false;
+		 local.tradestruct.ShortCloseDate 	= "";
+		 local.tradestruct.ShortClosePrice	= "";
+		 return local.tradestruct;
+		</cfscript>
 	</cffunction>
 	
 	<cffunction name="TradeReportBuilder" description="I build a structure of trades" access="public" displayname="" output="false" returntype="array">
@@ -184,45 +204,38 @@
 		<cfset local.arrayindex = 1 />
 		<cfloop from="1" to="#arguments.data.size()#" index="i">
 			<cfset local.tradeflag = false />
-			<cfset local.tradeStruct = structNew() />
-			<cfset local.tradestruct.LongOpen 		= false />
-			<cfset local.tradestruct.LongOpenDate 	= "" />
-			<cfset local.tradestruct.LongOpenPrice 	= "" />
-			<cfset local.tradestruct.LongClose 		= false />
-			<cfset local.tradestruct.LongCloseDate 	= "" />
-			<cfset local.tradestruct.LongClosePrice	= "" />
-			<cfset local.tradestruct.ShortOpen 		= false />
-			<cfset local.tradestruct.ShortOpenDate 	= "" />
-			<cfset local.tradestruct.ShortOpenPrice	= "" />
-			<cfset local.tradestruct.ShortClose 	= false />
-			<cfset local.tradestruct.ShortCloseDate 	= "" />
-			<cfset local.tradestruct.ShortClosePrice	= "" />
+			<cfset local.tradeStruct = GetTradeStruct() />
 			<cfset local.TradeBean = arguments.data[i] />
-			<cfif local.tradeBean.Get("HKGoLong")  >
-				<cfset local.tradeflag = true />
-				<cfset local.tradestruct.LongOpen 		= true />
-				<cfset local.tradestruct.LongOpenDate 	= local.tradeBean.Get("Date") />
-				<cfset local.tradestruct.LongOpenPrice 	= local.tradeBean.Get("HKClose") />
-			</cfif>
-			<cfif local.tradeBean.Get("HKCloseLong")>
-				<cfset local.tradeflag = true />
-				<cfset local.tradestruct.LongClose 		= true />
-				<cfset local.tradestruct.LongCloseDate 	= local.tradeBean.Get("Date") />
-				<cfset local.tradestruct.LongClosePrice = local.tradeBean.Get("HKClose") />
-			</cfif>
-			<cfif local.tradeBean.Get("HKGoShort") >
-				<cfset local.tradeflag = true />
-				<cfset local.tradestruct.ShortOpen 		= true />
-				<cfset local.tradestruct.ShortOpenDate 	= local.tradeBean.Get("Date") />
-				<cfset local.tradestruct.ShortOpenPrice	= local.tradeBean.Get("HKClose") />
-			</cfif>
+			
 			<cfif local.tradeBean.Get("HKCloseShort") >
-				<cfset local.tradeflag = true />
+				<cfset local.tradeStruct = GetTradeStruct() />
 				<cfset local.tradestruct.ShortClose 		= true />
 				<cfset local.tradestruct.ShortCloseDate 	= local.tradeBean.Get("Date") />
 				<cfset local.tradestruct.ShortClosePrice 	= local.tradeBean.Get("HKClose") />
+				<cfset local.tradeArray[local.arrayindex] 	= local.tradestruct />
+				<cfset local.arrayindex = local.arrayindex + 1 >			
 			</cfif>
-			<cfif local.tradeflag>
+			<cfif local.tradeBean.Get("HKGoLong")  >
+				<cfset local.tradeStruct = GetTradeStruct() />
+				<cfset local.tradestruct.LongOpen 		= true />
+				<cfset local.tradestruct.LongOpenDate 	= local.tradeBean.Get("Date") />
+				<cfset local.tradestruct.LongOpenPrice 	= local.tradeBean.Get("HKClose") />
+				<cfset local.tradeArray[local.arrayindex] = local.tradestruct />
+				<cfset local.arrayindex = local.arrayindex + 1 >			
+			</cfif>
+			<cfif local.tradeBean.Get("HKCloseLong")>
+				<cfset local.tradeStruct = GetTradeStruct() />
+				<cfset local.tradestruct.LongClose 		= true />
+				<cfset local.tradestruct.LongCloseDate 	= local.tradeBean.Get("Date") />
+				<cfset local.tradestruct.LongClosePrice = local.tradeBean.Get("HKClose") />
+				<cfset local.tradeArray[local.arrayindex] = local.tradestruct />
+				<cfset local.arrayindex = local.arrayindex + 1 >			
+			</cfif>
+			<cfif local.tradeBean.Get("HKGoShort") >
+				<cfset local.tradeStruct = GetTradeStruct() />
+				<cfset local.tradestruct.ShortOpen 		= true />
+				<cfset local.tradestruct.ShortOpenDate 	= local.tradeBean.Get("Date") />
+				<cfset local.tradestruct.ShortOpenPrice	= local.tradeBean.Get("HKClose") />
 				<cfset local.tradeArray[local.arrayindex] = local.tradestruct />
 				<cfset local.arrayindex = local.arrayindex + 1 >			
 			</cfif>

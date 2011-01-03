@@ -80,15 +80,15 @@
 	</cffunction>
 	
 	<cffunction name="testTradeReportPDF" access="public" returntype="void">
+		<cfargument name="symbol" required="false" default="CRM">
 		<cfscript>
 		var local = structNew();
-		local.symbol = "SUN";
-		local.HAdata = this.SystemService.GetHAStockData(symbol:"SUN",startdate:"10/1/2010",enddate:"1/01/2011"); 
+		local.HAdata = this.SystemService.GetHAStockData(symbol:"#arguments.symbol#",startdate:"9/1/2010",enddate:"1/01/2011"); 
 		local.result = this.SystemService.RunSystem(SystemToRun:"test",qryData: local.HAdata);
 		//debug(local.result);
 		local.tradearray = this.Output.TradeReportBuilder(local.result.beancollection);
-		local.tradearray = this.Output.TradeReportPDF(symbol:local.symbol,beanarray:local.tradearray);
-		//debug(local.tradearray);
+		local.null = this.Output.TradeReportPDF(symbol:arguments.symbol,beanarray:local.tradearray);
+		debug(local.tradearray);
 		//local.query = this.System.TrackTrades(queryData: local.data);
 		//local.beandata = local.result.;
 		</cfscript>
