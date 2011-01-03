@@ -50,75 +50,46 @@
 	</cffunction>
 	
 	<cffunction name="RunWatchlist" description="" access="public" displayname="" output="true" returntype="Any">
-		<!--- this should be a digest of individual trade reports  --->
-		<cfargument name="SystemToRun" required="true"  />
+		<!--- todo: this should be a digest of individual trade reports  --->
+		<!--- todo: remove hard dates --->
+		<cfargument name="SystemToRun" required="false" default="test" />
 		<cfargument name="ReportType" required="false" default="backtest" hint="backtest,watchlist"/>
 		<cfargument name="TargetDate" required="false" default="#dateformat(now()-1,"mm/dd/yyyy")#" />
-		<cfset var local = SetUpVars() />
+		<cfset var local = StructNew() />
+		<cfset local = StructAppend(local,SetUpVars() )/>
 		<cfloop list="#local.watchlist#" index="i">
 			<cfscript>
-			local.HAdata = GetHAStockData(symbol:"#i#",startdate:"10/8/2010",enddate:"11/15/2010"); 
-			local.results = session.objects.systemRunner.testSystem(SystemToRun:arguments.systemtorun,qryData:local.HAdata); 
-			dump(object:local.results);
-			local.Eventsx = processBeanCollection(beancollection:local.results.BeanCollection,TargetDate:arguments.TargetDate); 
-			/*
-			<cfdump label="from systemservice:processing symbol " var="#i#">
-			<cfdump label="from systemservice:local.eventsx " var="#local.Eventsx#">
-			
-			<cfset local.sym = local.eventsx["golong"].Get("Symbol") />
-			<cfdump label="from systemservice:local.eventsx symbol " var="#local.sym#">
-			
-			<!--- <cfcatch type="any"> --->
-			<cfdump label="in cfcatch sym:#i#" var="#local.eventsx#">
-			<!--- </cfcatch>
-			</cftry>  ---> */
-			 
-			local.arrStrBeanSets[local.x] = local.eventsx;
-			local.x = local.x + 1; 
+			local.HAdata 		= GetHAStockData(symbol:"#i#",startdate:"10/1/2010",enddate:"1/1/2011"); 
+			local.result 		= session.objects.systemRunner.testSystem(SystemToRun:"test",qryData:local.HAdata); 
+			local.tradeArray 	= session.objects.Output.TradeReportBuilder(local.result.beancollection);
+			if (local.tradeArray.size() )
+			{
+				local.arrLatestTrade 		= TrimTrades(local.tradeArray);
+				for (x=1; x LTE local.arrLatestTrade.size(); x=x+1)
+				ArrayAppend(local.arrAllTrades,local.arrLatestTrade[x]); 
+			}
+			/*trim the trade array and append the trades to the main array (all trades) */
 			</cfscript>
 		</cfloop>
-		
-		<!--- <cfdump label="from systemservice out of loop : eventgsx final" var="#local.Eventsx#">
-		<cfdump label="from systemservice out of loop : local.arrStrBeanSets " var="#local.arrStrBeanSets#">
-		<cfabort>
-		 --->
-		<!--- <cfloop array="#local.arrStrBeanSets#" index="j">
-			<cfif j["golong"].size()  >
-				<cfset local.arrGoLong[x] = j["golong"]>
-				<cfset x = x + 1>
-			</cfif>
-			<cfif j["HighBreakOut"].size() >
-				 <cfset local.arrHighBreakout[y] = j["highbreakOut"]>
-				 <cfset y = y+1>
-			</cfif> 
-			<!--- <cfif i.get("OpenTrade")>
-				 <cfset local.arrOpenTrade[local.arrGoLong.Size() +1] = i>
-			</cfif>
-			<cfif i.get("CloseTrade")>
-				 <cfset local.arrCloseTrade[local.arrGoLong.Size() +1] = i>
-			</cfif> --->
-			<cfif j["GoShort"].Size() >
-				 <cfset local.arrGoShort[local.arrGoShort +1] = j["GoShort"] />
-			</cfif>
-			<!--- <cfif i["LowBreakdown"].Size() >
-				 <cfset local.arrLowBreakdown[local.arrLowBreakdown +1] = i>
-			</cfif>  --->
-			<!--- <cfif i.get("MoveStop")>
-				 <cfset local.arrGoLong[arrGoLong.Size +1] = i>
-			</cfif> --->
-		
-		</cfloop>
-		<cfreturn local.arrGoLong />
-		<cfset local.strBeanCollection.goLong 		= local.arrGoLong />
-		<cfset local.strBeanCollection.HighBreakOut = local.arrHighBreakout />
-		<cfset local.strBeanCollection.OpenTrade 	= local.arrOpenTrade>
-		<cfset local.strBeanCollection.CloseTrade 	= local.arrCloseTrade>
-		<cfset local.strBeanCollection.GoShort		= local.arrGoShort> --->
-		<cfset local.ReportHeaders = "Date,Trade,Entry Price,New High Reversal,New High Breakout,R1 Breakout, R2 Breakout,RSIStatus,CCIStatus">
-		<cfset local.ReportMethods = "Date,HKGoLong,EntryPrice,NewHighReversal,NewHighBreakout,R1Breakout1Day,R2Breakout1Day,RSIStatus,CCIStatus">
-		<cfset session.objects.Output.WatchlistReport(local.arrStrBeanSets ) /> 
-		<cfset request.data = local.arrStrBeanSets />   
-		<cfreturn local.arrStrBeanSets  />
+		<!--- <cfset local.ReportHeaders = "Date,Trade,Entry Price,New High Reversal,New High Breakout,R1 Breakout, R2 Breakout,RSIStatus,CCIStatus">
+		<cfset local.ReportMethods = "Date,HKGoLong,EntryPrice,NewHighReversal,NewHighBreakout,R1Breakout1Day,R2Breakout1Day,RSIStatus,CCIStatus"> --->
+		<cfset session.objects.Output.WatchListReportPDF(local.arrAllTrades) />  
+		<cfreturn local.arrAllTrades  />
+	</cffunction>
+	
+	<cffunction name="TrimTrades" access="private" output="false" returntype="array" >
+	<cfargument name="TradeArray" required="true" >
+	<cfset var local = structNew() />
+	<cfset local.tradetrim = ArrayNew(1) />
+	<cfset local.aLen = arguments.TradeArray.size() />
+	
+	<cfif arguments.tradearray[local.alen].ShortOpen or arguments.tradearray[local.alen].LongOpen>
+		<cfset local.tradetrim[1] = arguments.tradearray[local.alen] />
+	<cfelse>
+		<cfset local.tradetrim[1] = arguments.tradearray[local.alen-1] />
+		<cfset local.tradetrim[2] = arguments.tradearray[local.alen] />
+	</cfif>
+	 <cfreturn local.tradetrim />
 	</cffunction>
 	
 	<cffunction name="ProcessBeanCollection" description="" access="private" displayname="" output="true" returntype="Any">
@@ -260,6 +231,7 @@
 		/* --- array of structurs of arrays */
 		local.arrStrBeanSets 	= arrayNew(1);
 		local.arrResults 		= arrayNew(1);
+		local.arrAllTrades 		= arrayNew(1);
 		/* <cfset local.watchlist = 
 		"ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH"
 		> */
@@ -267,7 +239,8 @@
 		/* <cfset local.watchlist = 
 		"A,ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH,SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF"
 		> */
-		local.watchlist = "A,ABX,ADBE,AEM,AKAM,APA,SPY,XLF";
+		local.watchlist = 
+		"A,ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH,SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF";
 		}
 		else {
 		local.watchlist = "AKAM" ;
