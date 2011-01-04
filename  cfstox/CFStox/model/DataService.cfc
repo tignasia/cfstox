@@ -13,7 +13,16 @@
 		<cfargument name="startdate" 	required="false" default=#CreateDate(2009,1,1)# />
 		<cfargument name="enddate" 		required="false" default=#now()# />
 		<cfset var local = structnew() />
-		<cfset var results = session.objects.http.gethttp(sym:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") />
+		<cftry>
+		<cfset results = session.objects.http.gethttp(sym:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") />
+		<cfcatch>
+			<cfoutput> HTTP request failed</cfoutput>
+			<cfdump var="#arguments.symbol#">
+			<cfdump var="#variables#">
+			<cfdump var="#arguments#">
+			<cfabort>
+		</cfcatch>
+		</cftry>
 		<cfquery   dbtype="query"  name="resorted" >
 			select * from results order by DateOne asc
 		</cfquery>

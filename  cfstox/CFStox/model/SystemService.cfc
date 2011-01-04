@@ -52,14 +52,38 @@
 	<cffunction name="RunWatchlist" description="" access="public" displayname="" output="true" returntype="Any">
 		<!--- todo: this should be a digest of individual trade reports  --->
 		<!--- todo: remove hard dates --->
+		
 		<cfargument name="SystemToRun" required="false" default="test" />
 		<cfargument name="ReportType" required="false" default="backtest" hint="backtest,watchlist"/>
+		<cfargument name="startdate" required="false" default="#dateformat(now()-60,"mm/dd/yyyy")#">
+		<cfargument name="enddate" required="false" default="#dateformat(now()-1,"mm/dd/yyyy")#">
 		<cfargument name="TargetDate" required="false" default="#dateformat(now()-1,"mm/dd/yyyy")#" />
-		<cfset var local = StructNew() />
-		<cfset local = StructAppend(local,SetUpVars() )/>
+		<cfargument name="watchlist" required="false" default="1">
+		<cfset var local = structNew() />	
+		<cfdump var="#arguments#">
+		<cfset StructAppend(local,SetUpVars(),"no" ) />
+		<!--- todo:wtf --->
+			
+		<cfswitch  expression="#arguments.watchlist#">
+			<cfcase value="1">
+				<cfset local.watchlist = local.watchlist1>
+			</cfcase>
+			<cfcase value="2">
+				<cfset local.watchlist = local.watchlist2>
+			</cfcase>
+			<cfcase value="3">
+				<cfset local.watchlist = local.watchlist3>
+			</cfcase>
+			<cfcase value="4">
+				<cfset local.watchlist = local.watchlist4>
+			</cfcase>
+		</cfswitch>	
+		
+		<!--- <cfdump var="#arguments#"> --->
+		
 		<cfloop list="#local.watchlist#" index="i">
 			<cfscript>
-			local.HAdata 		= GetHAStockData(symbol:"#i#",startdate:"10/1/2010",enddate:"1/1/2011"); 
+			local.HAdata 		= GetHAStockData(symbol:"#i#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
 			local.result 		= session.objects.systemRunner.testSystem(SystemToRun:"test",qryData:local.HAdata); 
 			local.tradeArray 	= session.objects.Output.TradeReportBuilder(local.result.beancollection);
 			if (local.tradeArray.size() )
@@ -74,6 +98,7 @@
 		<!--- <cfset local.ReportHeaders = "Date,Trade,Entry Price,New High Reversal,New High Breakout,R1 Breakout, R2 Breakout,RSIStatus,CCIStatus">
 		<cfset local.ReportMethods = "Date,HKGoLong,EntryPrice,NewHighReversal,NewHighBreakout,R1Breakout1Day,R2Breakout1Day,RSIStatus,CCIStatus"> --->
 		<cfset session.objects.Output.WatchListReportPDF(local.arrAllTrades) />  
+		<cfset request.beanarray = local.arrAllTrades />
 		<cfreturn local.arrAllTrades  />
 	</cffunction>
 	
@@ -219,6 +244,7 @@
 	
 	<cffunction name="SetUpVars" description="" access="private" displayname="" output="false" returntype="Struct">
 		<cfscript>
+		var local = structNew();
 		local.start 				= dateformat(now()-30,"mm/dd/yyyy"); 
 		local.strBeanCollection 	= structNew();
 		local.arrGoLong			= arrayNew(1);
@@ -239,8 +265,14 @@
 		/* <cfset local.watchlist = 
 		"A,ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH,SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF"
 		> */
-		local.watchlist = 
-		"A,ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH,SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF";
+		local.watchlist1 = 
+		"A,ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA";
+		local.watchlist2 = 
+		"DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT";
+		local.watchlist3 = 
+		"HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL";
+		local.watchlist4 = 
+		"PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH,SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF";
 		}
 		else {
 		local.watchlist = "AKAM" ;
@@ -254,5 +286,23 @@
 		<cfargument name="object" required="true" />
 		<cfdump var="#arguments.object#">
 			<cfreturn />
+	</cffunction>
+	
+	<cffunction name="functionOne" description="" access="public" displayname="" output="true" returntype="Any">
+		<cfargument name="ArgumentStatus" required="false" default="everythings great!" />
+		<cfdump label="before append:local" var="#local#">
+		<cfdump label="before append:arguments" var="#arguments#">
+		<cfset  local2 = FunctionTwo() />
+		<cfset StructAppend(local,local2)> 
+		<cfdump label="after append:local" var="#local#">
+		<cfdump label="after append:arguments" var="#arguments#">
+		<cfreturn local/>
+	</cffunction>
+	
+	<cffunction name="functionTwo" description="" access="private" displayname="" output="true" returntype="Any">
+		<cfargument name="ArgumentStatusfromFunctionTwo" required="false" default="Ha youre so screwed!" />
+		<!--- Common in pre 8 code, this should blow away the existing local scope, right? Yeah well guess what.. It's actually worse than useless--->
+		<cfset var local = StructNew()> 
+		<cfreturn local/>
 	</cffunction>
 </cfcomponent>

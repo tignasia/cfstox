@@ -55,9 +55,35 @@
 </form>
 </div>
 <!--- this runs a summary of trading actions and analysis against the watchlist --->
-<form action="controllers/controller.cfm" method="post" id="watchlist_form">
-<fieldset title="Watchlist">Watchlist
+<form action="controllers/controller.cfm" method="post" id="watchlist_form1">
+<fieldset title="Watchlist">Watchlist One
 <input type="hidden" id="action" name="action" value="watchlist">
+<input type="hidden" id="watchlist" name="watchlist" value="1">
 <input type="submit" name="submit" id="submit" value="Run watchlist analysis" />
 </fieldset>
 </form>
+
+<form action="controllers/controller.cfm" method="post" id="watchlist_form2">
+<fieldset title="Watchlist">Watchlist Two
+<input type="hidden" id="action" name="action" value="watchlist">
+<input type="hidden" id="watchlist" name="watchlist" value="2">
+<input type="submit" name="submit" id="submit" value="Run watchlist analysis" />
+</fieldset>
+</form>
+
+<form action="controllers/controller.cfm" method="post" id="watchlist_form3">
+<fieldset title="Watchlist">Watchlist Three
+<input type="hidden" id="action" name="action" value="watchlist">
+<input type="hidden" id="watchlist" name="watchlist" value="3">
+<input type="submit" name="submit" id="submit" value="Run watchlist analysis" />
+</fieldset>
+</form>
+
+<form action="controllers/controller.cfm" method="post" id="watchlist_form4">
+<fieldset title="Watchlist">Watchlist Four
+<input type="hidden" id="action" name="action" value="watchlist">
+<input type="hidden" id="watchlist" name="watchlist" value="4">
+<input type="submit" name="submit" id="submit" value="Run watchlist analysis" />
+</fieldset>
+</form>
+

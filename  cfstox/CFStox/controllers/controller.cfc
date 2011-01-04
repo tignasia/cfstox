@@ -55,7 +55,6 @@
 	</cffunction>
 	
 	<cffunction name="watchlist" description="run systems against watchlist" access="public" displayname="" output="false" returntype="struct">
-		<cfargument name="argumentData">
 		<cfset var local = structnew() />
 		<cfset local.view = "watchlist">
 		<!--- <cfset local.theList = 
@@ -67,7 +66,7 @@
 	<!--- SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF --->
 		<cfset local.startDate = dateformat(now()-30,"mm/dd/yyyy") />
 		<cfset local.endDate = dateformat(now(),"mm/dd/yyyy") />
-		<cfset request.data = session.objects.systemservice.RunWatchList(SystemToRun:"test") />
+		<cfset request.data = session.objects.systemservice.RunWatchList(SystemToRun:"test",watchlist:arguments.watchlist) />
 		<cfreturn local />
 	</cffunction>
 

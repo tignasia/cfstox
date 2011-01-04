@@ -124,6 +124,14 @@
 		</cfscript>
 	</cffunction>
 	
+	<cffunction name="testWeirdness" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		///debug(local.data);
+		local.result = this.SystemService.FunctionOne();
+		debug(local.result);
+		</cfscript>
+	</cffunction>
 	<!--- 
 <cffunction name="testSystemHKII" access="public" returntype="void">
 		<cfscript>
