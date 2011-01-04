@@ -5,64 +5,80 @@
 <script language="JavaScript" src="../FusionChartsFree/JSClass/FusionCharts.js"></script>
 </head>
 <body>
-<cfoutput>
 <cfset local = structNew() />
-
-
-Watchlist Report <br/>
-Breakout Highs <br/>
-<table>
-<th>Symbol</th>
-<th>ClosingPrice</th>
-<th>High</th>
-<th>Date</th>
-<th>Previous High</th>
-<th>Previous High Date</th>
-<th>Previous High Date</th>
-
-
-<cfloop array="#request.data#" index="i"  >
-<cfset local.TradeBean = i />
-<cfif local.TradeBean["highbreakout"].Get("NewHighBreakOut") > 
-<tr>
-	<td>#local.tradebean["highbreakout"].Get("Symbol")#</td>
-	<td>#local.tradebean["highbreakout"].Get("HKClose")#</td>
-	<td>#local.tradebean["highbreakout"].Get("HKHigh")#</td>
-	<td>#local.tradebean["highbreakout"].Get("Date")#</td>
-	<td>#local.tradebean["highbreakout"].Get("PreviousLocalHigh")#</td>
-	<td>#local.tradebean["highbreakout"].Get("PreviousLocalHighDate")#</td>
+		<cfset local.filename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "Watchlist"  & ".pdf"/>
+		<cfset local.ReportHeaders1 	= "Symbol,Trade,Entry Price,Date">
+		
+		<cfoutput>
+		<table cellspacing="10" width="80%">
+		<tr>
+		<cfloop list="#local.ReportHeaders1#" index="i">
+		<th>#i#</th>
+		</cfloop>
+		</tr>
+		
+		<cfset local.longentry 		= 0  />
+		<cfset local.shortentry 	= 0 />
+		<cfset local.profitloss 	= 0 />
+		<cfset local.netprofitloss 	= 0 />
+		<cfset local.Price		 	= 0 />
+		<cfset local.Date 		= 0 />
+		<cfloop from="1" to="#request.beanarray.size()#" index="i">
+			<cfset local.EntryDate 	= "" />
+			<cfset local.ExitPrice 	= 0 />
+			<cfset local.ExitDate 	= "" />
+			<cfset local.TradeBean = request.BeanArray[i] />
+			<cfset local.symbol = local.tradebean.get("Symbol") />	
+			<cfif local.tradeBean.LongOpen >
+				<cfset local.TradeType = "Long Open" />
+				<cfset local.entryprice = local.tradeBean.LongOpenPrice  />
+				<cfset local.entrydate = local.tradeBean.LongOpenDate  />
+				<cfset local.longentry = local.tradeBean.LongOpenPrice  />
+				<cfset local.price = local.tradeBean.LongOpenPrice  />
+				<cfset local.date = local.tradeBean.LongOpenDate  />
+				
+			</cfif> 
+			<cfif local.tradeBean.LongClose >
+				<cfset local.TradeType = "Long Close" />
+				<cfset local.exitprice 	= local.tradeBean.LongClosePrice  />
+				<cfset local.exitdate 	= local.tradeBean.LongCloseDate  />
+				<cfset local.profitloss =  local.tradeBean.LongClosePrice - local.longentry  />
+				<cfset local.netprofitloss = local.netprofitloss + local.profitloss />
+				<cfset local.price 	= local.tradeBean.LongClosePrice  />
+				<cfset local.date 	= local.tradeBean.LongCloseDate  />
+			</cfif> 
+			<cfif local.tradeBean.ShortOpen>
+				<cfset local.TradeType = "Short Open" />
+				<cfset local.EntryPrice = local.tradeBean.ShortOpenPrice />
+				<cfset local.EntryDate  = local.tradeBean.ShortOpenDate />
+				<cfset local.ShortEntry 	= local.tradeBean.ShortOpenPrice />
+				<cfset local.price 	= local.tradeBean.ShortOpenPrice  />
+				<cfset local.date 	= local.tradeBean.ShortOpenDate  />
+			</cfif> 
+			<cfif local.tradeBean.ShortClose>
+				<cfset local.TradeType = "Short Close" />
+				<cfset local.ExitPrice = local.tradeBean.ShortClosePrice />
+				<cfset local.ExitDate  = local.tradeBean.ShortCloseDate />
+				<cfset local.profitloss =  local.shortentry - local.tradeBean.ShortClosePrice />
+				<cfset local.netprofitloss = local.netprofitloss + local.profitloss />
+				<cfset local.Price = local.tradeBean.ShortClosePrice />
+				<cfset local.Date  = local.tradeBean.ShortCloseDate />
+			</cfif> 
+			<tr>
+			<td>#local.symbol#</td>
+			<td>#local.TradeType#</td>
+			<td>#local.Price#</td>
+			<td>#local.Date#</td>
+			</tr>
+			<cfset local.profitloss =  "" />
+		</cfloop>
+		</table>
+		</cfoutput>
 	
-</tr>
-</cfif> 
-</cfloop>
-</table>
-</cfoutput>
-<cfoutput>
-New Long Positions <br/>
-<table>
-<th>Symbol</th>
-<th>ClosingPrice</th> 
-<th>R1</th> 
-<th>Date</th> 
-<th>Previous High</th>
-<th>Previous High Date</th>
 
 
-<cfloop array="#request.data#" index="j">
-<cfset local.TradeBean =  j />	
-<cfif local.TradeBean["golong"].Get("HKGoLong") > 
-<tr>
-	<td>#local.tradebean["golong"].Get("Symbol")#</td>
-	<td>#local.tradebean["golong"].Get("HKClose")#</td>
-	<td>#DecimalFormat(local.tradebean["golong"].Get("R1"))#</td>
-	<td>#local.tradebean["golong"].Get("Date")#</td>
-	<td>#local.tradebean["golong"].Get("PreviousLocalHigh")#</td>
-	<td>#local.tradebean["golong"].Get("PreviousLocalHighDate")#</td>
-</tr>
-</cfif> 
-</cfloop>
-</table>
-</cfoutput>
-	
 
+<!--- <cfdump var="#request#">
+<cfdump var="#variables#">
+<cfdump var="#session#"> --->
 </body>
