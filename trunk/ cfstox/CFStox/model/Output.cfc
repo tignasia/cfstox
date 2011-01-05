@@ -179,8 +179,9 @@
 	
 	<cffunction name="WatchListReportPDF" description="I output a PDF of the trades" access="public" displayname="" output="false" returntype="void">
 		<cfargument name="BeanArray" required="true">
+		<cfargument name="watchlist" required="false" default="1" />
 		<cfset var local = structNew() />
-		<cfset local.filename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "Watchlist"  & ".pdf"/>
+		<cfset local.filename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "Watchlist" & "#arguments.watchlist#" & ".pdf"/>
 		<cfset local.ReportHeaders1 	= "Symbol,Trade,Entry Price,Date">
 		<cfdocument  format="PDF" filename="#local.filename#" overwrite="true" >
 		<cfoutput>

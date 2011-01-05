@@ -72,8 +72,8 @@
 	<cfhttp 
 	useragent="Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; FDM)"		   
 	url="#local.url#" 
-	method="get" file="data.csv" getasbinary="auto" path="#local.basepath#" result="resultdata"/>
-	
+	method="get" columns="DateOne,Open,High,Low,Close,Volume"	firstrowasheaders="Yes"   result="resultdata" name="google"/>
+	<cfset local.resultdata = resultdata>
 	<cfreturn local />
 </cffunction>
 

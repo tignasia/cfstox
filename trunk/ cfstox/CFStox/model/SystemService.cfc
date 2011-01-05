@@ -1,6 +1,6 @@
-<cfcomponent  displayname="SystemService" output="true">
+<cfcomponent  displayname="SystemService" output="false">
 
-	<cffunction name="init" description="init method" access="public" displayname="init" output="true" returntype="SystemService">
+	<cffunction name="init" description="init method" access="public" displayname="init" output="false" returntype="SystemService">
 	<!--- persistent variable to store trades and results --->
 		<cfreturn this/>
 	</cffunction>
@@ -49,18 +49,17 @@
 		<cfreturn local.results />
 	</cffunction>
 	
-	<cffunction name="RunWatchlist" description="" access="public" displayname="" output="true" returntype="Any">
+	<cffunction name="RunWatchlist" description="" access="public" displayname="" output="false" returntype="Any">
 		<!--- todo: this should be a digest of individual trade reports  --->
 		<!--- todo: remove hard dates --->
 		
 		<cfargument name="SystemToRun" required="false" default="test" />
 		<cfargument name="ReportType" required="false" default="backtest" hint="backtest,watchlist"/>
 		<cfargument name="startdate" required="false" default="#dateformat(now()-60,"mm/dd/yyyy")#">
-		<cfargument name="enddate" required="false" default="#dateformat(now()-1,"mm/dd/yyyy")#">
-		<cfargument name="TargetDate" required="false" default="#dateformat(now()-1,"mm/dd/yyyy")#" />
+		<cfargument name="enddate" required="false" default="#dateformat(now(),"mm/dd/yyyy")#">
+		<cfargument name="TargetDate" required="false" default="#dateformat(now(),"mm/dd/yyyy")#" />
 		<cfargument name="watchlist" required="false" default="1">
 		<cfset var local = structNew() />	
-		<cfdump var="#arguments#">
 		<cfset StructAppend(local,SetUpVars(),"no" ) />
 		<!--- todo:wtf --->
 			
@@ -85,20 +84,31 @@
 			<cfscript>
 			local.HAdata 		= GetHAStockData(symbol:"#i#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
 			local.result 		= session.objects.systemRunner.testSystem(SystemToRun:"test",qryData:local.HAdata); 
+			// this now produces two reports, a trade report and an activity report
 			local.tradeArray 	= session.objects.Output.TradeReportBuilder(local.result.beancollection);
+			
 			if (local.tradeArray.size() )
 			{
-				local.arrLatestTrade 		= TrimTrades(local.tradeArray);
+				
+				local.arrLatestTrade 	= TrimTrades(local.tradeArray);
 				for (x=1; x LTE local.arrLatestTrade.size(); x=x+1)
-				ArrayAppend(local.arrAllTrades,local.arrLatestTrade[x]); 
+					ArrayAppend(local.arrAllTrades,local.arrLatestTrade[x]); 		
+				if (local.arrLatestTrade.size() EQ 2 ){
+					for (y=1; y LTE local.arrLatestTrade.size(); y=y+1)
+					ArrayAppend(local.arrClosedTrades,local.arrLatestTrade[y]); 			
+					}
+				else {
+					ArrayAppend(local.arrNewTrades,local.arrLatestTrade[1]); 		
+					}
+			
 			}
 			/*trim the trade array and append the trades to the main array (all trades) */
 			</cfscript>
 		</cfloop>
 		<!--- <cfset local.ReportHeaders = "Date,Trade,Entry Price,New High Reversal,New High Breakout,R1 Breakout, R2 Breakout,RSIStatus,CCIStatus">
 		<cfset local.ReportMethods = "Date,HKGoLong,EntryPrice,NewHighReversal,NewHighBreakout,R1Breakout1Day,R2Breakout1Day,RSIStatus,CCIStatus"> --->
-		<cfset session.objects.Output.WatchListReportPDF(local.arrAllTrades) />  
-		<cfset request.beanarray = local.arrAllTrades />
+		<cfset session.objects.Output.WatchListReportPDF(local.arrNewTrades,arguments.watchlist) />  
+		<cfset request.beanarray = local.arrNewTrades />
 		<cfreturn local.arrAllTrades  />
 	</cffunction>
 	
@@ -117,82 +127,16 @@
 	 <cfreturn local.tradetrim />
 	</cffunction>
 	
-	<cffunction name="ProcessBeanCollection" description="" access="private" displayname="" output="true" returntype="Any">
-		<cfargument name="TargetDate" required="false" default="#dateformat(now()-1,"mm/dd/yyyy")#" />
-		<cfargument name="beancollection" required="true" />
-		<cfset var local = structnew() />
-		<cfset local.GoLong = "" />
-		<cfset local.GoShort = "" />
-		<cfset local.HighBreakout = "" />
-		<cfset local.OpenTrade = "" />
-		<cfset local.CloseTrade = "" />
-		<cfset local.LowBreakdown = "" />
-		<cfset local.arrMoveStop = "" />
-		<cfset local.strBeanCollection1 = structNew() />
-		<cfset local.highbreakout = "">
-		<cfset local.getlong = ""/>
-		<cfset local.getshort = ""/>
-		<cfdump  label="in processbean:beancollection "  var="#arguments.beancollection#">
-		<!--- HKGoLong, NewHighBreakout, OpenTrade, CloseTrade, HKGoShort, NewLowBreakdown, MoveStop --->
-		<!--- Loop over BeanArray and move beans to correct category --->
-		<!--- add symbol --->
-		<cfset x = 1 >
-		<cfset y = 1 >
-		<cfset z = 1 >
-		<cfloop  array="#arguments.beancollection#" index="m">
-			<cfif x EQ 1>
-				<cfset local.getlong = m>
-			</cfif>
-			<cfif 
-			<!---m.get("Date") GTE dateformat(arguments.targetdate,"mm/dd/yyyy") AND --->
-			m.get("HKGoLong")>
-				<cfset mvars = m.getmemento() />
-				<cfdump  label="in processbean:memvars "  var="#mvars#">
-				<cfset local.getlong = m>
-			</cfif>
-			<cfif x EQ 1>
-				 <cfset local.HighBreakout = m />
-			</cfif>
-			<cfif m.get("NewHighBreakout") AND  m.get("Date") GTE dateformat(arguments.targetdate,"mm/dd/yyyy")>
-				 <cfset local.HighBreakout = m />
-			</cfif>
-			<cfif x EQ 1>
-				<cfset local.getshort = m />
-			</cfif>
-			<cfif 
-			<!--- m.get("Date") GTE dateformat(arguments.targetdate,"mm/dd/yyyy") AND  --->
-			m.get("HKGoShort")
-			>	
-				<cfset local.getShort = m />
-			</cfif>
-			<!--- <cfif i.get("OpenTrade")>
-				 <cfset local.arrOpenTrade[local.arrGoLong.Size() +1] = i>
-			</cfif>
-			<cfif i.get("CloseTrade")>
-				 <cfset local.arrCloseTrade[local.arrGoLong.Size() +1] = i>
-			</cfif> --->
-			<!--- <cfif i.get("HKGoShort") AND i.get("Date") EQ dateformat(arguments.targetdate,"mm/dd/yyyy")>
-				 <cfset local.arrGoShort[local.arrGoShort.size() +1] = i>
-			</cfif>
-			<cfif i.get("NewLowBreakdown") AND i.get("Date") EQ dateformat(arguments.targetdate,"mm/dd/yyyy")>
-				 <cfset local.arrLowBreakdown[local.arrLowBreakdown.size() +1] = i>
-			</cfif> --->
-			<!--- <cfif i.get("MoveStop")>
-				 <cfset local.arrGoLong[arrGoLong.Size +1] = i>
-			</cfif> --->
-			<cfset x = x + 1 />
-		</cfloop>
-		
-		<!--- <cfloop  array="#arguments.beancollection#" index="n" >
-			<cfset xdate = m.get("date") />
-			<cfdump label="loop over tradebeans:" var="#xdate#" >
-		</cfloop> --->
-		<cfset local.strBeanCollection1.goLong 		= local.getLong />
-		<cfset local.strBeanCollection1.HighBreakOut = local.HighBreakout />
-		<cfset local.strBeanCollection1.OpenTrade 	= local.OpenTrade>
-		<cfset local.strBeanCollection1.CloseTrade 	= local.CloseTrade>
-		<cfset local.strBeanCollection1.GoShort		= local.getShort>
-		<cfreturn local.strBeanCollection1 />
+	<cffunction name="GetStockData" description="I return a HA data" access="public" displayname="" output="false" returntype="Any" >
+		<cfargument name="symbol" required="true" />
+		<cfargument name="startdate" required="false"  default="10/8/2010" />
+		<cfargument name="enddate" required="false" default="11/15/2010" />
+		<cfscript>
+		// todo: I stopped here
+		local.data = session.objects.DataService.GetStockDataGoogle(symbol:"#arguments.symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
+		local.HAData = session.objects.DataService.GetHAStockData();
+		return local.HAData;
+		</cfscript>
 	</cffunction>
 	
 	<cffunction name="GetHAStockData" description="I return a HA data" access="public" displayname="" output="false" returntype="Any" >
@@ -201,7 +145,7 @@
 		<cfargument name="enddate" required="false" default="11/15/2010" />
 		<cfscript>
 		// todo: I stopped here
-		local.data = session.objects.DataService.GetStockData(symbol:"#arguments.symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
+		local.data = session.objects.DataService.GetStockDataGoogle(symbol:"#arguments.symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
 		local.HAData = session.objects.DataService.GetHAStockData();
 		return local.HAData;
 		</cfscript>
@@ -227,6 +171,7 @@
 		return local.Low;
 		</cfscript>
 	</cffunction>
+	
 	<cffunction name="GetTradeBeans" description="" access="public" displayname="" output="false" returntype="Any">
 		<cfargument name="qryData" required="true" />
 		<cfargument name="rownumber" required="true"   />
@@ -251,13 +196,15 @@
 		local.arrGoShort 		= arrayNew(1);
 		local.arrHighBreakout 	= arrayNew(1);
 		local.arrOpenTrade 		= arrayNew(1);
-		local.arrCloseTrade 		= arrayNew(1) ;
+		local.arrCloseTrade 	= arrayNew(1) ;
 		local.arrLowBreakdown 	= arrayNew(1);
 		local.arrMoveStop 		= arrayNew(1);
 		/* --- array of structurs of arrays */
 		local.arrStrBeanSets 	= arrayNew(1);
 		local.arrResults 		= arrayNew(1);
 		local.arrAllTrades 		= arrayNew(1);
+		local.arrClosedTrades 	= arrayNew(1);
+		local.arrNewTrades 		= arrayNew(1);
 		/* <cfset local.watchlist = 
 		"ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH"
 		> */
@@ -266,13 +213,13 @@
 		"A,ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH,SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF"
 		> */
 		local.watchlist1 = 
-		"A,ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA";
+		"A,ABX";
 		local.watchlist2 = 
-		"DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT";
+		"DIG,DIS";
 		local.watchlist3 = 
-		"HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL";
+		"HPQ,HSY";
 		local.watchlist4 = 
-		"PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH,SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF";
+		"PG,POT";
 		}
 		else {
 		local.watchlist = "AKAM" ;

@@ -19,6 +19,14 @@
 		</cfscript>
 	</cffunction>
 
+	<cffunction name="testGetStockDataGoogle" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data = this.DataService.GetStockDataGoogle("ABX");
+		debug(local.data);
+		</cfscript>
+	</cffunction>
+
 	<cffunction name="testGetStockDataSDate" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
@@ -47,11 +55,19 @@
 		<cfscript>
 		var local = structNew();
 		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
-		local.data = this.DataService.GetTechnicalIndicators(query:local.data.HKData);
+		local.data = this.DataService.GetHAStockData();
 		debug(local.data);
 		</cfscript>
 	</cffunction>
 
+	<cffunction name="testGetTechnicalDataGoogle" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data = this.DataService.GetStockDataGoogle(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
+		local.data = this.DataService.GetHAStockData();
+		debug(local.data);
+		</cfscript>
+	</cffunction>
 `	<cffunction name="testGetOriginalStockData" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
