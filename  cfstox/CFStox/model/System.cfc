@@ -9,6 +9,15 @@
 		<cfreturn this/>
 	</cffunction>
 	
+	<cffunction name="reset" description="init method" access="public" displayname="init" output="false" returntype="void">
+		<!--- persistent variable to store trades and results --->
+		<cfset variables.HLData = arrayNew(2) />
+		<cfset variables.arrayCounter= 1 />
+		<cfset variables.PrevHigh 	= 0 />
+		<cfset variables.PrevLow 	= 10000 />
+		
+	</cffunction>
+	
 	<cffunction name="System_ha_longII" description="called from systemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
 		<!--- based on optimum trades in X - US Steel --->
 		<!--- based on two down days followed by up day --->
@@ -210,6 +219,7 @@
 		<cfargument name="HighPattern" required="false">
 		<cfargument name="LowPattern" required="false">
 		<cfset var local = Structnew() />
+		
 		<!--- New High Low algorythm 
 		If low -2 > low-1 AND low -1 < low, save low -1 and date to array
 		If low -1 < last saved value, flag as breakdown 

@@ -23,6 +23,7 @@
 		<cfargument name="SystemToRun" required="true" />
 		<cfset var local = structNew() />
 		<cfset reset() />
+		<cfset session.objects.system.reset() />
 		<cfset local.boolResult = false />
 		<cfset local.dataArray = ArrayNew(1) />
 		<cfset local.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:1) />
