@@ -82,7 +82,7 @@
 		
 		<cfloop list="#local.watchlist#" index="i">
 			<cfscript>
-			local.HAdata 		= GetHAStockData(symbol:"#i#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
+			local.HAdata 		= GetHAStockDataGoogle(symbol:"#i#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
 			local.result 		= session.objects.systemRunner.testSystem(SystemToRun:"test",qryData:local.HAdata); 
 			// this now produces two reports, a trade report and an activity report
 			local.tradeArray 	= session.objects.Output.TradeReportBuilder(local.result.beancollection);
@@ -133,13 +133,25 @@
 		<cfargument name="enddate" required="false" default="11/15/2010" />
 		<cfscript>
 		// todo: I stopped here
-		local.data = session.objects.DataService.GetStockDataGoogle(symbol:"#arguments.symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
+		local.data = session.objects.DataService.GetStockData(symbol:"#arguments.symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
 		local.HAData = session.objects.DataService.GetHAStockData();
 		return local.HAData;
 		</cfscript>
 	</cffunction>
 	
 	<cffunction name="GetHAStockData" description="I return a HA data" access="public" displayname="" output="false" returntype="Any" >
+		<cfargument name="symbol" required="true" />
+		<cfargument name="startdate" required="false"  default="10/8/2010" />
+		<cfargument name="enddate" required="false" default="11/15/2010" />
+		<cfscript>
+		// todo: I stopped here
+		local.data = session.objects.DataService.GetStockData(symbol:"#arguments.symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
+		local.HAData = session.objects.DataService.GetHAStockData();
+		return local.HAData;
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="GetHAStockDataGoogle" description="I return a HA data" access="public" displayname="" output="false" returntype="Any" >
 		<cfargument name="symbol" required="true" />
 		<cfargument name="startdate" required="false"  default="10/8/2010" />
 		<cfargument name="enddate" required="false" default="11/15/2010" />
@@ -208,21 +220,23 @@
 		/* <cfset local.watchlist = 
 		"ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH"
 		> */
-		if (NOT session.OBJECTS.controller.diagnostics) {
+		
 		/* <cfset local.watchlist = 
-		"A,ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH,SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF"
+		"A,ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,NASDAQ:QQQQ,RIG,RIMM,RMBS,RTH,SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF"
 		> */
+		if (NOT session.OBJECTS.controller.diagnostics) {
 		local.watchlist1 = 
-		"A,ABX";
+		"ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO";
 		local.watchlist2 = 
-		"DIG,DIS";
+		"CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT";
 		local.watchlist3 = 
-		"HPQ,HSY";
+		"GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,NYSE:IOC,IWM,JOYG,LVS,M,MDY,MEE";
 		local.watchlist4 = 
-		"PG,POT";
+		"MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,NASDAQ:QQQQ,RIG,RIMM,RMBS,RTH,SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF";
+		
 		}
 		else {
-		local.watchlist = "AKAM" ;
+		local.watchlist1 = "ABX" ;
 		}
 		local.x = 1;
 		return local;

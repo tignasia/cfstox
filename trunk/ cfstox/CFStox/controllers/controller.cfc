@@ -13,7 +13,7 @@
 		<cfscript>
 		var local = structnew(); 
 		local.view = "historical";
-		local.HAdata 		= session.objects.SystemService.GetHAStockData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") ; 
+		local.HAdata 		= session.objects.SystemService.GetHAStockDataGoogle(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") ; 
 		local.OriginalData 	= session.objects.SystemService.GetOriginalStockData();
 		local.result 		= session.objects.SystemService.RunSystem(SystemToRun:"test",qryData: local.HAdata);
 		local.high			= session.objects.SystemService.GetHigh();

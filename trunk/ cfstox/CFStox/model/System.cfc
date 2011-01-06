@@ -2,20 +2,10 @@
 
 	<cffunction name="init" description="init method" access="public" displayname="init" output="false" returntype="system">
 		<!--- persistent variable to store trades and results --->
-		<cfset variables.HLData = arrayNew(2) />
-		<cfset variables.arrayCounter= 1 />
-		<cfset variables.PrevHigh 	= 0 />
-		<cfset variables.PrevLow 	= 10000 />
 		<cfreturn this/>
 	</cffunction>
 	
 	<cffunction name="reset" description="init method" access="public" displayname="init" output="false" returntype="void">
-		<!--- persistent variable to store trades and results --->
-		<cfset variables.HLData = arrayNew(2) />
-		<cfset variables.arrayCounter= 1 />
-		<cfset variables.PrevHigh 	= 0 />
-		<cfset variables.PrevLow 	= 10000 />
-		
 	</cffunction>
 	
 	<cffunction name="System_ha_longII" description="called from systemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
@@ -246,28 +236,18 @@
 			<cfset arguments.TBeanToday.set("PreviousLocalLow",arguments.TrackingBean.get("PreviousLocalLow") >
 			<cfset arguments.TBeanToday.set("PreviousLocalLowDate",arguments.TrackingBean.get("PreviousLocalLowDate")>	
 		</cfif> --->
+		<!--- todo:use TrackingBean for this --->
 		<cfif arguments.TBeanTwoDaysAgo.get("HKhigh") LT arguments.TBeanOneDayAgo.get("HKhigh") AND
 				arguments.TBeanOneDayAgo.Get("HKhigh") GT arguments.TBeanToday.Get("HKhigh")  >
-			<cfset variables.HLData[variables.arrayCounter][1] = "high" />
-			<cfset variables.HLData[variables.arrayCounter][2] = arguments.TBeanOneDayAgo.get("HKhigh") />
-			<cfset variables.HLData[variables.arrayCounter][3] = arguments.TBeanOneDayAgo.get("date") />
-			<cfset arguments.TBeanToday.set("NewHighReversal",true)>	
-			
+				<cfset arguments.TBeanToday.set("NewHighReversal",true)>	
 		</cfif>
-		<cfif (variables.arraycounter -1) AND  arguments.TBeanToday.Get("HKhigh") GT variables.HLData[variables.arrayCounter-1][2]
+		<!--- <cfif (variables.arraycounter -1) AND  arguments.TBeanToday.Get("HKhigh") GT variables.HLData[variables.arrayCounter-1][2]
 				AND arguments.TBeanOneDayAgo.get("HKhigh") LT variables.HLData[variables.arrayCounter-1][2] >
 			<cfset arguments.TBeanToday.set("NewHighBreakout",true)>
 			<cfset arguments.TBeanToday.set("PreviousLocalHigh",variables.HLData[variables.arrayCounter-1][2])>
 			<cfset arguments.TBeanToday.set("PreviousLocalHighDate",variables.HLData[variables.arrayCounter-1][3])>	
-		</cfif>
-		<cfif arguments.TBeanTwoDaysAgo.get("HKhigh") LT arguments.TBeanOneDayAgo.get("HKhigh") AND
-				arguments.TBeanOneDayAgo.Get("HKhigh") GT arguments.TBeanToday.Get("HKhigh")  >
-			<cfset variables.HLData[variables.arrayCounter][1] = "high" />
-			<cfset variables.HLData[variables.arrayCounter][2] = arguments.TBeanOneDayAgo.get("HKhigh") />
-			<cfset variables.HLData[variables.arrayCounter][3] = arguments.TBeanOneDayAgo.get("date") />
-			<cfset arguments.TBeanToday.set("NewHighReversal",true)>	
-			<cfset variables.arrayCounter = variables.arrayCounter + 1 />
-		</cfif>
+		</cfif> --->
+		
 	<cfreturn />
 	</cffunction>
 	

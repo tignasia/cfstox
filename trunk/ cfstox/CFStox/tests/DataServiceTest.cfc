@@ -15,19 +15,49 @@
 	<cffunction name="testGetStockData" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
-		local.data = this.DataService.GetStockData("ABX");
-		</cfscript>
-	</cffunction>
-
-	<cffunction name="testGetStockDataGoogle" access="public" returntype="void">
-		<cfscript>
-		var local = structNew();
-		local.data = this.DataService.GetStockDataGoogle("ABX");
+		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
 		debug(local.data);
 		</cfscript>
 	</cffunction>
 
-	<cffunction name="testGetStockDataSDate" access="public" returntype="void">
+	<cffunction name="testGetStockDataYahoo" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
+		debug(local.data);
+		</cfscript>
+	</cffunction>
+
+	<cffunction name="testGetStockDataHAY" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
+		debug(local.data);
+		local.data = this.DataService.GetHAStockData();
+		debug(local.data);
+		
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testGetStockDataHAG" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data = this.DataService.GetStockDataGoogle(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
+		debug(local.data);
+		local.data = this.DataService.GetHAStockData();
+		debug(local.data);
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testGetStockDataGoogle" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data = this.DataService.GetStockDataGoogle(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
+		debug(local.data);
+		</cfscript>
+	</cffunction>
+	
+	<!--- <cffunction name="testGetStockDataSDate" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
 		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"1/1/2010");
@@ -50,7 +80,7 @@
 		debug(local.data);
 		</cfscript>
 	</cffunction>
-	
+	 --->
 	<cffunction name="testGetTechnicalData" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
@@ -68,7 +98,8 @@
 		debug(local.data);
 		</cfscript>
 	</cffunction>
-`	<cffunction name="testGetOriginalStockData" access="public" returntype="void">
+`	
+	<cffunction name="testGetOriginalStockData" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
 		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");

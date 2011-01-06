@@ -28,27 +28,34 @@
 		<cfset local.dataArray = ArrayNew(1) />
 		<cfset local.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:1) />
 		<cfset local.TrackingBean 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]) /> 
+		<cfset local.TradeBeanTwoDaysAgo = createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]) /> 
+		<cfset local.TradeBeanOneDayAgo = createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]) /> 
+		<cfset local.TradeBeanToday 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]) /> 
 			
 		<cfloop  query="arguments.qryData" startrow="3">
-			<cfset local.rowcount = arguments.qryData.currentrow />
-			
-			<cfset local.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:local.rowcount-2) />
-			<cfset local.DataArray[2] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:local.rowcount-1) />
-			<cfset local.DataArray[3] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:local.rowcount) />
-			<!---- check the conditions such as new local high/low, bollinger bands, MACD bollinsger band deviations, etc. --->
-			<!---- use these conditions to populate the rest of the bean--->
-			<cfset local.TradeBeanTwoDaysAgo = createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]) /> 
-			<cfset local.TradeBeanOneDayAgo = createObject("component","cfstox.model.TradeBean").init(local.DataArray[2]) /> 
-			<cfset local.TradeBeanToday 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[3]) /> 
-			<!--- <cfset TrackHighLows(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)> --->
-			<!--- <cfset local.TradeBeanToday = RecordIndicators(tradeBean:local.TradeBeanToday) /> --->
-			<cfset session.objects.system.System_ha_longII(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday,local.TrackingBean)>
-			<cfset session.objects.system.System_NewHighLow(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)>
-			<cfset session.objects.system.System_PivotPoints(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)>
-			<cfset session.objects.system.System_Max_Profit(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)>
-			<!--- record system name, date, entry price --->
-			<cfset local.TradeBeanToday = RecordIndicators(local.TradeBeanToday) />
-			<cfset recordTrades(local.TradeBeanToday,local.trackingBean) /> 
+			<cfscript>
+			local.rowcount = arguments.qryData.currentrow;
+			local.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:local.rowcount-2);
+			local.DataArray[2] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:local.rowcount-1);
+			local.DataArray[3] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:local.rowcount);
+			// <!---- check the conditions such as new local high/low, bollinger bands, MACD bollinsger band deviations, etc. --->
+			// <!---- use these conditions to populate the rest of the bean--->
+			local.TradeBeanTwoDaysAgo = createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]); 
+			local.TradeBeanOneDayAgo = createObject("component","cfstox.model.TradeBean").init(local.DataArray[2]); 
+			local.TradeBeanToday 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[3]); 
+			// local.TradeBeanTwoDaysAgo = local.TradeBeanTwoDaysAgo.init(local.DataArray[1]); 
+			// local.TradeBeanOneDayAgo = local.TradeBeanOneDayAgo.init(local.DataArray[2]); 
+			// local.TradeBeanToday = local.TradeBeanToday.init(local.DataArray[3]); 
+			// <!--- <cfset TrackHighLows(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday)> --->
+			// <!--- <cfset local.TradeBeanToday = RecordIndicators(tradeBean:local.TradeBeanToday) /> --->
+			session.objects.system.System_ha_longII(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday,local.TrackingBean);
+			session.objects.system.System_NewHighLow(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday);
+			session.objects.system.System_PivotPoints(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday);
+			//session.objects.system.System_Max_Profit(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday);
+			//<!--- record system name, date, entry price --->
+			local.TradeBeanToday = RecordIndicators(local.TradeBeanToday);
+			recordTrades(local.TradeBeanToday,local.trackingBean);
+			</cfscript> 
 		</cfloop>
 		<!--- return the action results ---->
 		<cfset local.trades = variables.TradeArray />
