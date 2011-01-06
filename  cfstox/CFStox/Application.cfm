@@ -6,9 +6,8 @@
 	clientmanagement="Yes">
 
  <cfsetting
- requesttimeout="12000"
- showdebugoutput="true"
- />
+ requesttimeout="12000" />
+<cfsetting  showdebugoutput="true" />
 <!--- <cfparam name="url.appReload" type="string" default="false" />
 <cfif not structKeyExists( application, 'appInitialized' ) or url.appReload>
 <cfif FindNoCase(".xml.cfm", GetFileFromPath(GetBaseTemplatePath()))>

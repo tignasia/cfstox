@@ -18,12 +18,12 @@
 	
 	<cffunction name="GetStockData" description="I return a stock data bean" access="public" displayname="GetStockData" output="false" returntype="Any">
 		<cfargument name="Symbol" 		required="true"  />
-		<cfargument name="startdate" 	required="false" default=#CreateDate(2009,1,1)# />
+		<cfargument name="startdate" 	required="false" default=#CreateDate(2010,1,1)# />
 		<cfargument name="enddate" 		required="false" default=#now()# />
 		<cfset var local = structnew() />
 		<cfset reset() />
 		<cftry>
-		<cfset results = session.objects.http.gethttp(sym:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") />
+		<cfset results = session.objects.http.gethttp(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") />
 		<cfcatch>
 			<cfoutput> HTTP request failed</cfoutput>
 			<cfdump var="#arguments.symbol#">
@@ -66,7 +66,7 @@
 		<cfset var local = structnew() />
 		<cfset reset() />
 		<cftry>
-		<cfset results = session.objects.http.getHTTPGoogle(sym:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") />
+		<cfset results = session.objects.http.getHTTPGoogle(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") />
 		<cfcatch>
 			<cfoutput> HTTP request failed</cfoutput>
 			<cfdump var="#arguments.symbol#">
@@ -89,7 +89,7 @@
 		<cfset LOCAL.GoogleData = QueryNew( "" ) />
 		<cfloop from="2" to="#local.qryData.recordcount#" index="i">
 			<cfif local.qryData.column_6[i] NEQ 0>
-			<cfset local.dateArray[i-1] = local.qryData.column_1[i] />
+			<cfset local.dateArray[i-1] = DateFormat(local.qryData.column_1[i], "yyyy-mm-dd") />
 			<cfset local.openArray[i-1] = local.qryData.column_2[i] />
 			<cfset local.highArray[i-1] = local.qryData.column_3[i] />
 			<cfset local.lowArray[i-1] = local.qryData.column_4[i] />
@@ -151,7 +151,7 @@
 		<cfset queryAddColumn(local.OrgData,"Symbol",'VarChar',local.symbolArray) > 
 		<cfset variables.qryDataOrg = GetTechnicalIndicators(query:local.OrgData)  />
 		<cfset variables.qryDataHA = GetTechnicalIndicators(query:local.HKData)  /> --->
-		<cfreturn  />
+		<cfreturn local />
 	</cffunction>
 	
 	<cffunction name="GetTechnicalIndicators" description="I populate a query with technical data" access="public" displayname="GetTechnicalData" output="false" returntype="Any">
