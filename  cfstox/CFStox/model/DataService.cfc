@@ -61,7 +61,7 @@
 
 	<cffunction name="GetStockDataGoogle" description="I return a stock data bean" access="public" displayname="GetStockData" output="false" returntype="Any">
 		<cfargument name="Symbol" 		required="true"  />
-		<cfargument name="startdate" 	required="false" default=#CreateDate(2009,1,1)# />
+		<cfargument name="startdate" 	required="false" default=#CreateDate(2010,1,1)# />
 		<cfargument name="enddate" 		required="false" default=#now()# />
 		<cfset var local = structnew() />
 		<cfset reset() />

@@ -22,8 +22,12 @@
 	</cffunction>
 	
 	<cffunction name="testHTTPGoogle" returntype="void" access="public">
+		<cfargument name="Symbol" 		required="false" default="ABX"  />
+		<cfargument name="startdate" 	required="false" default=#CreateDate(2010,11,1)# />
+		<cfargument name="enddate" 		required="false" default=#now()# />
 		<cfscript>
-		var results = this.httpService.gethttpGoogle(sym:"CSX",enddate:Now());
+		// http://www.google.com/finance/historical?cid=5232&startdate=Nov+1%2C+2010&enddate=Jan+6%2C+2011&num=30&output=csv
+		var results = this.httpService.getGoogleURL(symbol:"CSX",startdate:#arguments.startdate#,enddate:Now());
 		debug(results);
 		</cfscript>	
 	</cffunction>
