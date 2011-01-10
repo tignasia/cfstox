@@ -21,18 +21,27 @@
 	<cffunction name="TestSystem" description="called from SystemService.RunSystem" access="public" displayname="" output="false" returntype="Any">
 		<cfargument name="qryData" required="true" />
 		<cfargument name="SystemToRun" required="true" />
-		<cfset var local = structNew() />
-		<cfset reset() />
-		<cfset session.objects.system.reset() />
-		<cfset local.boolResult = false />
-		<cfset local.dataArray = ArrayNew(1) />
-		<cfset local.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:1) />
-		<cfset local.TrackingBean 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]) /> 
-		<cfset local.TradeBeanTwoDaysAgo = createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]) /> 
-		<cfset local.TradeBeanOneDayAgo = createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]) /> 
-		<cfset local.TradeBeanToday 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]) /> 
-			
-		<cfloop  query="arguments.qryData" startrow="3">
+		<cfargument name="summary" 	 required="false" default="true" />
+		<cfscript>
+		var local = structNew();
+		reset();
+		session.objects.system.reset();
+		local.boolResult = false;
+		local.dataArray = ArrayNew(1);
+		local.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:1);
+		local.TrackingBean 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]); 
+		local.TradeBeanTwoDaysAgo = createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]); 
+		local.TradeBeanOneDayAgo = createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]); 
+		local.TradeBeanToday 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]); 
+		if(NOT arguments.summary){
+		local.startrow = 3;
+		}
+		else{
+		local.startrow = arguments.qryData.recordcount - 7;
+		}
+		</cfscript>
+		
+		<cfloop  query="arguments.qryData" startrow="#local.startrow#">
 			<cfscript>
 			local.rowcount = arguments.qryData.currentrow;
 			local.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:local.rowcount-2);

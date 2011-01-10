@@ -99,7 +99,7 @@
 		</cfloop>
 		
 		 
-		<cfset dummyArray[3] = "">
+		<cfset local.dummyArray[3] = "fuck" />
 		<cfset ArrayDeleteAt(local.dummyArray,3) />
 		<cfset local.dateArray.removeAll(local.dummyArray) />
 		<cfset local.openArray.removeAll(local.dummyArray) />

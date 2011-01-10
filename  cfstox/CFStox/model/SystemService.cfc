@@ -25,8 +25,9 @@
 		<cfargument name="SystemToRun" required="true"  />
 		<cfargument name="qryData" required="true" />
 		<cfargument name="ReportType" required="false" default="backtest" hint="backtest,watchlist"/>
+		<cfargument name="summary" required="false" default="true" />
 		<cfset var local = structnew() />
-		<cfset local.results		= session.objects.systemRunner.testSystem(SystemToRun:arguments.systemtorun,qryData:arguments.qryData) >
+		<cfset local.results		= session.objects.systemRunner.testSystem(SystemToRun:arguments.systemtorun,qryData:arguments.qryData,summary:arguments.summary) >
 		<cfset local.ReportHeaders 	= "Date,Open,High,Low,Close,New High Reversal,New High Breakout,R1 Breakout, R2 Breakout,New Low Reversal,New Low Breakdown,S1 Breakdown, S2 Breakdown,RSIStatus,CCIStatus">
 		<cfset local.ReportMethods 	= "Date,HKOpen,HKHigh,HKLow,HKClose,NewHighReversal,NewHighBreakout,R1Breakout1Day,R2Breakout1Day,NewLowReversal,NewLowBreakdown,S1Breakdown1Day,S2Breakdown1Day,RSIStatus,CCIStatus">
 		<!--- historical technical data  --->
