@@ -15,7 +15,7 @@
 		local.view = "historical";
 		local.HAdata 		= session.objects.SystemService.GetHAStockDataGoogle(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") ; 
 		local.OriginalData 	= session.objects.SystemService.GetOriginalStockData();
-		local.result 		= session.objects.SystemService.RunSystem(SystemToRun:"test",qryData: local.HAdata);
+		local.result 		= session.objects.SystemService.RunSystem(SystemToRun:"test",qryData: local.HAdata ,summary:false);
 		local.high			= session.objects.SystemService.GetHigh();
 		local.low			= session.objects.SystemService.GetLow();
 		local.xmldata 		= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.symbol#",qrydata:local.OriginalData,startdate:"#arguments.startdate#", high:local.high, low:local.low);
