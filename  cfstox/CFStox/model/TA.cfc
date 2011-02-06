@@ -214,6 +214,29 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 		</cfscript>
 		<cfreturn local />
 	</cffunction>
+	
+	<cffunction  name="LocalHighLow" hint="Support/resistance">
+		<cfargument name="qryData" required="true" />
+		<cfscript>
+		var local = structNew();
+		local.qryrows = arguments.qrydata.recordcount;
+		local.LocalHighs = arrayNew(1);
+		local.LocalLows = arraynew(1);
+		for(i=1;i<=local.qryrows;i++){
+		local.LocalHighs[i] = FALSE;
+		local.LocalLows[i] = FALSE;
+		} 
+		for(i=3;i<=local.qryrows;i++){ 
+		    if(arguments.qryData.high[i-2] LT arguments.qryData.high[i-1] AND arguments.qryData.high[i] LT arguments.qryData.high[i-1] ) {
+		    local.LocalHighs[i-1] = TRUE;
+		    }
+		    if(arguments.qryData.low[i-2] GT arguments.qryData.low[i-1] AND arguments.qryData.low[i] GT arguments.qryData.low[i-1]) {
+		    local.LocalLows[i-1] = TRUE;
+		    }
+	    }
+		</cfscript>
+		<cfreturn local />
+	</cffunction>
 
 	<cffunction name="CandleSticksFunction" description="" access="public" displayname="" output="false" returntype="Numeric">
 		<!--- 

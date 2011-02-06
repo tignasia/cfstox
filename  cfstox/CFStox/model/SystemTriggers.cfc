@@ -1,16 +1,72 @@
-<cfcomponent  displayname="systemconditions" hint="I test conditions for entry and exit" output="false">
+<cfcomponent  displayname="system" hint="I test systems using given data" output="false">
 
 	<cffunction name="init" description="init method" access="public" displayname="init" output="false" returntype="system">
 		<!--- persistent variable to store trades and results --->
 		<cfreturn this/>
 	</cffunction>
-		
-	<cffunction name="reset" description="init method" access="public" displayname="init" output="false" returntype="system">
-		<!--- persistent variable to store trades and results --->
-		<cfreturn this/>
+		<!--- 
+		UpsideBreakout 
+		DownsideBreakdown
+		LongEntryStopTriggered
+		ShortEntryStopTriggered
+		LongExitStopTriggered
+		ShortExitStopTriggered
+		NewLocalHigh
+		NewLocalLow
+		Weakness
+		HighVolume
+		SMAUp
+		SMADown
+		--->
+	<cffunction name="UpsideBreakout" description="called from system" access="public" displayname="UpsideBreakout" output="false" returntype="boolean">
+		<!--- based on optimum trades in X - US Steel --->
+		<!--- <cfargument name="TradeBeanTwo" required="true" />
+		<cfargument name="TradeBeanOne" required="true" />
+		<cfargument name="TradeBeanToday" required="true" />
+		<cfargument name="TrackingBean" required="true" /> --->
+		<cfargument name="BeanCollection" required="true" />
+		<cfscript>
+		var local = StructNew(); 
+		local.boolGoLong = true;
+		local.boolGoShort = true;
+		local.Patterns = CandlePattern(TB2:TradeBeanTwoDaysAgo, TB1:TradeBeanOneDayAgo, TB:TradeBeanToday ); 
+		</cfscript>
 	</cffunction>
 	
-	<cffunction name="System_ha_longII" description="called from systemRunner - short w/tight stops" access="public" displayname="test" output="false" returntype="Any">
+	<cffunction name="System_ha_longII" description="called from systemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
+		<!--- based on optimum trades in X - US Steel --->
+		<!--- based on two down days followed by up day --->
+		<cfargument name="TradeBeanTwoDaysAgo" required="true" />
+		<cfargument name="TradeBeanOneDayAgo" required="true" />
+		<cfargument name="TradeBeanToday" required="true" />
+		<cfargument name="TrackingBean" required="true" />
+		<cfset var local = StructNew() />
+		<cfset local.boolGoLong = true />
+		<cfset local.boolGoShort = true />
+		<cfset local.Patterns = CandlePattern(TB2:TradeBeanTwoDaysAgo, TB1:TradeBeanOneDayAgo, TB:TradeBeanToday ) />
+		<cfif local.Patterns.OCpattern EQ "LLH"
+			AND arguments.TradeBeanToday.Get("HKHigh") GT arguments.TradeBeanOneDayAgo.Get("R2")>
+			<cfset TradeBeanToday.Set("HKGoLong",true) />
+			<cfset TradeBeanToday.Set("UseR2Entry",true) />
+		</cfif> 
+		<cfif arguments.TradeBeanToday.Get("HKClose") LT arguments.TradeBeanToday.Get("HKOpen")>
+			<cfset TradeBeanToday.Set("HKCloseLong",true) />
+			<cfset TradeBeanToday.Set("UseS2Entry",true) />
+		</cfif>  
+		<!--- go short --->
+		<cfif local.Patterns.OCpattern EQ "HHL"
+		AND arguments.TradeBeanToday.Get("HKLow") LT arguments.TradeBeanOneDayAgo.Get("S2")>
+			<cfset TradeBeanToday.Set("HKGoShort",true) />
+			<cfset TradeBeanToday.Set("UseR2Entry",true) />
+		</cfif> 
+		<cfif arguments.TradeBeanToday.Get("HKClose") GT arguments.TradeBeanToday.Get("HKOpen")>
+			<cfset TradeBeanToday.Set("HKCloseShort",true) />
+			<cfset TradeBeanToday.Set("UseS2Entry",true) />
+		</cfif>     	   		
+		<cfreturn TradeBeanToday />
+	</cffunction>
+	
+	<cffunction name="System_Short_Stops" description="called from systemRunner - short w/tight stops" access="public" displayname="test" output="false" returntype="Any">
 		<!--- based on optimum trades in X - US Steel --->
 		<!--- based on two down days followed by up day --->
 		<cfargument name="TradeBeanTwoDaysAgo" required="true" />
