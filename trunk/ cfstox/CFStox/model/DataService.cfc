@@ -180,11 +180,13 @@
 		<cfset queryAddColumn(arguments.query,"R2",'Decimal',local.pivots.r2) >
 		<cfset queryAddColumn(arguments.query,"S1",'Decimal',local.pivots.s1) >
 		<cfset queryAddColumn(arguments.query,"S2",'Decimal',local.pivots.s2) >
-		<cfset local.falseArray = ArrayNew(1) >
+		<!--- <cfset local.falseArray = ArrayNew(1) >
 		<cfloop from="1" to="#arguments.query.recordcount#" index="i">
 			<cfset local.falseArray[i] = "false">
-		</cfloop>
-		<cfset queryAddColumn(arguments.query,"TestResult","VarChar",local.falsearray) />
+		</cfloop> --->
+		<cfset local.LocalHighLows = session.objects.TA.LocalHighLow(qryData:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"LocalHigh","VarChar",local.LocalHighLows.LocalHighs) />
+		<cfset queryAddColumn(arguments.query,"LocalLow","VarChar",local.LocalHighLows.LocalLows) />
 		<cfreturn arguments.query />	
 	</cffunction>
 
