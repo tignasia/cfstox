@@ -180,10 +180,6 @@
 		<cfset queryAddColumn(arguments.query,"R2",'Decimal',local.pivots.r2) >
 		<cfset queryAddColumn(arguments.query,"S1",'Decimal',local.pivots.s1) >
 		<cfset queryAddColumn(arguments.query,"S2",'Decimal',local.pivots.s2) >
-		<!--- <cfset local.falseArray = ArrayNew(1) >
-		<cfloop from="1" to="#arguments.query.recordcount#" index="i">
-			<cfset local.falseArray[i] = "false">
-		</cfloop> --->
 		<cfset local.LocalHighLows = session.objects.TA.LocalHighLow(qryData:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"LocalHigh","VarChar",local.LocalHighLows.LocalHighs) />
 		<cfset queryAddColumn(arguments.query,"LocalLow","VarChar",local.LocalHighLows.LocalLows) />
@@ -258,8 +254,6 @@
  
 	<!--- Define the local scope. --->
 	<cfset var LOCAL = StructNew() />
- 
- 
 	<!---
 		When accepting delimiters, we only want to use the first
 		character that we were passed. This is different than
@@ -267,7 +261,6 @@
 		easy as possible.
 	--->
 	<cfset ARGUMENTS.Delimiter = Left( ARGUMENTS.Delimiter, 1 ) />
- 
 	<!---
 		When accepting the qualifier, we only want to accept the
 		first character returned. Is is possible that there is
@@ -275,19 +268,13 @@
 		the empty string (leave as-is).
 	--->
 	<cfif Len( ARGUMENTS.Qualifier )>
- 
 		<cfset ARGUMENTS.Qualifier = Left( ARGUMENTS.Qualifier, 1 ) />
- 
 	</cfif>
- 
- 
 	<!---
 		Set a variable to handle the new line. This will be the
 		character that acts as the record delimiter.
 	--->
 	<cfset LOCAL.LineDelimiter = Chr( 10 ) />
- 
- 
 	<!---
 		We want to standardize the line breaks in our CSV value.
 		A "line break" might be a return followed by a feed or
@@ -300,8 +287,6 @@
 		"\r?\n",
 		LOCAL.LineDelimiter
 		) />
- 
- 
 	<!---
 		Let's get an array of delimiters. We will need this when
 		we are going throuth the tokens and building up field
@@ -314,7 +299,6 @@
 		"[^\#ARGUMENTS.Delimiter#\#LOCAL.LineDelimiter#]+",
 		""
 		)
- 
 		<!---
 			Get character array of delimiters. This will put
 			each found delimiter in its own index (that should
@@ -322,8 +306,6 @@
 		--->
 		.ToCharArray()
 		/>
- 
- 
 	<!---
 		Add a blank space to the beginning of every theoretical
 		field. This will help in make sure that ColdFusion /
@@ -334,14 +316,11 @@
 		First, add a space to the beginning of the string.
 	--->
 	<cfset ARGUMENTS.CSV = (" " & ARGUMENTS.CSV) />
- 
 	<!--- Now add the space to each field. --->
 	<cfset ARGUMENTS.CSV = ARGUMENTS.CSV.ReplaceAll(
 		"([\#ARGUMENTS.Delimiter#\#LOCAL.LineDelimiter#]{1})",
 		"$1 "
 		) />
- 
- 
 	<!---
 		Break the CSV value up into raw tokens. Going forward,
 		some of these tokens may be merged, but doing it this
@@ -362,15 +341,12 @@
 	<cfset LOCAL.Tokens = ARGUMENTS.CSV.Split(
 		"[\#ARGUMENTS.Delimiter#\#LOCAL.LineDelimiter#]{1}"
 		) />
- 
- 
 	<!---
 		Set up the default records array. This will be a full
 		array of arrays, but for now, just create the parent
 		array with no indexes.
 	--->
 	<cfset LOCAL.Rows = ArrayNew( 1 ) />
- 
 	<!---
 		Create a new active row. Even if we don't end up adding
 		any values to this row, it is going to make our lives
@@ -380,21 +356,16 @@
 		LOCAL.Rows,
 		ArrayNew( 1 )
 		) />
- 
 	<!---
 		Set up the row index. THis is the row to which we are
 		actively adding value.
 	--->
 	<cfset LOCAL.RowIndex = 1 />
- 
- 
 	<!---
 		Set the default flag for wether or not we are in the
 		middle of building a value across raw tokens.
 	--->
 	<cfset LOCAL.IsInValue = false />
- 
- 
 	<!---
 		Loop over the raw tokens to start building values. We
 		have no sense of any row delimiters yet. Those will
@@ -405,8 +376,6 @@
 		from="1"
 		to="#ArrayLen( LOCAL.Tokens )#"
 		step="1">
- 
- 
 		<!---
 			Get the current field index. This is the current
 			index of the array to which we might be appending
@@ -415,7 +384,6 @@
 		<cfset LOCAL.FieldIndex = ArrayLen(
 			LOCAL.Rows[ LOCAL.RowIndex ]
 			) />
- 
 		<!---
 			Get the next token. Trim off the first character
 			which is the empty string that we added to ensure
@@ -425,8 +393,6 @@
 			"^.{1}",
 			""
 			) />
- 
- 
 		<!---
 			Check to see if we have a field qualifier. If we do,
 			then we might have to build the value across
@@ -434,16 +400,12 @@
 			should line up perfectly with the real tokens.
 		--->
 		<cfif Len( ARGUMENTS.Qualifier )>
- 
- 
 			<!---
 				Check to see if we are currently building a
 				field value that has been split up among
 				different delimiters.
 			--->
 			<cfif LOCAL.IsInValue>
- 
- 
 				<!---
 					ASSERT: Since we are in the middle of
 					building up a value across tokens, we can
@@ -454,7 +416,6 @@
 					have access to a previous delimiter (in
 					our delimiter array).
 				--->
- 
 				<!---
 					Since we are in the middle of building a
 					value, we replace out double qualifiers with
@@ -466,8 +427,6 @@
 					"\#ARGUMENTS.Qualifier#{2}",
 					"{QUALIFIER}"
 					) />
- 
- 
 				<!---
 					Add the token to the value we are building.
 					While this is not easy to read, add it
@@ -482,8 +441,6 @@
 					LOCAL.Delimiters[ LOCAL.TokenIndex - 1 ] &
 					LOCAL.Token
 					) />
- 
- 
 				<!---
 					Now that we have removed the possibly
 					escaped qualifiers, let's check to see if
@@ -513,13 +470,8 @@
 						tokens.
 					--->
 					<cfset LOCAL.IsInValue = false />
- 
 				</cfif>
- 
- 
 			<cfelse>
- 
- 
 				<!---
 					We are NOT in the middle of building a field
 					value which means that we have to be careful
@@ -528,7 +480,6 @@
 					1. The field is qualified on both ends.
 					2. The field is qualified on the start end.
 				--->
- 
 				<!---
 					Check to see if the beginning of the field
 					is qualified. If that is the case then either
@@ -536,8 +487,6 @@
 					this field has a completely qualified value.
 				--->
 				<cfif (Left( LOCAL.Token, 1 ) EQ ARGUMENTS.Qualifier)>
- 
- 
 					<!---
 						Delete the first character of the token.
 						This is the field qualifier and we do
@@ -597,13 +546,8 @@
 							LOCAL.Rows[ LOCAL.RowIndex ],
 							LOCAL.Token
 							) />
- 
 					</cfif>
- 
- 
 				<cfelse>
- 
- 
 					<!---
 						We are not dealing with a qualified
 						field (even though we are using field
@@ -614,14 +558,8 @@
 						LOCAL.Rows[ LOCAL.RowIndex ],
 						LOCAL.Token
 						) />
- 
- 
 				</cfif>
- 
- 
 			</cfif>
- 
- 
 			<!---
 				As a sort of catch-all, let's remove that
 				{QUALIFIER} constant that we may have thrown
@@ -635,11 +573,7 @@
 				ARGUMENTS.Qualifier,
 				"ALL"
 				) />
- 
- 
 		<cfelse>
- 
- 
 			<!---
 				Since we don't have a qualifier, just use the
 				current raw token as the actual value. We are
@@ -650,12 +584,7 @@
 				LOCAL.Rows[ LOCAL.RowIndex ],
 				LOCAL.Token
 				) />
- 
- 
 		</cfif>
- 
- 
- 
 		<!---
 			Check to see if we have a next delimiter and if we
 			do, is it going to start a new row? Be cautious that
@@ -685,8 +614,6 @@
 		</cfif>
  
 	</cfloop>
- 
- 
 	<!---
 		ASSERT: At this point, we have parsed the CSV into an
 		array of arrays (LOCAL.Rows). Now, we can take that
