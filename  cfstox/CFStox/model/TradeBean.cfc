@@ -10,6 +10,11 @@
 		set("HKLow",strData.Low);
 		set("HKClose",strData.Close);
 		set("HKVolume",strData.Volume);
+		set("Open",strData.Open);
+		set("High",strData.High);
+		set("Low",strData.Low);
+		set("Close",strData.Close);
+		set("Volume",strData.Volume);
 		set("ADX",strData.ADX);
 		set("CCI",strData.CCI);
 		set("RSI",strData.RSI); 
@@ -34,6 +39,8 @@
 		Set("PreviousLocalLowDate","00/00/0000");
 		Set("NewLocalLow",false);
 		Set("NewLocalHigh",false);
+		Set("NewLow",false);
+		Set("NewHigh",false);
 		Set("HKGoShort","false");
 		Set("HKCloseShort","false");
 		Set("HKGoLong","false");

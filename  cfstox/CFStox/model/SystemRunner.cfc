@@ -73,6 +73,109 @@
 		<cfreturn local />
 	</cffunction>
 	
+	<cffunction name="RunBreakOutReport"description="called from SystemService.RunBreakOutReport" access="public" displayname="" output="false" returntype="Any">
+		<cfargument name="qryData" required="true" />
+		<!--- only run for recent activity. false for backtesting --->
+		<cfargument name="summary" 	 required="false" default="false" />
+		<cfscript>
+		var local = structNew();
+		reset();
+		session.objects.system.reset();
+		local.boolResult = false;
+		local.dataArray = ArrayNew(1);
+		local.highLowArray = ArrayNew(2);
+		local.arrayCount = 1;
+		local.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:1);
+		local.TrackingBean 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]); 
+		local.TradeBeanTwoDaysAgo = createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]); 
+		local.TradeBeanOneDayAgo = createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]); 
+		local.TradeBeanToday 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]);
+		local.newLocalHigh = false;
+		local.newLocalLow = false; 
+		if(arguments.summary){
+		local.startrow = arguments.qryData.recordcount - 7; 
+		}
+		else{
+		local.startrow = 3;
+		}
+		// init the tracking bean
+		local.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:local.startrow);
+		local.trackingBean.Set("PreviousLocalHigh",local.DataArray[1].High);
+		local.trackingBean.Set("PreviousLocalLow",local.DataArray[1].Low);
+		local.trackingBean.Set("PreviousLocalHighDate",local.DataArray[1].DateOne);
+		local.trackingBean.Set("PreviousLocalLowDate",local.DataArray[1].DateOne);
+		</cfscript>
+		<!--- 
+		so we set our inital settings
+		we get a new high so we reset the prevhigh;	prevlow stays in place
+		we start dropping and bounce off the drop; 
+			record the prev high
+			record the prev low
+			reset prev low
+		--->
+		<cfloop  query="arguments.qryData" startrow="#local.startrow#">
+			<cfscript>
+			local.rowcount = arguments.qryData.currentrow;
+			local.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:local.rowcount-2);
+			local.DataArray[2] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:local.rowcount-1);
+			local.DataArray[3] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:local.rowcount);
+			local.TradeBeanTwoDaysAgo = createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]); 
+			local.TradeBeanOneDayAgo = createObject("component","cfstox.model.TradeBean").init(local.DataArray[2]); 
+			local.TradeBeanToday 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[3]); 
+			session.objects.system.System_BreakOut(local.TradeBeanOneDayAgo,local.TradeBeanToday);
+			session.objects.system.System_NewHighLow(local.TradeBeanTwoDaysAgo,local.TradeBeanOneDayAgo,local.TradeBeanToday);
+			if(local.TradeBeanToday.Get("NewHigh") AND local.trackingBean.Get("PreviousLocalHigh") LT local.TradeBeanToday.Get("High") )
+			{//set new local low flag so we dont keep flagging it
+				//local.trackingBean.Set("PreviousLocalHigh",local.TradeBeanToday.Get("High"));
+				//local.trackingBean.Set("PreviousLocalHighDate",local.TradeBeanToday.Get("Date"));
+				if (NOT local.newLocalLow)
+				{
+				local.highLowArray[local.arrayCount][1] = "Breakout";
+				local.highLowArray[local.arrayCount][2] = "PreviousLocalHigh";
+				local.highLowArray[local.arrayCount][3] = local.trackingBean.Get("PreviousLocalHigh");
+				local.highLowArray[local.arrayCount][4] = "PreviousLocalHighDate";
+				local.highLowArray[local.arrayCount][5] = local.trackingBean.Get("PreviousLocalHighDate");
+				local.highLowArray[local.arrayCount][6] = local.TradeBeanToday.Get("High");
+				local.highLowArray[local.arrayCount][7] = local.TradeBeanToday.Get("Date");
+				local.arrayCount = local.arrayCount + 1; 
+				}
+			local.newLocalhigh = false;
+			local.newLocallow = true;		
+			}
+			if(local.TradeBeanToday.Get("NewLow") AND local.trackingBean.Get("PreviousLocalLow") GT local.TradeBeanToday.Get("Low"))
+			{//set new local high flag so we dont keep flagging it
+				//local.trackingBean.Set("PreviousLocalLow",local.TradebeanToday.Get("Low"));
+				//local.trackingBean.Set("PreviousLocalLowDate",local.TradeBeanToday.Get("Date"));
+				if (NOT local.newLocalHigh)
+				{
+				local.highLowArray[local.arrayCount][1] = "Breakdown";
+				local.highLowArray[local.arrayCount][2] = "PreviousLocalLow";
+				local.highLowArray[local.arrayCount][3] = local.trackingBean.Get("PreviousLocalLow");
+				local.highLowArray[local.arrayCount][4] = "PreviousLocalLowDate";
+				local.highLowArray[local.arrayCount][5] = local.trackingBean.Get("PreviousLocalLowDate");
+				local.highLowArray[local.arrayCount][6] = local.TradeBeanToday.Get("Low");
+				local.highLowArray[local.arrayCount][7] = local.TradeBeanToday.Get("Date");
+				local.arrayCount = local.arrayCount + 1; 
+				}
+			local.newLocalhigh = true;
+			local.newLocallow = false;		
+			}
+			if(local.TradeBeanToday.Get("NewHighReversal") )
+			{//set new local low flag so we dont keep flagging it
+				local.trackingBean.Set("PreviousLocalHigh",local.TradeBeanOneDayAgo.Get("High"));
+				local.trackingBean.Set("PreviousLocalHighDate",local.TradeBeanOneDayAgo.Get("Date"));
+			}
+			
+			if(local.TradeBeanToday.Get("NewLowReversal") )
+			{//set new local high flag so we dont keep flagging it
+				local.trackingBean.Set("PreviousLocalLow",local.TradeBeanOneDayAgo.Get("Low"));
+				local.trackingBean.Set("PreviousLocalLowDate",local.TradeBeanOneDayAgo.Get("Date"));
+			}
+			</cfscript> 
+		</cfloop>
+		<cfreturn local.highLowArray />
+	</cffunction>
+
 	<cffunction name="RecordTrades" description="" access="private" displayname="" output="false" returntype="Any">
 		<cfargument name="TradeBean" required="true" />
 		<cfargument name="TrackingBean" required="true"  />
