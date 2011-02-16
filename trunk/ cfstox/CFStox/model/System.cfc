@@ -238,7 +238,6 @@
 		Set("NewLowReversal","false");
 		--->
 		<!--- new local high ---->
-		<!--- new local high ---->
 		<!--- <cfif  arguments.TBeanToday.Get("HKhigh") GT arguments.TrackingBean.get("PreviousLocalHigh")
 				AND NOT arguments.TrackingBean.get("NewHighBreakout")>
 			<cfset arguments.TrackingBean.set("NewHighBreakout",true)>
@@ -254,17 +253,28 @@
 			<cfset arguments.TBeanToday.set("PreviousLocalLowDate",arguments.TrackingBean.get("PreviousLocalLowDate")>	
 		</cfif> --->
 		<!--- todo:use TrackingBean for this --->
+		<!--- todo:experiment with using real body, shadow body, or a combination --->
 		<cfif arguments.TBeanTwoDaysAgo.get("HKhigh") LT arguments.TBeanOneDayAgo.get("HKhigh") AND
-				arguments.TBeanOneDayAgo.Get("HKhigh") GT arguments.TBeanToday.Get("HKhigh")  >
+				arguments.TBeanToday.Get("HKhigh") LT arguments.TBeanOneDayAgo.Get("HKhigh") >
 				<cfset arguments.TBeanToday.set("NewHighReversal",true)>	
 		</cfif>
-		<!--- <cfif (variables.arraycounter -1) AND  arguments.TBeanToday.Get("HKhigh") GT variables.HLData[variables.arrayCounter-1][2]
-				AND arguments.TBeanOneDayAgo.get("HKhigh") LT variables.HLData[variables.arrayCounter-1][2] >
-			<cfset arguments.TBeanToday.set("NewHighBreakout",true)>
-			<cfset arguments.TBeanToday.set("PreviousLocalHigh",variables.HLData[variables.arrayCounter-1][2])>
-			<cfset arguments.TBeanToday.set("PreviousLocalHighDate",variables.HLData[variables.arrayCounter-1][3])>	
-		</cfif> --->
-		
+		<cfif arguments.TBeanTwoDaysAgo.get("HKlow") GT arguments.TBeanOneDayAgo.get("HKlow") AND
+				arguments.TBeanToday.Get("HKlow") GT arguments.TBeanOneDayAgo.Get("HKlow") >
+				<cfset arguments.TBeanToday.set("NewLowReversal",true)>	
+		</cfif>
+	<cfreturn />
+	</cffunction>
+	
+	<cffunction name="System_Breakout" description="I find new highs and lows" access="public" displayname="" output="false" returntype="Void">
+		<cfargument name="TBeanOneDayAgo" required="true" />
+		<cfargument name="TBeanToday" required="true" />
+		<cfset var local = Structnew() />
+		<cfif 	arguments.TBeanToday.Get("HKhigh") GT arguments.TBeanOneDayAgo.Get("HKhigh") >
+				<cfset arguments.TBeanToday.set("NewHigh",true)>	
+		</cfif>
+		<cfif  arguments.TBeanToday.Get("HKlow") LT arguments.TBeanOneDayAgo.Get("HKlow") >
+				<cfset arguments.TBeanToday.set("NewLow",true)>	
+		</cfif>
 	<cfreturn />
 	</cffunction>
 	

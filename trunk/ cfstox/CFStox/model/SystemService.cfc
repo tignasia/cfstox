@@ -21,7 +21,10 @@
 		<!--- todo: change output component to "report" and move headers and methods into it --->
 		<!--- todo: add basic candlesticks  --->
 		<!--- todo: use yahoo or google data stream --->
-
+		<!--- todo: create custom HA bars and custom indicators --->
+		<!--- todo: add breakout, real body height and volume data to query --->
+		<!--- todo: fix the various getstockdata methods --->
+		
 		<cfargument name="SystemToRun" required="true"  />
 		<cfargument name="qryData" required="true" />
 		<cfargument name="ReportType" required="false" default="backtest" hint="backtest,watchlist"/>
@@ -113,6 +116,19 @@
 		<cfreturn local.arrAllTrades  />
 	</cffunction>
 	
+	<cffunction name="RunBreakoutReport" description="" access="public" displayname="" output="false" returntype="Any">
+		<cfargument name="Symbol" required="true" />
+		<cfargument name="startdate" required="false" default="#dateformat(now()-60,"mm/dd/yyyy")#">
+		<cfargument name="enddate" required="false" default="#dateformat(now(),"mm/dd/yyyy")#">
+		<cfscript>
+		var local = structNew(); 	
+		local.data 		= GetStockDataGoogle(symbol:"#arguments.symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
+		local.arrResult = session.objects.systemRunner.RunBreakOutReport(qryData:local.data.OriginalData); 
+		//session.objects.Output.BreakOutReport(symbol:arguments.symbol,data:local.arrResult); 
+		return local.arrResult;
+		</cfscript>
+	</cffunction>
+	
 	<cffunction name="TrimTrades" access="private" output="false" returntype="array" >
 	<cfargument name="TradeArray" required="true" >
 	<cfset var local = structNew() />
@@ -161,6 +177,19 @@
 		local.data = session.objects.DataService.GetStockDataGoogle(symbol:"#arguments.symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
 		local.HAData = session.objects.DataService.GetHAStockData();
 		return local.HAData;
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="GetStockDataGoogle" description="I return a HA data" access="public" displayname="" output="false" returntype="Any" >
+		<cfargument name="symbol" required="true" />
+		<cfargument name="startdate" required="false"  default="10/8/2010" />
+		<cfargument name="enddate" required="false" default="11/15/2010" />
+		<cfscript>
+		// todo: I stopped here
+		local.data = session.objects.DataService.GetStockDataGoogle(symbol:"#arguments.symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
+		local.HAData = session.objects.DataService.GetHAStockData();
+		local.OriginalData = session.objects.DataService.GetOriginalStockData();
+		return local;
 		</cfscript>
 	</cffunction>
 	

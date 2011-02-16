@@ -27,6 +27,14 @@
 		</cfscript>
 	</cffunction>
 
+	<cffunction name="testBreakOutReport" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.result = this.SystemService.RunBreakoutReport(symbol:"MEE",startdate:"12/01/2009",enddate:"12/15/2010"); 
+		debug(local.result);
+		</cfscript>
+	</cffunction>
+	
 	<cffunction name="testTestRunner" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
