@@ -25,23 +25,24 @@
 		<!--- todo: add breakout, real body height and volume data to query --->
 		<!--- todo: fix the various getstockdata methods --->
 		
-		<cfargument name="SystemToRun" required="true"  />
+		<cfargument name="SystemName" required="true"  />
 		<cfargument name="qryData" required="true" />
 		<cfargument name="ReportType" required="false" default="backtest" hint="backtest,watchlist"/>
 		<cfargument name="summary" required="false" default="true" />
 		<cfset var local = structnew() />
-		<cfset local.results		= session.objects.systemRunner.testSystem(SystemToRun:arguments.systemtorun,qryData:arguments.qryData,summary:arguments.summary) >
+		<cfset local.results		= session.objects.systemRunner.testSystem(SystemName:arguments.systemName,qryData:arguments.qryData,summary:arguments.summary) >
+		<cfset local.ReportData 	= session.objects.ReportService.RunReport(SystemName:arguments.SystemName,ReportName:"Backtest",type:"Excel",data:local.results) />
 		<cfset local.ReportHeaders 	= "Date,Open,High,Low,Close,New High Reversal,New High Breakout,R1 Breakout, R2 Breakout,New Low Reversal,New Low Breakdown,S1 Breakdown, S2 Breakdown,RSIStatus,CCIStatus">
 		<cfset local.ReportMethods 	= "Date,HKOpen,HKHigh,HKLow,HKClose,NewHighReversal,NewHighBreakout,R1Breakout1Day,R2Breakout1Day,NewLowReversal,NewLowBreakdown,S1Breakdown1Day,S2Breakdown1Day,RSIStatus,CCIStatus">
 		<!--- historical technical data  --->
-		<cfset session.objects.Output.BeanReportPDF(local) />
-		<cfset session.objects.Output.BeanReportExcel(local) />
+		<cfset session.objects.ReportService.BeanReportPDF(local) />
+		<cfset session.objects.ReportService.BeanReportExcel(local) />
 		<cfset local.ReportHeaders 	= "Date,Long Entry Trade,Long Exit Trade,Short Entry Trade,Short Exit Trade,Entry Price,Entry Date,Exit Price,Exit Date,Profit/loss,Net Profit/Loss">
 		<cfset local.ReportMethods 	= "Date,HKGoLong,HKCloseLong,HKGoShort,HKCloseShort,EntryPrice,EntryDate,ExitPrice,ExitDate,ProfitLoss,NetProfitLoss">
-		<cfset session.objects.Output.TradeReport(local) />
+		<cfset session.objects.ReportService.TradeReport(local) />
 		<cfset local.ReportHeaders 	= "Date,High,Low,Price,High,Difference">
 		<cfset local.ReportMethods 	= "Date,NewLocalHigh,NewLocalLow,HKHigh">
-		<!--- todo:fix <cfset session.objects.Output.HiLoReport(local) /> --->
+		<!--- todo:fix <cfset session.objects.ReportService.HiLoReport(local) /> --->
 		<!--- this belongs in a watchlist runner method --->
 		<cfif arguments.ReportType EQ "watchlist">
 		<!---- loop over the BeanArray and get open and close setups and entries/exits--->
@@ -89,7 +90,7 @@
 			local.HAdata 		= GetHAStockDataGoogle(symbol:"#i#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
 			local.result 		= session.objects.systemRunner.testSystem(SystemToRun:"test",qryData:local.HAdata); 
 			// this now produces two reports, a trade report and an activity report
-			local.tradeArray 	= session.objects.Output.TradeReportBuilder(local.result.beancollection);
+			local.tradeArray 	= session.objects.ReportService.TradeReportBuilder(local.result.beancollection);
 			
 			if (local.tradeArray.size() )
 			{
@@ -111,7 +112,7 @@
 		</cfloop>
 		<!--- <cfset local.ReportHeaders = "Date,Trade,Entry Price,New High Reversal,New High Breakout,R1 Breakout, R2 Breakout,RSIStatus,CCIStatus">
 		<cfset local.ReportMethods = "Date,HKGoLong,EntryPrice,NewHighReversal,NewHighBreakout,R1Breakout1Day,R2Breakout1Day,RSIStatus,CCIStatus"> --->
-		<cfset session.objects.Output.WatchListReportPDF(local.arrNewTrades,arguments.watchlist) />  
+		<cfset session.objects.ReportService.WatchListReportPDF(local.arrNewTrades,arguments.watchlist) />  
 		<cfset request.beanarray = local.arrNewTrades />
 		<cfreturn local.arrAllTrades  />
 	</cffunction>
@@ -124,7 +125,7 @@
 		var local = structNew(); 	
 		local.data 		= GetStockDataGoogle(symbol:"#arguments.symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
 		local.arrResult = session.objects.systemRunner.RunBreakOutReport(qryData:local.data.OriginalData); 
-		//session.objects.Output.BreakOutReport(symbol:arguments.symbol,data:local.arrResult); 
+		//session.objects.ReportService.BreakOutReport(symbol:arguments.symbol,data:local.arrResult); 
 		return local.arrResult;
 		</cfscript>
 	</cffunction>
@@ -296,4 +297,5 @@
 		<cfset var local = StructNew()> 
 		<cfreturn local/>
 	</cffunction>
+		
 </cfcomponent>

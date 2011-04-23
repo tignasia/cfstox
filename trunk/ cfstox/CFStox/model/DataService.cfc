@@ -1,12 +1,12 @@
 <cfcomponent  displayname="DataService" output="false" hint="I process and store the data ">
 
-<cffunction name="Init" description="" access="public" displayname="" output="false" returntype="DataService">
-	<cfset variables.qryDataOrg = "" />
-	<cfset variables.qryDataHA = "" />
-	<cfset variables.high = "" />
-	<cfset variables.low = "" />
-	<cfreturn this />
-</cffunction>	
+	<cffunction name="Init" description="" access="public" displayname="" output="false" returntype="DataService">
+		<cfset variables.qryDataOrg = "" />
+		<cfset variables.qryDataHA = "" />
+		<cfset variables.high = "" />
+		<cfset variables.low = "" />
+		<cfreturn this />
+	</cffunction>	
 
 	<cffunction name="reset" description="" access="public" displayname="" output="false" returntype="void">
 	<cfset variables.qryDataOrg = "" />
@@ -202,6 +202,14 @@
 	<cfreturn variables.low />
 	</cffunction>
 	
+	<cffunction name="PopulateData" description="populate the database with stock data" access="public" displayname="" output="false" returntype="struct">
+		<cfargument name="symbol" required="true" />
+		<cfargument name="startdate" required="true" />
+		<cfargument name="enddate" required="true" />
+		<cfset var local = structnew() />
+		<cfset local.results = true />
+		<cfreturn local />
+	</cffunction>
 	
 	<--- --------------------------------------------------------------------------------------- ----
 	

@@ -14,16 +14,16 @@
 
 <div id="chartdiv" align="center"> Historical Data : #request.symbol# </div>
 <script type="text/javascript">
-  var chart = new FusionCharts("../FusionChartsFree/Charts/FCF_Candlestick.swf", "ChartId", "600", "400", "1");
+  var chart = new FusionCharts("../FusionChartsFree/Charts/FCF_Candlestick.swf", "ChartId", "800", "400", "1");
   <cfoutput>chart.setDataXML("#request.xmldata#");</cfoutput>		   
    chart.render("chartdiv");
 </script> 
 <!--- draw heiken ashi  --->
 
 
-<div id="chartdiv2" align="center"> Heiken-Ashi Chart </div>
+<div id="chartdiv2" align="center"> Heiken-Ashi Chart: </div>
 <script type="text/javascript">
-  var chart = new FusionCharts("../FusionChartsFree/Charts/FCF_Candlestick.swf", "ChartId2", "600", "400");
+  var chart = new FusionCharts("../FusionChartsFree/Charts/FCF_Candlestick.swf", "ChartId2", "800", "400");
   <cfoutput>chart.setDataXML("#request.xmldataHA#");</cfoutput>		   
    chart.render("chartdiv2");
 </script> 
