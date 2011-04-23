@@ -1,6 +1,6 @@
 <cfcomponent  displayname="Output" output="false" >
 
-	<cffunction name="Init" description="" access="public" displayname="" output="false" returntype="Output">
+	<cffunction name="Init" description="" access="public" displayname="" output="false" returntype="ReportService">
 		<cfreturn this />
 	</cffunction>
 
@@ -458,6 +458,12 @@
 		<cfreturn />
 	</cffunction>
 	
+	<cffunction name="RunReport" description="I output a PDF of the bean status" access="public" displayname="" output="false" returntype="void">
+		<cfargument name="data" required="true">
+		<cfset var local = structNew() />
+		
+		<cfreturn />
+	</cffunction>
 	
 	<cffunction name="GetPDFPath" description="I get the absolute path for the PDF" access="public" displayname="" output="false" returntype="String">
 		<cfargument name="data" required="true">

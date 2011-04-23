@@ -22,140 +22,140 @@
 		<!--- based on optimum trades in X - US Steel --->
 		<!--- <cfargument name="TradeBeanTwo" required="true" />
 		<cfargument name="TradeBeanOne" required="true" />
-		<cfargument name="TradeBeanToday" required="true" />
+		<cfargument name="DataBeanToday" required="true" />
 		<cfargument name="TrackingBean" required="true" /> --->
 		<cfargument name="BeanCollection" required="true" />
 		<cfscript>
 		var local = StructNew(); 
 		local.boolGoLong = true;
 		local.boolGoShort = true;
-		local.Patterns = CandlePattern(TB2:TradeBeanTwoDaysAgo, TB1:TradeBeanOneDayAgo, TB:TradeBeanToday ); 
+		local.Patterns = CandlePattern(TB2:DataBean2, TB1:DataBean1, TB:DataBeanToday ); 
 		</cfscript>
 	</cffunction>
 	
 	<cffunction name="System_ha_longII" description="called from systemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
 		<!--- based on optimum trades in X - US Steel --->
 		<!--- based on two down days followed by up day --->
-		<cfargument name="TradeBeanTwoDaysAgo" required="true" />
-		<cfargument name="TradeBeanOneDayAgo" required="true" />
-		<cfargument name="TradeBeanToday" required="true" />
+		<cfargument name="DataBean2" required="true" />
+		<cfargument name="DataBean1" required="true" />
+		<cfargument name="DataBeanToday" required="true" />
 		<cfargument name="TrackingBean" required="true" />
 		<cfset var local = StructNew() />
 		<cfset local.boolGoLong = true />
 		<cfset local.boolGoShort = true />
-		<cfset local.Patterns = CandlePattern(TB2:TradeBeanTwoDaysAgo, TB1:TradeBeanOneDayAgo, TB:TradeBeanToday ) />
+		<cfset local.Patterns = CandlePattern(TB2:DataBean2, TB1:DataBean1, TB:DataBeanToday ) />
 		<cfif local.Patterns.OCpattern EQ "LLH"
-			AND arguments.TradeBeanToday.Get("HKHigh") GT arguments.TradeBeanOneDayAgo.Get("R2")>
-			<cfset TradeBeanToday.Set("HKGoLong",true) />
-			<cfset TradeBeanToday.Set("UseR2Entry",true) />
+			AND arguments.DataBeanToday.Get("HKHigh") GT arguments.DataBean1.Get("R2")>
+			<cfset DataBeanToday.Set("HKGoLong",true) />
+			<cfset DataBeanToday.Set("UseR2Entry",true) />
 		</cfif> 
-		<cfif arguments.TradeBeanToday.Get("HKClose") LT arguments.TradeBeanToday.Get("HKOpen")>
-			<cfset TradeBeanToday.Set("HKCloseLong",true) />
-			<cfset TradeBeanToday.Set("UseS2Entry",true) />
+		<cfif arguments.DataBeanToday.Get("HKClose") LT arguments.DataBeanToday.Get("HKOpen")>
+			<cfset DataBeanToday.Set("HKCloseLong",true) />
+			<cfset DataBeanToday.Set("UseS2Entry",true) />
 		</cfif>  
 		<!--- go short --->
 		<cfif local.Patterns.OCpattern EQ "HHL"
-		AND arguments.TradeBeanToday.Get("HKLow") LT arguments.TradeBeanOneDayAgo.Get("S2")>
-			<cfset TradeBeanToday.Set("HKGoShort",true) />
-			<cfset TradeBeanToday.Set("UseR2Entry",true) />
+		AND arguments.DataBeanToday.Get("HKLow") LT arguments.DataBean1.Get("S2")>
+			<cfset DataBeanToday.Set("HKGoShort",true) />
+			<cfset DataBeanToday.Set("UseR2Entry",true) />
 		</cfif> 
-		<cfif arguments.TradeBeanToday.Get("HKClose") GT arguments.TradeBeanToday.Get("HKOpen")>
-			<cfset TradeBeanToday.Set("HKCloseShort",true) />
-			<cfset TradeBeanToday.Set("UseS2Entry",true) />
+		<cfif arguments.DataBeanToday.Get("HKClose") GT arguments.DataBeanToday.Get("HKOpen")>
+			<cfset DataBeanToday.Set("HKCloseShort",true) />
+			<cfset DataBeanToday.Set("UseS2Entry",true) />
 		</cfif>     	   		
-		<cfreturn TradeBeanToday />
+		<cfreturn DataBeanToday />
 	</cffunction>
 	
 	<cffunction name="System_Short_Stops" description="called from systemRunner - short w/tight stops" access="public" displayname="test" output="false" returntype="Any">
 		<!--- based on optimum trades in X - US Steel --->
 		<!--- based on two down days followed by up day --->
-		<cfargument name="TradeBeanTwoDaysAgo" required="true" />
-		<cfargument name="TradeBeanOneDayAgo" required="true" />
-		<cfargument name="TradeBeanToday" required="true" />
+		<cfargument name="DataBean2" required="true" />
+		<cfargument name="DataBean1" required="true" />
+		<cfargument name="DataBeanToday" required="true" />
 		<cfargument name="TrackingBean" required="true" />
 		<cfset var local = StructNew() />
 		<!--- todo:remove and pass as argument --->
-		<cfset local.Patterns = CandlePattern(TB2:TradeBeanTwoDaysAgo, TB1:TradeBeanOneDayAgo, TB:TradeBeanToday ) />
+		<cfset local.Patterns = CandlePattern(TB2:DataBean2, TB1:DataBean1, TB:DataBeanToday ) />
 		<cfif local.Patterns.OCpattern EQ "LLH">
 			<cfset arguments.TrackingBean.Set("ShortEntryStop",false) />
 		</cfif> 
 		<cfif local.Patterns.OCpattern EQ "HLL">
 			<cfset arguments.TrackingBean.Set("ShortEntryStop",true) />
 			<cfset arguments.TrackingBean.Set("ShortEntryStopDays",0) />
-			<cfset arguments.TrackingBean.Set("ShortEntryStopLevel",arguments.TradeBeanToday.get("S1")) />
+			<cfset arguments.TrackingBean.Set("ShortEntryStopLevel",arguments.DataBeanToday.get("S1")) />
 		</cfif> 
-		<cfif arguments.TradeBeanToday.Get("HKClose") LT arguments.TradeBeanToday.Get("HKOpen")>
-			<cfset TradeBeanToday.Set("HKCloseLong",true) />
-			<cfset TradeBeanToday.Set("UseS2Entry",true) />
+		<cfif arguments.DataBeanToday.Get("HKClose") LT arguments.DataBeanToday.Get("HKOpen")>
+			<cfset DataBeanToday.Set("HKCloseLong",true) />
+			<cfset DataBeanToday.Set("UseS2Entry",true) />
 		</cfif>  
-		<cfreturn TradeBeanToday />
+		<cfreturn DataBeanToday />
 	</cffunction>
 	
 	<cffunction name="AKAMShort_S1entry_R1Exit" description="called from systemRunner - short w/tight stops" access="public" displayname="test" output="false" returntype="Any">
 		<!--- based on optimum trades in AKAM Short --->
 		<!--- based on two down days enter at break of S1 --->
-		<cfargument name="TradeBeanTwoDaysAgo" required="true" />
-		<cfargument name="TradeBeanOneDayAgo" required="true" />
-		<cfargument name="TradeBeanToday" required="true" />
+		<cfargument name="DataBean2" required="true" />
+		<cfargument name="DataBean1" required="true" />
+		<cfargument name="DataBeanToday" required="true" />
 		<cfargument name="TrackingBean" required="true" />
 		<cfset var local = StructNew() />
 		<!--- todo:remove and pass as argument --->
-		<cfset local.Patterns = CandlePattern(TB2:TradeBeanTwoDaysAgo, TB1:TradeBeanOneDayAgo, TB:TradeBeanToday ) />
+		<cfset local.Patterns = CandlePattern(TB2:DataBean2, TB1:DataBean1, TB:DataBeanToday ) />
 		<!--- this system always has a short entry stop  --->
 		<cfif local.Patterns.OCpattern EQ "HLL">
 			<cfset arguments.TrackingBean.Set("ShortEntryStop",true) />
 			<cfset arguments.TrackingBean.Set("ShortEntryStopDays",0) />
-			<cfset arguments.TrackingBean.Set("ShortEntryStopLevel",arguments.TradeBeanToday.get("S1")) />
+			<cfset arguments.TrackingBean.Set("ShortEntryStopLevel",arguments.DataBeanToday.get("S1")) />
 		</cfif> 
-		<cfif arguments.TradeBeanToday.Get("HKClose") LT arguments.TradeBeanToday.Get("HKOpen")>
-			<cfset TradeBeanToday.Set("HKCloseLong",true) />
-			<cfset TradeBeanToday.Set("UseS2Entry",true) />
+		<cfif arguments.DataBeanToday.Get("HKClose") LT arguments.DataBeanToday.Get("HKOpen")>
+			<cfset DataBeanToday.Set("HKCloseLong",true) />
+			<cfset DataBeanToday.Set("UseS2Entry",true) />
 		</cfif>  
-		<cfreturn TradeBeanToday />
+		<cfreturn DataBeanToday />
 	</cffunction>
 	
 	<cffunction name="System_ha_longIII" description="called from systemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
 		<!--- based on optimum trades in X - US Steel --->
 		<!--- based on two down days followed by up day --->
-		<cfargument name="TradeBeanTwoDaysAgo" required="true" />
-		<cfargument name="TradeBeanOneDayAgo" required="true" />
-		<cfargument name="TradeBeanToday" required="true" />
+		<cfargument name="DataBean2" required="true" />
+		<cfargument name="DataBean1" required="true" />
+		<cfargument name="DataBeanToday" required="true" />
 		<cfargument name="TrackingBean" required="true" />
 		<cfset var local = StructNew() />
 		<cfset local.boolGoLong = true>
-		<cfif arguments.TradeBeanTwoDaysAgo.Get("HKClose") GT arguments.TradeBeanTwoDaysAgo.Get("HKOpen")>
+		<cfif arguments.DataBean2.Get("HKClose") GT arguments.DataBean2.Get("HKOpen")>
 			<cfset local.boolGoLong = false />
 		</cfif>   
-		<cfif local.boolGoLong AND arguments.TradeBeanOneDayAgo.Get("HKClose") GT arguments.TradeBeanOneDayAgo.Get("HKOpen")>
+		<cfif local.boolGoLong AND arguments.DataBean1.Get("HKClose") GT arguments.DataBean1.Get("HKOpen")>
 			<cfset local.boolGoLong = false />
 		</cfif>
-		<cfif local.boolGoLong AND arguments.TradeBeanToday.Get("HKClose") GT arguments.TradeBeanToday.Get("HKOpen")>
-			<cfset TradeBeanToday.Set("HKGoLong",true) />
-			<cfset TradeBeanToday.Set("UseR2Entry",true) />
+		<cfif local.boolGoLong AND arguments.DataBeanToday.Get("HKClose") GT arguments.DataBeanToday.Get("HKOpen")>
+			<cfset DataBeanToday.Set("HKGoLong",true) />
+			<cfset DataBeanToday.Set("UseR2Entry",true) />
 		</cfif> 
-		<cfif arguments.TradeBeanToday.Get("HKClose") LT arguments.TradeBeanToday.Get("HKOpen")>
-			<cfset TradeBeanToday.Set("HKCloseLong",true) />
-			<cfset TradeBeanToday.Set("UseS2Entry",true) />
+		<cfif arguments.DataBeanToday.Get("HKClose") LT arguments.DataBeanToday.Get("HKOpen")>
+			<cfset DataBeanToday.Set("HKCloseLong",true) />
+			<cfset DataBeanToday.Set("UseS2Entry",true) />
 		</cfif>     		
-		<cfreturn TradeBeanToday />
+		<cfreturn DataBeanToday />
 	</cffunction>
 	
 	<cffunction name="System_ha_III" description="called from systemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
 		<!--- based on optimum trades in X - US Steel --->
 		<!--- based on two down days followed by up day --->
-		<cfargument name="TradeBeanTwoDaysAgo" required="true" />
-		<cfargument name="TradeBeanOneDayAgo" required="true" />
-		<cfargument name="TradeBeanToday" required="true" />
+		<cfargument name="DataBean2" required="true" />
+		<cfargument name="DataBean1" required="true" />
+		<cfargument name="DataBeanToday" required="true" />
 		<cfargument name="TrackingBean" required="true" />
 		<cfset var local = StructNew() />
 		<cfscript>
 		local.boolGoLong = false;
-		local.tb2open = arguments.TradeBeanTwoDaysAgo.Get("HKOpen");
-		local.tb2close = arguments.TradeBeanTwoDaysAgo.Get("HKClose");
-		local.tb1open = arguments.TradeBeanOneDayAgo.Get("HKOpen");
-		local.tb1close = arguments.TradeBeanOneDayAgo.Get("HKClose");
-		local.tbopen = arguments.TradeBeanToday.Get("HKOpen");
-		local.tbclose = arguments.TradeBeanToday.Get("HKClose");
+		local.tb2open = arguments.DataBean2.Get("HKOpen");
+		local.tb2close = arguments.DataBean2.Get("HKClose");
+		local.tb1open = arguments.DataBean1.Get("HKOpen");
+		local.tb1close = arguments.DataBean1.Get("HKClose");
+		local.tbopen = arguments.DataBeanToday.Get("HKOpen");
+		local.tbclose = arguments.DataBeanToday.Get("HKClose");
 		if (
 		local.tb2open GT local.tb2close AND  
 		local.tb1open LT local.tb1close //AND 
@@ -163,8 +163,8 @@
 		) 
 		{
 			local.boolGoLong = true;
-			TradeBeanToday.Set("HKGoLong",true); 
-			TradeBeanToday.Set("UseR2Entry",true); 
+			DataBeanToday.Set("HKGoLong",true); 
+			DataBeanToday.Set("UseR2Entry",true); 
 		}
 		
 		if (
@@ -175,21 +175,21 @@
 		) 
 		{
 			local.boolGoShort = true;
-			TradeBeanToday.Set("HKCloseLong",true); 
-			TradeBeanToday.Set("UseR2Entry",true); 
+			DataBeanToday.Set("HKCloseLong",true); 
+			DataBeanToday.Set("UseR2Entry",true); 
 		}
 		</cfscript>
-		<cfreturn TradeBeanToday />
+		<cfreturn DataBeanToday />
 	</cffunction>
 	
 	<cffunction name="System_hekin_ashi_short" description="called from SystemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
-		<cfargument name="TradeBeanTwoDaysAgo" required="true" />
-		<cfargument name="TradeBeanOneDayAgo" required="true" />
-		<cfargument name="TradeBeanToday" required="true" />
-		<cfif TradeBeanTwoDaysAgo.Get("HKHigh") LT TradeBeanOneDayAgo.Get("HKHigh") AND TradeBeanToday.Get("HKHigh") GT TradeBeanOneDayAgo.Get("HKHigh")>		
-			<cfset TradeBeanToday.Set("HKGoShort",true) />
+		<cfargument name="DataBean2" required="true" />
+		<cfargument name="DataBean1" required="true" />
+		<cfargument name="DataBeanToday" required="true" />
+		<cfif DataBean2.Get("HKHigh") LT DataBean1.Get("HKHigh") AND DataBeanToday.Get("HKHigh") GT DataBean1.Get("HKHigh")>		
+			<cfset DataBeanToday.Set("HKGoShort",true) />
 		</cfif>
-		<cfreturn TradeBeanToday />
+		<cfreturn DataBeanToday />
 	</cffunction>
 
 	<cffunction name="System_hekin_ashiII" description="heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">

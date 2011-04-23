@@ -42,7 +42,7 @@
 		local.view = "historical";
 		local.HAdata 		= session.objects.SystemService.GetHAStockData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") ; 
 		local.OriginalData 	= session.objects.SystemService.GetOriginalStockData();
-		local.result 		= session.objects.SystemService.RunSystem(SystemToRun:"test",qryData: local.HAdata);
+		local.result 		= session.objects.SystemService.RunSystem(SystemName:"System_ha_longIII",qryData: local.HAdata);
 		local.high			= session.objects.SystemService.GetHigh();
 		local.low			= session.objects.SystemService.GetLow();
 		local.xmldata 		= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.symbol#",qrydata:local.OriginalData,startdate:"#arguments.startdate#", high:local.high, low:local.low);
@@ -70,6 +70,15 @@
 		<cfreturn local />
 	</cffunction>
 
+	<cffunction name="PopulateData" description="populate the database with stock data" access="public" displayname="" output="false" returntype="struct">
+		<cfargument name="symbol" required="true" />
+		<cfargument name="startdate" required="true" />
+		<cfargument name="enddate" required="true" />
+		<cfset var local = structnew() />
+		<cfset local.results = session.objects.DataService.putData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") />
+		<cfreturn local />
+	</cffunction>
+
 	<cffunction name="loadObjects" description="I load objects" access="private" displayname="" output="false" returntype="void">
 	<!--- load the objects that we might need if not already loaded and set the loaded flag in session --->
 	<cfset session.objects.XMLGenerator 	= createobject("component","cfstox.model.XMLGenerator").init() />
@@ -81,7 +90,7 @@
 	<cfset session.objects.DataService 		= createObject("component","cfstox.model.Dataservice").init() />
 	<cfset session.objects.SystemService 	= createObject("component","cfstox.model.SystemService").init() />
 	<cfset session.objects.SystemRunner 	= createObject("component","cfstox.model.SystemRunner").init() />
-	<cfset session.objects.Output 			= createObject("component","cfstox.model.Output").init() />
+	<cfset session.objects.ReportService	= createObject("component","cfstox.model.ReportService").init() />
 	<cfreturn />
 	</cffunction>	
 

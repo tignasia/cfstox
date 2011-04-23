@@ -9,6 +9,7 @@
 <!--- <cfset stockdata = request.stockdata /> --->
 
 <cfoutput>
+Heiken-Ashi Data
 <cfif request.method EQ "historical">
 <a href="../Data/#request.symbol#.pdf" target="_blank">View PDF</a>
 <a href="../Data/#request.symbol#.xls" target="_blank">View Excel</a>
@@ -28,7 +29,7 @@
 
 <div id="chartdiv" align="center" width="50%"> Historical Data : #request.symbol# </div>
 <script type="text/javascript">
-  var chart = new FusionCharts("../FusionChartsFree/Charts/FCF_Candlestick.swf", "ChartId", "600", "400");
+  var chart = new FusionCharts("../FusionChartsFree/Charts/FCF_Candlestick.swf", "ChartId", "1200", "600");
   <cfoutput>chart.setDataXML("#request.xmldata#");</cfoutput>		   
    chart.render("chartdiv");
 </script> 
@@ -37,7 +38,7 @@
 
 <div id="chartdiv2" align="center" width="50%"> Heiken-Ashi Chart: #request.symbol#</div>
 <script type="text/javascript">
-  var chart = new FusionCharts("../FusionChartsFree/Charts/FCF_Candlestick.swf", "ChartId2", "600", "400");
+  var chart = new FusionCharts("../FusionChartsFree/Charts/FCF_Candlestick.swf", "ChartId2", "1200", "600");
   <cfoutput>chart.setDataXML("#request.xmldataHA#");</cfoutput>		   
    chart.render("chartdiv2");
 </script> 
