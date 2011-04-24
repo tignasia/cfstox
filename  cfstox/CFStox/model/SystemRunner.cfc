@@ -32,7 +32,8 @@
 		<cfloop  query="arguments.qryData" startrow="#local.startrow#">
 			<cfscript>
 			// five data beans 
-			testdata = SetupTestData(argumentCollection:arguments);	 
+			testdata = SetupTestData(argumentCollection:arguments);	
+			testData.Trackingbean = local.TrackingBean; 
 			</cfscript>
 			<!-- returns a tradebean with the trades the system made  -->
  			<cfinvoke component="#session.objects.system#" method="#arguments.SystemName#"  argumentcollection="#testdata#"  returnvariable="resultData" /> 
@@ -82,10 +83,10 @@
 		data.DataArray[3] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:data.rowcount-2);
 		data.DataArray[2] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:data.rowcount-1);
 		data.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:data.rowcount);
-		data.DataBean5 = createObject("component","cfstox.model.TradeBean").init(data.DataArray[5]);
-		data.DataBean4 = createObject("component","cfstox.model.TradeBean").init(data.DataArray[4]); 
-		data.DataBean3 = createObject("component","cfstox.model.TradeBean").init(data.DataArray[3]); 
-		data.DataBean2 = createObject("component","cfstox.model.TradeBean").init(data.DataArray[2]);  
+		data.DataBean4 = createObject("component","cfstox.model.TradeBean").init(data.DataArray[5]);
+		data.DataBean3 = createObject("component","cfstox.model.TradeBean").init(data.DataArray[4]); 
+		data.DataBean2 = createObject("component","cfstox.model.TradeBean").init(data.DataArray[3]); 
+		data.DataBean1 = createObject("component","cfstox.model.TradeBean").init(data.DataArray[2]);  
 		data.DataBeanToday 	= createObject("component","cfstox.model.TradeBean").init(data.DataArray[1]); 
 		</cfscript>
 		<cfreturn data />

@@ -57,7 +57,6 @@
 		{	// push the new value on the bottom	
 			local.DataArray[arguments.period] = ((arguments.values[local.i][5] - local.lastclose)/ local.lastclose)*100;
 			local.lastclose 					= arguments.values[local.i][5];
-			dump(local.i);
 			try {
 			local.indicatorSum = ArrayAvg(local.DataArray);
 			}
