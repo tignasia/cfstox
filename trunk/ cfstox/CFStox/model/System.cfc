@@ -10,28 +10,17 @@
 		<cfreturn this/>
 	</cffunction>
 	
-	<cffunction name="System_ha_longII" description="called from systemRunner - short w/tight stops" access="public" displayname="test" output="false" returntype="Any">
+	<cffunction name="long_entry_HA" description="" access="public" displayname="test" output="false" returntype="Any">
 		<!--- based on optimum trades in X - US Steel --->
 		<!--- based on two down days followed by up day --->
-		<cfargument name="DataBean3" required="true" />
-		<cfargument name="DataBean2" required="true" />
-		<cfargument name="DataBeanToday" required="true" />
-		<cfargument name="TrackingBean" required="true" />
+		<cfargument name="arrDataBeans" required="true" />
 		<cfset var local = StructNew() />
-		<cfset local.Patterns = CandlePattern(TB2:arguments.DataBean3,TB1:arguments.DataBean2,TB:argumentsDataBeanToday ) />
+		<cfset local.Patterns = GetCandlePatterns(argumentcollection:arguments) />
 		<cfif local.Patterns.OCpattern EQ "LLH">
-			<cfset arguments.TrackingBean.Set("ShortEntryStop",false) />
 		</cfif> 
 		<cfif local.Patterns.OCpattern EQ "HLL">
-			<cfset arguments.TrackingBean.Set("ShortEntryStop",true) />
-			<cfset arguments.TrackingBean.Set("ShortEntryStopDays",0) />
-			<cfset arguments.TrackingBean.Set("ShortEntryStopLevel",arguments.DataBeanToday.get("S1")) />
 		</cfif> 
-		<cfif arguments.DataBeanToday.Get("HKClose") LT arguments.DataBeanToday.Get("HKOpen")>
-			<cfset DataBeanToday.Set("HKCloseLong",true) />
-			<cfset DataBeanToday.Set("UseS2Entry",true) />
-		</cfif>  
-		<cfreturn DataBeanToday />
+		<cfreturn arguments.arrDataBeans />
 	</cffunction>
 	
 	<cffunction name="AKAMShort_S1entry_R1Exit" description="called from systemRunner - short w/tight stops" access="public" displayname="test" output="false" returntype="Any">
@@ -60,25 +49,20 @@
 	<cffunction name="System_ha_longIII" description="called from systemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
 		<!--- based on optimum trades in X - US Steel --->
 		<!--- based on two down days followed by up day --->
+		<cfargument name="DataBean4" required="true" />
 		<cfargument name="DataBean3" required="true" />
 		<cfargument name="DataBean2" required="true" />
+		<cfargument name="DataBean1" required="true" />
 		<cfargument name="DataBeanToday" required="true" />
+		<cfargument name="TrackingBean" required="true" />
 		<cfset var local = StructNew() />
-		<cfset local.boolGoLong = true>
+		<cfset local.Patterns = GetCandlePatterns(argumentcollection:arguments) />
 		<cfif arguments.DataBean3.Get("HKClose") GT arguments.DataBean3.Get("HKOpen")>
-			<cfset local.boolGoLong = false />
 		</cfif>   
-		<cfif local.boolGoLong AND arguments.DataBean2.Get("HKClose") GT arguments.DataBean2.Get("HKOpen")>
-			<cfset local.boolGoLong = false />
+		<cfif arguments.DataBean2.Get("HKClose") GT arguments.DataBean2.Get("HKOpen")>
 		</cfif>
-		<cfif local.boolGoLong AND arguments.DataBeanToday.Get("HKClose") GT arguments.DataBeanToday.Get("HKOpen")>
-			<cfset DataBeanToday.Set("HKGoLong",true) />
-			<cfset DataBeanToday.Set("UseR2Entry",true) />
+		<cfif arguments.DataBeanToday.Get("HKClose") GT arguments.DataBeanToday.Get("HKOpen")>
 		</cfif> 
-		<cfif arguments.DataBeanToday.Get("HKClose") LT arguments.DataBeanToday.Get("HKOpen")>
-			<cfset DataBeanToday.Set("HKCloseLong",true) />
-			<cfset DataBeanToday.Set("UseS2Entry",true) />
-		</cfif>     		
 		<cfreturn DataBeanToday />
 	</cffunction>
 	
@@ -341,115 +325,96 @@
 	<cffunction name="GetCandlePatterns" description="called from system - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
 		<!--- Takes TradeBeans as arguments --->
 		<!--- Returns the hekien-ashi candlestick open high low and close for past 5 days--->
-		<cfargument name="TB4" required="false" />
-		<cfargument name="TB3" required="false" />
-		<cfargument name="TB2" required="false" />
-		<cfargument name="TB1" required="false" />
-		<cfargument name="TB" required="false" />
+		<cfargument name="DataBean4" required="false" />
+		<cfargument name="DataBean3" required="false" />
+		<cfargument name="DataBean2" required="false" />
+		<cfargument name="DataBean1" required="false" />
+		<cfargument name="DataBeanToday" required="false" />
 		<cfscript>
 		var local = StructNew();
-		local.arrTB = arrayNew(1);
-		local.arrTB[1] = arguments.TB4;
-		local.arrTB[2] = arguments.TB3;
-		local.arrTB[3] = arguments.TB2;
-		local.arrTB[4] = arguments.TB1;
-		local.arrTB[5] = arguments.TB;
-		local.arrOC = ArrayNew(2);
-		for (local.x = 1; x <= 4, x++) { 
-		local.arrOC[x][1] =  local.arrTB[x].Get("HKClose");
-		local.arrOC[x][2] =  local.arrTB[x+1].Get("HKOpen");
+		local.arrDataBean = arrayNew(1);
+		local.arrDataBean[1] = arguments.DataBean4;
+		local.arrDataBean[2] = arguments.DataBean3;
+		local.arrDataBean[3] = arguments.DataBean2;
+		local.arrDataBean[4] = arguments.DataBean1;
+		local.arrDataBean[5] = arguments.DataBeanToday;
+		local.arrData = ArrayNew(2);
+		local.strData = "HKOpen,HKHigh,HkLow,HKClose";
+		
+		for (local.x = 1; local.x <= 4; local.x++) { 
+		try {
+		local.arrData[local.x][1] =  local.arrDataBean[local.x].Get("HKClose");
+		local.arrData[local.x][2] =  local.arrDataBean[local.x+1].Get("HKOpen");
+			}
+		catch (Any e) {
+		WriteOutput("Error: " & e.message);
+		dump(e.message, local.arrDataBean[local.x]);
 		}
-		local.OCpattern = CandlePatterns(local.arrOC);
+		}
+		local.OCpattern = CandlePattern(local.arrData);
 		//local.OpenPattern = "";
-		//local.HighPattern = "";
-		//local.LowPattern = "";
-		//local.ClosePattern = "";
-		// open-close
+		
+		for (local.xx = 1; local.xx <= 4; local.xx++) { 
+
+			for (local.x = 1; local.x <= 3; local.x++) { 
+			try {
+			local.listItem = JavaCast("String",ListGetAt(local.strData,local.x));
+			local.arrData[local.x][1] =  local.arrDataBean[local.x].Get("#local.listitem#");
+			local.arrData[local.x][2] =  local.arrDataBean[local.x+1].Get("#local.listitem#");
+			}
+			catch (Any e) {
+			WriteOutput("Error: " & e.message);
+			dump(error:e.message, object:local.arrDataBean[local.x+1]);
+			}
+			}
+		
+			switch(local.xx){
+			case 1:
+			local.OpenPattern = CandlePattern(local.arrData);
+			break;
+			case 2:
+			local.HighPattern = CandlePattern(local.arrData);
+			break;
+			case 3:
+			local.LowPattern = CandlePattern(local.arrData);
+			break;
+			case 4:
+			local.ClosePattern = CandlePattern(local.arrData);
+			break;
+			}
+		}
+		return local; 
 		</cfscript>
 	</cffunction>
 	
 	<cffunction name="CandlePattern" description="called from system - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
 		<!--- Takes TradeBeans as arguments --->
 		<!--- Returns the hekien-ashi candlestick open high low and close for past 5 days--->
-		<cfargument name="TB4" required="false" />
-		<cfargument name="TB3" required="false" />
-		<cfargument name="TB2" required="false" />
-		<cfargument name="TB1" required="false" />
-		<cfargument name="TB" required="false" />
+		<cfargument name="dataArray" required="true" />
 		<cfscript>
 		var local = StructNew();
-		local.OCpattern = "";
-		local.OpenPattern = "";
-		local.HighPattern = "";
-		local.LowPattern = "";
-		local.ClosePattern = "";
+		local.pattern = "";
+		local.x = 1;
 		// open-close
-		if(arguments.TB2.Get("HKClose") GT arguments.TB2.Get("HKOpen")){
-		local.OCpattern = Local.OCpattern & "H";
-		}	   
-		else {
-		local.OCpattern = Local.OCpattern & "L";
+		for (local.x = 1; local.x <= 4; local.x++ ) {
+			if(arguments.dataArray[local.x][1] GT arguments.dataArray[local.x][2]){
+			local.pattern = Local.pattern & "H";
+			}	   
+			else {
+			local.pattern = Local.pattern & "L";
+			}
 		}
-		if(arguments.TB1.Get("HKClose") GT arguments.TB1.Get("HKOpen")){
-		local.OCpattern = Local.OCpattern & "H";
-		}
-		else {
-		local.OCpattern = Local.OCpattern & "L";
-		}	
-		if(arguments.TB.Get("HKClose") GT arguments.TB.Get("HKOpen")){
-		local.OCpattern = Local.OCpattern & "H";
-		}
-		else{
-		local.OCpattern = Local.OCpattern & "L";
-		}	
-		// close pattern  
-		if(arguments.TB2.Get("HKClose") GT arguments.TB1.Get("HKClose")){
-		local.ClosePattern = Local.ClosePattern & "L";
-		} else {
-		local.ClosePattern = Local.ClosePattern & "H";
-		}	   
-		if(arguments.TB1.Get("HKClose") GT arguments.TB.Get("HKClose")){
-		local.ClosePattern = Local.ClosePattern & "L";
-		} else {
-		local.ClosePattern = Local.ClosePattern & "H";
-		}	
-		
-		// open pattern  
-		if(arguments.TB2.Get("HKOpen") GT arguments.TB1.Get("HKOpen")){
-		local.OpenPattern = Local.OpenPattern & "L";
-		} else {
-		local.OpenPattern = Local.OpenPattern & "H";
-		}	   
-		if(arguments.TB1.Get("HKOpen") GT arguments.TB.Get("HKOpen")){
-		local.OpenPattern = Local.OpenPattern & "L";
-		} else {
-		local.OpenPattern = Local.OpenPattern & "H";
-		}	
-		
-		// high pattern  
-		if(arguments.TB2.Get("HKHigh") GT arguments.TB1.Get("HKHigh")){
-		local.HighPattern = Local.HighPattern & "L";
-		} else {
-		local.HighPattern = Local.HighPattern & "H";
-		}	   
-		if(arguments.TB1.Get("HKHigh") GT arguments.TB.Get("HKHigh")){
-		local.HighPattern = Local.HighPattern & "L";
-		} else {
-		local.HighPattern = Local.HighPattern & "H";
-		}	
-		
-		// low pattern  
-		if(arguments.TB2.Get("HKLow") GT arguments.TB1.Get("HKLow")){
-		local.LowPattern = Local.LowPattern & "L";
-		} else {
-		local.LowPattern = Local.LowPattern & "H";
-		}	   
-		if(arguments.TB1.Get("HKLow") GT arguments.TB.Get("HKLow")){
-		local.LowPattern = Local.LowPattern & "L";
-		} else {
-		local.LowPattern = Local.LowPattern & "H";
-		}
-		return local;			
+		return local.pattern;			
 		</cfscript>
+	</cffunction>
+	
+	<cffunction name="Dump" description="utility" access="public" displayname="test" output="false" returntype="Any">
+		<!--- Takes TradeBeans as arguments --->
+		<!--- Returns the hekien-ashi candlestick open high low and close for past 5 days--->
+		<cfargument name="error" required="true" />
+		<cfargument name="object" required="true" />
+		<cfdump label="error:" var="#arguments.error#">
+		<cfdump label="bean:" var="#arguments.object.GetMemento()#">
+		<cfabort>
 	</cffunction>
 </cfcomponent>
