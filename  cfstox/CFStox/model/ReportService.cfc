@@ -1,4 +1,4 @@
-<cfcomponent  displayname="Output" output="false" >
+<cfcomponent  displayname="ReportService" output="false" >
 
 	<cffunction name="Init" description="" access="public" displayname="" output="false" returntype="ReportService">
 		<cfreturn this />
@@ -13,10 +13,10 @@
 		<cfreturn />
 	</cffunction>
 	
-	<cffunction name="BeanReportPDF" description="I output a PDF of the bean status" access="public" displayname="" output="false" returntype="void">
+	<cffunction name="BeanReport" description="I output a PDF of the bean status" access="public" displayname="" output="false" returntype="void">
 		<cfargument name="data" required="true">
 		<cfset var local = structNew() />
-		<cfset local.filename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "#arguments.data.results.symbol#" & ".pdf"/>
+		<cfset local.PDFfilename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "#arguments.data.results.symbol#" & ".pdf"/>
 		<cfdocument  format="PDF" filename="#local.filename#" overwrite="true" orientation = "landscape">
 		<cfoutput>
 		<table>
@@ -37,30 +37,53 @@
 		<cfreturn />
 	</cffunction>
 	
-	<cffunction name="BeanReportExcel" description="I output a Excel of the bean status" access="public" displayname="" output="false" returntype="void">
+	<cffunction name="QryToArray" access="public" output="false" returntype="Array">
+		<cfargument name="query" required="true">
+		<cfset var local = structNew() />
+		<cfset local.returnArray = ArrayNew(2) />
+		<cfscript>
+		local.qryrows = arguments.query.recordcount;
+		//Convert data and append
+		local.cols = listToArray(arguments.query.columnList);
+       	for(i=1;i<=local.qryrows;i++){   
+			for (j=1;j <= local.cols.size(); j++) { 
+				local.returnArray[i][j] = query["#local.cols[j]#"][i];
+    		}
+       	}
+       	</cfscript>
+		<cfreturn local.returnArray />
+	</cffunction>
+	
+	<cffunction name="HistoryReport" description="I output a report" access="public" displayname="" output="false" returntype="void">
 		<cfargument name="data" required="true">
 		<cfset var local = structNew() />
-		<cfset local.filename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "#arguments.data.results.symbol#" & ".xls"/>
-		<cfsavecontent variable="exceldata">
+		<cfset local.PDFfilename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "#arguments.data.symbol#" & ".pdf"/>
+		<cfset local.Excelfilename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "#arguments.data.symbol#" & ".xls"/>
+		<cfset local.columns = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,RSI,LOCALHIGH,LOCALLOW,LINEARREG,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LRSDELTA,PP,R1,R2,S1,S2">
+		<cfsavecontent variable="Stockdata">
 		<cfoutput>
 		<table>
-		<cfloop list="#arguments.data.ReportHeaders#" index="i">
+		<cfloop list="#local.columns#" index="i">
 		<th>#i#</th>
 		</cfloop>
-		<cfloop from="1" to="#arguments.data.results.beancollection.size()#" index="i">
-		<cfset local.TradeBean = arguments.data.results.beancollection[i] />	
+		
+		<cfloop from="1" to="#arguments.data.recordcount#" index="j">
 		<tr>
-			<cfloop list="#arguments.data.reportMethods#" index="j">
-			<td>#local.tradebean.Get(j)#</td>
+			<cfloop list="#local.columns#" index="k">
+			<td>#arguments.data[k][j]#</td>
 			</cfloop>
 		</tr>
 		</cfloop>
 		</table>
 		</cfoutput>
 		</cfsavecontent>
-		<cffile action="write" file="#local.filename#" output="#exceldata#"   />
+		<cffile action="write" file="#local.Excelfilename#" output="#stockdata#"   />
+		<cfdocument  format="PDF" filename="#local.PDFfilename#" overwrite="true" orientation = "landscape">
+		<cfoutput>#stockData#</cfoutput>
+		</cfdocument>
 		<cfreturn />
 	</cffunction>
+	
 	
 	<cffunction name="TradeReport" description="I output a PDF of the trades" access="public" displayname="" output="false" returntype="void">
 		<cfargument name="data" required="true">
@@ -461,9 +484,21 @@
 	<cffunction name="RunReport" description="I output a PDF of the bean status" access="public" displayname="" output="false" returntype="void">
 		<cfargument name="data" required="true">
 		<cfset var local = structNew() />
-		
 		<cfreturn />
 	</cffunction>
+
+<!--- 
+	<cfset local.ReportHeaders 	= "Date,Open,High,Low,Close,New High Reversal,New High Breakout,R1 Breakout, R2 Breakout,New Low Reversal,New Low Breakdown,S1 Breakdown, S2 Breakdown,RSIStatus,CCIStatus">
+		<cfset local.ReportMethods 	= "Date,HKOpen,HKHigh,HKLow,HKClose,NewHighReversal,NewHighBreakout,R1Breakout1Day,R2Breakout1Day,NewLowReversal,NewLowBreakdown,S1Breakdown1Day,S2Breakdown1Day,RSIStatus,CCIStatus">
+		<!--- historical technical data  --->
+		<cfset session.objects.ReportService.BeanReportPDF(local) />
+		<cfset session.objects.ReportService.BeanReportExcel(local) />
+		<cfset local.ReportHeaders 	= "Date,Long Entry Trade,Long Exit Trade,Short Entry Trade,Short Exit Trade,Entry Price,Entry Date,Exit Price,Exit Date,Profit/loss,Net Profit/Loss">
+		<cfset local.ReportMethods 	= "Date,HKGoLong,HKCloseLong,HKGoShort,HKCloseShort,EntryPrice,EntryDate,ExitPrice,ExitDate,ProfitLoss,NetProfitLoss">
+		<cfset session.objects.ReportService.TradeReport(local) />
+		<cfset local.ReportHeaders 	= "Date,High,Low,Price,High,Difference">
+		<cfset local.ReportMethods 	= "Date,NewLocalHigh,NewLocalLow,HKHigh">
+ --->
 	
 	<cffunction name="GetPDFPath" description="I get the absolute path for the PDF" access="public" displayname="" output="false" returntype="String">
 		<cfargument name="data" required="true">
@@ -479,6 +514,4 @@
 
 <!--- loop thru table header array and write th headers --->
 <!--- loop over methods array and call methods on the tradebean to get info --->
-
-
 </cfcomponent>

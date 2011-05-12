@@ -13,13 +13,14 @@
 		<cfscript>
 		var local = structnew(); 
 		local.view = "historical";
-		local.HAdata 		= session.objects.SystemService.GetHAStockDataGoogle(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") ; 
-		local.OriginalData 	= session.objects.SystemService.GetOriginalStockData();
-		local.result 		= session.objects.SystemService.RunSystem(SystemToRun:"test",qryData: local.HAdata ,summary:false);
-		local.high			= session.objects.SystemService.GetHigh();
-		local.low			= session.objects.SystemService.GetLow();
+		session.objects.DataService.GetStockDataGoogle(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") ; 
+		local.HAdata 		= session.objects.DataService.GetHAStockData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") ; 
+		local.OriginalData 	= session.objects.DataService.GetOriginalStockData();
+		local.high			= session.objects.DataService.GetHigh();
+		local.low			= session.objects.DataService.GetLow();
 		local.xmldata 		= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.symbol#",qrydata:local.OriginalData,startdate:"#arguments.startdate#", high:local.high, low:local.low);
-		local.xmldataha 	= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.Symbol#",qrydata:local.HAData ,startdate:"#arguments.startdate#", high:local.high, low:local.low);
+		local.xmldataha 	= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.Symbol#",qrydata:local.HAData,startdate:"#arguments.startdate#", high:local.high, low:local.low);
+		session.objects.ReportService.HistoryReport(local.OriginalData);
 		structAppend(request,local); 
 		structAppend(request,arguments);
 		request.method = "historical";
