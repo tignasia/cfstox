@@ -22,10 +22,27 @@ Heiken-Ashi Data
 </cfoutput>
 
 <cfform >
-<cfgrid  format="flash" name="myGrid" query="request.HAData" rowheaders="false" height="250" autowidth="true">
+<cfgrid  format="flash" name="myHAGrid" query="request.HAData" rowheaders="false" height="250" autowidth="true">
 </cfgrid>
 </cfform> 
 
+<cfoutput>
+Original Data
+<cfif request.method EQ "historical">
+<a href="../Data/#request.symbol#.pdf" target="_blank">View PDF</a>
+<a href="../Data/#request.symbol#.xls" target="_blank">View Excel</a>
+</cfif>
+<cfif request.method EQ "backtest">
+<cfset tradesurl = "../Data/#request.symbol#"&"trades"&".pdf">	
+<a href="#tradesurl#" target="_blank">View Trades (PDF)</a>
+<!--- <a href="../Data/#symbol#.xls" target="_blank">View Excel</a> --->
+</cfif>
+</cfoutput>
+
+<cfform >
+<cfgrid  format="flash" name="myOriginalGrid" query="request.OriginalData" rowheaders="false" height="250" autowidth="true">
+</cfgrid>
+</cfform> 
 
 <div id="chartdiv" align="center" width="50%"> Historical Data : #request.symbol# </div>
 <script type="text/javascript">

@@ -19,7 +19,7 @@
        	for(i=1;i<=local.qryrows;i++){
        		local.date = qrydata['DateOne'][i];
        		local.newDate =  listGetAt(local.date, 2, '-') & '/' & listGetAt(local.date, 3, '-') & '/' & listGetAt(local.date, 1, '-');   
-			local.strXML = local.strXML & "<set open='#qrydata['open'][i]#' high='#qrydata['high'][i]#' low='#qrydata['low'][i]#' close='#qrydata['close'][i]#' date='#local.newdate#' toolText='date:#local.newdate# open:#qrydata['open'][i]#' hoverText='date:#local.newdate# open:#qrydata['open'][i]#' />";
+			local.strXML = local.strXML & "<set open='#qrydata['open'][i]#' high='#qrydata['high'][i]#' low='#qrydata['low'][i]#' close='#qrydata['close'][i]#' x='#i#' date='#local.newdate#' toolText='date:#local.newdate# open:#qrydata['open'][i]#' hoverText='date:#local.newdate# open:#qrydata['open'][i]#' />";
        	}
            	//Close <graph> element
        	local.strXML = local.strXML & "</data></graph>";

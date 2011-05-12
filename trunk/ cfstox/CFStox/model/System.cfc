@@ -10,6 +10,16 @@
 		<cfreturn this/>
 	</cffunction>
 	
+	<cffunction name="all_long_entry" description="" access="public" displayname="test" output="false" returntype="Any">
+		<!--- based on optimum trades in X - US Steel --->
+		<!--- based on two down days followed by up day --->
+		<cfargument name="arrDataBeans" required="true" />
+		<cfset var local = StructNew() />
+		<cfset local.Patterns = GetCandlePatterns(argumentcollection:arguments) />
+		<cfreturn arguments.arrDataBeans />
+	</cffunction>
+	
+	
 	<cffunction name="long_entry_HA" description="" access="public" displayname="test" output="false" returntype="Any">
 		<!--- based on optimum trades in X - US Steel --->
 		<!--- based on two down days followed by up day --->

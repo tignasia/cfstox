@@ -99,7 +99,7 @@
 		</cfloop>
 		
 		 
-		<cfset local.dummyArray[3] = "fuck" />
+		<cfset local.dummyArray[3] = "placeholder" />
 		<cfset ArrayDeleteAt(local.dummyArray,3) />
 		<cfset local.dateArray.removeAll(local.dummyArray) />
 		<cfset local.openArray.removeAll(local.dummyArray) />
@@ -109,14 +109,14 @@
 		<cfset local.volumeArray.removeAll(local.dummyArray) />
 		
 		<cfloop from="1" to="#local.dateArray.size()#" index="i">
-		<cfif local.dateArray[i] EQ "">
-		<cfset ArrayDeleteAt(local.dateArray,i) />
-		<cfset ArrayDeleteAt(local.openArray,i) />
-		<cfset ArrayDeleteAt(local.highArray,i) />
-		<cfset ArrayDeleteAt(local.lowArray,i) />
-		<cfset ArrayDeleteAt(local.closeArray,i) />
-		<cfset ArrayDeleteAt(local.volumeArray,i) />
-		</cfif>
+			<cfif local.dateArray[i] EQ "">
+				<cfset ArrayDeleteAt(local.dateArray,i) />
+				<cfset ArrayDeleteAt(local.openArray,i) />
+				<cfset ArrayDeleteAt(local.highArray,i) />
+				<cfset ArrayDeleteAt(local.lowArray,i) />
+				<cfset ArrayDeleteAt(local.closeArray,i) />
+				<cfset ArrayDeleteAt(local.volumeArray,i) />
+			</cfif>
 		</cfloop> 
 		
 		
@@ -208,10 +208,80 @@
 		<cfargument name="enddate" required="true" />
 		<cfset var local = structnew() />
 		<cfset local.results = true />
+		<!--- check to see if the symbol exists  --->
+		<!--- if it doesnt, get two years of data from yahoo --->
+		
+		<!--- if it does, get the oldest and newest dates --->
+		
 		<cfreturn local />
 	</cffunction>
+		
+	<!--- <cffunction name="GetHAStockData" description="I return a HA data" access="public" displayname="" output="false" returntype="Any" >
+		<cfargument name="symbol" required="true" />
+		<cfargument name="startdate" required="false"  default="10/8/2010" />
+		<cfargument name="enddate" required="false" default="11/15/2010" />
+		<cfscript>
+		local.data = session.objects.DataService.GetStockData(symbol:"#arguments.symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
+		local.HAData = session.objects.DataService.GetHAStockData();
+		return local.HAData;
+		</cfscript>
+	</cffunction> --->
 	
-	<--- --------------------------------------------------------------------------------------- ----
+	<cffunction name="GetHAStockDataGoogle" description="I return a HA data" access="public" displayname="" output="false" returntype="Any" >
+		<cfargument name="symbol" required="true" />
+		<cfargument name="startdate" required="false"  default="10/8/2010" />
+		<cfargument name="enddate" required="false" default="11/15/2010" />
+		<cfscript>
+		// todo: I stopped here
+		local.data = session.objects.DataService.GetStockDataGoogle(symbol:"#arguments.symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
+		local.HAData = session.objects.DataService.GetHAStockData();
+		return local.HAData;
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="UpdateData" description="I update data in the database" access="public" displayname="" output="false" returntype="Any" >
+		<cfargument name="symbol" required="true" />
+		<cfargument name="startdate" required="false"  default="10/8/2010" />
+		<cfargument name="enddate" required="false" default="11/15/2010" />
+		<cfscript>
+		// todo: I stopped here
+		local.data = session.objects.DataService.GetStockDataGoogle(symbol:"#arguments.symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
+		local.HAData = session.objects.DataService.GetHAStockData();
+		return local.HAData;
+		</cfscript>
+	</cffunction>
+	
+	<!--- <cffunction name="GetStockData" description="I return a HA data" access="public" displayname="" output="false" returntype="Any" >
+		<cfargument name="symbol" required="true" />
+		<cfargument name="startdate" required="false"  default="10/8/2010" />
+		<cfargument name="enddate" required="false" default="11/15/2010" />
+		<cfscript>
+		local.data = session.objects.DataService.GetStockData(symbol:"#arguments.symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
+		local.HAData = session.objects.DataService.GetHAStockData();
+		return local.HAData;
+		</cfscript>
+	</cffunction> --->
+	
+	<!--- <cffunction name="GetStockDataGoogle" description="I return a HA data" access="public" displayname="" output="false" returntype="Any" >
+		<cfargument name="symbol" required="true" />
+		<cfargument name="startdate" required="false"  default="10/8/2010" />
+		<cfargument name="enddate" required="false" default="11/15/2010" />
+		<cfscript>
+		// todo: I stopped here
+		local.data = session.objects.DataService.GetStockDataGoogle(symbol:"#arguments.symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
+		local.HAData = session.objects.DataService.GetHAStockData();
+		local.OriginalData = session.objects.DataService.GetOriginalStockData();
+		return local;
+		</cfscript>
+	</cffunction> --->
+	
+	<!--- <cffunction name="GetOriginalStockData" description="I return original data" access="public" displayname="" output="false" returntype="Any" >
+		<cfscript>
+		local.OriginalData = session.objects.DataService.GetOriginalStockData();
+		return local.OriginalData;
+		</cfscript>
+	</cffunction>	 --->
+<--- --------------------------------------------------------------------------------------- ----
 	
 	Blog Entry:
 	Parsing CSV Values In To A ColdFusion Query
@@ -228,38 +298,11 @@
 ---- --------------------------------------------------------------------------------------- --->
 
 
-<cffunction
-	name="CSVToQuery"
-	access="public"
-	returntype="query"
-	output="false"
-	hint="Converts the given CSV string to a query.">
- 
-	<!--- Define arguments. --->
-	<cfargument
-		name="CSV"
-		type="string"
-		required="true"
-		hint="This is the CSV string that will be manipulated."
-		/>
- 
-	<cfargument
-		name="Delimiter"
-		type="string"
-		required="false"
-		default=","
-		hint="This is the delimiter that will separate the fields within the CSV value."
-		/>
- 
-	<cfargument
-		name="Qualifier"
-		type="string"
-		required="false"
-		default=""""
-		hint="This is the qualifier that will wrap around fields that have special characters embeded."
-		/>
- 
- 
+<cffunction name="CSVToQuery" access="public" returntype="query" output="false"	hint="Converts the given CSV string to a query.">
+ 	<!--- Define arguments. --->
+ <cfargument name="CSV" type="string" required="true" hint="This is the CSV string that will be manipulated."/>
+ <cfargument name="Delimiter" type="string" required="false" default="," hint="This is the delimiter that will separate the fields within the CSV value." />
+ <cfargument name="Qualifier" type="string"	required="false" default="""" hint="This is the qualifier that will wrap around fields that have special characters embeded." />
 	<!--- Define the local scope. --->
 	<cfset var LOCAL = StructNew() />
 	<!---
@@ -291,10 +334,7 @@
 		for later (and it is a single character which makes our
 		life 1000 times nicer).
 	--->
-	<cfset ARGUMENTS.CSV = ARGUMENTS.CSV.ReplaceAll(
-		"\r?\n",
-		LOCAL.LineDelimiter
-		) />
+	<cfset ARGUMENTS.CSV = ARGUMENTS.CSV.ReplaceAll("\r?\n",LOCAL.LineDelimiter) />
 	<!---
 		Let's get an array of delimiters. We will need this when
 		we are going throuth the tokens and building up field
@@ -303,10 +343,7 @@
 		character array of the string. This should put each
 		delimiter at it's own index.
 	--->
-	<cfset LOCAL.Delimiters = ARGUMENTS.CSV.ReplaceAll(
-		"[^\#ARGUMENTS.Delimiter#\#LOCAL.LineDelimiter#]+",
-		""
-		)
+	<cfset LOCAL.Delimiters = ARGUMENTS.CSV.ReplaceAll(	"[^\#ARGUMENTS.Delimiter#\#LOCAL.LineDelimiter#]+",	""	)
 		<!---
 			Get character array of delimiters. This will put
 			each found delimiter in its own index (that should
@@ -325,10 +362,7 @@
 	--->
 	<cfset ARGUMENTS.CSV = (" " & ARGUMENTS.CSV) />
 	<!--- Now add the space to each field. --->
-	<cfset ARGUMENTS.CSV = ARGUMENTS.CSV.ReplaceAll(
-		"([\#ARGUMENTS.Delimiter#\#LOCAL.LineDelimiter#]{1})",
-		"$1 "
-		) />
+	<cfset ARGUMENTS.CSV = ARGUMENTS.CSV.ReplaceAll("([\#ARGUMENTS.Delimiter#\#LOCAL.LineDelimiter#]{1})","$1 ") />
 	<!---
 		Break the CSV value up into raw tokens. Going forward,
 		some of these tokens may be merged, but doing it this
@@ -346,9 +380,7 @@
 		this later as we build values (this is why we created
 		the array of delimiters above).
 	--->
-	<cfset LOCAL.Tokens = ARGUMENTS.CSV.Split(
-		"[\#ARGUMENTS.Delimiter#\#LOCAL.LineDelimiter#]{1}"
-		) />
+	<cfset LOCAL.Tokens = ARGUMENTS.CSV.Split("[\#ARGUMENTS.Delimiter#\#LOCAL.LineDelimiter#]{1}") />
 	<!---
 		Set up the default records array. This will be a full
 		array of arrays, but for now, just create the parent
@@ -360,10 +392,7 @@
 		any values to this row, it is going to make our lives
 		more smiple to have it in existence.
 	--->
-	<cfset ArrayAppend(
-		LOCAL.Rows,
-		ArrayNew( 1 )
-		) />
+	<cfset ArrayAppend(LOCAL.Rows,ArrayNew( 1 )	) />
 	<!---
 		Set up the row index. THis is the row to which we are
 		actively adding value.
@@ -379,28 +408,19 @@
 		have no sense of any row delimiters yet. Those will
 		have to be checked for as we are building up each value.
 	--->
-	<cfloop
-		index="LOCAL.TokenIndex"
-		from="1"
-		to="#ArrayLen( LOCAL.Tokens )#"
-		step="1">
+	<cfloop index="LOCAL.TokenIndex" from="1" to="#ArrayLen(LOCAL.Tokens)#" step="1">
 		<!---
 			Get the current field index. This is the current
 			index of the array to which we might be appending
 			values (for a multi-token value).
 		--->
-		<cfset LOCAL.FieldIndex = ArrayLen(
-			LOCAL.Rows[ LOCAL.RowIndex ]
-			) />
+		<cfset LOCAL.FieldIndex = ArrayLen(LOCAL.Rows[ LOCAL.RowIndex ]	) />
 		<!---
 			Get the next token. Trim off the first character
 			which is the empty string that we added to ensure
 			proper splitting.
 		--->
-		<cfset LOCAL.Token = LOCAL.Tokens[ LOCAL.TokenIndex ].ReplaceFirst(
-			"^.{1}",
-			""
-			) />
+		<cfset LOCAL.Token = LOCAL.Tokens[ LOCAL.TokenIndex ].ReplaceFirst(	"^.{1}", ""	) />
 		<!---
 			Check to see if we have a field qualifier. If we do,
 			then we might have to build the value across
@@ -457,8 +477,7 @@
 					field qualifier).
 				--->
 				<cfif (Right( LOCAL.Token, 1 ) EQ ARGUMENTS.Qualifier)>
- 
-					<!---
+ 					<!---
 						Wooohoo! We have reached the end of a
 						qualified value. We can complete this
 						value and move onto the next field.
@@ -471,8 +490,7 @@
 						point will not affect the results.
 					--->
 					<cfset LOCAL.Rows[ LOCAL.RowIndex ][ LOCAL.FieldIndex ] = LOCAL.Rows[ LOCAL.RowIndex ][ LOCAL.FieldIndex ].ReplaceFirst( ".{1}$", "" ) />
- 
-					<!---
+ 					<!---
 						Set the flag to indicate that we are no
 						longer building a field value across
 						tokens.
@@ -524,8 +542,7 @@
 						token is a fully qualified value.
 					--->
 					<cfif (Right( LOCAL.Token, 1 ) EQ ARGUMENTS.Qualifier)>
- 
-						<!---
+ 						<!---
 							This token is fully qualified.
 							Remove the end field qualifier and
 							append it to the row data.
@@ -537,10 +554,8 @@
 								""
 								)
 							) />
- 
-					<cfelse>
- 
-						<!---
+ 					<cfelse>
+ 						<!---
 							This token is not fully qualified
 							(but the first character was a
 							qualifier). We are buildling a value
@@ -548,8 +563,7 @@
 							flag for building the value.
 						--->
 						<cfset LOCAL.IsInValue = true />
- 
-						<!--- Add this token to the row. --->
+ 						<!--- Add this token to the row. --->
 						<cfset ArrayAppend(
 							LOCAL.Rows[ LOCAL.RowIndex ],
 							LOCAL.Token
@@ -605,8 +619,7 @@
 			(LOCAL.TokenIndex LT ArrayLen( LOCAL.Tokens )) AND
 			(LOCAL.Delimiters[ LOCAL.TokenIndex ] EQ LOCAL.LineDelimiter)
 			)>
- 
-			<!---
+ 			<!---
 				The next token is indicating that we are about
 				start a new row. Add a new array to the parent
 				and increment the row counter.
@@ -615,13 +628,10 @@
 				LOCAL.Rows,
 				ArrayNew( 1 )
 				) />
- 
-			<!--- Increment row index to point to next row. --->
+ 			<!--- Increment row index to point to next row. --->
 			<cfset LOCAL.RowIndex = (LOCAL.RowIndex + 1) />
- 
-		</cfif>
- 
-	</cfloop>
+ 		</cfif>
+ 	</cfloop>
 	<!---
 		ASSERT: At this point, we have parsed the CSV into an
 		array of arrays (LOCAL.Rows). Now, we can take that
@@ -646,57 +656,46 @@
  
 	<!--- Set the initial max field count. --->
 	<cfset LOCAL.MaxFieldCount = 0 />
- 
-	<!---
+ 	<!---
 		Set up the array of empty values. As we iterate over
 		the rows, we are going to add an empty value to this
 		for each record (not field) that we find.
 	--->
 	<cfset LOCAL.EmptyArray = ArrayNew( 1 ) />
- 
- 
-	<!--- Loop over the records array. --->
+ 	<!--- Loop over the records array. --->
 	<cfloop
 		index="LOCAL.RowIndex"
 		from="1"
 		to="#ArrayLen( LOCAL.Rows )#"
 		step="1">
- 
-		<!--- Get the max rows encountered so far. --->
+ 		<!--- Get the max rows encountered so far. --->
 		<cfset LOCAL.MaxFieldCount = Max(
 			LOCAL.MaxFieldCount,
 			ArrayLen(
 				LOCAL.Rows[ LOCAL.RowIndex ]
 				)
 			) />
- 
-		<!--- Add an empty value to the empty array. --->
+ 		<!--- Add an empty value to the empty array. --->
 		<cfset ArrayAppend(
 			LOCAL.EmptyArray,
 			""
 			) />
- 
-	</cfloop>
- 
- 
-	<!---
+ 	</cfloop>
+ 	<!---
 		ASSERT: At this point, LOCAL.MaxFieldCount should hold
 		the number of fields in the widest row. Additionally,
 		the LOCAL.EmptyArray should have the same number of
 		indexes as the row array - each index containing an
 		empty string.
 	--->
- 
- 
-	<!---
+ 	<!---
 		Now, let's pre-populate the query with empty strings. We
 		are going to create the query as all VARCHAR data
 		fields, starting off with blank. Then we will override
 		these values shortly.
 	--->
 	<cfset LOCAL.Query = QueryNew( "" ) />
- 
-	<!---
+ 	<!---
 		Loop over the max number of fields and create a column
 		for each records.
 	--->
@@ -705,8 +704,7 @@
 		from="1"
 		to="#LOCAL.MaxFieldCount#"
 		step="1">
- 
-		<!---
+ 		<!---
 			Add a new query column. By using QueryAddColumn()
 			rather than QueryAddRow() we are able to leverage
 			ColdFusion's ability to add row values in bulk
@@ -720,18 +718,13 @@
 			"CF_SQL_VARCHAR",
 			LOCAL.EmptyArray
 			) />
- 
-	</cfloop>
- 
- 
-	<!---
+ 	</cfloop>
+ 	<!---
 		ASSERT: At this point, our return query LOCAL.Query
 		contains enough columns and rows to handle all the
 		data that we have stored in our array of arrays.
 	--->
- 
- 
-	<!---
+ 	<!---
 		Loop over the array to populate the query with
 		actual data. We are going to have to loop over
 		each row and then each field.
@@ -741,8 +734,7 @@
 		from="1"
 		to="#ArrayLen( LOCAL.Rows )#"
 		step="1">
- 
-		<!--- Loop over the fields in this record. --->
+ 		<!--- Loop over the fields in this record. --->
 		<cfloop
 			index="LOCAL.FieldIndex"
 			from="1"
@@ -758,18 +750,14 @@
 				"string",
 				LOCAL.Rows[ LOCAL.RowIndex ][ LOCAL.FieldIndex ]
 				) />
- 
-		</cfloop>
- 
-	</cfloop>
- 
- 
-	<!---
+ 		</cfloop>
+ 	</cfloop>
+ 	<!---
 		Our query has been successfully populated.
 		Now, return it.
 	--->
 	<cfreturn LOCAL.Query />
- 
-</cffunction>
-	
+ </cffunction>
+
+
 </cfcomponent>
