@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Drag-node Chart &gt; Setting connector strength threshold using JavaScript </td>
+  </tr>
+  <tr> 
+    <td valign="top" class="text">
+      <p>The drag-node chart allows you to hide connectors below a given strength at client side using JavaScript. Each of the connectors are set with a strength through XML/JSON or at run time. If you want to hide some of the connectors you need to set the threshold by using the <span class="codeInline">setThreshhold</span> function. The value passed through the function should be more than the strength of the connectors which you want to hide. </p>
+      <p>In our previous example, we have used the <span class="codeInline">strength</span> attribute to specify the strength of the connectors. The data is show below:</p>
+      <tr>
+    <td valign="top"> <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab1">XML</a></li>
+      	 <li><a href="#tab2">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab1" class="tab_content">
+    		  <pre class="prettyprint code_container">&lt;chart&gt;...
+&nbsp;&nbsp;&nbsp;&lt;connectors color='FF0000' stdThickness='5'&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;connector <strong>strength='0.96'</strong> label='link label' from='1' to='9' color='BBBB00' arrowAtStart='1' arrowAtEnd='1' /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;connector <strong>strength='0.8' </strong>label='link12' from='1' to='5' color='BBBB00' arrowAtStart='1' arrowAtEnd='1' /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;connector <strong>strength='0.8'</strong> label='link2' from='1' to='8' color='BBBB00' /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;connector <strong>strength='0.3'</strong> label='link3' from='1' to='4' color='BBBB00' arrowAtStart='1' arrowAtEnd='1' /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;connector<strong> strength='0.4'</strong> label='link4' from='2' to='4' color='BBBB00' arrowAtStart='1' arrowAtEnd='1' /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;connector <strong>strength='0.6'</strong> label='link5' from='4' to='2' color='BBBB00' arrowAtStart='1' arrowAtEnd='1' /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;connector <strong>strength='0.33'</strong> label='link1' from='2' to='8' color='BBBB00'/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;connector <strong>strength='0.66'</strong> label='link7' from='8' to='3' color='BBBB00' arrowAtStart='1' arrowAtEnd='1' /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;connector <strong>strength='0.7'</strong> label='link6' from='4' to='5' color='BBBB00' arrowAtStart='1' arrowAtEnd='1' /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;connector <strong>strength='0.6'</strong> from='4' to='8' color='FF5904' arrowAtStart='1' arrowAtEnd='1'/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;connector <strong>strength='0.6'</strong> label='link9' from='5' to='8' color='BBBB00' /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;connector <strong>strength='0.5'</strong> label='link10' from='7' to='8' color='BBBB00' arrowAtStart='1' arrowAtEnd='1' /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;connector <strong>strength='0.3'</strong> label='link11' from='7' to='10' color='BBBB00'/&gt;
+&nbsp;&nbsp;&nbsp;&lt;/connectors&gt;
+...
+&lt;/chart&gt;
+</pre>
+    		</div>
+			<div id="tab2" class="tab_content">
+			  <pre class="prettyprint code_container" style="height:750px; overflow:auto;">{
+  "chart":{
+    
+  },
+  ...
+  "connectors":[{
+      "color":"FF0000",
+      "stdthickness":"5",
+      "connector":[{
+<strong>          "strength":"0.96",
+</strong>          "label":"link label",
+          "from":"1",
+          "to":"9",
+          "color":"BBBB00",
+          "arrowatstart":"1",
+          "arrowatend":"1"
+        },
+        {
+<strong>          "strength":"0.8",
+</strong>          "label":"link12",
+          "from":"1",
+          "to":"5",
+          "color":"BBBB00",
+          "arrowatstart":"1",
+          "arrowatend":"1"
+        },
+        {
+<strong>          "strength":"0.8",
+</strong>          "label":"link2",
+          "from":"1",
+          "to":"8",
+          "color":"BBBB00"
+        },
+        {
+<strong>          "strength":"0.3",
+</strong>          "label":"link3",
+          "from":"1",
+          "to":"4",
+          "color":"BBBB00",
+          "arrowatstart":"1",
+          "arrowatend":"1"
+        },
+        {
+<strong>          "strength":"0.4",
+</strong>          "label":"link4",
+          "from":"2",
+          "to":"4",
+          "color":"BBBB00",
+          "arrowatstart":"1",
+          "arrowatend":"1"
+        },
+        {
+<strong>          "strength":"0.6",
+</strong>          "label":"link5",
+          "from":"4",
+          "to":"2",
+          "color":"BBBB00",
+          "arrowatstart":"1",
+          "arrowatend":"1"
+        },
+        {
+<strong>          "strength":"0.33",
+</strong>          "label":"link1",
+          "from":"2",
+          "to":"8",
+          "color":"BBBB00"
+        },
+        {
+<strong>          "strength":"0.66",
+</strong>          "label":"link7",
+          "from":"8",
+          "to":"3",
+          "color":"BBBB00",
+          "arrowatstart":"1",
+          "arrowatend":"1"
+        },
+        {
+<strong>          "strength":"0.7",
+</strong>          "label":"link6",
+          "from":"4",
+          "to":"5",
+          "color":"BBBB00",
+          "arrowatstart":"1",
+          "arrowatend":"1"
+        },
+        {
+<strong>          "strength":"0.6",
+</strong>          "from":"4",
+          "to":"8",
+          "color":"FF5904",
+          "arrowatstart":"1",
+          "arrowatend":"1"
+        },
+        {
+<strong>          "strength":"0.6",
+</strong>          "label":"link9",
+          "from":"5",
+          "to":"8",
+          "color":"BBBB00"
+        },
+        {
+<strong>          "strength":"0.5",
+</strong>          "label":"link10",
+          "from":"7",
+          "to":"8",
+          "color":"BBBB00",
+          "arrowatstart":"1",
+          "arrowatend":"1"
+        },
+        {
+<strong>          "strength":"0.3",
+</strong>          "label":"link11",
+          "from":"7",
+          "to":"10",
+          "color":"BBBB00"
+        }
+      ]
+    }
+  ],
+...
+  }
+}</pre>
+			</div>
+		 </div>
+	  </div>
+	  <div style="clear:both"></div>
+	  <p></p>
+</td>
+</tr>
+  
+  <tr>
+    <td valign="top" class="text">
+      To hide all the connectors with strength value less than 0.75, we just need to use the following code:
+        <pre class="prettyprint code_container"><span class="codeComment">//Get a reference to our chart</span>
+var ourChart = FusionCharts(&quot;NodeChart&quot;); 
+<span class="codeComment">//Update chart to hide connectors with strength less than 0.75</span>
+ourChart.<strong>setThreshold(0.75);</strong></pre><br/>
+<p> Once the function is executed the chart will hide all the connectors having strength below 0.75. The chart will look like as under:</p>
+<p><img src="../Images/dragNode_setThreshold.jpg" width="577" height="437" /></p>
+Try it <a href="../../Code/SpecialCharts/DragNode_setThreshold.html" target="_blank">Live!</a></td>
+  </tr>
+</table>
+</body>
+</html>

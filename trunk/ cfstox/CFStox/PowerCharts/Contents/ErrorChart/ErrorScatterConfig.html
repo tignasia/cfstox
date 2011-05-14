@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Error  Charts &gt; Error Scatter   &gt; Configuration </td>
+  </tr>
+  <tr> 
+ <td valign="top" class="text"><p>PowerCharts v3 gives you the option to configure a variety of functional as well as cosmetic properties of the error bars. The following list of attributes let you configure different facets of  error bars like error bar color, thickness, alpha, width etc.</p>
+ </td>
+ </tr>
+ <tr>
+ <td>
+<table width="98%" border="0" cellpadding="0" cellspacing="0" class="table">
+      <tr>
+   <td width="21%" class="header">Attribute Name</td>
+        <td width="11%" class="header">Type</td>
+        <td width="31%" class="header">Description</td>
+        <td width="21%" class="header">Example</td>
+        <td width='14%' class="header">Sample Image</td>
+      </tr>
+      <tr>
+        <td class="codeInline">useHorizontalErrorBar</td>
+        <td>Boolean</td>
+        <td>Lets you set whether to show half  or full horizontal error bars. By default this attribute is set to 0.</td>
+        <td><span class="codeInline">useHorizontalErrorBar='1'</span></td>
+        <td><img src="Images/Errorbar16.jpg"/></td>
+      </tr>
+      <tr>
+        <td class="codeInline">useVerticalErrorBar</td>
+        <td>Boolean</td>
+        <td>Lets you set whether to show half  or full vertical error bars. By default this attribute is set to 1.</td>
+        <td><span class="codeInline">useVerticalErrorBar='1'</span></td>
+        <td><img src="Images/Errorbar19.jpg"/></td>
+      </tr>
+      <tr>
+        <td class="codeInline">halfHorizontalErrorBar</td>
+        <td>Boolean</td>
+        <td>If you've opted to show horizontal error bars, this attribute lets you set   whether to show half  or full horizontal error bars. By default this attribute is set to 1.</td>
+        <td><span class="codeInline">halfHorizontalErrorBar='0'</span></td>
+        <td><img src="Images/Errorbar19.jpg"/></td>
+      </tr>
+      <tr>
+        <td class="codeInline">halfVerticalErrorBar</td>
+        <td>Boolean</td>
+        <td>Lets you set whether to show half  or full vertical error bars. By default this attribute is set to 1.</td>
+        <td><span class="codeInline">halfVerticalErrorBar='0'</span></td>
+        <td><img src="Images/Errorbar18.jpg"/></td>
+      </tr>
+      <tr>
+        <td class="codeInline">horizontalErrorBarColor </td>
+        <td>Hex Code</td>
+        <td>Lets  you set a color for  the horizontal error bars. </td>
+        <td class="codeInline">horizontalErrorBarColor='ff0000'</td>
+        <td><img src="Images/Errorbar20.jpg" height="130" width="147"/></td>
+      </tr>
+      <tr>
+        <td class="codeInline">verticalErrorBarColor </td>
+        <td>Hex Code</td>
+        <td>Lets  you set a color for  the vertical error bars. </td>
+        <td class="codeInline">verticalErrorBarColor='ff0000'</td>
+        <td><img src="Images/Errorbar23.jpg"/></td>
+      </tr>
+      <tr>
+        <td class="codeInline">errorBarColor </td>
+        <td>Hex Code</td>
+        <td>Lets  you set the color of both horizontal and vertical error bars. </td>
+        <td class="codeInline">errorBarColor='ff0000'</td>
+        <td><img src="Images/Errorbar33.jpg"/></td>
+      </tr>
+      <tr>
+        <td class="codeInline">horizontalErrorBarAlpha</td>
+        <td>Numeric Value (0-100)</td>
+        <td>Lets  you set the alpha of  the horizontal error bars. </td>
+        <td class="codeInline">horizontalErrorBarAlpha='40'</td>
+        <td><img src="Images/Errorbar21.jpg"/></td>
+      </tr>
+      <tr>
+        <td class="codeInline">verticalErrorBarAlpha</td>
+        <td>Numeric Value (0-100)</td>
+        <td>Lets  you set the alpha of  the vertical error bars. </td>
+        <td class="codeInline">verticalErrorBarAlpha='40'</td>
+        <td><img src="Images/Errorbar24.jpg"/></td>
+      </tr>
+      <tr>
+        <td class="codeInline">errorBarAlpha</td>
+        <td>Numeric Value (0-100)</td>
+        <td>Lets  you set the alpha of both horizontal and vertical error bars.</td>
+        <td class="codeInline">errorBarAlpha='40'</td>
+        <td><img src="Images/Errorbar35.jpg"/></td>
+      </tr>
+      <tr>
+        <td class="codeInline">horizontalErrorBarThickness</td>
+        <td>Numeric value</td>
+        <td>Lets  you set the thickness of  the horizontal error bars.</td>
+        <td class="codeInline">horizontalErrorBarThickness='3'</td>
+        <td><img src="Images/Errorbar25.jpg"/></td>
+      </tr>
+      <tr>
+        <td class="codeInline">verticalErrorBarThickness</td>
+        <td>Numeric value</td>
+        <td>Lets  you set the thickness of  the vertical error bars.</td>
+        <td class="codeInline">verticalErrorBarThickness='3'</td>
+        <td><img src="Images/Errorbar26.jpg"/></td>
+      </tr>
+      <tr>
+        <td class="codeInline">errorBarThickness</td>
+        <td>Numeric value</td>
+        <td>Lets  you set the thickness of both horizontal and vertical error bars. </td>
+        <td class="codeInline">errorBarThickness='3'</td>
+        <td><img src="Images/Errorbar34.jpg"/></td>
+      </tr>
+      <tr>
+        <td class="codeInline">horizontalErrorBarWidth</td>
+        <td>Numeric Value</td>
+        <td>Lets you configure  the width of the horizontal error bars in pixels.</td>
+        <td class="codeInline">horizontalErrorBarWidth='20'</td>
+        <td><img src="Images/Errorbar27.jpg"/></td>
+      </tr>
+       <tr>
+        <td class="codeInline">verticalErrorBarWidth</td>
+        <td>Numeric Value</td>
+        <td>Lets you configure  the width of the vertical error bars in pixels.</td>
+        <td class="codeInline">verticalErrorBarWidth='20'</td>
+        <td><img src="Images/Errorbar28.jpg"/></td>
+      </tr>
+       <tr>
+        <td class="codeInline">errorBarWidth</td>
+        <td>Numeric Value</td>
+        <td>Lets you configure  the width of  both horizontal and vertical error bars   in pixels.</td>
+        <td class="codeInline">errorBarWidth='20'</td>
+        <td><img src="Images/Errorbar36.jpg"/></td>
+      </tr>
+	  </table>
+ </td>
+ </tr>
+ </table>
+ </body>
+ </html>

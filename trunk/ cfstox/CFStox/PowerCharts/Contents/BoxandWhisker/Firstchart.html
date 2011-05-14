@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Box and Whisker &gt; Creating a simple chart </td>
+  </tr>
+  <tr> 
+    <td valign="top" class="text"><p> To begin with, let's create a chart showing the number of visits to a website for the months of January and February in three different years. The chart will look as under : </p>
+      
+      </td>
+  </tr>
+   <tr>
+    <td valign="top"><img src="Images/FirstChart.jpg" class='imageBorder'/></td>
+  </tr>
+
+
+  <tr>
+    <td valign="top" class="text"><p>And the data for same can be listed as under:</p> </td>
+  </tr>
+  <tr>
+    <td valign="top"> <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab1">XML</a></li>
+      	 <li><a href="#tab2">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab1" class="tab_content">
+    		  <pre class="prettyprint code_container">
+&lt;chart caption='Visits to a Website' subCaption='In three years'&gt;
+
+&lt;categories&gt;
+  &lt;category label='2008' /&gt;
+  &lt;category label='2009' /&gt;
+  &lt;category label='2010' /&gt;
+&lt;/categories&gt;
+
+&lt;dataset seriesName="January" lowerBoxColor='009FAA' upperboxColor='D4DFFF'&gt;
+    &lt;set value='160,133,35,67,89,107,59' /&gt;
+    &lt;set value='139,67,75,114,39,67,191' /&gt;
+    &lt;set value='200,107,197,289,53,26,97' /&gt;
+&lt;/dataset&gt;
+
+&lt;dataset seriesName="February" lowerBoxColor='2A5F55' upperboxColor='D47F00'&gt;
+    &lt;set value='160,303,125,137,169,107,89' /&gt;
+    &lt;set value='139,167,255,124,99,187,151' /&gt;
+    &lt;set value='60,137,117,219,153,126,277' /&gt;
+&lt;/dataset&gt;
+
+&lt;/chart&gt;
+</pre></div>
+			<div id="tab2" class="tab_content">
+			  <pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Visits to a Website",
+    "subcaption":"In three years"
+  },
+  "categories":[{
+      "category":[{
+          "label":"2008"
+        },
+        {
+          "label":"2009"
+        },
+        {
+          "label":"2010"
+        }
+      ]
+    }
+  ],
+  "dataset":[{
+      "seriesname":"January",
+      "lowerboxcolor":"009FAA",
+      "upperboxcolor":"D4DFFF",
+      "data":[{
+          "value":"160,133,35,67,89,107,59"
+        },
+        {
+          "value":"139,67,75,114,39,67,191"
+        },
+        {
+          "value":"200,107,197,289,53,26,97"
+        }
+      ]
+    },
+    {
+      "seriesname":"February",
+      "lowerboxcolor":"2A5F55",
+      "upperboxcolor":"D47F00",
+      "data":[{
+          "value":"160,303,125,137,169,107,89"
+        },
+        {
+          "value":"139,167,255,124,99,187,151"
+        },
+        {
+          "value":"60,137,117,219,153,126,277"
+        }
+      ]
+    }
+  ]
+}</pre></div>
+		 </div>
+	  </div>
+	  <div style="clear:both"></div></td>
+  </tr>
+  <tr>
+  <td valign="top" class="text"><p>
+  In the above XML we have done the following:</p>
+      <ul>
+        <li> Created the <span class="codeInline">&lt;chart&gt;</span> element with two attributes to define the caption and the sub-caption of the chart</li>
+        <li>Defined years as x-axis labels using <span class="codeInline">&lt;category&gt;</span> elements</li>
+        <li>Created two <span class="codeInline">&lt;dataset&gt;</span> elements (January and February) to provide data</li>
+		<li>Provided website visit data using the <span class="codeInline">value</span> attribute  in each of the <span class="codeInline">&lt;set&gt;</span> elements  </li>
+		<li>Set the  colors for the upper and lower boxes of the dataplots  by the <span class="codeInline">lowerBoxcolor</span> and <span class="codeInline">upperBoxColor</span> attributes in <span class="codeInline">&lt;dataset&gt;</span> elements</li>
+		<p>When the chart loads the data, it shows box and whisker plots. The Minimum value, maximum value and the median value are displayed whereas, the upper and lower quartile values are hidden by default.		</p>
+		<p>We will learn more on how to configure the chart and various statistical values in the following pages.</p>
+  </td></tr>
+ 
+</table>
+</body>
+</html>

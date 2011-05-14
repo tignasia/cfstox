@@ -1,0 +1,39 @@
+<chart 
+halfErrorBar='0'
+errorBarWidthPercent="100" showvalues="0"  linedashed="1" anchorradius="4" anchorsides="14" linethickness="3" anchorborderthickness="3" errorbarwidth='7' errorbarcolor='7BAB7E' errorbarthickness='2'
+
+
+xaxisname='Appliance' yaxisname='Life Span (yr)' caption='Life Span Chart of Appliances' subcaption='(With Error Values)' >
+
+	<categories>
+		<category label='AC - Central' />
+		<category label='AC - Window' />
+		<category label='Heat Pump' />
+		<category label='Coffee Machine' />
+		<category label='Dish Washer' />
+	</categories>
+
+	<dataset seriesName='At Home'>
+		<set value='14' errorValue='1.2' />
+		<set value='9' errorValue='1.5' />
+		<set value='15' errorValue='1.3' />
+		<set value='9' errorValue='1.1' />
+		<set value='10' errorValue='1.2' />
+	</dataset>
+
+	<dataset seriesName='In Office'>
+		<set value='11' errorValue='1' />
+		<set value='6' errorValue='0.5' />
+		<set value='10' errorValue='1.2' />
+		<set value='4' errorValue='0.8' />
+		<set value='7' errorValue='1' />
+	</dataset>
+	<styles>
+		<definition>
+	      <style name="myErrorAnim" type="animation" param="_yScale" start="0" duration="1"/>
+		</definition>
+		<application>
+			<apply toObject="ERRORBARS" styles="myErrorAnim"/>
+		</application>
+	</styles>
+</chart>

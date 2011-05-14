@@ -1,8 +1,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>Historical Data</title>
-<link rel="stylesheet" href="../FusionChartsFree/Contents/Style.css" type="text/css" /> 
-<script language="JavaScript" src="../FusionChartsFree/JSClass/FusionCharts.js"></script>
+<!-- <link rel="stylesheet" href="../FusionChartsFree/Contents/Style.css" type="text/css" /> 
+<script language="JavaScript" src="../FusionChartsFree/JSClass/FusionCharts.js"></script> -->
+<link rel="stylesheet" href="../PowerCharts/Contents/css/Style.css" type="text/css" /> 
+<script language="JavaScript" src="../PowerCharts/Charts/FusionCharts.js">
 </head>
 <body>
 <!--- <cfdump label="request" var="#request#"> --->
@@ -45,20 +47,30 @@ Original Data
 </cfform> 
 
 <div id="chartdiv" align="center" width="50%"> Historical Data : #request.symbol# </div>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
   var chart = new FusionCharts("../FusionChartsFree/Charts/FCF_Candlestick.swf", "ChartId", "1200", "600");
   <cfoutput>chart.setDataXML("#request.xmldata#");</cfoutput>		   
    chart.render("chartdiv");
-</script> 
+</script>  -->
+<script type="text/javascript">
+  var chart = new FusionCharts("../PowerCharts/Charts/Candlestick.swf", "ChartId", "1200", "600");
+  <cfoutput>chart.setDataXML("#request.xmldata#");</cfoutput>		   
+   chart.render("chartdiv");
+</script>
 <!--- draw heiken ashi  --->
 
 
 <div id="chartdiv2" align="center" width="50%"> Heiken-Ashi Chart: #request.symbol#</div>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
   var chart = new FusionCharts("../FusionChartsFree/Charts/FCF_Candlestick.swf", "ChartId2", "1200", "600");
   <cfoutput>chart.setDataXML("#request.xmldataHA#");</cfoutput>		   
    chart.render("chartdiv2");
-</script> 
+</script>  -->
+<script type="text/javascript">
+  var chart = new FusionCharts("../PowerCharts/Charts/Candlestick.swf", "ChartId", "1200", "600");
+  <cfoutput>chart.setDataXML("#request.xmldataHA#");</cfoutput>		   
+   chart.render("chartdiv2");
+</script>
 
 
  <a href="Data/Col3DLineDY.xml" target="_blank"><img src="../FusionChartsFree/Contents/Images/BtnViewXML.gif" alt="View XML for the above chart" width="75" height="25" border="0" /></a>

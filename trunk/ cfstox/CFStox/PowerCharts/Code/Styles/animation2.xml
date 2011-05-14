@@ -1,0 +1,39 @@
+<chart caption='Periodic Table' subCaption='Other Metals-Metalloids' xAxisName='Group' yAxisName='Period' canvasBgColor='FFFFFF' mapByCategory='1' showColumnIdInTooltext='1' showRowIdInToolText='1'>
+
+<colorRange>
+
+<color code ='CCCCCC' label='Other metals'/>
+<color code ='CCCC99' label='Metalloids'/>
+
+</colorRange>
+
+<dataset>
+                
+  <set columnId='13' rowId='2' colorRangeLabel='Metalloids' displayValue='B'/>
+  <set columnId='13' rowId='3' colorRangeLabel='Other metals' displayValue='Al'/>
+  <set columnId='14' rowId='3' colorRangeLabel='Metalloids' displayValue='Si'/>
+  <set columnId='13' rowId='4' colorRangeLabel='Other metals' displayValue='Ga'/>
+  <set columnId='14' rowId='4' colorRangeLabel='Metalloids' displayValue='Ge'/>
+  <set columnId='15' rowId='4' colorRangeLabel='Metalloids' displayValue='As'/>
+  <set columnId='13' rowId='5' colorRangeLabel='Other metals' displayValue='In'/>
+  <set columnId='14' rowId='5' colorRangeLabel='Other metals' displayValue='Sn'/>
+  <set columnId='15' rowId='5' colorRangeLabel='Metalloids' displayValue='Sb'/>
+  <set columnId='16' rowId='5' colorRangeLabel='Metalloids' displayValue='Te'/>
+  <set columnId='13' rowId='6' colorRangeLabel='Other metals' displayValue='Tl'/>
+  <set columnId='14' rowId='6' colorRangeLabel='Other metals' displayValue='Pb'/>
+  <set columnId='15' rowId='6' colorRangeLabel='Other metals' displayValue='Bi'/>
+  <set columnId='16' rowId='6' colorRangeLabel='Metalloids' displayValue='Po'/>
+
+</dataset>
+        
+ <styles>
+ <definition>
+ <style name="Animation_0" type="ANIMATION" duration="2" start="0" param="_y"/>
+ <style name="Animation_1" type="ANIMATION" duration="2" start="0" param="_x" easing="Regular"/>
+ </definition>
+ <application>
+ <apply toObject="DATALABELS" styles="Animation_0,Font_0"/>
+ <apply toObject="DATAPLOT" styles="Animation_1"/>
+ </application>
+ </styles>
+ </chart>

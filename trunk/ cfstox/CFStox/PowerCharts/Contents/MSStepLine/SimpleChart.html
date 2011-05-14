@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Multi-series Step Line Chart &gt; Creating a Simple Chart </td>
+  </tr>
+  <tr> 
+ <td valign="top" class="text">
+   <p>In this section, we'll create a simple step line chart to analyze the change in price of two fictional products over a given period of time. Here, the chart will show you the extent of change in price of both the products at different year thus leading to effective visualization of the  variation of price over the same time scale.</p>
+   <p>Our final chart will look like:</p>
+   <p><img src="images/StepLine5.jpg"/></p>
+ <p>The data for the chart above can be listed as under: </p>
+ <div class="container">
+    <ul class="tabs">
+       <li><a href="#tab1">XML</a></li>
+       <li><a href="#tab2">JSON</a></li>
+    </ul>
+    <div class="tab_container">
+       <div id="tab1" class="tab_content">
+        <pre class="prettyprint code_container">&lt;chart caption='Product Analysis' yAxisName=&quot;Price&quot; numberPrefix='$' showValues='0' &gt;<br />  <br />  &lt;categories&gt;<br />    &lt;category label='2005' /&gt;<br />    &lt;category label='2006' /&gt;<br />    &lt;category label='2007' /&gt;<br />    &lt;category label='2008' /&gt;<br />    &lt;category label='2009' /&gt;<br />    &lt;category label='2010' /&gt;<br />  &lt;/categories&gt;<br />  <br />  &lt;dataset seriesName='Product A'&gt;<br />    &lt;set value='318' /&gt;<br />    &lt;set value='367' /&gt;<br />    &lt;set value='297' /&gt;<br />    &lt;set value='319' /&gt;<br />    &lt;set value='348' /&gt;<br />    &lt;set value='338' /&gt;<br />  &lt;/dataset&gt;<br />  <br />  &lt;dataset seriesName='Product B'&gt;<br />    &lt;set value='100'/&gt;<br />    &lt;set value='115'/&gt;<br />    &lt;set value='85'/&gt;<br />    &lt;set value='150'/&gt;<br />    &lt;set value='110' /&gt;<br />    &lt;set value='98' /&gt;<br />  &lt;/dataset&gt;<br /> <br />&lt;/chart&gt;</pre>
+        </div>
+        <div id="tab2" class="tab_content">
+  <pre id="pre-datajson2" class="prettyprint code_container">{
+  "chart":{
+    "caption":"Product Analysis",
+    "yaxisname":"Price",
+    "numberprefix":"$",
+    "showvalues":"0"
+  },
+  "categories":[{
+      "category":[{
+          "label":"2005"
+        },
+        {
+          "label":"2006"
+        },
+        {
+          "label":"2007"
+        },
+        {
+          "label":"2008"
+        },
+        {
+          "label":"2009"
+        },
+        {
+          "label":"2010"
+        }
+      ]
+    }
+  ],
+  "dataset":[{
+      "seriesname":"Product A",
+      "data":[{
+          "value":"318"
+        },
+        {
+          "value":"367"
+        },
+        {
+          "value":"297"
+        },
+        {
+          "value":"319"
+        },
+        {
+          "value":"348"
+        },
+        {
+          "value":"338"
+        }
+      ]
+    },
+    {
+      "seriesname":"Product B",
+      "data":[{
+          "value":"100"
+        },
+        {
+          "value":"115"
+        },
+        {
+          "value":"85"
+        },
+        {
+          "value":"150"
+        },
+        {
+          "value":"110"
+        },
+        {
+          "value":"98"
+        }
+      ]
+    }
+  ]
+}</pre>
+  </div>
+  </div>
+  </div>
+ </td>
+	</tr>   
+  <tr>
+  <td class="text"><p>As you can see above, the XML structure for a step line chart is similar to that of any multi-series chart of FusionCharts Suite. However, if you're still unaware of the FusionCharts XML structure, let's glance through what we have done.</p>
+  <p>Here, we have:
+  <ul>
+  <li>Created the <span class="codeInline">&lt;chart&gt;</span> element, which is the root element of any chart</li>
+  <li>Specified  caption, y-axis name and number prefix and also hide the data values on the chart.  You can specify a lot more properties for the <span class="codeInline">&lt;chart&gt;</span> element, which have been discussed in the <a href="../ChartSS/MSStepLine.html">Chart XML Sheet</a></li>
+  <li>Next, there is <span class="codeInline">&lt;categories&gt;</span> element in which each <span class="codeInline">&lt;category&gt;</span> element represents a label in the x-axis</li>
+  <li>Thereafter, we have two <span class="codeInline">&lt;dataset&gt;</span> elements (Product A &amp; Product B) which contain the data of each series</li>
+  <li>Finally, in <span class="codeInline">&lt;set&gt;</span> element we provide data for both the series in which is to be plotted on the chart</li>
+  </ul>
+   </p>
+  </td>
+  </tr>
+</table>
+</body>
+</html>

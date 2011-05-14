@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+<style type="text/css">
+.specialHighlight { background-color:#FFECD2;} 
+</style>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Drag-able Chart &gt; Submitting data as form elements </td>
+  </tr>
+  <tr> 
+    <td valign="top" class="text"><p>Since the drag charts are visual data modification widgets, you'll obviously need to submit the modified data to your scripts for further processing. The drag-able charts offer you two methods to do the same:</p>
+      <ol>
+        <li>You can submit the updated data from chart to your server  side script (as form elements) in XML format.</li>
+        <li>Or, you can submit this data as XML/array to client side JavaScript functions. These functions can now handle the data in the way they want to.</li>
+      </ol>
+      <p>In this section, we'll see how to submit the data to a server side script. </p></td>
+  </tr>
+  <tr>
+    <td valign="top" class="header">Setting the form </td>
+  </tr>
+  <tr>
+    <td valign="top" class="text"><p>To enable submission of data to server side script, you first need to make sure that the submit button is not hidden on your form. To show it, you use the following attribute:</p>
+    <pre class="prettyprint code_container">&lt;chart ... showFormBtn='1' ...&gt;  </pre>
+    <p>This adds a submit button to your chart as below: </p>
+    <p><img src="../Images/DragForm1.jpg" width="447" height="337"  class="imageBorder" /></p>
+    <p>Now you need to define the form properties i.e., where and how this button would submit the data to. The following attributes let you define the form properties: </p></td>
+  </tr>
+  <tr>
+    <td valign="top" class="text"><table class="table" width="98%" border="0"  cellpadding="0" cellspacing="0" >
+      <tr>
+        <td width="25%" class="header"> Attribute Name </td>
+        <td width='73%' class="header"> Description</td>
+      </tr>
+
+      <tr>
+        <td width="25%" valign="top" class="codeInline"> formAction </td>
+        <td width='45%' valign='top' class="text">URL of your server side script to which you want to submit   data. You can either use relative path or absolute path. The name of form   variable which is to be requested in this page is <span class="codeInline">strXML</span>. </td>
+      </tr>
+      <tr>
+        <td width="25%" valign="top" class="codeInline"> formMethod </td>
+        <td width='45%' valign='top' class="text">Method of form submission - POST or GET. We recommend POST   method if you're submitting data as XML. </td>
+      </tr>
+      <tr>
+        <td width="25%" valign="top" class="codeInline"> formTarget </td>
+        <td width='45%' valign='top' class="text">Target of the form - <span class="codeInline">_blank</span> or <span class="codeInline">_self</span>. </td>
+      </tr>
+      <tr>
+        <td width="25%" valign="top" class="codeInline"> formBtnTitle </td>
+        <td width='45%' valign='top' class="text">Lets you configure the text for the submit button. By default,   it's &quot;Submit&quot;. </td>
+      </tr>
+      <tr>
+        <td valign="top" class="codeInline">btnTextColor</td>
+        <td valign='top' class="text">Color of the button text. </td>
+      </tr>
+      <tr class='trLightBlueBg'>
+        <td width="25%" valign="top" class="codeInline"> formBtnWidth </td>
+        <td width='45%' valign='top' class="text">Lets you configure the width of the submit button. </td>
+      </tr>
+      <tr>
+        <td width="25%" valign="top" class="codeInline"> formBtnBorderColor </td>
+        <td width='45%' valign='top' class="text">Border color for the submit button. </td>
+      </tr>
+      <tr>
+        <td width="25%" valign="top" class="codeInline"> formBtnBgColor </td>
+        <td width='45%' valign='top' class="text">Background color for the submit button. </td>
+      </tr>
+
+    </table></td>
+  </tr>
+  <tr>
+    <td valign="top" class="text"><p><span class="codeInline">formAction</span> is the most important attribute which contains the full path to your server side script.</p>
+    <p>Example:</p> 
+    <pre class="prettyprint code_container">&lt;chart ... showFormBtn='1' formAction='../MyDataProcessor.asp' ..&gt;</pre>
+    <p>If you do not specify this attribute, the form wouldn't submit at all. </p>
+      <p>You can also define the form method (<span class="codeInline">GET</span> or <span class="codeInline">POST</span>) and target (<span class="codeInline">_self</span> or <span class="codeInline">_blank</span>) using the attributes above.</p>
+    <p>Now, in your server side script (<span class="codeInline">MyDataProcess.asp</span> or   <span class="codeInline">MyDataProcess.php</span> or <span class="codeInline">MyDataProcess.aspx</span> or ...), you can request the updated XML data from chart as  <span class="codeInline">strXML</span> variable. For example, given below is the ASP code that simply requests the XML from chart and outputs it:</p>
+      <pre class="prettyprint code_container">
+&lt;%
+  Response.ContentType=&quot;text/xml&quot;
+  Response.Write(Request(&quot;strXML&quot;))
+%&gt;</pre>
+    <p>In your scripts, you can request the XML data, parse it and then process it further as per your requirements. </p>
+    <p> Let's drag the 2009 - Inkjet Printer's value and click on Submit.</p>
+    <p><img src="../Images/DragForm2.jpg" width="435" height="294"  class="imageBorder" /></p>
+    <p>From the sever side script we show the submitted XML. Note that, in the XML, shown below, we have highlighted the data to specify the data where the changes have been made. The data is as under:    </p>
+    <pre class="code_container prettyprint">&lt;chart caption="Product Sales Comparison" subcaption="Drag the top edge of dashed columns to adjust data" <br />  showvalues="0" xAxisName="Year" yAxisName="Units" restoreBtnBorderColor="A2A3A0" 
+  formBtnBorderColor="A2A3A0" formAction="../MyDataProcessor.asp"><br />  &lt;categories>
+    &lt;category name="2005 (Actuals)" />
+    &lt;category name="2006 (Actuals)" />
+    &lt;category name="2007 (Predicted)" />
+    &lt;category name="2008 (Predicted)" />
+    &lt;category name="2009 (Predicted)" />
+  &lt;/categories><br />  &lt;dataset id="IJ" seriesName="Inkjet Printers"><br />    &lt;set id="IJ2005" value="25601" allowDrag="0"/><br />    &lt;set id="IJ2006" value="20148" allowDrag="0"/><br />    &lt;set id="IJ2007" value="17372" dashed="1"/><br />    &lt;set id="IJ2008" value="35407" dashed="1"/><br />    <span class="specialHighlight">&lt;set id="IJ2009" value="96000" dashed="1"/></span>
+  &lt;/dataset>
+  &lt;dataset id="LJ" seriesName="Laser Printers" showValues="0">
+    &lt;set id="LJ2005" value="57401" allowDrag="0"/>
+    &lt;set id="LJ2006" value="41941" allowDrag="0"/>
+    &lt;set id="LJ2007" value="45263" dashed="1"/>
+    &lt;set id="LJ2008" value="117320" dashed="1"/><br />    &lt;set id="LJ2009" value="114845" dashed="1"/>
+  &lt;/dataset>
+  &lt;dataset id="CR" seriesName="Cartridges" showValues="0">
+    &lt;set id="CR2005" value="45000" allowDrag="0"/>
+    &lt;set id="CR2006" value="44835" allowDrag="0"/>
+    &lt;set id="CR2007" value="18722" dashed="1"/>
+    &lt;set id="CR2008" value="77557" dashed="1"/>
+    &lt;set id="CR2009" value="92633" dashed="1"/>
+  &lt;/dataset>
+  &lt;styles>
+    &lt;definition>
+      &lt;style name="myCaptionFont" type="font" font="Arial" size="14" bold="1" />
+      &lt;style name="mySubCaptionFont" type="font" font="Arial" size="10" bold="0" />
+    &lt;/definition>
+    &lt;application>
+      &lt;apply toObject="Caption" styles="myCaptionFont" />
+      &lt;apply toObject="SubCaption" styles="mySubCaptionFont" />
+    &lt;/application>
+  &lt;/styles>
+&lt;/chart></pre>
+    <p>Next, we'll see how to request the chart data in client side JavaScript functions. </p></td>
+  </tr>
+</table>
+</body>
+</html>

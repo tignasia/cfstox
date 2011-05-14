@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+<style type="text/css">
+.specialHighlight { background-color:#FFECD2;} 
+</style>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Drag-node Chart &gt; Submitting data as form</td>
+  </tr>
+  <tr> 
+    <td valign="top" class="text"><p>Since the drag node chart is a visual data widget, you might need to submit the modified data to your scripts for further processing. The drag-node chart offers you two methods to do the same:</p>
+      <ol>
+        <li>You can submit the updated data from chart to your server  side script (as form elements) in XML format.</li>
+        <li>Or, you can submit this data as XML/array to client side JavaScript functions. These functions can now handle the data in the way they want to.</li>
+      </ol>
+      <p>In this section, we'll see how to submit the data to a server side script. </p></td>
+  </tr>
+  <tr>
+    <td valign="top" class="header">Setting the form </td>
+  </tr>
+  <tr>
+    <td valign="top" class="text"><p>To enable submission of data to server side script, you first need to make sure that the submit button is not hidden on your form. To show it, you use the following attribute:</p>
+    <pre class="prettyprint code_container">&lt;chart ... showFormBtn='1' ...&gt;</pre>
+    <p>This adds a submit button to your chart as below: </p>
+    <p><img src="../Images/DragNodeSubmit.jpg" width="195" height="120" class="imageBorder" /></p>
+    <p>Now you need to define the form properties i.e., where and how this button would submit the data to. The following attributes let you define the form properties:</p> </td>
+  </tr>
+  <tr>
+    <td valign="top" class="text"><table class="table" width="98%" border="0"  cellpadding="0" cellspacing="0" >
+      <tr class="trAttHeader">
+        <td width="20%" class="header"> Attribute Name </td>
+        <td width='65%' class="header"> Description  </td>
+      </tr>
+
+      <tr class='trLightBlueBg'>
+        <td width="25%" valign="top" class="codeInline"> formAction </td>
+        <td width='45%' valign='top' class="text">URL of your server side script to which you want to submit   data. You can either use relative path or absolute path. The name of form   variable which is to be requested in this page is <span class="codeInline">strXML</span>. </td>
+      </tr>
+      <tr>
+        <td width="25%" valign="top" class="codeInline"> formMethod </td>
+        <td width='45%' valign='top' class="text">Method of form submission - POST or GET. We recommend POST   method if you're submitting data as XML. </td>
+      </tr>
+      <tr class='trLightBlueBg'>
+        <td width="25%" valign="top" class="codeInline"> formTarget </td>
+        <td width='45%' valign='top' class="text">Target of the form - <span class="codeInline">_blank</span> or <span class="codeInline">_self</span>. </td>
+      </tr>
+      <tr>
+        <td width="25%" valign="top" class="codeInline"> formBtnTitle </td>
+        <td width='45%' valign='top' class="text">Lets you configure the text for the submit button. By default,   it's &quot;Submit&quot; </td>
+      </tr>
+      <tr class='trLightBlueBg'>
+        <td valign="top" class="codeInline">btnTextColor</td>
+        <td valign='top' class="text">Color of the button text </td>
+      </tr>
+      <tr class='trLightBlueBg'>
+        <td width="25%" valign="top" class="codeInline"> formBtnWidth </td>
+        <td width='45%' valign='top' class="text">Lets you configure the width of the submit button. </td>
+      </tr>
+      <tr>
+        <td width="25%" valign="top" class="codeInline"> formBtnBorderColor </td>
+        <td width='45%' valign='top' class="text">Border color for the submit button </td>
+      </tr>
+      <tr class='trLightBlueBg'>
+        <td width="25%" valign="top" class="codeInline"> formBtnBgColor </td>
+        <td width='45%' valign='top' class="text">Background color for the submit button. </td>
+      </tr>
+
+    </table></td>
+  </tr>
+  <tr>
+    <td valign="top" class="text"><p><span class="codeInline">formAction</span> is the most important attribute which contains the full path to your server side script. </p>
+    <p>Example:</p>
+     <pre class="prettyprint code_container">&lt;chart ... showFormBtn='1' formAction='../MyDataProcessor.asp' ...&gt;</pre>
+     <p>
+      If you do not specify this attribute, the form wouldn't submit at all. </p>
+     <p>You can also define the form method (<span class="codeInline">GET</span> or <span class="codeInline">POST</span>) and target (<span class="codeInline">_self</span> or <span class="codeInline">_blank</span>) using the attributes above.</p>
+    <p>Now, in your server side script (<span class="codeInline">MyDataProcess.asp</span> or   <span class="codeInline">MyDataProcess.php</span> or <span class="codeInline">MyDataProcess.aspx</span> or ...), you can request the updated XML data from chart as  <span class="codeInline">strXML</span> variable. For example, given below is the ASP code that simply requests the XML from chart and outputs it:<br />
+      <pre class="prettyprint code_container">
+&lt;%
+  Response.ContentType=&quot;text/xml&quot;
+  Response.Write(Request(&quot;strXML&quot;))
+%&gt;    </pre>
+    <p>In your scripts, you can request the XML data, parse it and then process it further as per your requirements. </p>
+    <p>Let's take an example to view the updated XML after the data is submitted.
+	To show the changes we have used the same chart which is used in the <a href="Overview.html">Overview</a> page. We will make the following run-time changes in the chart:</p>
+    <ul>
+      <li>Delete Node 3 from the top right corner of the chart</li>
+      <li>Added the label named &quot;New Label&quot; on the top right corner of the chart</li>
+      <li>Added a new Node named as &quot;New Node&quot; below &quot;Node 4&quot;</li>
+      <li>Added a connector named as &quot;New C1&quot; between &quot;Node 9&quot; and &quot;New Node&quot;</li>
+    </ul>
+    <p>      After making the changes the chart will look as under:</p>
+    <p><img src="../Images/DragNodegetXML.jpg"  class="imageBorder"/></p>
+    <p>For the above chart, the following XML data is submitted when Submit button is clicked. Note that, in the XML data, shown below, we have used highlighted blocks to specify the nodes where the changes have been made. The data is as under: </p>
+       		  <pre class="prettyprint code_container">
+&lt;chart palette='2' xaxisminvalue='0' xaxismaxvalue='100' yaxisminvalue='0' yaxismaxvalue='100' is3d='1' showformbtn='1' viewmode='0' &gt;
+        &lt;dataset seriesname='DS1' &gt;
+          &lt;set id='1' x='12' y='79' name='Node 1 with a long label' height='56' width='70' shape='RECTANGLE' toolText='Node 1 with a long label' color='FE3233'/&gt;
+          &lt;set id='2' x='59' y='15' name='Node 2' height='56' width='40' shape='RECTANGLE' toolText='Node 2' color='FE9191'/&gt;
+          &lt;set id='4' x='38.2631578947368' y='45.7246376811594' name='Node 4' radius='37' shape='CIRCLE' toolText='Node 4' color='FE8181'/&gt;
+          &lt;set id='5' x='40' y='85' name='Node 5' height='67' width='45' shape='RECTANGLE' toolText='Node 5' color='FE7272'/&gt;
+          &lt;set id='6' x='69' y='85' name='Node 6' height='67' width='45' shape='RECTANGLE' toolText='Node 6' color='72D4FE'/&gt;
+          &lt;set id='7' x='87' y='45' name='Node 7' numSides='3' radius='47' shape='POLYGON' toolText='Node 7' color='FE5151'/&gt;
+          &lt;set id='8' x='65' y='60' name='Node 8' numSides='5' radius='47' shape='POLYGON' toolText='Node 8' color='FE9191'/&gt;
+          &lt;set id='9' x='12' y='20' name='Node 9' radius='37' shape='CIRCLE' toolText='Node 9' color='33C1FE'/&gt;
+          &lt;set id='10' x='80' y='12' name='Node 10' numSides='4' radius='47' shape='POLYGON' toolText='Node 10' color='33C1FE'/&gt;
+          <span class="specialHighlight">&lt;set id='ND' x='37.8947368421053' y='16.231884057971' name='New Node' height='30' width='30' shape='RECTANGLE' toolText='New Node' color='afd8f8'/&gt;</span>
+        &lt;/dataset&gt;
+        &lt;connectors color='FF0000' stdthickness='5' &gt;
+          &lt;connector from='1' to='9' color='BBBB00' strength='0.96' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link label' /&gt;
+          &lt;connector from='1' to='5' color='BBBB00' strength='0.8' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link12' /&gt;
+          &lt;connector from='1' to='8' color='BBBB00' strength='0.8' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link2' /&gt;
+          &lt;connector from='1' to='4' color='BBBB00' strength='0.3' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link3' /&gt;
+          &lt;connector from='2' to='4' color='BBBB00' strength='0.4' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link4' /&gt;
+          &lt;connector from='2' to='8' color='BBBB00' strength='0.33' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link1' /&gt;
+          &lt;connector from='4' to='5' color='BBBB00' strength='0.7' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link6' /&gt;
+          &lt;connector from='4' to='8' color='FF5904' strength='0.6' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='' /&gt;
+          &lt;connector from='5' to='8' color='BBBB00' strength='0.6' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link9' /&gt;
+          &lt;connector from='7' to='8' color='BBBB00' strength='0.5' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link10' /&gt;
+          &lt;connector from='7' to='10' color='BBBB00' strength='0.3' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link11' /&gt;
+          <span class="specialHighlight">&lt;connector from='ND' to='9' color='ffbe3c' strength='0' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='New C1' /&gt;</span>
+        &lt;/connectors&gt;
+        &lt;labels &gt;
+          &lt;label text='A Note added as Text Label' x='18' y='5' color='60634E' alpha='100' fontSize='10' bgColor='' borderColor='' padding='5' allowDrag='1' /&gt;
+          <span class="specialHighlight">&lt;label text='New Label' x='88.0701754385965' y='91.0144927536232' color='60634e' alpha='100' fontSize='10' bgColor='bcfffc' borderColor='' padding='7' allowDrag='1' /&gt;</span>
+        &lt;/labels&gt;
+      &lt;/chart&gt;
+</pre>
+    <p>Next, we'll see how to request the chart data in client side JavaScript functions. </p></td>
+  </tr>
+</table>
+</body>
+</html>

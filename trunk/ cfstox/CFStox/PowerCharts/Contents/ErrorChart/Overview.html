@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+<style type="text/css">
+<!--
+.font1 {
+	font-family: Arial, Helvetica, sans-serif;
+}
+.font1 {
+	font-family: Courier New, Courier, monospace;
+}
+.font1 {
+	font-family: Times New Roman, Times, serif;
+}
+-->
+</style>
+</head>
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Error  Chart &gt; Overview</td>
+  </tr>
+<tr> 
+    <td valign="top" class="text"><p>Error  charts are conventional charts with a special ability to show the extent of uncertainty in information relative to its true value. With the help of its distinct <span class="font1">I</span>-shaped bars, these charts indicate the range of possible errors or deviations(both positive and negative) that might occur in data. Typically these charts represent the standard deviation in a measurement indicating the amount of differences that reside in a set of data.   Error  charts give a general idea of the accuracy of information or conversely the amount of variation in data from its original or expected value. </p>  
+<p>Following are the areas where these types of charts are used:
+<ul>
+	<li>Appliance Testing</li>
+	<li>Scientific Research</li>
+	<li>Monitoring Systems</li>
+	<li>Weather Analysis</li>
+	<li>Human Resource Management</li>
+</ul>
+</p>
+<p>At present, there are three types of multi-series error charts available in the PowerCharts v3 suite:</p>
+<ol>
+<li>Error Bar chart</li>
+<li>Error Line chart</li>
+<li>Error Scatter chart (XY Plot)</li>
+</ol>
+<p>Shown below are the sample images of each of them:</p>
+<table border="0" cellpadding="0" cellspacing="0" style="width:504px;">
+<tr><td><img src="Images/Errorbar3.jpg"/></td>
+</tr>
+
+<tr><td class="imageCaption" align="center"><div class="highlightBlock"><div class="msg_handler_slider">Error Bar chart &nbsp;<a>View Data</a> &raquo;  </div>
+ <div class="msg_body"  style="width:470px; "> 
+ <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab1">XML</a></li>
+      	 <li><a href="#tab2">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab1" class="tab_content">
+    		  <pre class="prettyprint code_container" style="height:300px; overflow:auto; text-align:left !important;">&lt;chart palette='2' xaxisname='Appliance' yaxisname='Life Span (yr)' caption='Life Span Chart of Appliances' subcaption='(With Error Values)' showValues='0' halfErrorBar='0' errorBarColor='8F8C82' errorBarThickness='0' errorBarWidthPercent='30'&gt;
+  &lt;categories&gt;
+    &lt;category label='AC - Central' /&gt;
+    &lt;category label='AC - Window' /&gt;
+    &lt;category label='Heat Pump' /&gt;
+    &lt;category label='Coffee Machine' /&gt;
+    &lt;category label='Dish Washer' /&gt;
+  &lt;/categories&gt;
+  &lt;dataset seriesName='At Home' &gt;
+    &lt;set value='14' errorValue='1.2' /&gt;
+    &lt;set value='9' errorValue='1.5' /&gt;
+    &lt;set value='15' errorValue='1.3' /&gt;
+    &lt;set value='6' errorValue='1.1' /&gt;
+    &lt;set value='10' errorValue='1.2' /&gt;
+  &lt;/dataset&gt;
+  &lt;dataset seriesName='In Office' &gt;
+    &lt;set value='11' errorValue='1' /&gt;
+    &lt;set value='6' errorValue='0.5' /&gt;
+    &lt;set value='12' errorValue='1.2' /&gt;
+    &lt;set value='4' errorValue='0.8' /&gt;
+    &lt;set value='7' errorValue='1' /&gt;
+  &lt;/dataset&gt;
+  &lt;styles&gt;
+    &lt;definition&gt;
+      &lt;style name='myCaptionFont' type='font' font='Arial' size='14' color='666666' bold='1' underline='1'/&gt;
+    &lt;/definition&gt;
+    &lt;application&gt;
+      &lt;apply toObject='Caption' styles='myCaptionFont' /&gt;
+    &lt;/application&gt;
+  &lt;/styles&gt;
+&lt;/chart&gt;</pre>
+    		</div>
+<div id="tab2" class="tab_content"><pre class="prettyprint code_container" style="height:300px; overflow:auto; text-align:left !important;">{
+  "chart":{
+    "palette":"2",
+    "xaxisname":"Appliance",
+    "yaxisname":"Life Span (yr)",
+    "caption":"Life Span Chart of Appliances",
+    "subcaption":"(With Error Values)",
+    "showvalues":"0",
+    "halferrorbar":"0",
+    "errorbarcolor":"8F8C82",
+    "errorbarthickness":"0",
+    "errorbarwidthpercent":"30"
+  },
+  "categories":[{
+      "category":[{
+          "label":"AC - Central"
+        },
+        {
+          "label":"AC - Window"
+        },
+        {
+          "label":"Heat Pump"
+        },
+        {
+          "label":"Coffee Machine"
+        },
+        {
+          "label":"Dish Washer"
+        }
+      ]
+    }
+  ],
+  "dataset":[{
+      "seriesname":"At Home",
+      "data":[{
+          "value":"14",
+          "errorvalue":"1.2"
+        },
+        {
+          "value":"9",
+          "errorvalue":"1.5"
+        },
+        {
+          "value":"15",
+          "errorvalue":"1.3"
+        },
+        {
+          "value":"6",
+          "errorvalue":"1.1"
+        },
+        {
+          "value":"10",
+          "errorvalue":"1.2"
+        }
+      ]
+    },
+    {
+      "seriesname":"In Office",
+      "data":[{
+          "value":"11",
+          "errorvalue":"1"
+        },
+        {
+          "value":"6",
+          "errorvalue":"0.5"
+        },
+        {
+          "value":"12",
+          "errorvalue":"1.2"
+        },
+        {
+          "value":"4",
+          "errorvalue":"0.8"
+        },
+        {
+          "value":"7",
+          "errorvalue":"1"
+        }
+      ]
+    }
+  ],
+  "styles":{
+    "definition":[{
+        "name":"myCaptionFont",
+        "type":"font",
+        "font":"Arial",
+        "size":"14",
+        "color":"666666",
+        "bold":"1",
+        "underline":"1"
+      }
+    ],
+    "application":[{
+        "toobject":"Caption",
+        "styles":"myCaptionFont"
+      }
+    ]
+  }
+}</pre></div></div></div></div><div style="clear:both">
+</div> </div></td>
+</tr>
+<tr><td height="25"></td></tr>
+<tr><td><img src="Images/Errorbar4.jpg" /></td>
+</tr>
+<tr><td class="imageCaption" align="center"><div class="highlightBlock"><div class="msg_handler_slider">Error Line chart &nbsp;<a>View Data</a> &raquo;  </div>
+ <div class="msg_body"  style="width:470px; "> 
+ <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab3">XML</a></li>
+      	 <li><a href="#tab4">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab3" class="tab_content"><pre class="prettyprint code_container"  style="height:300px; overflow:auto; text-align:left !important;"> &lt;chart palette='2' errorBarColor='666666' halferrorbar="0" errorBarThickness="2" errorBarwidthpercent="40" errorBaralpha="80" caption="Temperature Monitoring" yaxisname="Temperature" showvalues="0" showalternatehgridcolor="0" showlegend="0" showshadow="1" yaxismaxvalue="40" lineThickness='3' anchorRadius='4' &gt;
+&lt;categories&gt;
+&lt;category label="Houston"/&gt;
+&lt;category label="San Francisco"/&gt;
+&lt;category label="New York"/&gt;
+&lt;category label="Chicago"/&gt;
+&lt;category label="Detroit"/&gt;
+&lt;/categories&gt;
+&lt;dataset &gt;
+&lt;set value="32" errorValue="3.8"/&gt;
+&lt;set value="26" errorValue="2.5"/&gt;
+&lt;set value="33.5" errorValue="5.5"/&gt;
+&lt;set value="18.5" errorValue="3.5"/&gt;
+&lt;set value="37.5" errorValue="5.2"/&gt;
+&lt;/dataset&gt;
+&lt;/chart&gt;
+
+</pre></div>
+<div id="tab4" class="tab_content"><pre class="prettyprint code_container"  style="height:300px; overflow:auto;text-align:left !important;">{
+  {
+  "chart":{
+    "palette":"2",
+    "errorbarcolor":"666666",
+    "halferrorbar":"0",
+    "errorbarthickness":"2",
+    "errorbarwidthpercent":"40",
+    "errorbaralpha":"80",
+    "caption":"Temperature Monitoring",
+    "yaxisname":"Temperature",
+    "showvalues":"0",
+    "showalternatehgridcolor":"0",
+    "showlegend":"0",
+    "showshadow":"1",
+    "yaxismaxvalue":"40",
+    "linethickness":"3",
+    "anchorradius":"4"
+  },
+  "categories":[{
+      "category":[{
+          "label":"Houston"
+        },
+        {
+          "label":"San Francisco"
+        },
+        {
+          "label":"New York"
+        },
+        {
+          "label":"Chicago"
+        },
+        {
+          "label":"Detroit"
+        }
+      ]
+    }
+  ],
+  "dataset":[{
+      "data":[{
+          "value":"32",
+          "errorvalue":"3.8"
+        },
+        {
+          "value":"26",
+          "errorvalue":"2.5"
+        },
+        {
+          "value":"33.5",
+          "errorvalue":"5.5"
+        },
+        {
+          "value":"18.5",
+          "errorvalue":"3.5"
+        },
+        {
+          "value":"37.5",
+          "errorvalue":"5.2"
+        }
+      ]
+    }
+  ]
+}</pre></div></div></div></div><div style="clear:both">
+</div> </div></td>
+</tr>
+<tr><td height="25"></td></tr>
+<tr><td><img src="Images/Errorbar32.jpg"/></td></tr>
+<tr><td class="imageCaption" align="center"><div class="highlightBlock"><div class="msg_handler_slider">Error Scatter chart (XY Plot) &nbsp;<a>View Data</a> &raquo;  </div>
+ <div class="msg_body"  style="width:470px; "> 
+ <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab5">XML</a></li>
+      	 <li><a href="#tab6">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab5" class="tab_content"><pre class="prettyprint code_container"  style="height:300px; overflow:auto; text-align:left !important;"> &lt;chart palette='2' useHorizontalErrorBar='1' useVerticalErrorBar='1' halfHorizontalErrorBar='0' halfVerticalErrorBar='0' verticalErrorBarThickness='2' horizontalErrorBarThickness='2' caption="Server Load" xaxisname="Load (TPS)" yaxisname="Value"  showvalues="0" showlegend="0" &gt;
+ &lt;categories verticalLineThickness='1'&gt;
+      &lt;category label='-60' x='-60' showVerticalLine='1'/&gt;
+      &lt;category label='-40' x='-40' showVerticalLine='1'/&gt;
+      &lt;category label='-20' x='-20' showVerticalLine='1'/&gt;
+      &lt;category label='0' x='0' showVerticalLine='0'/&gt;
+      &lt;category label='20' x='20' showVerticalLine='1'/&gt;
+      &lt;category label='40' x='40' showVerticalLine='1'/&gt;
+      &lt;category label='60' x='60' showVerticalLine='1'/&gt;
+      &lt;category label='80' x='80' showVerticalLine='1'/&gt;
+      &lt;category label='100' x='100' showVerticalLine='1'/&gt;
+   &lt;/categories&gt;
+
+   &lt;dataset seriesName='Server 1' anchorBorderColor='FCB03C' anchorradius="6" &gt;
+    &lt;set y='11' x='10' horizontalerrorValue='3' verticalErrorValue='1.9'/&gt;
+    &lt;set y='9' x='35' horizontalerrorValue='4' verticalErrorValue='3.1'/&gt;
+    &lt;set y='6' x='55' horizontalerrorValue='2.5' verticalErrorValue='2.4'/&gt;
+    &lt;set y='14' x='70' horizontalerrorValue='3.2' verticalErrorValue='4.2'/&gt;
+    &lt;set y='14' x='50' horizontalerrorValue='2.3' verticalErrorValue='1.8'/&gt;
+    &lt;set y='3' x='65' horizontalerrorValue='2' verticalErrorValue='2'/&gt;
+    &lt;set y='17' x='85' horizontalerrorValue='4.1' verticalErrorValue='2.3'/&gt;
+    &lt;set y='15' x='15' horizontalerrorValue='2.7' verticalErrorValue='1.7'/&gt;
+   &lt;/dataset&gt;
+&lt;/chart&gt;
+
+</pre></div>
+<div id="tab6" class="tab_content"><pre class="prettyprint code_container"  style="height:300px; overflow:auto;text-align:left !important;">{
+ {
+  "chart":{
+    "palette":"2",
+    "usehorizontalerrorbar":"1",
+    "useverticalerrorbar":"1",
+    "halfhorizontalerrorbar":"0",
+    "halfverticalerrorbar":"0",
+    "verticalerrorbarthickness":"2",
+    "horizontalerrorbarthickness":"2",
+    "caption":"Server Load",
+    "xaxisname":"Load (TPS)",
+    "yaxisname":"Value",
+    "showvalues":"0",
+    "showlegend":"0"
+  },
+  "categories":[{
+      "verticallinethickness":"1",
+      "category":[{
+          "label":"-60",
+          "x":"-60",
+          "showverticalline":"1"
+        },
+        {
+          "label":"-40",
+          "x":"-40",
+          "showverticalline":"1"
+        },
+        {
+          "label":"-20",
+          "x":"-20",
+          "showverticalline":"1"
+        },
+        {
+          "label":"0",
+          "x":"0",
+          "showverticalline":"0"
+        },
+        {
+          "label":"20",
+          "x":"20",
+          "showverticalline":"1"
+        },
+        {
+          "label":"40",
+          "x":"40",
+          "showverticalline":"1"
+        },
+        {
+          "label":"60",
+          "x":"60",
+          "showverticalline":"1"
+        },
+        {
+          "label":"80",
+          "x":"80",
+          "showverticalline":"1"
+        },
+        {
+          "label":"100",
+          "x":"100",
+          "showverticalline":"1"
+        }
+      ]
+    }
+  ],
+  "dataset":[{
+      "seriesname":"Server 1",
+      "anchorbordercolor":"FCB03C",
+      "anchorradius":"6",
+      "data":[{
+          "y":"11",
+          "x":"10",
+          "horizontalerrorvalue":"3",
+          "verticalerrorvalue":"1.9"
+        },
+        {
+          "y":"9",
+          "x":"35",
+          "horizontalerrorvalue":"4",
+          "verticalerrorvalue":"3.1"
+        },
+        {
+          "y":"6",
+          "x":"55",
+          "horizontalerrorvalue":"2.5",
+          "verticalerrorvalue":"2.4"
+        },
+        {
+          "y":"14",
+          "x":"70",
+          "horizontalerrorvalue":"3.2",
+          "verticalerrorvalue":"4.2"
+        },
+        {
+          "y":"14",
+          "x":"50",
+          "horizontalerrorvalue":"2.3",
+          "verticalerrorvalue":"1.8"
+        },
+        {
+          "y":"3",
+          "x":"65",
+          "horizontalerrorvalue":"2",
+          "verticalerrorvalue":"2"
+        },
+        {
+          "y":"17",
+          "x":"85",
+          "horizontalerrorvalue":"4.1",
+          "verticalerrorvalue":"2.3"
+        },
+        {
+          "y":"15",
+          "x":"15",
+          "horizontalerrorvalue":"2.7",
+          "verticalerrorvalue":"1.7"
+        }
+      ]
+    }
+  ]
+}</pre></div></div></div></div><div style="clear:both">
+</div> </div></td>
+</tr>
+</table>
+
+<p><strong>Features of Error  charts:</strong>
+<ul>
+	<li>Supports both half and full error bars for positive and negative errors respectively.</li>
+	<li>Options to configure the error bars by changing its color, thickness and alpha.</li>
+	<li>Customizable width of error bars depending on the importance of deviation from the data itself.</li>
+</ul>
+</p>
+</td>
+</tr>
+</table>
+</body>
+</html>

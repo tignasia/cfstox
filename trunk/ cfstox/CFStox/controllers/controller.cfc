@@ -41,6 +41,7 @@
 		<cfscript>
 		var local = structnew(); 
 		local.view = "historical";
+		
 		local.HAdata 		= session.objects.SystemService.GetHAStockData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") ; 
 		local.OriginalData 	= session.objects.SystemService.GetOriginalStockData();
 		local.result 		= session.objects.SystemService.RunSystem(SystemName:"System_ha_longIII",qryData: local.HAdata);

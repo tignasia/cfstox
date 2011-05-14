@@ -1,0 +1,66 @@
+﻿<chart Caption='Continent-wise revenue in 2010' subCaption='(in million US$)' bgColor='D0AC41, FFFFFF' bgAngle='90'>
+    
+        <rows>
+            <row id='North America'/>
+            <row id='Europe'/>
+            <row id='Asia'/>
+            <row id='South America'/>
+            <row id='Australia'/>
+        </rows>
+
+        <columns>
+               <column id='Q1' />
+               <column id='Q2' />
+               <column id='Q3' />
+               <column id='Q4' />
+        </columns>
+        
+    <dataset>
+    
+		<set rowId='North America' columnId='Q1' value='19'/>
+		<set rowId='North America' columnId='Q2' value='23'/>
+		<set rowId='North America' columnId='Q3' value='29'/>
+		<set rowId='North America' columnId='Q4' value='34'/>
+
+		<set rowId='Europe' columnId='Q1' value='16'/>
+		<set rowId='Europe' columnId='Q2' value='17'/>
+		<set rowId='Europe' columnId='Q3' value='21'/>
+		<set rowId='Europe' columnId='Q4' value='18'/>
+
+		<set rowId='Asia' columnId='Q1' value='9'/>
+		<set rowId='Asia' columnId='Q2' value='7'/>
+		<set rowId='Asia' columnId='Q3' value='12'/>
+		<set rowId='Asia' columnId='Q4' value='14'/>
+
+		<set rowId='South America' columnId='Q1' value='7'/>
+		<set rowId='South America' columnId='Q2' value='8'/>
+		<set rowId='South America' columnId='Q3' value='8'/>
+		<set rowId='South America' columnId='Q4' value='11'/>
+
+		<set rowId='Australia' columnId='Q1' value='11'/>
+		<set rowId='Australia' columnId='Q2' value='13'/>
+		<set rowId='Australia' columnId='Q3' value='12'/>
+		<set rowId='Australia' columnId='Q4' value='15'/>
+
+   </dataset>
+
+	<colorRange gradient='0'>
+        <color minValue='0' maxValue='10' code='BB1610' label='Low'/>
+        <color minValue='10' maxValue='25' code='EDC738' label='Average'/>
+        <color minValue='25' maxValue='50' code='8EA715' label='High'/> 
+     </colorRange>
+
+	<styles>
+		
+	    <definition>
+	        <style name='DataValueStyle' type='font' color='FFFFFF' bold='1'/>
+	    </definition>
+
+	    <application>
+	        <apply toObject='DataValues' styles='DataValueStyle' />
+	    </application>
+	
+	</styles>
+	
+</chart>
+

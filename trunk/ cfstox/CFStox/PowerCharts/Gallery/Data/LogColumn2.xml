@@ -1,0 +1,83 @@
+<chart caption="Logarithmic Chart on Base of 5" base="5" showValues="0" decimals="0" formatNumberScale="0" seriesNameInToolTip="0" showLegend="0">
+−
+<categories>
+<category label="Item 1"/>
+<category label="Item 2"/>
+<category label="Item 3"/>
+<category label="Item 4"/>
+</categories>
+−
+<dataset seriesname="DataSet1">
+<set value="34463"/>
+<set value="84406"/>
+<set value="81461"/>
+<set value="56587"/>
+</dataset>
+−
+<dataset seriesname="DataSet2">
+<set value="42442"/>
+<set value="31761"/>
+<set value="63805"/>
+<set value="32327"/>
+</dataset>
+−
+<dataset seriesname="DataSet3">
+<set value="90815"/>
+<set value="62235"/>
+<set value="1092"/>
+<set value="68596"/>
+</dataset>
+−
+<dataset seriesname="DataSet4">
+<set value="59532"/>
+<set value="19509"/>
+<set value="70732"/>
+<set value="53124"/>
+</dataset>
+−
+<dataset seriesname="DataSet5">
+<set value="283"/>
+<set value="40063"/>
+<set value="79277"/>
+<set value="27488"/>
+</dataset>
+−
+<dataset seriesname="DataSet6">
+<set value="76623"/>
+<set value="70780"/>
+<set value="24543"/>
+<set value="61426"/>
+</dataset>
+−
+<dataset seriesname="DataSet7">
+<set value="56635"/>
+<set value="35224"/>
+<set value="93470"/>
+<set value="39497"/>
+</dataset>
+−
+<dataset seriesname="DataSet8">
+<set value="93713"/>
+<set value="77950"/>
+<set value="21646"/>
+<set value="77141"/>
+</dataset>
+−
+<dataset seriesname="DataSet9">
+<set value="33897"/>
+<set value="57396"/>
+<set value="13101"/>
+<set value="1610"/>
+</dataset>
+−
+<styles>
+−
+<definition>
+<style name="myCaptionFont" type="font" font="Arial" size="14" color="666666" bold="1" underline="1"/>
+</definition>
+−
+<application>
+<apply toObject="Caption" styles="myCaptionFont"/>
+</application>
+</styles>
+</chart>

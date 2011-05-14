@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Heat map chart &gt; Creating a simple chart </td>
+  </tr>
+  <tr> 
+    <td valign="top" class="text">
+      <p> As a first chart, let's plot the PR Visisbility Analysis of three different companies as shown below: </p>
+      
+      </td>
+  </tr>
+   <tr>
+    <td valign="top"><img src="Images/Myfirstchart.jpg" class='imageBorder'/></td>
+  </tr>
+ <tr>
+ <td><p> The table below shows the data used to create the chart:</p></td></tr>
+   <tr>
+     <td valign="top" class="text"><table class='table'width="525" border="0">
+       <tr>
+         <td width="175" class="header"><strong>Performance Report</strong></td>
+         <td width="80" class="header"><strong>Mon</strong></td>
+         <td width="80" class="header"><strong>Tue</strong></td>
+         <td width="80" class="header"><strong>Wed</strong></td>
+         <td width="80" class="header"><strong>Thu</strong></td>
+         <td width="80" class="header"><strong>Fri</strong></td>
+       </tr>
+       <tr>
+         <td class="header"><strong>Google</strong></td>
+         <td>68</td>
+         <td>35</td>
+         <td>95</td>
+         <td>17</td>
+         <td>55</td>
+       </tr>
+       <tr>
+         <td class="header"><strong>Yahoo</strong></td>
+         <td>0</td>
+         <td>71</td>
+         <td>70</td>
+         <td>63</td>
+         <td>79</td>
+       </tr>
+       <tr>
+         <td class="header"><strong>Microsoft</strong></td>
+         <td>98</td>
+         <td>48</td>
+         <td>31</td>
+         <td>79</td>
+         <td>39</td>
+       </tr>
+     </table>
+	 <br />
+<br />
+
+       <table class="table" width="525" border="0">
+         <tr>
+           <td width="225" class="header"><strong>Numeric Range</strong> </td>
+           <td width="150" class="header"><strong>Label</strong></td>
+           <td width="150" class="header"><strong>Color</strong></td>
+         </tr>
+		 <tr>
+           <td><strong>0</strong></td>
+           <td>Very bad </td>
+           <td>B63300</td>
+         </tr>
+         <tr>
+           <td><strong>0-30</strong></td>
+           <td>Bad </td>
+           <td>FFCC00</td>
+         </tr>
+         <tr>
+           <td><strong>30-70</strong></td>
+           <td>Average</td>
+           <td>87B213</td>
+         </tr>
+         <tr>
+           <td><strong>70-100</strong></td>
+           <td>Very good </td>
+           <td>006384</td>
+         </tr>
+       </table>       
+   </tr>
+
+  <tr>
+    <td valign="top" class="text"><p>And the XML for same can be listed as under:</p> </td>
+  </tr>
+  <tr>
+    <td valign="top"> <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab1">XML</a></li>
+      	 <li><a href="#tab2">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab1" class="tab_content"><pre class="prettyprint code_container">
+&lt;chart Caption='PR Visibility (articles)' xAxisName='Week Days' yAxisName='Companies'&gt;
+
+    &lt;dataset&gt;
+    
+     &lt;set rowId='Google' columnId='Mon' value='68'/&gt;
+     &lt;set rowId='Google' columnId='Tue' value='35'/&gt;
+     &lt;set rowId='Google' columnId='Wed' value='95'/&gt;
+     &lt;set rowId='Google' columnId='Thu' value='17'/&gt;
+     &lt;set rowId='Google' columnId='Fri' value='55'/&gt;
+	 
+     &lt;set rowId='Yahoo' columnId='Mon' value='0'/&gt;
+     &lt;set rowId='Yahoo' columnId='Tue' value='71'/&gt;
+     &lt;set rowId='Yahoo' columnId='Wed' value='70'/&gt;
+     &lt;set rowId='Yahoo' columnId='Thu' value='63'/&gt;
+     &lt;set rowId='Yahoo' columnId='Fri' value='79'/&gt;
+
+     &lt;set rowId='Microsoft' columnId='Mon' value='98'/&gt;
+     &lt;set rowId='Microsoft' columnId='Tue' value='48'/&gt;
+     &lt;set rowId='Microsoft' columnId='Wed' value='31'/&gt;
+     &lt;set rowId='Microsoft' columnId='Thu' value='79'/&gt;
+     &lt;set rowId='Microsoft' columnId='Fri' value='39'/&gt;
+
+   &lt;/dataset&gt;
+
+  &lt;colorRange gradient='1' minValue='0' code='B63300' startlabel='Very Bad' endLabel="Very Good"&gt;
+   
+        &lt;color code ='FFCC00'  maxValue='30' label='BAD'/&gt;
+	&lt;color code ='87B213' maxValue='70' label='AVERAGE'/&gt;
+	&lt;color code ='006384' maxValue='100' /&gt;  
+	
+  &lt;/colorRange&gt;
+
+&lt;/chart&gt;
+</pre>
+    		</div>
+			<div id="tab2" class="tab_content">
+			  <pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Weekly Performance",
+    "subcaption":"In percentage",
+    "xaxisname":"Week Days",
+    "yaxisname":"Companies"
+  },
+  "dataset":[{
+      "data":[{
+          "rowid":"Google",
+          "columnid":"Mon",
+          "value":"68"
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Tue",
+          "value":"35"
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Wed",
+          "value":"95"
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Thu",
+          "value":"17"
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Fri",
+          "value":"55.98"
+        },
+        {
+          "rowid":"Yahoo",
+          "columnid":"Mon",
+          "value":"0"
+        },
+        {
+          "rowid":"Yahoo",
+          "columnid":"Tue",
+          "value":"71"
+        },
+        {
+          "rowid":"Yahoo",
+          "columnid":"Wed",
+          "value":"70"
+        },
+        {
+          "rowid":"Yahoo",
+          "columnid":"Thu",
+          "value":"63"
+        },
+        {
+          "rowid":"Yahoo",
+          "columnid":"Fri",
+          "value":"79"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Mon",
+          "value":"98"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Tue",
+          "value":"48"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Wed",
+          "value":"31"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Thu",
+          "value":"79"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Fri",
+          "value":"39"
+        }
+      ]
+    }
+  ],
+  "colorrange":{
+    "gradient":"1",
+    "minvalue":"0",
+    "code":"A7CAF0",
+    "startlabel":"Very Bad",
+    "endlabel":"Very Good",
+    "color":[{
+        "code":"FADCAA",
+        "maxvalue":"30",
+        "label":"BAD"
+      },
+      {
+        "code":"565FAA",
+        "maxvalue":"70",
+        "label":"AVERAGE"
+      },
+      {
+        "code":"2C9AAB",
+        "maxvalue":"100"
+      }
+    ]
+  }
+}</pre>
+			</div>
+		 </div>
+	  </div>
+	  <div style="clear:both"></div></td>
+  </tr>
+  <tr>
+  <td valign="top" class="text"><p>
+  In the above XML :</p>
+      <ul>
+        <li> The <span class="codeInline">&lt;set&gt;</span> elements are used within the <span class="codeInline">&lt;dataset&gt;</span> element to provide data for the rows and columns of the chart </li>
+        <li>There are two attributes, <span class="codeInline">rowId</span> and <span class="codeInline">columnId</span>, which are used to identify a cell of the table in which the data values are plotted</li>
+        <li>In the <span class="codeInline">&lt;colorRange&gt;</span> element the lower limit for the numeric range is defined using the <span class="codeInline">minValue</span> attribute</li>
+		<li> The starting color for the range of colors is also set in the <span class="codeInline">&lt;colorRange&gt;</span> element using the <span class="codeInline">code</span> attribute
+        <li>The <span class="codeInline">gradient</span> attribute <span class="codeInline"></span> is set to '1' to show gradient legend. If this attribute is set to 0 then the chart will display icon legends. For more details see the <a href="iconlegend.html">Icon legend</a> page</li>
+        <li>In each <span class="codeInline">&lt;color&gt;</span> element the upper limit of the numeric range and the colors associated to that range is declared</li>
+		<li>The upper limit is set using the <span class="codeInline">maxValue</span> attribute and the colors associated are set using the <span class="codeInline">code</span> attribute</li>
+      </ul>  
+      
+    </td></tr>
+  <tr>
+    <td valign="top" class="text">
+      <p>Primarily there can be two types of heat map chart. They are:</p>
+	   <ul>
+        <li> Numeric based heat map chart </li>
+		<li> Category (non-numeric) based heat map chart</li>
+		</ul>
+		<p>The following pages will discuss both the types in details.</p>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

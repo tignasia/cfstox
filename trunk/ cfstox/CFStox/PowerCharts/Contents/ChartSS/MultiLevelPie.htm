@@ -1,0 +1,1929 @@
+<html>
+<head>
+<title>
+FusionCharts v3 - XML Structure
+</title>
+<link rel="stylesheet" href="ChartStyle.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+<body topMargin="15" leftMargin="15">
+&nbsp;<span class="pageHeader">Multi-level Pie Chart Specification Sheet</span>
+<br>
+&nbsp;<span class="textBold">SWF: </span><span class="text">MultiLevelPie.swf</span>
+<br><br>
+
+	<table width="98%" align="center" cellpadding="0" cellspacing="0">		
+		<tr>
+			<td>
+				<a name="top"></a>
+				<span class="text"><b>Quick Links</b> (within this page)</span>
+			</td>
+		</tr>
+	</table>		
+	<table width="98%" align="center" cellpadding="4" cellspacing="2" class="tableYellowBorder">		
+		<tr class="trLightYellowBg">
+			<td width="33%">
+				<span class="text">
+				&nbsp;<b>Chart</b>
+				</span>
+			</td>
+			<td width="33%">
+				<span class="text">
+				&nbsp;<b>Data</b>
+				</span>
+			</td>
+			<td width="34%">
+				<span class="text">
+				&nbsp;<b>Others</b>
+				</span>
+			</td>
+		</tr>
+		
+		<tr>
+			<td width="33%" valign="top" class="trVeryLightYellowBg">
+				<img src="Images/Bullet.gif" WIDTH="9" HEIGHT="9">&nbsp;<a HREF="#chartImage">Chart Image</a><br>
+				<img src="Images/Bullet.gif" WIDTH="9" HEIGHT="9">&nbsp;<a HREF="#Objects">Chart Objects</a><br>
+				
+				<img src='Images/Bullet.gif'>&nbsp;<A HREF='#Anchor1'>Functional Attributes</A></BR><img src='Images/Bullet.gif'>&nbsp;<A HREF='#Anchor2'>Titles and Axis Names</A></BR><img src='Images/Bullet.gif'>&nbsp;<A HREF='#Anchor3'>Chart Cosmetics</A></BR><img src='Images/Bullet.gif'>&nbsp;<A HREF='#Anchor8'>Tool-tip</A></BR><img src='Images/Bullet.gif'>&nbsp;<A HREF='#Anchor6'>Paddings and Margins</A></BR>			
+			</td>
+			<td width="33%" valign="top">	
+			
+			<img src="Images/Bullet.gif" WIDTH="9" HEIGHT="9">&nbsp;<a HREF="#sampleXML">Sample Data</a><br>
+			<img src='Images/Bullet.gif'>&nbsp;<A HREF='#Anchor14'>&lt;category&gt; element</A></BR><img src='Images/Bullet.gif'>&nbsp;<A HREF='#Anchor4'>Plot Cosmetics</A></BR><img src='Images/Bullet.gif'>&nbsp;<A HREF='#Anchor11'>Pie / Doughnut Properties</A></BR>
+				
+			</td>
+			<td width="34%" valign="top" class="trVeryLightYellowBg">	
+			<img src='Images/Bullet.gif'>&nbsp;<A HREF='#Anchor7'>Number Formatting</A></BR><img src='Images/Bullet.gif'>&nbsp;<A HREF='#Anchor9'>Font Properties</A></BR>
+			</td>
+		</tr>
+	</table>
+
+
+<br>
+<a name="chartImage"></a>
+<table width="98%" align="center" cellpadding="2">
+	<tr>
+		<td align="center">
+			<span class="text">&nbsp;Multi-level Pie chart looks as under:</span>
+		</td>
+	</tr>
+	<tr>
+		<td align="center">
+			<img src="Images/MultiLevelPie.gif" alt="Multi-level Pie chart" class="imageBorder">
+		</td>
+	</tr>	
+</table>
+
+<br>
+<a name="sampleXML"></a>
+<table width="98%" align="center" cellpadding="2">
+	<tr>
+		<td align="left">
+			<span class="text">&nbsp;Sample XML/JSON for Multi-level Pie chart:</span>
+		</td>
+	</tr>
+</table>
+<table width="98%" align="center" cellpadding="2" class="tableYellowBorder">	
+	<tr>
+	  <td align="left" valign="top">
+	  <div class="container">
+		<ul class="tabs">
+       <li><a href="#tab1">XML</a></li>
+       <li><a href="#tab2">JSON</a></li>
+    </ul>
+	<div class="tab_container">
+       <div id="tab1" class="tab_content">
+	   <pre class="prettyprint code_container">&lt;chart palette='2' piefillAlpha='34' pieBorderThickness='3' hoverFillColor='FDCEDA' pieBorderColor='FFFFFF' baseFontSize='9' useHoverColor='1' caption='Organization Chart' &gt;
+  &nbsp;&nbsp;&nbsp;&lt;category label='CEO'  fillColor='DBFF6C' link='n-Details.asp?CEO'&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='CTO' fillColor='DBFF6C'&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Proj. Manager' &gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Design' /&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Coding'  /&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Validate' /&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/category&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Q &amp; A Manager' &gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Testing Team' /&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/category&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Architect' &gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Study'  /&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Design'  /&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/category&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/category&gt;
+  &nbsp;&nbsp;&nbsp;&lt;category label='CFO' fillColor='FBE299'  &gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Payables' toolText='Accounts Payable Team'&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Salary' toolText='Team for salary accounts maintenance and upkeep' /&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Purchase' /&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Other' toolText='Other Payments' /&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/category&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Receivables' toolText='Accounts Receivables Team'&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='SW1' toolText='Online Software Receipts Accounts' /&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='SW2' toolText='Physical Software Receipts Accounts' /&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='SER1' toolText='Services Collection' /&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='SER2' toolText='Services Collection (Physical)' /&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='OTR' toolText='Subscription and Other Collections' /&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/category&gt;
+  &nbsp;&nbsp;&nbsp;&lt;/category&gt;
+  &nbsp;&nbsp;&nbsp;&lt;category label='CIO' fillColor='DAEDFC' link='Details.asp?CIO'&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='PR' toolText='PR Team'&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Packaging' toolText='Packaging Staff' /&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Inv Rel.' toolText='Investor Relations Upkeep' /&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Marketing' toolText='Marketing &amp; Sales' /&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/category&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='HR' toolText='HR Team'&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Selection' toolText='Selection of Candidates' /&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Deploying' toolText='Deploying at required site' /&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/category&gt;
+  &nbsp;&nbsp;&nbsp;&lt;/category&gt;
+  &lt;/category&gt;
+  &lt;styles&gt;
+  &nbsp;&nbsp;&nbsp;&lt;definition&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;style name='myHTMLFont' type='font' isHTML='1' /&gt;
+  &nbsp;&nbsp;&nbsp;&lt;/definition&gt;
+  &nbsp;&nbsp;&nbsp;&lt;application&gt;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;apply toObject='TOOLTIP' styles='myHTMLFont' /&gt;
+  &nbsp;&nbsp;&nbsp;&lt;/application&gt;
+  &lt;/styles&gt;
+  &lt;/chart&gt;</pre>
+  </div>
+  <div id="tab2" class="tab_content"><pre class="prettyprint code_container">
+  {
+  "chart":{
+    "palette":"2",
+    "piefillalpha":"34",
+    "pieborderthickness":"3",
+    "hoverfillcolor":"FDCEDA",
+    "piebordercolor":"FFFFFF",
+    "basefontsize":"9",
+    "usehovercolor":"1",
+    "caption":"Organization Chart"
+  },
+  "category":[{
+      "label":"CEO",
+      "fillcolor":"DBFF6C",
+      "link":"n-Details.asp?CEO",
+      "category":[{
+          "label":"CTO",
+          "fillcolor":"DBFF6C",
+          "category":[{
+              "label":"Proj. Manager",
+              "category":[{
+                  "label":"Design"
+                },
+                {
+                  "label":"Coding"
+                },
+                {
+                  "label":"Validate"
+                }
+              ]
+            },
+            {
+              "label":"Q & A Manager",
+              "category":[{
+                  "label":"Testing Team"
+                }
+              ]
+            },
+            {
+              "label":"Architect",
+              "category":[{
+                  "label":"Study"
+                },
+                {
+                  "label":"Design"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label":"CFO",
+          "fillcolor":"FBE299",
+          "category":[{
+              "label":"Payables",
+              "toolText":"Accounts Payable Team",
+              "category":[{
+                  "label":"Salary",
+                  "toolText":"Team for salary accounts maintenance and upkeep"
+                },
+                {
+                  "label":"Purchase"
+                },
+                {
+                  "label":"Other",
+                  "toolText":"Other Payments"
+                }
+              ]
+            },
+            {
+              "label":"Receivables",
+              "toolText":"Accounts Receivables Team",
+              "category":[{
+                  "label":"SW1",
+                  "toolText":"Online Software Receipts Accounts"
+                },
+                {
+                  "label":"SW2",
+                  "toolText":"Physical Software Receipts Accounts"
+                },
+                {
+                  "label":"SER1",
+                  "toolText":"Services Collection"
+                },
+                {
+                  "label":"SER2",
+                  "toolText":"Services Collection (Physical)"
+                },
+                {
+                  "label":"OTR",
+                  "toolText":"Subscription and Other Collections"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label":"CIO",
+          "fillcolor":"DAEDFC",
+          "link":"Details.asp?CIO",
+          "category":[{
+              "label":"PR",
+              "toolText":"PR Team",
+              "category":[{
+                  "label":"Packaging",
+                  "toolText":"Packaging Staff"
+                },
+                {
+                  "label":"Inv Rel.",
+                  "toolText":"Investor Relations Upkeep"
+                },
+                {
+                  "label":"Marketing",
+                  "toolText":"Marketing & Sales"
+                }
+              ]
+            },
+            {
+              "label":"HR",
+              "toolText":"HR Team",
+              "category":[{
+                  "label":"Selection",
+                  "toolText":"Selection of Candidates"
+                },
+                {
+                  "label":"Deploying",
+                  "toolText":"Deploying at required site"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "styles":{
+    "definition":[{
+        "name":"myHTMLFont",
+        "type":"font",
+        "ishtml":"1"
+      }
+    ],
+    "application":[{
+        "toobject":"TOOLTIP",
+        "styles":"myHTMLFont"
+      }
+    ]
+  }
+}</pre></div>
+  </div>
+  </div>
+      </td>
+	</tr>		
+	<tr align="center">
+		<td align="right" colspan="4" style="BORDER-TOP:#FE9B00 1px solid;">
+			<span class="back_to_top"><a href="#top">Back to top <img src="Images/Top.gif" border="0" alt="Back to Top" WIDTH="16" HEIGHT="16" ></a></span>		         </td>	</tr>		
+</table>
+
+<br>
+
+	<a name="Objects" />
+	<table width="98%" align="center" cellpadding="3" cellspacing="0">		
+		<tr>
+			<td class="header">Chart Objects</td>
+		</tr>
+	</table>
+    <br>
+
+	<table width="98%" align="center" cellpadding="4" cellspacing="2" class="tableYellowBorder">		
+		<tr class="trLightYellowBg">
+			<td width="15%" valign="top">
+				<span class="textBold">
+				Object Name				</span>			</td>
+			<td width="35%" valign="top">
+				<span class="textBold">
+				Description				</span>			</td>
+			<td width="25%" valign="top">
+				<span class="textBold">
+				Features Supported				</span>			</td>
+			<td width="25%" valign="top">
+				<span class="textBold">
+				Animation Parameters Supported				</span>			</td>
+		</tr>
+		<tr>
+				<td width="15%" valign="top">
+					<span class="text">
+					BACKGROUND					</span>				</td>
+				<td width="35%" valign="top">
+					<span class="text">
+					BACKGROUND refers to the entire background of the chart.					</span>				</td>
+				<td width="25%" valign="top">
+<ul>				<LI><span class="text">Animation</span></LI><LI><span class="text">Shadow</span></LI><LI><span class="text">Glow</span></LI><LI><span class="text">Bevel</span></LI><LI><span class="text">Blur</span></LI>
+</ul>			</td>
+				<td width="25%" valign="top">
+					<ul>
+					<LI><span class="text">_alpha</span></LI><LI><span class="text">_x</span></LI><LI><span class="text">_y</span></LI><LI><span class="text">_xScale</span></LI><LI><span class="text">_yScale</span></LI>
+					</ul>				</td>
+	  </tr>
+      <tr class='trVeryLightYellowBg'>
+				<td width="15%" valign="top">
+					<span class="text">
+					CANVAS					</span>				</td>
+				<td width="35%" valign="top">
+					<span class="text">
+					CANVAS refers to the area in which the actual chart is plotted. </span></td>
+				<td width="25%" valign="top">
+<ul>				<LI><span class="text">Animation</span></LI><LI><span class="text">Shadow</span></LI><LI><span class="text">Glow</span></LI><LI><span class="text">Bevel</span></LI><LI><span class="text">Blur</span></LI>
+</ul>			</td>
+				<td width="25%" valign="top">
+					<ul>
+					<LI><span class="text">_alpha</span></LI><LI><span class="text">_x</span></LI><LI><span class="text">_y</span></LI><LI><span class="text">_xScale</span></LI><LI><span class="text">_yScale</span></LI>
+					</ul>				</td>
+			</tr>
+			<tr>
+				<td width="15%" valign="top">
+					<span class="text">
+					CAPTION					</span>				</td>
+				<td width="35%" valign="top">
+					<span class="text">
+					CAPTION refers to the heading of the chart.					</span>				</td>
+				<td width="25%" valign="top">
+					<ul>
+					<LI><span class="text">Animation</span></LI><LI><span class="text">Font</span></LI><LI><span class="text">Shadow</span></LI><LI><span class="text">Glow</span></LI><LI><span class="text">Bevel</span></LI><LI><span class="text">Blur</span></LI>
+					</ul>				</td>
+				<td width="25%" valign="top">
+					<ul>
+					<LI><span class="text">_alpha</span></LI><LI><span class="text">_x</span></LI><LI><span class="text">_y</span></LI>
+					</ul>				</td>
+			</tr>
+			<tr class='trVeryLightYellowBg'>
+				<td width="15%" valign="top">
+					<span class="text">
+					DATALABELS					</span>				</td>
+				<td width="35%" valign="top">
+					<span class="text">
+					DATALABELS refer to the x-axis labels of the data.					</span>				</td>
+				<td width="25%" valign="top">
+					<ul>
+					<LI><span class="text">Animation</span></LI><LI><span class="text">Font</span></LI><LI><span class="text">Shadow</span></LI><LI><span class="text">Glow</span></LI><LI><span class="text">Bevel</span></LI><LI><span class="text">Blur</span></LI>
+					</ul>				</td>
+				<td width="25%" valign="top">
+					<ul>
+					<LI><span class="text">_alpha</span></LI><LI><span class="text">_x</span></LI><LI><span class="text">_y</span></LI>
+					</ul>				</td>
+			</tr>
+			<tr>
+				<td width="15%" valign="top">
+					<span class="text">
+					DATAPLOT					</span>				</td>
+				<td width="35%" valign="top">
+					<span class="text">
+					DATAPLOT refers to the actual plot of the chart. For example, in Column 2D chart, columns are referred to as DATAPLOT. In Pie chart, it's the pies. In Bubble chart, it's the bubbles and so on.					</span>				</td>
+				<td width="25%" valign="top">
+<ul>				<LI><span class="text">Animation</span></LI><LI><span class="text">Shadow</span></LI><LI><span class="text">Glow</span></LI><LI><span class="text">Bevel</span></LI><LI><span class="text">Blur</span></LI>
+</ul>			</td>
+				<td width="25%" valign="top">
+					<ul>
+					<LI><span class="text">_alpha</span></LI><LI><span class="text">_x</span></LI><LI><span class="text">_y</span></LI><LI><span class="text">_xScale</span></LI><LI><span class="text">_yScale</span></LI>
+					</ul>				</td>
+			</tr>
+			<tr class='trVeryLightYellowBg'>
+				<td width="15%" valign="top">
+					<span class="text">
+					SUBCAPTION					</span>				</td>
+				<td width="35%" valign="top">
+					<span class="text">
+					SUBCAPTION refers to the sub-heading of the chart.					</span>				</td>
+				<td width="25%" valign="top">
+					<ul>
+					<LI><span class="text">Animation</span></LI><LI><span class="text">Font</span></LI><LI><span class="text">Shadow</span></LI><LI><span class="text">Glow</span></LI><LI><span class="text">Bevel</span></LI><LI><span class="text">Blur</span></LI>
+					</ul>				</td>
+				<td width="25%" valign="top">
+					<ul>
+					<LI><span class="text">_alpha</span></LI><LI><span class="text">_x</span></LI><LI><span class="text">_y</span></LI>
+					</ul>				</td>
+			</tr>
+			<tr>
+				<td width="15%" valign="top">
+					<span class="text">
+					TOOLTIP					</span>				</td>
+				<td width="35%" valign="top">
+					<span class="text">
+					TOOLTIP refers to the tool tip shown when mouse is hovered over the data plots.					</span>				</td>
+				<td width="25%" valign="top">
+					<ul>
+					<LI><span class="text">Font</span></LI>
+					</ul>				</td>
+				<td width="25%" valign="top">
+					<span class="text">					</span>				</td>
+			</tr>
+			
+		<tr align="center">
+		<td align="right" colspan="4" style="BORDER-TOP:#FE9B00 1px solid;">
+			<span class="back_to_top"><a href="#top">Back to top <img src="Images/Top.gif" border="0" alt="Back to Top" WIDTH="16" HEIGHT="16" ></a></span>		         </td>	</tr>		
+</table>
+	
+<br>
+<table width="98%" align="center" cellpadding="2">
+	<tr class="trLightBlueBg">
+		<td align="left">
+			<span class="header">&nbsp;&lt;chart&gt; element Attributes</span>			
+		</td>
+	</tr>		
+</table>
+
+		<a name="Anchor1"></a>
+		<table width="98%" align="center" cellpadding="2"> 	
+			<tr>
+				<td class="header">Functional Attributes</td>
+			</tr>	
+							
+				<tr>
+					<td class="text">
+					<p>These attributes let you control a variety of functional elements on the chart.</p> </td>
+				</tr>
+				
+			
+		</table>	
+				
+		<table width="98%" align="center" class="tableGreyBorder" cellpadding="4"> 	
+		<tr class="trAttHeader">		
+			<td width="25%">					
+				<span class="textBold">
+				Attribute Name				</span>			</td>
+			<td width="15%">
+				<span class="textBold">
+				Type				</span>			</td>				
+				
+			<td width="15%">
+				<span class="textBold">
+				Range				</span>			</td>
+			<td width='45%'>
+			
+				<span class="textBold">
+				Description				</span>			</td>									
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				animation				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Boolean				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0/1				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				This attribute lets you set the configuration whether the chart should appear in an animated fashion. If you do not want to animate any part of the chart, set this as 0.				</span>			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				palette				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Number				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				1-5				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				FusionCharts v3 introduces the concept of Color Palettes. Each chart has 5 pre-defined color palettes which you can choose from. Each palette renders the chart in a different color theme. Valid values are 1-5.				</span>			</td>	
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				clickURL				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					String				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				The entire chart can now act as a hotspot. Use this URL to define the hotspot link for the chart. The link can be specified in <a href="../FCV3Basics/DrillDown/LinkFormat.html">FusionCharts Link Format</a>.				</span>			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				defaultAnimation				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Boolean				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0/1				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				By default, each chart animates some of its elements. If you wish to switch off the default animation patterns, you can set this attribute to 0. It can be particularly useful when you want to define your own animation patterns using STYLE feature.				</span>			</td>	
+		</tr>
+		<tr>
+          <td valign="top" class="text">paletteColors</td>
+		  <td valign="top" class="text">String</td>
+		  <td valign="top" class="text">List of hex color codes separated by comma </td>
+		  <td valign='top' class="text">While the <span class="codeInline">palette</span> attribute allows to select a palette theme that applies to chart background, canvas, font and tool-tips, it does not change the colors of data items (i.e., column, line, pie etc.). Using <span class="codeInline">paletteColors</span> attribute, you can specify your custom list of hex colors for the data items. The list of colors have to be separated by comma e.g.,<BR/> <span class="codeInline">&lt;chart paletteColors='FF0000,0372AB,FF5904...'&gt;</span>. <br/>The chart will cycle through the list of specified colors and then render the data plot accordingly.
+		      <br/><br/>To use the same set of colors throughout all your charts in a web application, you can store the list of palette colors in your application globally and then provide the same in each chart XML.</td>
+		  </tr>
+		<tr class="trLightBlueBg">
+          <td valign="top" class="text">showAboutMenuItem</td>
+		  <td valign="top" class="text">Boolean</td>
+		  <td valign="top" class="text">0/1</td>
+		  <td valign='top' class="text">Setting this to 1 shows up a custom context menu in the chart, which can be customized to show your text and can be linked to your URL. For e.g., you can set the context menu of the chart to include &quot;About your company name&quot; and then link to your company home page. By default, the chart shows &quot;About FusionCharts&quot; when right clicked. </td>
+		  </tr>
+          	
+        <tr>
+        <td valign="top" class="text">showPrintMenuItem</td>
+		  <td valign="top" class="text">Boolean</td>
+		  <td valign="top" class="text">0/1</td>
+		  <td valign='top' class="text">When you write click on the chart it shows a context menu. This attribute allows you to show or hide the &quot;Print&quot; option in the context menu.</td>
+		  </tr>		
+          <tr class="trLightBlueBg">
+          <td valign="top" class="text">showTooltipforWrappedLabels</td>
+		  <td valign="top" class="text">Boolean</td>
+		  <td valign="top" class="text">0/1</td>
+		  <td valign='top' class="text">When the labels of the chart are too lengthy, the chart truncates them and displays a part of the label. In this situation, this attribute shows a tooltip displaying the complete label when the mouse is hovered on the shortened labels. </td>
+		  </tr>
+          <tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				unescapeLinks			</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Boolean				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0/1				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Internally the chart decodes a Url that you set as link. Before invoking the link it again encodes the Url. If you are passing multilingual characters via a Url or do not want this decode-encode mechanism to be handled by chart you can set,<span class="codeInline">unescapeLinks='0'</span>.				</span>			</td>	
+		</tr>	
+		<tr class="trLightBlueBg">
+          <td valign="top" class="text">aboutMenuItemLabel</td>
+		  <td valign="top" class="text">String</td>
+		  <td valign="top" class="text">&nbsp;</td>
+		  <td valign='top' class="text">The menu item label for the custom context menu item. </td>
+		  </tr>
+		<tr>
+          <td valign="top" class="text">aboutMenuItemLink</td>
+		  <td valign="top" class="text">String</td>
+		  <td valign="top" class="text">URL</td>
+		  <td valign='top' class="text">Link for the custom context menu item. You can specify the link in <a href="../FCV3Basics/DrillDown/LinkFormat.html">FusionCharts Link Format</a> to be able to open the same in new window, pop-ups, frames or as JavaScript links. </td>
+		  </tr>		
+		<tr class="trLightBlueBg">		
+			<td width="25%" valign="top">
+				<span class="text">
+				showLabels				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Boolean				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0/1				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Whether to show labels on the chart?				</span>			</td>	
+		</tr>		
+			
+	<tr align="center">
+		<td align="right" colspan="4" style="BORDER-TOP:#FE9B00 1px solid;">
+			<span class="back_to_top"><a href="#top">Back to top <img src="Images/Top.gif" border="0" alt="Back to Top" WIDTH="16" HEIGHT="16" ></a></span>		         </td>	</tr>		
+</table>
+	
+	<br>
+	
+		<a name="Anchor2"></a>
+		<table width="98%" align="center" cellpadding="2"> 	
+			<tr>
+				<td class="header">Chart Titles and Axis Names</td>
+			</tr>	
+							
+				<tr>
+					<td class="text">
+						<p>Using these attributes, you can set the caption &amp; sub-caption of the chart.</p> </td>
+				</tr>
+				
+			
+		</table>	
+				
+		<table width="98%" align="center" class="tableGreyBorder" cellpadding="4"> 	
+		<tr class="trAttHeader">		
+			<td width="25%">					
+				<span class="textBold">
+				Attribute Name
+				</span>
+			</td>
+			<td width="15%">
+				<span class="textBold">
+				Type
+				</span>
+			</td>				
+			<td width='60%'>
+			
+				<span class="textBold">
+				Description
+				</span>
+			</td>									
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				caption
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					String
+				</span>						
+			</td>					
+			<td width='60%' valign='top'>
+				<span class="text">
+				Caption of the chart.
+				</span>
+			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				subCaption
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					String
+				</span>						
+			</td>					
+			<td width='60%' valign='top'>
+				<span class="text">
+				Sub-caption of the chart.
+				</span>
+			</td>	
+		</tr>		
+			
+	<tr align="center">
+		<td align="right" colspan="4" style="BORDER-TOP:#FE9B00 1px solid;">
+			<span class="back_to_top"><a href="#top">Back to top <img src="Images/Top.gif" border="0" alt="Back to Top" WIDTH="16" HEIGHT="16" ></a></span>		         </td>	</tr>		
+</table>
+	
+	<br>
+	
+		<a name="Anchor3"></a>
+		<table width="98%" align="center" cellpadding="2"> 	
+			<tr>
+				<td class="header">Chart Cosmetics</td>
+			</tr>	
+							
+				<tr>
+					<td class="text">
+						<p>The following attributes let you configure chart cosmetics like background color, background alpha etc.	</p>				</td>
+				</tr>
+				
+			
+		</table>	
+				
+		<table width="98%" align="center" class="tableGreyBorder" cellpadding="4"> 	
+		<tr class="trAttHeader">		
+			<td width="25%">					
+				<span class="textBold">
+				Attribute Name				</span>			</td>
+			<td width="15%">
+				<span class="textBold">
+				Type				</span>			</td>				
+				
+			<td width="15%">
+				<span class="textBold">
+				Range				</span>			</td>
+			<td width='45%'>
+			
+				<span class="textBold">
+				Description				</span>			</td>									
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				showBorder				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Boolean				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0/1				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Whether to show a border around the chart or not?				</span>			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				borderColor				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Color				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Border color of the chart.				</span>			</td>	
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				borderThickness				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Number				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				In Pixels				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Border thickness of the chart.				</span>			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				borderAlpha				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Number				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0-100				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Border alpha of the chart.				</span>			</td>	
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				bgColor				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Color				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				This attribute sets the background color for the chart. You can set any hex color code as the value of this attribute. To specify a gradient as background color, separate the hex color codes of each color in the gradient using comma. Example: FF5904,FFFFFF. Remember to remove # and any spaces in between.See FusionCharts v3 Basics &gt; Advanced Charting &gt; <a href="../FCV3Basics/Advanced/Gradients.html">Using Gradients</a> for more details.				</span>			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				bgAlpha				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Number				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0-100				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Sets the alpha (transparency) for the background. If you've opted for gradient background, you need to set a list of alpha(s) separated by comma.See FusionCharts v3 Basics &gt; Advanced Charting &gt; <a href="../FCV3Basics/Advanced/Gradients.html">Using Gradients</a> for more details.				</span>			</td>	
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				bgRatio				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Number				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0-100				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				If you've opted for a gradient background, this attribute lets you set the ratio of each color constituent.See FusionCharts v3 Basics &gt; Advanced Charting &gt; <a href="../FCV3Basics/Advanced/Gradients.html">Using Gradients</a> for more details.				</span>			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				bgAngle				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Number				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0-360				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Angle of the background color, in case of a gradient.See FusionCharts v3 Basics &gt; Advanced Charting &gt; <a href="../FCV3Basics/Advanced/Gradients.html">Using Gradients</a> for more details.				</span>			</td>	
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				bgSWF				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					String				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				To place any Flash movie as background of the chart, enter the (path and) name of the background SWF. It should be in the same domain as the chart.				</span>			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				bgSWFAlpha				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Number				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0-100				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Helps you specify alpha for the loaded background SWF.				</span>			</td>	
+		</tr>
+		<tr>
+          <td valign="top"><span class="text"> logoURL </span> </td>
+		  <td valign="top"><span class="text"> String </span> </td>
+		  <td valign="top"><span class="text"> URL </span></td>
+		  <td valign='top'><span class="text">You can load an external logo (JPEG/PNG/SWF) on the chart once it has rendered. This attribute lets you specify the URL of the same. Owing to Flash Player security settings, you can only specify logo that are on the sub-domain as the SWF file of the chart. </span></td>
+		  </tr>
+		<tr class='trLightBlueBg'>
+          <td valign="top"><span class="text"> logoPosition </span> </td>
+		  <td valign="top"><span class="text"> String </span> </td>
+		  <td valign="top"><span class="text"> TL, TR, BL, BR, CC </span></td>
+		  <td valign='top' class="text"> Where to position the logo on the chart:
+		      <ul>
+                <li><span class="text">TL - Top-left</span></li>
+		         <li><span class="text">TR - Top-right</span></li>
+		         <li><span class="text">BR - Bottom right</span></li>
+		         <li><span class="text">BL - Bottom left</span></li>
+		        <li><span class="text">CC - Center of screen</span> </li>
+	        </ul></td>
+		  </tr>
+		<tr>
+          <td valign="top"><span class="text"> logoAlpha </span> </td>
+		  <td valign="top"><span class="text"> Number </span> </td>
+		  <td valign="top" class="text"> 0-100 </td>
+		  <td valign='top'><span class="text">Once the logo has loaded on the chart, you can configure its opacity using this atribute.</span></td>
+		  </tr>
+		<tr class='trLightBlueBg'>
+          <td valign="top"><span class="text"> logoScale </span> </td>
+		  <td valign="top"><span class="text"> Number </span> </td>
+		  <td valign="top"><span class="text"> 0-300 </span></td>
+		  <td valign='top'><span class="text">You can also change the scale of externally loaded logo at run-time by specifying a value for this parameter. </span></td>
+		  </tr>
+		<tr>
+          <td valign="top"><span class="text"> logoLink </span> </td>
+		  <td valign="top"><span class="text"> String </span> </td>
+		  <td valign="top"><span class="text"> URL </span></td>
+		  <td valign='top'><span class="text">If you want to link the logo to an external URL, specify the link in this attribute. The link can be in <a href="../FCV3Basics/DrillDown/LinkFormat.html">FusionCharts Link Format</a>, allowing you to link to new windows, pop-ups, frames etc. </span> </td>
+		  </tr>		
+			
+	<tr align="center">
+		<td align="right" colspan="4" style="BORDER-TOP:#FE9B00 1px solid;">
+			<span class="back_to_top"><a href="#top">Back to top <img src="Images/Top.gif" border="0" alt="Back to Top" WIDTH="16" HEIGHT="16" ></a></span>		         </td>	</tr>		
+</table>
+	
+	<br>
+	
+		<a name="Anchor4"></a>
+		<table width="98%" align="center" cellpadding="2"> 	
+			<tr>
+				<td class="header">Data Plot Cosmetics</td>
+			</tr>	
+							
+				<tr>
+					<td class="text">
+				 <p> These attributes let you configure how your plot would appear on the chart. </p></td>
+				</tr>
+				
+			
+		</table>	
+				
+		<table width="98%" align="center" class="tableGreyBorder" cellpadding="4"> 	
+		<tr class="trAttHeader">		
+			<td width="25%">					
+				<span class="textBold">
+				Attribute Name
+				</span>
+			</td>
+			<td width="15%">
+				<span class="textBold">
+				Type
+				</span>
+			</td>				
+				
+			<td width="15%">
+				<span class="textBold">
+				Range
+				</span>
+			</td>
+			<td width='45%'>
+			
+				<span class="textBold">
+				Description
+				</span>
+			</td>									
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				showPlotBorder
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Boolean
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0/1
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Whether the pie  border would show up.				</span>			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				plotBorderColor
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Color
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				
+				</span>
+			Hex Code</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Color for pie border				</span>			</td>	
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				plotBorderThickness
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Number
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0-5 (Pixels)
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Thickness for pie border				</span>			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				plotBorderAlpha
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Number
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0-100
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Alpha for pie border				</span>			</td>	
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				plotFillAlpha
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Number
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0-100
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				This attribute lets you set the fill alpha for plot.
+				</span>
+			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				showShadow
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Boolean
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0/1
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Whether to show shadow for pie?				</span>			</td>	
+		</tr>
+        	<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				shadowColor
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Color</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				Hex Code</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Lets you set a color of the shadow for pie.				</span>			</td>	
+		</tr>
+        <tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				shadowAlpha</span>
+			</td>
+			<td width="15%" valign="top">
+			<span class="text">
+					Number</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0-100
+				</span>
+			</td>
+			<td width='45%' valign='top'><span class="text">Lets you set alpha of the shadow for pie.</span></td>	
+		</tr>	
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				plotFillColor
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Color
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				Hex Code
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Fill color for all the pies.
+				</span>
+			</td>	
+		</tr>		
+			
+	<tr align="center">
+		<td align="right" colspan="4" style="BORDER-TOP:#FE9B00 1px solid;">
+			<span class="back_to_top"><a href="#top">Back to top <img src="Images/Top.gif" border="0" alt="Back to Top" WIDTH="16" HEIGHT="16" ></a></span>		         </td>	</tr>		
+</table>
+	
+	<br>
+		<a name="Anchor11"></a>
+		<table width="98%" align="center" cellpadding="2"> 	
+			<tr>
+				<td class="header">
+						Pie / Doughnut Properties
+				</td>
+			</tr>	
+							
+				<tr>
+					<td class="text">
+						<p>The following attributes let you control various functionalities of pie.</p>					</td>
+				</tr>
+				
+			
+		</table>	
+				
+		<table width="98%" align="center" class="tableGreyBorder" cellpadding="4"> 	
+		<tr class="trAttHeader">		
+			<td width="25%">					
+				<span class="textBold">
+				Attribute Name
+				</span>
+			</td>
+			<td width="15%">
+				<span class="textBold">
+				Type
+				</span>
+			</td>				
+				
+			<td width="15%">
+				<span class="textBold">
+				Range
+				</span>
+			</td>
+			<td width='45%'>
+			
+				<span class="textBold">
+				Description
+				</span>
+			</td>									
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				pieRadius
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Number
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				In Pixels
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				This attribute lets you explicitly set the outer radius of the chart. FusionCharts automatically calculates the best fit pie radius for the chart. This attribute is useful if you want to enforce one of your own values.
+				</span>
+			</td>	
+		</tr>		
+			
+	<tr align="center">
+		<td align="right" colspan="4" style="BORDER-TOP:#FE9B00 1px solid;">
+			<span class="back_to_top"><a href="#top">Back to top <img src="Images/Top.gif" border="0" alt="Back to Top" WIDTH="16" HEIGHT="16" ></a></span>		         </td>	</tr>		
+</table>
+	
+	<br>
+	
+		<a name="Anchor7"></a>
+		<table width="98%" align="center" cellpadding="2"> 	
+			<tr>
+				<td class="header">Number Formatting</td>
+			</tr>	
+							
+				<tr>
+				  <td class="text">&nbsp;</td>
+				</tr>
+				
+			
+		</table>	
+				
+		<table width="98%" align="center" class="tableGreyBorder" cellpadding="4"> 	
+		<tr class="trAttHeader">		
+			<td width="25%">					
+				<span class="textBold">
+				Attribute Name
+				</span>
+			</td>
+			<td width="15%">
+				<span class="textBold">
+				Type
+				</span>
+			</td>				
+				
+			<td width="15%">
+				<span class="textBold">
+				Range
+				</span>
+			</td>
+			<td width='45%'>
+			
+				<span class="textBold">
+				Description
+				</span>
+			</td>									
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				inDecimalSeparator
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					String
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				Character
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				In some countries, commas are used as decimal separators and dots as thousand separators. In XML, if you specify such values, it will give a error while converting to number. So, FusionCharts accepts the input decimal and thousand separator from user, so that it can covert it accordingly into the required format. This attribute lets you input the decimal separator. For more details, please see FusionCharts v3 Basics &gt; Advanced Charting &gt; <a href="../FCV3Basics/Advanced/Number_Basics.html">Number Formatting</a> section.
+				</span>
+			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				inThousandSeparator
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					String
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				Character
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				In some countries, commas are used as decimal separators and dots as thousand separators. In XML, if you specify such values, it will give a error while converting to number. So, FusionCharts accepts the input decimal and thousand separator from user, so that it can covert it accordingly into the required format. This attribute lets you input the thousand separator. For more details, please see FusionCharts v3 Basics &gt; Advanced Charting &gt; <a href="../FCV3Basics/Advanced/Number_Basics.html">Number Formatting</a> section.
+				</span>
+			</td>	
+		</tr>		
+			
+	<tr align="center">
+		<td align="right" colspan="4" style="BORDER-TOP:#FE9B00 1px solid;">
+			<span class="back_to_top"><a href="#top">Back to top <img src="Images/Top.gif" border="0" alt="Back to Top" WIDTH="16" HEIGHT="16" ></a></span>		         </td>	</tr>		
+</table>
+	
+	<br>
+	
+		<a name="Anchor9"></a>
+		<table width="98%" align="center" cellpadding="2"> 	
+			<tr>
+				<td class="header">Font Properties</td>
+			</tr>	
+							
+				<tr>
+					<td class="text">
+						<p>Using the attributes below, you can define the generic font properties for all the text on the chart. These attributes allow you a high level control over font properties.</p>
+<p>If you intend to specify font properties for individual chart elements (like Caption, sub-caption etc.), you'll need to use the STYLES feature of FusionCharts v3. Using STYLES, you can also specify advanced font properties like Bold, Italics, HTML Mode etc.</p>
+					</td>
+				</tr>
+				
+			
+		</table>	
+				
+		<table width="98%" align="center" class="tableGreyBorder" cellpadding="4"> 	
+		<tr class="trAttHeader">		
+			<td width="25%">					
+				<span class="textBold">
+				Attribute Name
+				</span>
+			</td>
+			<td width="15%">
+				<span class="textBold">
+				Type
+				</span>
+			</td>				
+				
+			<td width="15%">
+				<span class="textBold">
+				Range
+				</span>
+			</td>
+			<td width='45%'>
+			
+				<span class="textBold">
+				Description
+				</span>
+			</td>									
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				baseFont
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					String
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				Font Name
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				This attribute lets you set the font face (family) of all the text (data labels, values etc.) on chart. If you specify <span class="codeInline">outCnvBaseFont</span> attribute also, then this attribute controls only the font face of text within the chart canvas bounds.
+				</span>
+			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				baseFontSize
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Number
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0-72
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				This attribute sets the base font size of the chart i.e., all the values and the names in the chart which lie on the canvas will be displayed using the font size provided here.
+				</span>
+			</td>	
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				baseFontColor
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Color
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				This attribute sets the base font color of the chart i.e., all the values and the names in the chart which lie on the canvas will be displayed using the font color provided here.
+				</span>
+			</td>	
+		</tr>		
+			
+	<tr align="center">
+		<td align="right" colspan="4" style="BORDER-TOP:#FE9B00 1px solid;">
+			<span class="back_to_top"><a href="#top">Back to top <img src="Images/Top.gif" border="0" alt="Back to Top" WIDTH="16" HEIGHT="16" ></a></span>		         </td>	</tr>		
+</table>
+	
+	<br>
+	
+		<a name="Anchor8"></a>
+		<table width="98%" align="center" cellpadding="2"> 	
+			<tr>
+				<td class="header">Tool-tip</td>
+			</tr>	
+							
+				<tr>
+					<td class="text">
+						<p>These attributes let you control the tool tip. You can set the background color, border color, separator character and few other details.</p>
+					</td>
+				</tr>
+				
+			
+		</table>	
+				
+		<table width="98%" align="center" class="tableGreyBorder" cellpadding="4"> 	
+		<tr class="trAttHeader">		
+			<td width="25%">					
+				<span class="textBold">
+				Attribute Name				</span>			</td>
+			<td width="15%">
+				<span class="textBold">
+				Type				</span>			</td>				
+				
+			<td width="15%">
+				<span class="textBold">
+				Range				</span>			</td>
+			<td width='45%'>
+			
+				<span class="textBold">
+				Description				</span>			</td>									
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				showToolTip				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Boolean				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0/1				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Whether to show tool tip on chart?				</span>			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				toolTipBgColor				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Color				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Background Color for tool tip.				</span>			</td>	
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				toolTipBorderColor				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Color				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Border Color for tool tip.				</span>			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				toolTipSepChar				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					String				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				The character specified as the value of this attribute separates the name and value displayed in tool tip.				</span>			</td>	
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				useHoverColor				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Boolean				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0/1				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Whether to use the hover fill color for the pies?				</span>			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				hoverFillColor				</span>			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Color				</span>			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				Hex Code				</span>			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				The color which should be used as fill during hover.				</span>			</td>	
+		</tr>
+		<tr>
+          <td valign="top" class="text">showToolTipShadow</td>
+		  <td valign="top" class="text">Boolean</td>
+		  <td valign="top" class="text">0/1</td>
+		  <td valign='top' class="text">Whether to show shadow for tool-tips on the chart. </td>
+		  </tr>		
+			
+	<tr align="center">
+		<td align="right" colspan="4" style="BORDER-TOP:#FE9B00 1px solid;">
+			<span class="back_to_top"><a href="#top">Back to top <img src="Images/Top.gif" border="0" alt="Back to Top" WIDTH="16" HEIGHT="16" ></a></span>		         </td>	</tr>		
+</table>
+	
+	<br>
+	
+		<a name="Anchor6"></a>
+		<table width="98%" align="center" cellpadding="2"> 	
+			<tr>
+				<td class="header">Chart Padding & Margins</td>
+			</tr>	
+							
+				<tr>
+				  <td class="text">
+					<p>The following attributes help you control chart margins and paddings.</p> </td>
+				</tr>
+				
+			
+		</table>	
+				
+		<table width="98%" align="center" class="tableGreyBorder" cellpadding="4"> 	
+		<tr class="trAttHeader">		
+			<td width="25%">					
+				<span class="textBold">
+				Attribute Name
+				</span>
+			</td>
+			<td width="15%">
+				<span class="textBold">
+				Type
+				</span>
+			</td>				
+				
+			<td width="15%">
+				<span class="textBold">
+				Range
+				</span>
+			</td>
+			<td width='45%'>
+			
+				<span class="textBold">
+				Description
+				</span>
+			</td>									
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				captionPadding
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Number
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				In Pixels
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				This attribute lets you control the space (in pixels) between the sub-caption and top of the chart canvas. If the sub-caption is not defined, it controls the space between caption and top of chart canvas. If neither caption, nor sub-caption is defined, this padding does not come into play.
+				</span>
+			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				chartLeftMargin
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Number
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				In Pixels
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Amount of empty space that you want to put on the left side of your chart. Nothing is rendered in this space.
+				</span>
+			</td>	
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				chartRightMargin
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Number
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				In Pixels
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Amount of empty space that you want to put on the right side of your chart. Nothing is rendered in this space.
+				</span>
+			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				chartTopMargin
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Number
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				In Pixels
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Amount of empty space that you want to put on the top of your chart. Nothing is rendered in this space.
+				</span>
+			</td>	
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				chartBottomMargin
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Number
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				In Pixels
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Amount of empty space that you want to put on the bottom of your chart. Nothing is rendered in this space.
+				</span>
+			</td>	
+		</tr>		
+			
+	<tr align="center">
+		<td align="right" colspan="4" style="BORDER-TOP:#FE9B00 1px solid;">
+			<span class="back_to_top"><a href="#top">Back to top <img src="Images/Top.gif" border="0" alt="Back to Top" WIDTH="16" HEIGHT="16" ></a></span>		         </td>	</tr>		
+</table>
+	
+	<br>
+	
+		<a name="Anchor14"></a>
+		<table width="98%" align="center" cellpadding="2"> 	
+			<tr>
+				<td class="header">&lt;category&gt; element</td>
+			</tr>	
+							
+				<tr>
+					<td class="text">
+						<p>Each <SPAN Class='codeInline'>&lt;category&gt;</SPAN> element represents a pie. 
+You can specify the following attributes for <SPAN Class='codeInline'>&lt;category&gt;</SPAN> element:</p>
+				  </td>
+				</tr>
+				
+			
+		</table>	
+				
+		<table width="98%" align="center" class="tableGreyBorder" cellpadding="4"> 	
+		<tr class="trAttHeader">		
+			<td width="25%">					
+				<span class="textBold">
+				Attribute Name
+				</span>
+			</td>
+			<td width="15%">
+				<span class="textBold">
+				Type
+				</span>
+			</td>				
+				
+			<td width="15%">
+				<span class="textBold">
+				Range
+				</span>
+			</td>
+			<td width='45%'>
+			
+				<span class="textBold">
+				Description
+				</span>
+			</td>									
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				label
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					String
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Display value for the pie.
+				</span>
+			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				value
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Number
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				Numeric Value
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<p class="text">
+				If you do not want a symmetrical distribution for all the pies, you can  allot numeric values to individual pies. This can be done using the value attribute of each category. You'll need to define the value for all the categories (pies) then. The sweep angle of the pie would  depend on its value.							</p>
+				<p class="text">If you just want a symmetrical multi-level pie chart, you can ignore the value. </p></td>	
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				Color
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Color
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				Hex Code
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Color for the pie.
+				</span>
+			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				Alpha
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					Number
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				0-100
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Alpha for the pie.
+				</span>
+			</td>	
+		</tr>		
+		<tr>		
+			<td width="25%" valign="top">
+				<span class="text">
+				toolText
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					String
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Tool text for the pie.
+				</span>
+			</td>	
+		</tr>		
+		<tr class='trLightBlueBg'>		
+			<td width="25%" valign="top">
+				<span class="text">
+				link
+				</span>
+			</td>
+			<td width="15%" valign="top">
+				<span class="text">
+					String
+				</span>						
+			</td>					
+			
+			<td width="15%" valign="top">
+				<span class="text">
+				
+				</span>
+			</td>
+			<td width='45%' valign='top'>
+				<span class="text">
+				Link for the pie.
+				</span>
+			</td>	
+		</tr>		
+			
+	<tr align="center">
+		<td align="right" colspan="4" style="BORDER-TOP:#FE9B00 1px solid;">
+			<span class="back_to_top"><a href="#top">Back to top <img src="Images/Top.gif" border="0" alt="Back to Top" WIDTH="16" HEIGHT="16" ></a></span>		         </td>	</tr>		
+</table>
+	
+<table width="98%">
+    <tr>
+    <td colspan="4" class="text"><p>The chart also accepts the following features, which have not been discussed here:</p>
+    <ul>
+<li><span class="text"><a href="../FCV3Basics/Export/ECXML.html">Exporting Chart</a>: All the attributes pertinent to exporting of charts as images or pdfs are discussed in the <strong>Exporting as Image/PDF</strong> section.</span></li> 
+<li><span class="text"><a href="../FCV3Basics/Export/ExportDataSetup.html">Exporting Chart Data</a>: All the attributes pertinent to exporting of chart data are discussed in the <strong>Exporting Chart Data</strong> section.</span></li>
+<li><span class="text"><a href="../FCV3Basics/Styles/Styles.html">Styles</a>: All the attributes  pertinent to Styles  are discussed in the <strong>FusionCharts v3 Styles</strong> section.</span></li>
+</ul><br>
+    </td>
+    </tr>
+	</table>
+	
+</body>
+</html>
+

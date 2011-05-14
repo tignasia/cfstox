@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Box and Whisker chart &gt; Legend</td>
+  </tr>
+ 
+  <tr> 
+    <td valign="top" class="text">
+      <p>In Box and whisker chart a new concept of legend has been introduced. Along with the dataset series name, the legend shows the icons of mean, mean deviation, standard deviation, quartile deviation and the outliers of every data plot. Each dataset is highlighted by different colors background to easily differentiate between them and their icons. These legend icons are interactive to let user click and hide/show the desired set of values. </p>
+      
+	A chart showing all the icons in two datasets along with their legend is given below:
+	  <br/>  <br/>  
+</td>
+</tr>
+<tr>
+    <td valign="top"><img src="Images/Alliconsdisplayed.jpg" class="imageBorder" />
+	<p> 
+	In the above screenshot:<ul> 
+	<li>The chart displays the icons of the mean, the deviations and  the outliers of the dataplots</li> 
+	<li>The legend shows two different datasets highlighted by two different color strips</li>
+	<li>The primary legend icons of the datasets consists of a bi-color box represents the upper and lower quartile boxes of the datasets</li>
+	<li>The sub icons of the legend consists of all the other icons present in the datasets representing the mean, deviations and the outliers</li>
+	</ul>
+	<p class="highlightBlock">You can hide the all the sub icons of the legend items setting <span class="codeInline">showDetailedLegend='0'</span> in <span class="codeInline">&lt;chart&gt;</span> element.
+</p>
+
+	<p class="header">Interactivity</p>
+	To show or hide any data set in the chart you can click on the main legend items or the primary legend icons.
+	A sample chart with one hidden datasets -January (after mouse click on the legend item) is given below:
+	<p> <img src="Images/hiddendataset.jpg" class="imageBorder" /></p>
+	In the above screen shot, the dataset January is hidden from the chart canvas. In the legend box, the complete legend item for the dataset is grayed out. To show the dataset again, click on the main dataset icon. 
+	<p>You can also click on the sub icons of a dataset from the legend to show or hide the respective points on the chart.</p>
+	<p>In the screen shot below we are hiding the mean deviation and the standard deviation icons of both the datasets. So, the icons in the legend are grayed out from both the datasets.</p>
+	<p><img src="Images/hiddenicons.jpg" class="imageBorder" /></p>
+	</td>
+  </tr>
+  <tr>   
+</table>
+</body>
+</html>

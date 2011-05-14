@@ -1,0 +1,845 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Heat map chart &gt; Numeric based mapping </td>
+  </tr>
+  <tr> 
+    <td valign="top" class="text">
+      <p>Numeric based heat map charts are created using numeric data for the chart like scientific calculations, temperature data and many more. The chart that we created in <a href="Firstchart.html">Creating a simple chart</a> page is a numeric based chart. Let's add some more data to the chart and also change the looks of the chart by representing it in a different color combination. The chart will look like as under:</p>
+    </td></tr>
+	
+	<tr>
+	<td>
+	<span class="highlightBlock"> You can also create non-numeric or category based heat map charts to make a periodic table. Details on the category based heat map chart is discussed in the <a href="Categorybasedmapping.html">next page</a>.</span></td>
+	<tr>
+    <td valign="top"><p><img src="Images/Numericbasedchart.jpg" width='522' height="350" class="imageBorder" /></p>
+      <p>The data for this chart is as follows: </p>
+    </td>
+  </tr>
+  <tr>
+  <td>
+	<div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab1">XML</a></li>
+      	<li><a href="#tab2">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab1" class="tab_content">
+    		  <pre class="prettyprint code_container">
+&lt;chart Caption='Weekly Performance' subCaption='In percentage' xAxisName='Week Days' yAxisName='Companies' &gt;
+
+&lt;dataset&gt;
+    
+     &lt;set rowId='Google' columnId='Mon' value='68'/&gt;
+     &lt;set rowId='Google' columnId='Tue' value='35'/&gt;
+     &lt;set rowId='Google' columnId='Wed' value='95'/&gt;
+     &lt;set rowId='Google' columnId='Thu' value='17'/&gt;
+     &lt;set rowId='Google' columnId='Fri' value='55'/&gt;
+	 
+     &lt;set rowId='Yahoo' columnId='Mon' value='0'/&gt;
+     &lt;set rowId='Yahoo' columnId='Tue' value='71'/&gt;
+     &lt;set rowId='Yahoo' columnId='Wed' value='70'/&gt;
+     &lt;set rowId='Yahoo' columnId='Thu' value='63'/&gt;
+     &lt;set rowId='Yahoo' columnId='Fri' value='79'/&gt;
+
+     &lt;set rowId='Microsoft' columnId='Mon' value='98'/&gt;
+     &lt;set rowId='Microsoft' columnId='Tue' value='48'/&gt;
+     &lt;set rowId='Microsoft' columnId='Wed' value='31'/&gt;
+     &lt;set rowId='Microsoft' columnId='Thu' value='79'/&gt;
+     &lt;set rowId='Microsoft' columnId='Fri' value='39'/&gt;
+	 
+     &lt;set rowId='Symantec' columnId='Mon' value='89'/&gt;
+     &lt;set rowId='Symantec' columnId='Tue' value='68'/&gt;
+     &lt;set rowId='Symantec' columnId='Wed' value='90'/&gt;
+     &lt;set rowId='Symantec' columnId='Thu' value='19'/&gt;
+     &lt;set rowId='Symantec' columnId='Fri' value='69'/&gt;
+	 
+     &lt;set rowId='AOL' columnId='Mon' value='58'/&gt;
+     &lt;set rowId='AOL' columnId='Tue' value='27'/&gt;
+     &lt;set rowId='AOL' columnId='Wed' value='100'/&gt;
+     &lt;set rowId='AOL' columnId='Thu' value='70'/&gt;
+     &lt;set rowId='AOL' columnId='Fri' value='89'/&gt;
+
+&lt;/dataset&gt;
+
+   &lt;colorRange gradient='1' minValue='0' code='B63300' startlabel='Very Bad' endLabel="Very Good"&gt;
+   
+    &lt;color code ='FFCC00'  maxValue='30' label='BAD'/&gt;
+    &lt;color code ='87B213'  maxValue='70' label='AVERAGE'/&gt;
+    &lt;color code ='006384'  maxValue='100' /&gt;  
+		
+   &lt;/colorRange&gt;
+
+&lt;/chart&gt;
+	</pre>
+    		</div>
+			<div id="tab2" class="tab_content">
+			  <pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Weekly Performance",
+    "subcaption":"In percentage",
+    "xaxisname":"Week Days",
+    "yaxisname":"Companies"
+  },
+  "dataset":[{
+      "data":[{
+          "rowid":"Google",
+          "columnid":"Mon",
+          "value":"68"
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Tue",
+          "value":"35"
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Wed",
+          "value":"95"
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Thu",
+          "value":"17"
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Fri",
+          "value":"55.98"
+        },
+        {
+          "rowid":"Yahoo",
+          "columnid":"Mon",
+          "value":"0"
+        },
+        {
+          "rowid":"Yahoo",
+          "columnid":"Tue",
+          "value":"71"
+        },
+        {
+          "rowid":"Yahoo",
+          "columnid":"Wed",
+          "value":"70"
+        },
+        {
+          "rowid":"Yahoo",
+          "columnid":"Thu",
+          "value":"63"
+        },
+        {
+          "rowid":"Yahoo",
+          "columnid":"Fri",
+          "value":"79"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Mon",
+          "value":"98"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Tue",
+          "value":"48"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Wed",
+          "value":"31"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Thu",
+          "value":"79"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Fri",
+          "value":"39"
+        },
+        {
+          "rowid":"Symantec",
+          "columnid":"Mon",
+          "value":"89"
+        },
+        {
+          "rowid":"Symantec",
+          "columnid":"Tue",
+          "value":"68"
+        },
+        {
+          "rowid":"Symantec",
+          "columnid":"Wed",
+          "value":"90"
+        },
+        {
+          "rowid":"Symantec",
+          "columnid":"Thu",
+          "value":"19"
+        },
+        {
+          "rowid":"Symantec",
+          "columnid":"Fri",
+          "value":"69"
+        },
+        {
+          "rowid":"AOL",
+          "columnid":"Mon",
+          "value":"58"
+        },
+        {
+          "rowid":"AOL",
+          "columnid":"Tue",
+          "value":"27"
+        },
+        {
+          "rowid":"AOL",
+          "columnid":"Wed",
+          "value":"100"
+        },
+        {
+          "rowid":"AOL",
+          "columnid":"Thu",
+          "value":"70"
+        },
+        {
+          "rowid":"AOL",
+          "columnid":"Fri",
+          "value":"89"
+        }
+      ]
+    }
+  ],
+  "colorrange":{
+    "gradient":"1",
+    "minvalue":"0",
+    "code":"57743A",
+    "startlabel":"Very Bad",
+    "endlabel":"Very Good",
+    "color":[{
+        "code":"8AA660",
+        "maxvalue":"30",
+        "label":"BAD"
+      },
+      {
+        "code":"E5F2D0",
+        "maxvalue":"70",
+        "label":"AVERAGE"
+      },
+      {
+        "code":"2A5F55",
+        "maxvalue":"100"
+      }
+    ]
+  }
+}</pre>
+			</div>
+	    </div>
+	  </div>
+  <tr>
+	  <td>
+	    <p>In the above data, numeric values are provided through the <span class="codeInline">&lt;set&gt;</span> elements by the <span class="codeInline">value</span> attribute. The <span class="codeInline">rowId</span> and the <span class="codeInline">columnId</span> attributes are used to specify the cell positions where the values are to be placed. The <span class="codeInline">&lt;colorRange&gt;</span> element is used to specify the lower limit of the numeric range by the <span class="codeInline">minValue</span> attribute. The boolean attribute <span class="codeInline">gradient</span> is set to '1' to show gradient legend in the chart.The <span class="codeInline">code</span> attribute is used to set the starting color for the range. The attributes <span class="codeInline">startLabel</span> and <span class="codeInline">endLabel</span> are used to set the labels for the upper and lower limits of the gradient scale. In the <span class="codeInline">&lt;color&gt;</span> elements the upper limits of the numeric range is defined by the <span class="codeInline">maxValue</span> attribute and the <span class="codeInline">code</span> attribute is used to set the colors for the particular range.   </p>
+	  </td></tr>
+	  <tr>
+   <td valign="top" class='header'>Pre defined rows and columns</td>
+  </tr>
+	  <tr>
+	  <td>
+	    <p>In the above example the chart automatically decides the order of rows and columns according to the sequence of the <span class="codeInline">&lt;set&gt;</span> elements. So, the chart is plotting 'Google in the first row, Yahoo in the second and so on. </p>
+         <p> There is one more method to plot numeric based heat map charts, in which you can provide pre defined order of rows and columns. This will give you the freedom of providing data in any order through the <span class="codeInline">&lt;set&gt;</span> element. The chart will abide by the pre-defined table structure. Let's see the same chart adding pre-defined rows and columns.
+		  
+      &nbsp;
+	  </td>
+  </tr>
+  <tr>
+    <td valign="top"><p><img src="Images/Numericbasedchart.jpg" class="imageBorder" /></p>
+    </td>
+  </tr>
+    <tr>
+    <td valign="top" class="text">
+      <p>The data for this method is shown below:</p> 
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"> <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab3">XML</a></li>
+      	 <li><a href="#tab4">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab3" class="tab_content">
+    		  <pre class="prettyprint code_container">
+&lt;chart Caption='Weekly Performance' subCaption='In percentage' xAxisName='Week Days' yAxisName='Companies'&gt;
+    
+	<strong>&lt;rows&gt;
+		&lt;row id='Google'/&gt;
+		&lt;row id='Yahoo'/&gt;
+		&lt;row id='Microsoft'/&gt;
+		&lt;row id='Symantec'/&gt;
+		&lt;row id='AOL'/&gt;
+		
+	&lt;/rows&gt;
+
+	&lt;columns&gt;
+
+		&lt;column id='MON'/&gt;
+		&lt;column id='TUE'/&gt;
+		&lt;column id='WED'/&gt;
+		&lt;column id='THU'/&gt;
+		&lt;column id='FRI'/&gt;
+		
+	&lt;/columns&gt;</strong>
+	
+    &lt;dataset&gt;
+    
+     &lt;set rowId='Yahoo' columnId='Mon' value='0'/&gt;
+     &lt;set rowId='Yahoo' columnId='Tue' value='71'/&gt;
+     &lt;set rowId='Yahoo' columnId='Wed' value='70'/&gt;
+     &lt;set rowId='Yahoo' columnId='Thu' value='63'/&gt;
+     &lt;set rowId='Yahoo' columnId='Fri' value='79'/&gt;
+	 
+     &lt;set rowId='Google' columnId='Mon' value='68'/&gt;
+     &lt;set rowId='Google' columnId='Tue' value='35'/&gt;
+     <strong>&lt;set rowId='Microsoft' columnId='Wed' value='31'/&gt;
+     &lt;set rowId='Microsoft' columnId='Thu' value='79'/&gt;</strong>
+     &lt;set rowId='Google' columnId='Fri' value='55.98'/&gt;
+	 
+     &lt;set rowId='Microsoft' columnId='Mon' value='98'/&gt;
+     &lt;set rowId='Microsoft' columnId='Tue' value='48'/&gt;
+    <strong> &lt;set rowId='Google' columnId='Wed' value='95'/&gt;
+     &lt;set rowId='Google' columnId='Thu' value='17'/&gt;</strong>
+     &lt;set rowId='Microsoft' columnId='Fri' value='39'/&gt;
+	 
+     &lt;set rowId='Symantec' columnId='Mon' value='89'/&gt;
+     &lt;set rowId='Symantec' columnId='Tue' value='68'/&gt;
+     &lt;set rowId='Symantec' columnId='Wed' value='90'/&gt;
+     &lt;set rowId='Symantec' columnId='Thu' value='19'/&gt;
+     &lt;set rowId='Symantec' columnId='Fri' value='69'/&gt;
+	 
+     &lt;set rowId='AOL' columnId='Mon' value='58'/&gt;
+     &lt;set rowId='AOL' columnId='Tue' value='27'/&gt;
+     &lt;set rowId='AOL' columnId='Wed' value='100'/&gt;
+     &lt;set rowId='AOL' columnId='Thu' value='70'/&gt;
+     &lt;set rowId='AOL' columnId='Fri' value='89'/&gt;
+
+   &lt;/dataset&gt;
+
+   &lt;colorRange gradient='1' minValue='0' code='57743A' startlabel='Very Bad' endLabel="Very Good"&gt;
+	&lt;color code ='8AA660'  maxValue='30' label='BAD'/&gt;
+	&lt;color code ='E5F2D0' maxValue='70' label='AVERAGE'/&gt;
+	&lt;color code ='2A5F55' maxValue='100' /&gt;
+   &lt;/colorRange&gt;
+
+&lt;/chart&gt;
+</pre>
+    		</div>
+			<div id="tab4" class="tab_content">
+			  <pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Weekly Performance",
+    "subcaption":"In percentage",
+    "xaxisname":"Week Days",
+    "yaxisname":"Companies"
+  },
+  "rows":{
+    "row":[{
+        "id":"Google"
+      },
+      {
+        "id":"Yahoo"
+      },
+      {
+        "id":"Microsoft"
+      },
+      {
+        "id":"Symantec"
+      },
+      {
+        "id":"AOL"
+      }
+    ]
+  },
+  "columns":{
+    "column":[{
+        "id":"MON"
+      },
+      {
+        "id":"TUE"
+      },
+      {
+        "id":"WED"
+      },
+      {
+        "id":"THU"
+      },
+      {
+        "id":"FRI"
+      }
+    ]
+  },
+  "dataset":[{
+      "data":[{
+          "rowid":"Yahoo",
+          "columnid":"Mon",
+          "value":"0"
+        },
+        {
+          "rowid":"Yahoo",
+          "columnid":"Tue",
+          "value":"71"
+        },
+        {
+          "rowid":"Yahoo",
+          "columnid":"Wed",
+          "value":"70"
+        },
+        {
+          "rowid":"Yahoo",
+          "columnid":"Thu",
+          "value":"63"
+        },
+        {
+          "rowid":"Yahoo",
+          "columnid":"Fri",
+          "value":"79"
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Mon",
+          "value":"68"
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Tue",
+          "value":"35"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Wed",
+          "value":"31"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Thu",
+          "value":"79"
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Fri",
+          "value":"55.98"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Mon",
+          "value":"98"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Tue",
+          "value":"48"
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Wed",
+          "value":"95"
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Thu",
+          "value":"17"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Fri",
+          "value":"39"
+        },
+        {
+          "rowid":"Symantec",
+          "columnid":"Mon",
+          "value":"89"
+        },
+        {
+          "rowid":"Symantec",
+          "columnid":"Tue",
+          "value":"68"
+        },
+        {
+          "rowid":"Symantec",
+          "columnid":"Wed",
+          "value":"90"
+        },
+        {
+          "rowid":"Symantec",
+          "columnid":"Thu",
+          "value":"19"
+        },
+        {
+          "rowid":"Symantec",
+          "columnid":"Fri",
+          "value":"69"
+        },
+        {
+          "rowid":"AOL",
+          "columnid":"Mon",
+          "value":"58"
+        },
+        {
+          "rowid":"AOL",
+          "columnid":"Tue",
+          "value":"27"
+        },
+        {
+          "rowid":"AOL",
+          "columnid":"Wed",
+          "value":"100"
+        },
+        {
+          "rowid":"AOL",
+          "columnid":"Thu",
+          "value":"70"
+        },
+        {
+          "rowid":"AOL",
+          "columnid":"Fri",
+          "value":"89"
+        }
+      ]
+    }
+  ],
+  "colorrange":{
+    "gradient":"1",
+    "minvalue":"0",
+    "code":"57743A",
+    "startlabel":"Very Bad",
+    "endlabel":"Very Good",
+    "color":[{
+        "code":"8AA660",
+        "maxvalue":"30",
+        "label":"BAD"
+      },
+      {
+        "code":"E5F2D0",
+        "maxvalue":"70",
+        "label":"AVERAGE"
+      },
+      {
+        "code":"2A5F55",
+        "maxvalue":"100"
+      }
+    ]
+  }
+}</pre>
+			</div>
+		 </div>
+	  </div><div style="clear:both"></div>
+</td>
+  </tr>
+  <tr>
+    <td valign="top" class="text">
+      <p>The above data contains two new elements - <span class="codeInline">&lt;rows&gt;</span> and <span class="codeInline">&lt;columns&gt;</span>. These two elements are used to explicitly define the order of rows and columns in a table. The element <span class="codeInline">&lt;rows&gt;</span> is a collection of <span class="codeInline">&lt;row&gt;</span> elements and the element <span class="codeInline">&lt;columns&gt;</span> is a collection of <span class="codeInline">&lt;column&gt;</span> elements. Each row and column is set with a unique ID using the <span class="codeInline">Id</span> attribute through the <span class="codeInline">&lt;row&gt;</span> and <span class="codeInline">&lt;column&gt;</span> elements, respectively. Later on, in the <span class="codeInline">&lt;set&gt;</span> element this unique id is used to map and place the data in the defined location by the <span class="codeInline">columnId</span> and <span class="codeInline">rowId</span> attributes. For better understanding, we have used data in random order. Still the chart uses the same order which is specified in the <span class="codeInline">&lt;rows&gt;</span> and <span class="codeInline">&lt;columns&gt;</span> elements.</p>
+      <div class="imageBorder" style="padding:10px;">
+ <div class="msg_handler_slider"> You can also set the display names of the rows and columns by the <span class="codeInline">label</span> attribute through the <span class="codeInline">&lt;row&gt;</span> and <span class="codeInline">&lt;column&gt;</span> elements. <a>Click here</a> to see in more details. &raquo;</div> 
+ <div class="msg_body "> 
+
+ <div class="container" style="width:600px !important;">
+           <ul class="tabs">
+              <li><a href="#XML5">XML</a></li>
+              <li><a href="#JSON6">JSON</a></li>
+             
+           </ul>
+ <div class="tab_container">
+    		<div id="XML5" class="tab_content"><pre class="prettyprint code_container">
+&lt;chart ...&gt;
+  <strong>&lt;rows&gt;
+    &lt;row id='Google' label='Google US'/&gt;
+    &lt;row id='Yahoo' label='Yahoo US'/&gt;
+    &lt;row id='Microsoft' label='Microsoft US'/&gt;
+  &lt;/rows&gt;
+
+  &lt;columns&gt;
+    &lt;column id='MON' label='Monday'/&gt;
+    &lt;column id='TUE' label='Tuesday'/&gt;
+    &lt;column id='WED' label='Wednesday'/&gt;
+    &lt;column id='THU' label='Thursday'/&gt;
+    &lt;column id='FRI' label='Friday'/&gt;
+  &lt;/columns&gt;
+	...
+&lt;/chart&gt;
+	</strong></pre></div>
+	<div id="JSON6" class="tab_content"><pre class="prettyprint code_container">{
+  "chart":{},
+  "rows":{
+    "row":[{
+        "id":"Google",
+        "label":"Google US"
+      },
+      {
+        "id":"Yahoo",
+        "label":"Yahoo US"
+      },
+      {
+        "id":"Microsoft",
+        "label":"Microsoft US"
+      }
+    ]
+  },
+  "columns":{
+    "column":[{
+        "id":"MON",
+        "label":"Monday"
+      },
+      {
+        "id":"TUE",
+        "label":"Tuesday"
+      },
+      {
+        "id":"WED",
+        "label":"Wednesday"
+      },
+      {
+        "id":"THU",
+        "label":"Thursday"
+      },
+      {
+        "id":"FRI",
+        "label":"Friday"
+      }
+    ]
+  }
+  ...
+}
+	</pre></div>
+	</div></div>
+	<div style="clear:both;"></div>
+	<p>In the above data, to set the display name of the rows and columns in the chart we have used the <span class="codeInline">label</span> attribute. The chart for the same data will look as under:</p>
+	<p><img src="Images/rowandcolumnwithlabel.jpg" class="imageBorder" /></p>
+	
+	</div>
+	
+	</div>
+	</div>
+	
+<p class="header">Icon Legend</p>
+<p>All the charts in previous examples contain a gradient scale below the heat map table. You can also create numeric based heat map charts with icon legends.</p>
+<p>A sample chart with icon legends is shown below: </p>
+<p><img src="Images/Numericchartwithiconlegend.jpg" class="imageBorder" /></p>
+The data for the above chart is as below:
+<tr>
+  <td>
+	<div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab7">XML</a></li>
+      	<li><a href="#tab8">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab7" class="tab_content">
+    		  <pre class="prettyprint code_container">
+&lt;chart Caption='Weekly Performance' subCaption='In percentage' xAxisName='Week Days' yAxisName='Companies'&gt;
+...
+&lt;colorRange <strong>gradient='0'</strong>&gt;
+        <strong>&lt;color code ='8AA660' minValue='0' maxValue='30' label='BAD'/&gt;
+        &lt;color code ='E5F2D0' minValue='30' maxValue='70' label='AVERAGE'/&gt;
+        &lt;color code ='2A5F55' minValue='70' maxValue='100' label='GOOD'/&gt;</strong>
+&lt;/colorRange&gt;
+&lt;/chart&gt;</pre>
+    		</div>
+<div id="tab8" class="tab_content"><pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Weekly Performance",
+    "subcaption":"In percentage",
+    "xaxisname":"Week Days",
+    "yaxisname":"Companies"
+  },
+  ...
+  "colorrange":{
+  <strong>  "gradient":"0",</strong>
+    <strong>"color":[{
+        "code":"8AA660",
+        "minvalue":"0",
+        "maxvalue":"30",
+        "label":"BAD"
+      },
+      {
+        "code":"E5F2D0",
+        "minvalue":"30",
+        "maxvalue":"70",
+        "label":"AVERAGE"
+      },
+      {
+        "code":"2A5F55",
+        "minvalue":"70",
+        "maxvalue":"100",
+        "label":"GOOD"
+      }
+    ]</strong>
+  }
+}
+	</pre>
+</div>
+	</div></div>
+	<div style="clear:both;"></div>
+	<p> In the above data:</p>
+	<ol>
+	  <li>The <span class="codeInline">gradient</span> attribute <span class="codeInline"></span> is set to '0' (So, the chart is displaying icon legend instead of gradient legend. If this attribute is not mentioned in the <span class="codeInline">&lt;colorRange&gt;</span> element, the chart displays icon legend by default)</li>
+	  <li><span class="codeInline">minValue </span>is <strong>not</strong> defined in the &lt;colorRange&gt; element </li>
+	  <li>Each <span class="codeInline">&lt;color&gt;</span> element defines <span class="codeInline">minValue</span>, <span class="codeInline">maxValue, </span>color <span class="codeInline">code</span> and <span class="codeInline">label</span>&nbsp; for the particular color range</li>
+	  </ol>
+   <br/>
+  </td>
+  </tr>
+  
+  <tr>
+   <td valign="top" class='header'>Note on <span class="codeInline">&lt;ColorRange&gt;</span> element </td>
+  </tr>
+  <tr>
+  <td>
+    <p> The <span class="codeInline">&lt;colorRange&gt;</span> element is used to specify single color ranges or gradient color scale for a range of numbers. </p>
+    <p><strong>Single color:</strong> When a single color is set in the <span class="codeInline">&lt;colorRange&gt;</span> element then the chart displays a single color icon on the legend for a numeric range. For example, there are three numeric ranges:  0-30, 30-70 and 70-100. The colors red, yellow and green are set for each of the ranges respectively. So, any number greater than or equals to 0 and less than 30 will appear in the color red, any number greater than or equals to 30 and less than 70 will appear in the color yellow and any number greater than or equals to 70 and less than or equals to 100 will appear in the color green. </p>
+    <p>The above given equation is shown in the table below:</p>
+    <table width="400" border="0" class="table">
+      <tr>
+        <td class="header">Numeric Range </td>
+        <td class="header">Label</td>
+        <td class="header">Color</td>
+      </tr>
+      <tr>
+        <td>0 &lt;= value &lt; 30</td>
+        <td> Bad </td>
+        <td>Red</td>
+      </tr>
+      <tr>
+        <td>30 &lt;= value &lt; 70</td>
+        <td>Average</td>
+        <td>Yellow</td>
+      </tr>
+      <tr>
+        <td>70 &lt;= value &lt;= 100</td>
+        <td>Good</td>
+        <td>Green</td>
+      </tr>
+    </table>
+    <p> For more details refer to the <a href="iconlegend.html">Icon Legend</a> page.</p>
+    <p><strong>Gradient color:</strong> When gradient color is used in the <span class="codeInline">&lt;colorRange&gt;</span> element the chart displays a gradient scale on the legend which contains the mixture of one or more colors along with the original colors. For more details refer to the <a href="gradientlegend.html">Gradient Legend</a> page.  
+<p class="header">Providing individual cell colors</p>
+You can also set individual colors for a particular cell apart from the colors defined in the <span class="codeInline">&lt;colorRange&gt;</span> element. To do this, you need to use the <span class="codeInline">color</span> attribute within the <span class="codeInline">&lt;set&gt;</span> element. To show this, let's use the same chart and change the color of the first two data plots or cells. The chart will look like as under:
+<p><img src="Images/Colorofindividualcell.jpg" class="imageBorder" /></p>
+The data for the above chart is given below:
+<tr>
+  <td>
+	<div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab9">XML</a></li>
+      	<li><a href="#tab10">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab9" class="tab_content">
+    		  <pre class="prettyprint code_container">
+&lt;chart Caption='Weekly Performance' subCaption='In percentage' xAxisName='Week Days' yAxisName='Companies' &gt;
+
+&lt;dataset&gt;
+    
+     &lt;set rowId='Google' columnId='Mon' value='68<strong>' color='D45FAA'/&gt;</strong>
+     &lt;set rowId='Google' columnId='Tue' value='35' <strong>color='FF9F55'/&gt;</strong>
+     &lt;set rowId='Google' columnId='Wed' value='95'/&gt;
+     &lt;set rowId='Google' columnId='Thu' value='17'/&gt;
+     &lt;set rowId='Google' columnId='Fri' value='55.98'/&gt;
+	 ...
+&lt;/dataset&gt;
+ &lt;colorRange gradient='1' minValue='0' code='57743A' startlabel='Very Bad' endLabel="Very Good"&gt;
+   
+    &lt;color code ='8AA660' maxValue='30' label='BAD'/&gt;
+    &lt;color code ='E5F2D0' maxValue='70' label='AVERAGE'/&gt;
+    &lt;color code ='2A5F55' maxValue='100' /&gt;  
+                
+   &lt;/colorRange&gt;
+
+&lt;/chart&gt;
+	 </pre>
+    		</div>
+<div id="tab10" class="tab_content">
+  <pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Weekly Performance",
+    "subcaption":"In percentage",
+    "xaxisname":"Week Days",
+    "yaxisname":"Companies"
+  },
+  "dataset":[{
+      "data":[{
+          "rowid":"Google",
+          "columnid":"Mon",
+          "value":"68",
+        <strong>  "color":"D45FAA"</strong>
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Tue",
+          "value":"35",
+         <strong> "color":"FF9F55"</strong>
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Wed",
+          "value":"95"
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Thu",
+          "value":"17"
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Fri",
+          "value":"55.98"
+        }
+		...
+      ]
+    }
+  ],
+  "colorrange":{
+    "gradient":"1",
+    "minvalue":"0",
+    "code":"57743A",
+    "startlabel":"Very Bad",
+    "endlabel":"Very Good",
+    "color":[{
+        "code":"8AA660",
+        "maxvalue":"30",
+        "label":"BAD"
+      },
+      {
+        "code":"E5F2D0",
+        "maxvalue":"70",
+        "label":"AVERAGE"
+      },
+      {
+        "code":"2A5F55",
+        "maxvalue":"100"
+      }
+    ]
+  }
+}
+	</pre>
+</div>
+	</div></div>
+	<div style="clear:both;"></div>
+	<p> In the above data, the <span class="codeInline">color</span> attribute is used in two <span class="codeInline">&lt;set&gt;</span> elements to apply different colors for the first two cells of the chart. These two colors are different from the colors defined in the <span class="codeInline">&lt;colorRange&gt;</span> element. The transparency of the cell can also be controlled by using the <span class="codeInline">alpha</span> attribute through the <span class="codeInline">&lt;set&gt;</span> elements.</p>
+	<p>In the next page we will see how non-numeric values can be plotted using heat map charts. </p>
+  </td>
+  </tr>
+</td></tr>      
+</table>
+</body>
+</html>
