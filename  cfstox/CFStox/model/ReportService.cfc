@@ -78,9 +78,10 @@
 		</cfoutput>
 		</cfsavecontent>
 		<cffile action="write" file="#local.Excelfilename#" output="#stockdata#"   />
+		<!--- todo: apply patch
 		<cfdocument  format="PDF" filename="#local.PDFfilename#" overwrite="true" orientation = "landscape">
 		<cfoutput>#stockData#</cfoutput>
-		</cfdocument>
+		</cfdocument> --->
 		<cfreturn />
 	</cffunction>
 	

@@ -1,0 +1,43 @@
+<chart halfErrorBar="1" xaxisname="Formulations" yaxisname="Relative to Control" errorBarWidthPercent="100" showvalues="0"  anchorradius="4" anchorsides="14" canvasborderalpha="40" linethickness="3" anchorborderthickness="3"  chartbottommargin="25" showshadow="1" charttopmargin="25" chartrightmargin="25" errorbarwidth='7' errorbarcolor='7BAB7E' errorbarthickness='2'>
+−
+<categories>
+<category label="A"/>
+<category label="B"/>
+<category label="C"/>
+<category label="D"/>
+<category label="E"/>
+<category label="F"/>
+<category label="G"/>
+<category label="H"/>
+</categories>
+−
+<dataset seriesName="Knockdown" showValues="0" >
+<set value="0.211076" errorValue="0.097802"/>
+<set value="0.450276" errorValue="0.102295"/>
+<set value="0.368874" errorValue="0.087787"/>
+<set value="0.715044" errorValue="0.08438"/>
+<set value="0.209661" errorValue="0.096219"/>
+<set value="0.914319" errorValue="0.081522"/>
+<set value="0.339887" errorValue="0.104881"/>
+<set value="0.214319" errorValue="0.091522"/>
+</dataset>
+−
+<dataset seriesName="Total Protein" showValues="0" >
+<set value="1.413691" errorValue="0.092655"/>
+<set value="1.105719" errorValue="0.12089"/>
+<set value="1.504506" errorValue="0.162548"/>
+<set value="1.364124" errorValue="0.175192"/>
+<set value="0.960436" errorValue="0.118757"/>
+<set value="1.399421" errorValue="0.131748"/>
+<set value="1.107908" errorValue="0.153635"/>
+<set value="1.191121" errorValue="0.138404"/>
+</dataset>
+<styles>
+    <definition>
+		<style name="myErrorAnim" type="animation" param="_yScale" start="0" duration="1"/>
+	</definition>
+	<application>
+		<apply toObject="ERRORBARS" styles="myErrorAnim"/>
+	</application>
+  </styles>
+</chart>

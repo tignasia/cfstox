@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">PowerCharts v3 Version History</td>
+  </tr>
+  <tr> 
+    <td valign="top" class="text">
+       <p>
+          PowerCharts v3.2.0 boasts of a plethora of enhancements which are listed below: </p>
+    </td>
+  </tr>
+   
+  <tr>
+  <td valign="top"  class="header"><a name="32" id="32"></a>What's new in v3.2.0</td>
+  </tr>
+  <tr>
+  <td valign="top" class="text">
+    <p class="highlightBlock">Existing PowerCharts users can learn how to use the new features introduced in PowerCharts v3.2 <a href="Upgrading32.html">here</a>. 
+      </p>
+    <ul>
+  <li>Automatic rendering of JavaScript charts on devices (like iPad and iPhone) where Flash player is not supported</li>
+  <li>5 new chart types:
+    <ul>
+      <li>Error Scatter chart</li>
+      <li>Error Line chart</li>
+      <li>Heat map chart</li>
+      <li>Box and whisker chart</li>
+      <li>Multi-series Step line chart</li>
+      </ul>
+  </li>
+  <li>Support for JSON data format</li>
+  <li>Drag-node chart now provides run time addition and deletion of nodes and connectors</li>
+  <li>Drag-node chart now allows to add text labels at run time or from the XML or JSON data </li>
+  <li>Support for <i>LinkedCharts</i>, where a single data source controls multiple charts</li>
+  <li>Interactive legends in charts that allow for selective showing/hiding of data series (or slicing, in case of pie charts) </li>
+  <li>Legends now support icons for each data series </li>
+  <li>Better management of labels on charts. Labels now have an auto rendering mode to prevent them from overlapping,  the chart selects the best display mode for labels depending on the length of the labels and the width of the chart. Long labels are   truncated, with ellipses appended to the truncated end of each label, and a tooltip bearing the completed label text is displayed when the user hovers over a truncated label</li>
+  <li>Support for line breaks and wrapping in all text elements including: caption, sub caption, X-axis title, Y-axis title, Labels and tooltips</li>
+  <li>In Line charts, data values can now be positioned either above or below the dataplots. Automatic positioning of data values is also supported</li>
+  <li>Custom alignment of caption and sub caption using STYLES</li>
+  <li>Advanced print management using JavaScript</li>
+  <li>Additional options for efficient event handling using JavaScript</li>
+  <li>Support for dynamic update of chart properties using JavaScript</li>
+  <li>Charts now support % based sizes along with dynamic resizing apart from Select Scatter, Drag Node, Drag Column, Drag Line, Drag Area charts </li>
+  </ul>
+  <br />
+  </td>
+  </tr>
+   
+   <tr>
+    <td valign="top" class="header"><a name="311" id="311"></a>What's new in v3.1: </td>
+  </tr>
+  <tr>
+    <td valign="top" class="text">
+    <br />
+    <ul>
+      <li>Ability to export charts as PNG/JPG/PDF at client side or server side. We've also devised a batch export mechanism at client side, which allows you to export all the charts in a page as a single image/PDF using one-click</li>
+      <li>Ability to use multi-lingual text in rotated fonts as well. We now use bitmap fonts to render all UTF-8 characters</li>
+      <li>Ability to specify labels for vLines and also to configure position of vLines and labels</li>
+      <li>Ability to copy data from chart as CSV using context menu, or JavaScript function</li>
+      <li>Personalization of chart - you can now add your logos over the chart, and also add an "About your company" to chart's context menu and link it to your URL</li>
+      <li><span class="codeInline">DisplayValue</span> attribute - Each data plot can now display a text value (instead of just the numeric value), allowing a sort of annotation to be rendered for each data point</li>
+      <li>Support for custom palettes for data point. You can now specify a list of colors that the chart will use for rendering data plots (column, pie, bar, line etc.). This allows for global configuration of palettes</li>
+      <li>Support for automatic wrapping in caption/sub-caption and tool-tips</li>
+      <li>More control over chart using JavaScript - many new APIs and events exposed by chart</li>
+    <br />
+    </td>
+  </tr>
+  <tr> 
+    <td valign="top" class="header"><a name="30" id="30"></a>What's new in v3.0? </td>
+  </tr>
+  <tr> 
+    <td valign="top" class="text">
+    <br />
+    <table width="95%" border="0" align="center" cellpadding="2" cellspacing="0">
+        <tr valign="middle" class="text"> 
+          <td valign="middle"><img src="../Images/Bullet.gif" width="18" height="19"  /></td>
+          <td class="textBold">Available Chart Types</td>
+        </tr>
+        <tr valign="middle" class="text"> 
+          <td>&nbsp;</td>
+          <td class="text">PowerCharts v3 introduces a lot of powerful chart types 
+              like:<br />
+            <ul>
+              <li>Error Bar Charts  </li>
+              <li>Spline Charts</li>
+              <li>Spline Area Charts</li>
+              <li>Logarithmic Axis Charts</li>
+              <li>Waterfall Chart</li>
+              <li>Inverse charts </li>
+              <li>Drag Node Chart</li>
+              <li>Multi Axis Line Chart</li>
+              <li>Candlestick</li>
+              <li>Radar Chart</li>
+              <li>Drag-able Column and Line Charts for advanced simulation scenarios </li>
+              <li>Kagi Chart </li>
+			  <li>Multi-level Pie Chart </li>
+			  <li>Select Scatter Chart </li>
+            </ul>
+            </td>
+        </tr>
+       <tr><td colspan="2" height="23"></td></tr>
+        <tr valign="top" class="text">
+          <td valign="middle"><img src="../Images/Bullet.gif" width="18" height="19"  /></td>
+          <td class="textBold">Ability to export charts as image </td>
+        </tr>
+        <tr valign="top" class="text">
+          <td>&nbsp;</td>
+          <td>
+            <p>Starting PowerCharts v3.0.5, you can now export your charts as images using a combination of client side and server side manipulation.</p>
+          </td>
+        </tr>
+        
+        <tr valign="top" class="text">
+          <td valign="middle"><img src="../Images/Bullet.gif" width="18" height="19"  /></td>
+          <td class="textBold">Easy but advanced integration with JavaScript</td>
+        </tr>
+        <tr valign="top" class="text">
+          <td>&nbsp;</td>
+          <td>
+            <p>PowerCharts v3 offers advanced options to integrate charts with your AJAX applications   or JavaScript modules. You can update charts on client side, invoke JavaScript   functions as hotspot links, or make dynamic calls for XML data without   involving any page refreshes. You can also specify a <span class="codeInline">DOMId</span> for each chart and have it register with JavaScript. The chart can then keep JavaScript functions posted around it's activities.</p>
+          </td>
+        </tr>
+        
+        
+        
+        <tr valign="middle" class="text"> 
+          <td width="15"> <div align="center"><img src="../Images/Bullet.gif" width="18" height="19"  /></div></td>
+          <td class="textBold">STYLE Element</td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td>&nbsp;</td>
+          <td>
+            <p>FusionCharts v3 suite introduces <span class="codeInline">Styles</span> 
+            to help you apply font,  effects and even animation to various objects 
+            of the chart. <span class="codeInline">Styles </span>lends a simple 
+            mechanism, using which you can easily control the visual layout of 
+            charts. </p>
+          </td>
+        </tr>
+        <tr valign="middle" class="text"> 
+          <td> <div align="center"><img src="../Images/Bullet.gif" width="18" height="19"  /></div></td>
+          <td class="textBold">Maps Supported</td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td>&nbsp;</td>
+          <td>
+            <p>FusionCharts v3 suite introduces maps in FusionMaps pack. FusionMaps is a collection of over 550 Flash based vector maps used to show 
+              different types of data related to geographical divisions. Suitable 
+              for use in web sites and applications, each map exposes its properties 
+              using an XML API. Setting up a map for use barely takes a few minutes 
+              and doesn't involve any modification of source code. All you need 
+              to do is feed the data in XML file and you're ready to go.</p>
+            <p class="highlightBlock">Please note that FusionMaps v3 is an independent product in FusionCharts 
+              v3 suite, and not present in standard license. You need to purchase it 
+              separately or you can buy the complete suite as <a href="http://www.fusioncharts.com/buy/#bundles" target="_blank">discounted bundle</a>.           </td>
+        </tr>
+        <tr valign="middle" class="text"> 
+          <td width="15"> <div align="center"><img src="../Images/Bullet.gif" width="18" height="19"  /></div></td>
+          <td class="textBold">Built in Adobe Flash 8 using ActionScript 2</td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td>&nbsp;</td>
+          <td>
+            <p>PowerCharts v3 is coded in Flash 8 and ActionScript 2 to fully 
+            utilize the new and advanced features of Flash 8 like dynamic tweening, 
+            filters, better speed, advanced OOP structures etc.</p>
+          </td>
+        </tr>
+       <tr valign="top" class="text"> 
+          <td width="15" valign="middle"> <div align="center"><img src="../Images/Bullet.gif" width="18" height="19"  /></div></td>
+          <td class="textBold">New Debug Mode</td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td>&nbsp;</td>
+          <td>
+            <p>PowerCharts v3 introduces a debug mode for each chart. The debug 
+            mode helps you to look into what's happening in the chart - behind the 
+            scenes. You can see how the chart is initializing, getting its data 
+            and interacting with JavaScript. Various errors generated are also 
+            shown in this. So, whenever you see an error on the chart now, all 
+            you need to do is switch to the debug mode to locate and fix it.</p>
+          </td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td width="15" valign="middle"> <div align="center"><img src="../Images/Bullet.gif" width="18" height="19"  /></div></td>
+          <td class="textBold">Gradient Support</td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td>&nbsp;</td>
+          <td>
+            <p>FusionCharts v3 suite supports gradients for most of chart objects like 
+            background, canvas, data plot etc. Many new charts support a single 
+            attribute <span class="codeInline">use3DLighting</span> to allow advanced 
+            lighting and gradient effects on the chart for better visuals.</p>
+          </td>
+        </tr>
+        <tr valign="top" class="text">
+          <td valign="middle"><div align="center"><img src="../Images/Bullet.gif" width="18" height="19"  /></div></td>
+          <td class="textBold">Palette Support</td>
+        </tr>
+        <tr valign="top" class="text">
+          <td>&nbsp;</td>
+          <td>
+            <p>PowerCharts v3 introduces <span class="codeInline">Palettes</span> to help you quickly select colors themes for your chart. Starting v3, you can select one of the five pre-defined palettes to change look of your chart. You wouldn't need to specify any hex color codes when using <span class="codeInline">Palettes</span>.</p> 
+          </td>
+        </tr>
+        
+        <tr valign="top" class="text"> 
+          <td valign="middle"><img src="../Images/Bullet.gif" width="18" height="19"  /></td>
+          <td class="textBold">Dashed Line Support</td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td>&nbsp;</td>
+          <td>
+            <p>Starting PowerCharts v3, you can use dashed lines to plot:</p>
+          
+            <ul>
+              <li>Data (Columns, Lines, Pies etc.)</li>
+              <li>Grid Divisional Lines</li>
+              <li>Trend Lines</li>
+              <li>Vertical separator lines</li>
+            </ul>
+            <p>You can also specify the dash properties like dash length, gap 
+              etc.</p></td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td valign="middle"><img src="../Images/Bullet.gif" width="18" height="19"  /></td>
+          <td class="textBold">Multiple display modes for data labels</td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td>&nbsp;</td>
+          <td>
+            <p>In PowerCharts v3, a lot of options have been introduced to allow 
+            for better x-axis label control. You can now WRAP, STAGGER or ROTATE 
+            the x-axis labels.</p> 
+          </td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td valign="middle"><img src="../Images/Bullet.gif" width="18" height="19"  /></td>
+          <td class="textBold">Rotated value boxes &amp; dynamic placement options</td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td>&nbsp;</td>
+          <td>
+            <p>The data value text fields can now be rotated to avoid cluttering. 
+            Also, in case of column charts, you can select whether to place the 
+            value textboxes inside the columns or outside. If there is no space, 
+            PowerCharts v3 will automatically adjust positions.</p>
+          </td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td valign="middle"><img src="../Images/Bullet.gif" width="18" height="19"  /></td>
+          <td class="textBold">Number scale support</td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td>&nbsp;</td>
+          <td>
+            <p>PowerCharts v3 introduces number scaling and better control 
+              over number formatting.</p>
+          </td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td valign="middle"><img src="../Images/Bullet.gif" width="18" height="19"  /></td>
+          <td class="textBold">Automatic Divisional Line Numbering</td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td>&nbsp;</td>
+          <td>
+            <p>PowerCharts v3 introduces automatic divisional line numbering 
+              and placement to best position them on the chart.</p>
+          </td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td valign="middle"><img src="../Images/Bullet.gif" width="18" height="19"  /></td>
+          <td class="textBold">Better printing support</td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td>&nbsp;</td>
+          <td><p>The context menu of the chart now includes a new item &quot;Print 
+              Chart&quot;, which offers standard cross-browser printing support.</p></td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td valign="middle"><img src="../Images/Bullet.gif" width="18" height="19"  /></td>
+          <td class="textBold">More control over dynamic resizing</td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td>&nbsp;</td>
+          <td><p>v3 introduces two mode of chart resizing - <span class="codeInline">exactFit</span> 
+              and <span class="codeInline">noScale</span>. <span class="codeInline">noScale</span> 
+              uses pixel based resizing. In <span class="codeInline">exactFit</span> 
+              mode, you can resize the chart based on percentage. Also, <span class="codeInline">exactFit</span> 
+              mode allows dynamic scaling, when the container object (browser, 
+              table, DIV etc.) is resized.</p></td>
+        </tr>
+        
+        
+        <tr valign="top" class="text"> 
+          <td valign="middle"><img src="../Images/Bullet.gif" width="18" height="19"  /></td>
+          <td class="textBold">Better Legend</td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td>&nbsp;</td>
+          <td>
+            <p>PowerCharts v3 introduces a better looking and interactive legend 
+              for the multi-series/combination charts. You can customize a lot 
+              of the properties for the Legend of each chart.</p>
+          </td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td valign="middle"><img src="../Images/Bullet.gif" width="18" height="19"  /></td>
+          <td class="textBold">Advanced drill down features</td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td>&nbsp;</td>
+          <td><p>The chart items can now link to new window, pop-up, frames or 
+              self window.</p></td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td valign="middle"><img src="../Images/Bullet.gif" width="18" height="19"  /></td>
+          <td class="textBold">Vertical division lines between any two data points.</td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td>&nbsp;</td>
+          <td><p>In charts with axis support, you can now opt for vertical division lines between 
+              any two sets of data. This particularly helps when you're plotting 
+              data for say 2 yrs and you want a visible separator between the 
+              two years' data on chart.</p></td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td valign="middle"><img src="../Images/Bullet.gif" width="18" height="19"  /></td>
+          <td class="textBold">Entire chart as a hotspot</td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td>&nbsp;</td>
+          <td><p>Starting v3, the entire chart can now act as a single hotspot.</p></td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td valign="middle"><img src="../Images/Bullet.gif" width="18" height="19" /></td>
+          <td class="textBold">Custom tool tip for each data plot item</td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td>&nbsp;</td>
+          <td><p>You can now set your own custom tool tip text for each data plot item.</p></td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td valign="middle"><img src="../Images/Bullet.gif" width="18" height="19" /></td>
+          <td class="textBold">Multiple language support for application messages</td>
+        </tr>
+        <tr valign="top" class="text"> 
+          <td>&nbsp;</td>
+          <td><p>You can now easily customize the chart to show application messages 
+              (loading chart, loading data, rendering chart etc.) in your own 
+              language. To do so, you need to specify the messages in chart source 
+              and re-compile</p></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

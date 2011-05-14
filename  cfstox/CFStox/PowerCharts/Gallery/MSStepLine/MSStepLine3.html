@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Multi Series Step Line Chart</title>
+
+        <link href="../assets/ui/css/style.css" rel="stylesheet" type="text/css" />
+        <link href="../assets/prettify/prettify.css" rel="stylesheet" type="text/css" />
+
+        <script language="JavaScript" src="../../Charts/FusionCharts.js"></script>
+        <script type="text/javascript" src="../assets/ui/js/json2.js"></script>
+
+        <script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js"></script>
+        <script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+        <script type="text/javascript" src="../assets/ui/js/gallery_helper.js"></script>
+
+        <style type="text/css">
+            body { background:none !important }
+        </style>
+
+    </head>
+    <body>
+        <!-- heading -->
+        <h3 class="chart-title">Multi Series Step Line Chart</h3>
+<p>&nbsp;</p>
+        <div id="chartdiv" align="center">
+            FusionCharts.
+        </div>
+
+        <script type="text/javascript">
+            var chart = new FusionCharts("../../Charts/MSStepLine.swf", "ChartId", "570", "380", "0", "0");
+            chart.setXMLUrl("../Data/MSStepLine3.xml");
+            chart.render("chartdiv");
+        </script>
+
+        <P align="center" class="chartdesc">
+            In the chart above, we have plotted the revenue of an organization for the year 2005 and 2006 which have been further divided into 12 months to display the monthly sales in each business year.
+        </P>
+
+        <!-- action buttons -->
+        <div class="qua-button-holder">
+            <a class="qua qua-button view-chart-data" href="javascript:void(0)"><span>View XML</span></a>
+            <a class="qua qua-button view-chart-data" href="javascript:void(0)"><span>View JSON</span></a>
+        </div>
+
+        <!-- data viewer -->
+        <div class="show-code-block">
+            <span id="titlebar">XML</span>
+            <div class="show-code-close-icon"><a href="javascript:void(0)"><img src="../assets/ui/images/close.gif" /></a></div>
+            <div class="clear"></div>
+            <pre class="prettyprint"></pre>
+            <div class="show-code-close-btn"><a class="qua qua-button" href="javascript:void(0)"><span>Close</span></a></div>
+        </div>
+
+    </body>
+</html>

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Drag-able Chart &gt; Reading data using JavaScript </td>
+  </tr>
+  <tr> 
+    <td valign="top" class="text"><p>In our previous section, we had seen how to submit the updated data from chart to a server side script as form elements. Here, we'll see how to read the updated data using JavaScript functions present on the same page.</p>
+      <p class="highlightBlock">Code samples discussed in this section is present in <span class="codeInline">Download Package &gt; Code &gt; DragColumn </span> folder.</p>      
+    </td>
+  </tr>
+  
+  <tr>
+    <td valign="top" class="text">
+      <p>After the chart is rendered, whenever we need access to chart's latest data data as array, we can simple call the following function on the chart: </p>
+    <pre class="prettyprint code_container"><span class="codeComment">//Get a reference to our chart</span>
+  var ourChart = FusionCharts(&quot;SelectChart&quot;); 
+<span class="codeComment">//Now get the data as array. </span>
+  var arrData = <strong>ourChart.getDataWithId()</strong>;      </pre>
+ <p> We first need to get a reference to the chart object. We do so using <a href="../FCV3Basics/JavaScript/API/Methods.html"><span class="codeInline">FusionCharts</span></a> item reference method. Next, to get the data as array, we simply call the <span class="codeInline">getDataWithId</span> method of the chart. This method returns the data of chart in a 3-dimensional array. The structure of the array is as under:</p> 
+    </td>
+  </tr>
+  <tr>
+    <td valign="top" class="text"><table class="table" width="98%" border="0" cellpadding="0" cellspacing="0" >
+      <tr>
+        <td width="20%" valign="top" class="header">[0,0] - Empty </td>
+        <td width="18%" valign="top" class="header">[0,1]- Dataset id</td>
+        <td width="18%" valign="top" class="header">[0,2] - Dataset Id </td>
+        <td width="18%" valign="top" class="header">[0,n]- Dataset Id </td>
+        <td width="15%" valign="top" class="header">[0,n]- Dataset Id</td>
+      </tr>
+      <tr>
+        <td valign="top" class="text"><strong>[1,0] - Category label of data index 1 </strong></td>
+        <td valign="top" class="text">Data for dataset [1] data index [1] - returned as an array with two elements.
+          <p>Sub array [0] - Id of set</p>
+          Sub array [1] - Updated value of set </td>
+        <td valign="top" class="text">Data for dataset [2] data index [1] - returned as an array with two elements.
+          <p>Sub array [0] - Id of set</p>
+          Sub array [1] - Updated value of set</td>
+        <td valign="top" class="text">Data for dataset [n] data index [m] - returned as an array with two elements.
+          <p>Sub array [0] - Id of set</p>
+          Sub array [1] - Updated value of set</td>
+        <td valign="top" class="text">Same as left </td>
+      </tr>
+      <tr>
+        <td valign="top" class="text"><strong>[2,0] - Category label of data index 2 </strong></td>
+        <td valign="top" class="text">Data for dataset [1] data index [2] - returned as an array with two elements.
+          <p>Sub array [0] - Id of set</p>Sub array [1] - Updated value of set</td>
+        <td valign="top" class="text">Same as above </td>
+        <td valign="top" class="text">Same as above </td>
+        <td valign="top" class="text">Same as left </td>
+      </tr>
+      <tr>
+        <td valign="top" class="text"><strong>[m,0] - Category label of data index m </strong></td>
+        <td valign="top" class="text">Data for dataset [n] data index [m] - returned as an array with two elements.
+          <p>Sub array [0] - Id of set</p>Sub array [1] - Updated value of set</td>
+        <td valign="top" class="text">Same as above </td>
+        <td valign="top" class="text">Same as above </td>
+        <td valign="top" class="text">Same as left </td>
+      </tr>
+      <tr>
+        <td valign="top" class="text"><strong>[m,0] - Category label of data index m </strong></td>
+        <td valign="top" class="text">Same as above </td>
+        <td valign="top" class="text">Same as above </td>
+        <td valign="top" class="text">Same as above </td>
+        <td valign="top" class="text">Same as left </td>
+      </tr>
+      <tr>
+        <td valign="top" class="text"><strong>[m,0] - Category label of data index m </strong></td>
+        <td valign="top" class="text">Same as above</td>
+        <td valign="top" class="text">Same as above </td>
+        <td valign="top" class="text">Same as above </td>
+        <td valign="top" class="text">Same as left </td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td valign="top" class="text"><p>To make things simpler, let's consider the following XML:</p> 
+    <pre class="prettyprint code_container">&lt;chart palette='1' caption='Revenue / Profit Simulation Chart' subcaption='Drag the top edge of columns to simulate revenue and profit' 
+       showvalues='0' xAxisName='Quarter' yAxisName='Dollars' numberPrefix='$' formatNumberScale='1'
+       defaultAnimation='0' showFormBtn='0'&gt;
+&nbsp;&nbsp;&nbsp;&lt;categories&gt;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Quarter 1' /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Quarter 2' /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Quarter 3' /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;category label='Quarter 4' /&gt;
+&nbsp;&nbsp;&nbsp;&lt;/categories&gt;
+&nbsp;&nbsp;&nbsp;&lt;dataset id='R' seriesName='Revenue' allowNegativeDrag='0'&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;set id='R1' value='3554800' /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;set id='R2' value='3014800' /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;set id='R3' value='2737200' /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;set id='R4' value='3540700' /&gt;
+&nbsp;&nbsp;&nbsp;&lt;/dataset&gt;
+&nbsp;&nbsp;&nbsp;&lt;dataset id='P' seriesName='Profit'&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;set id='P1' value='870000' /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;set id='P2' value='-419400' /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;set id='P3' value='452600' /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;set id='P4' value='717300' allowNegativeDrag='0'/&gt;
+&nbsp;&nbsp;&nbsp;&lt;/dataset&gt;
+&nbsp;&nbsp;&nbsp;&lt;trendlines&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;line startValue='2800000' endValue='3500000' color='009900' displayValue='Target' isTrendZone='1' alpha='10' valueOnRight='1'/&gt;
+&nbsp;&nbsp;&nbsp;&lt;/trendlines&gt;
+&nbsp;&nbsp;&nbsp;&lt;styles&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;definition&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;style name=&quot;myCaptionFont&quot; type=&quot;font&quot; font=&quot;Arial&quot; size=&quot;14&quot; bold=&quot;1&quot; /&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;style name=&quot;mySubCaptionFont&quot; type=&quot;font&quot; font=&quot;Arial&quot; size=&quot;10&quot; bold=&quot;0&quot; /&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/definition&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;application&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;apply toObject=&quot;Caption&quot; styles=&quot;myCaptionFont&quot; /&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;apply toObject=&quot;SubCaption&quot; styles=&quot;mySubCaptionFont&quot; /&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/application&gt;
+&nbsp;&nbsp;&nbsp;&lt;/styles&gt;
+&lt;/chart&gt; </pre>
+    <p>This XML generates a chart as under: </p>
+<p><img src="../Images/DragCol1.jpg" width="512" height="315" /></p>
+<p>Now, without editing this data visually, if you return the data of chart as array using the <span class="codeInline">getDataWithId()</span> method of the chart object, the tabular mapping of returned array can be traced as under: </p></td>
+  </tr>
+  <tr>
+    <td valign="top" class="text"><table class="table" width="50%" border="0" cellpadding="0" cellspacing="0" >
+      <tr>
+        <td>(empty)</td>
+        <td><strong>Revenue</strong></td>
+        <td><strong>Profit</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Quarter 1</strong> </td>
+        <td>[R1,3554800]</td>
+        <td>[P1,870000]</td>
+      </tr>
+      <tr>
+        <td><strong>Quarter 2</strong> </td>
+        <td>[R2,3014800]</td>
+        <td>[P2,-419400]</td>
+      </tr>
+      <tr>
+        <td><strong>Quarter 3</strong> </td>
+        <td>[R3,2737200]</td>
+        <td>[P3,452600]</td>
+      </tr>
+      <tr>
+        <td><strong>Quarter 4</strong> </td>
+        <td>[R4,3540700]</td>
+        <td>[P4,717300]</td>
+      </tr>
+    </table>    </td>
+  </tr>
+  <tr>
+    <td valign="top" class="text"><p>If you map this with XML, you'll find the following:</p>
+      <ul>
+        <li>[0,0] index of array is empty </li>
+        <li>The first row in returned array contains the series name of each dataset placed horizontally (sequentially)</li>
+        <li>The first column in returned array contains the labels  of all the categories </li>
+        <li>Rest of the columns map to respective category and dataset. For each data, it's id and last updated value on chart in returned. In our example, since we've not changed any data visually on the chart, it's showing the original data.</li>
+      </ul>
+   </td>
+  </tr>
+  <tr><td height="25"></td></tr>
+  <tr>
+    <td valign="top" class="header">getData() function </td>
+  </tr>
+  <tr>
+    <td valign="top" class="text"><p>Similar to <span class="codeInline">getDataWithId</span>() function is <span class="codeInline">getData()</span> function, but with one dimension of data less. Unlike <span class="codeInline">getDataWithId() </span>method, that returns both the id and updated value of each data on the chart, this method just returns the value of each data. Thus, the return array is now converted into a 2 dimensional array, where each data cell just contains a numeric value representing the final value of data on the chart.</p>
+    <p>The tabular mapping of array returned by this method can be traced as under: </p></td>
+  </tr>
+  <tr>
+    <td valign="top" class="text"><table class="table" width="50%" border="0" cellpadding="0" cellspacing="0" >
+      <tr>
+        <td>(empty)</td>
+        <td><strong>Revenue</strong></td>
+        <td><strong>Profit</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Quarter 1</strong> </td>
+        <td>3554800</td>
+        <td>870000</td>
+      </tr>
+      <tr>
+        <td><strong>Quarter 2</strong> </td>
+        <td>3014800</td>
+        <td>-419400</td>
+      </tr>
+      <tr>
+        <td><strong>Quarter 3</strong> </td>
+        <td>2737200</td>
+        <td>452600</td>
+      </tr>
+      <tr>
+        <td><strong>Quarter 4</strong> </td>
+        <td>3540700</td>
+        <td>717300</td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td valign="top" class="text"><p>Fairly simple. We just have the values now in each data cell, which can be directly accessed by the index of the 2-dimensional array.</p>
+      <p>See it <a href="../../Code/DragColumn/Default.html" target="_blank">live</a>! </p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top" class="header">Reading XML Data from the chart </td>
+  </tr>
+  <tr>
+    <td valign="top" class="text"><p>The chart also provides a method to read the updated data in XML format. This method is named as <span class="codeInline">getXMLData</span>() and can be invoked as under:</p>
+  
+  <pre class="prettyprint code_container"><span class="codeComment">//Get a reference to our chart</span>
+var ourChart = FusionCharts(&quot;SelectChart&quot;); 
+<span class="codeComment">//Get the data from chart </span>
+var xmlRtn = ourChart.getXMLData();
+<span class="codeComment">//Show it to user in alert box.</span>
+alert(xmlRtn);</pre>    
+    </td>
+  </tr>
+   <tr>
+    <td valign="top" class="text">&nbsp;</td>
+  </tr>
+  <tr>
+    <td valign="top" class="highlightBlock text">The function <span class="codeInline"><a href="../FCV3Basics/JavaScript/JS_DataBackFromChart.html#drag">getXMLData</a>()</span>returns the latest/updated data. This function is also used to retrieve the original data from the chart. To get the <a href="../FCV3Basics/JavaScript/JS_DataBackFromChart.html#drag">original data</a> from the chart you need pass <span class="codeInline">false</span> as a parameter to the function. e.g., <span class="codeInline">var xmlRtn = ourChart.getXMLData(<strong>false</strong>);</span></td>
+  </tr>
+  <tr>
+    <td height="25"></td>
+  </tr>
+  <tr>
+    <td valign="top" class="header">Example Application in Code Download </td>
+  </tr>
+  <tr>
+    <td valign="top" class="text">
+      <p>Using all this information, we've built a simple example where we data from chart and render it dynamically in tabular format at client side using JavaScript. The code for this is contained in <span class="codeInline">Chart.html</span> in<span class="codeInline"> Download Package &gt; Code &gt; DragColumn</span> folder. </p>
+      <p>See it <a href="../../Code/DragColumn/Default.html" target="_blank">live</a>! </p>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

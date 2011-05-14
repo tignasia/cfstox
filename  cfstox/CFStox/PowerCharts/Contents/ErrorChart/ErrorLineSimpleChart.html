@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Error  Charts &gt; Error Line &gt; Creating a Simple Error Line Chart </td>
+  </tr>
+  <tr> 
+ <td valign="top" class="text"><p>Here, we' ll create a simple error line chart to show the change in temperature in different US cities on a particular date in two successive years. </p>
+ <p>The final chart would look as under: </p>
+ <p><img src="Images/Errorbar22.jpg"/></p>
+   <p>The data for the above chart would look like:</p>
+ <div class="container">
+    <ul class="tabs">
+       <li><a href="#tab1">XML</a></li>
+       <li><a href="#tab2">JSON</a></li>
+    </ul>
+    <div class="tab_container">
+       <div id="tab1" class="tab_content">
+        <pre class="prettyprint code_container">&lt;chart caption=&quot;Temperatures Analysis&quot; yAxisName=&quot;Temperature&quot; numberSuffix=&quot;C&quot; showValues='0' halfErrorBar=&quot;0&quot; errorBarColor='666666'&gt;<br />  
+  &lt;categories&gt;<br />    &lt;category label=&quot;Houston&quot;/&gt;<br />    &lt;category label=&quot;San Francisco&quot;/&gt;<br />    &lt;category label=&quot;New York&quot;/&gt;<br />    &lt;category label=&quot;Chicago&quot;/&gt;<br />    &lt;category label=&quot;Detroit&quot;/&gt;<br />  &lt;/categories&gt;
+<br />  &lt;dataset seriesName='1st Mar 2007'&gt;<br />    &lt;set value=&quot;-3.5&quot; errorValue=&quot;3&quot;/&gt;<br />    &lt;set value=&quot;6.6&quot; errorValue=&quot;2&quot;/&gt;<br />    &lt;set value=&quot;-3.5&quot; errorValue=&quot;4.5&quot;/&gt;<br />    &lt;set value=&quot;8.5&quot; errorValue=&quot;2.5&quot;/&gt;<br />    &lt;set value=&quot;5&quot; errorValue=&quot;3.7&quot;/&gt;<br />  &lt;/dataset&gt;
+<br />  &lt;dataset seriesName='1st Mar 2008'&gt;<br />    &lt;set value=&quot;4&quot; errorValue=&quot;3&quot;/&gt;<br />    &lt;set value=&quot;10&quot; errorValue=&quot;2&quot;/&gt;<br />    &lt;set value=&quot;4&quot; errorValue=&quot;4.5&quot;/&gt;<br />    &lt;set value=&quot;14&quot; errorValue=&quot;2.5&quot;/&gt;<br />    &lt;set value=&quot;14.5&quot; errorValue=&quot;3.7&quot;/&gt;<br />  &lt;/dataset&gt;
+<br />&lt;/chart&gt;</pre>
+        </div>
+        <div id="tab2" class="tab_content">
+  <pre id="pre-datajson2" class="prettyprint code_container">{
+  "chart":{
+    "caption":"Temperatures Analysis",
+    "yaxisname":"Temperature",
+    "numbersuffix":"C",
+    "showvalues":"0",
+    "halferrorbar":"0",
+    "errorbarcolor":"666666"
+  },
+  "categories":[{
+      "category":[{
+          "label":"Houston"
+        },
+        {
+          "label":"San Francisco"
+        },
+        {
+          "label":"New York"
+        },
+        {
+          "label":"Chicago"
+        },
+        {
+          "label":"Detroit"
+        }
+      ]
+    }
+  ],
+  "dataset":[{
+      "seriesname":"1st Mar 2007",
+      "data":[{
+          "value":"-3.5",
+          "errorvalue":"3"
+        },
+        {
+          "value":"6.6",
+          "errorvalue":"2"
+        },
+        {
+          "value":"-3.5",
+          "errorvalue":"4.5"
+        },
+        {
+          "value":"8.5",
+          "errorvalue":"2.5"
+        },
+        {
+          "value":"5",
+          "errorvalue":"3.7"
+        }
+      ]
+    },
+    {
+      "seriesname":"1st Mar 2008",
+      "data":[{
+          "value":"4",
+          "errorvalue":"3"
+        },
+        {
+          "value":"10",
+          "errorvalue":"2"
+        },
+        {
+          "value":"4",
+          "errorvalue":"4.5"
+        },
+        {
+          "value":"14",
+          "errorvalue":"2.5"
+        },
+        {
+          "value":"14.5",
+          "errorvalue":"3.7"
+        }
+      ]
+    }
+  ]
+}</pre>
+  </div>
+  </div>
+  </div>
+ </td>
+	</tr>   
+  <tr>
+  <td class="text"><p></p>
+  <p>In the data above, we have done the following:
+  <ul>
+  <li>Created the <span class="codeInline">&lt;chart&gt;</span> element and defined caption, y axis name, number suffix and disabled the display of datavalues in the chart. Also, in order to show full error bars, we have set <span class="codeInline">halfErrorBar='0'</span> as by default, only positive deviation is displayed.</li>
+  <li>Next, there lies the <span class="codeInline">errorBarColor</span> attribute which allows you to set a color for the error bars. Various other visual and functional aspects of error bars have been discussed in the <a href="ErrorLineConfig.html">Configuration</a> page. Moreover, you can specify innumerable  properties for the <span class="codeInline">&lt;chart&gt;</span> element which will let you control a myriad of functionalities in your chart.  The entire list of attributes   is present in the <a href="../ChartSS/ErrorLine.html">Chart XML Sheet</a>.</li>
+  <li>Moving on, we have <span class="codeInline">&lt;categories&gt;</span> element, in which you can define a custom label for each <span class="codeInline">&lt;category&gt;</span> element.</li>
+  <li>Thereafter, we added two <span class="codeInline">&lt;dataset&gt;</span> elements and  provided data for the respective series using <span class="codeInline">&lt;set&gt;</span> elements. In every <span class="codeInline">&lt;set&gt;</span> element, along with the datavalues we have also defined the range of possible errors as the value of  <span class="codeInline">errorValue</span> attribute.</li>
+  </ul>
+   </p>
+  
+  </td>
+  </tr>
+</table>
+</body>
+</html>
+

@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title> PowerCharts v3.2 - DrillDown - Using Frames</title>
+        <script type="text/javascript" src="../../../Charts/FusionCharts.js"></script>
+    </head>
+
+    <body bgcolor="#ffffff">
+
+        <div id="chartContainer" align="center">The chart will appear within this DIV. This text will be replaced by the chart.</div>
+        <script type="text/javascript"><!--
+
+            var myChart = new FusionCharts( "../../../Charts/Spline.swf",
+            "myChartId", "400", "300", "0", "0" );
+            myChart.setXMLUrl("../FrameData.xml");
+            myChart.render("chartContainer");
+
+            // -->
+        </script>
+
+    </body>
+</html>

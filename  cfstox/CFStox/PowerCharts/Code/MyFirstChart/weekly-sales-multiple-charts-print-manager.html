@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title> PowerCharts v3.2 - Print Manager</title>
+        <script type="text/javascript" src="../../Charts/FusionCharts.js"></script>
+        <link href="../assets/ui/css/style.css" rel="stylesheet" type="text/css" />
+       
+    </head>
+
+    <body>
+        <!-- wrapper -->
+        <div id="wrapper">
+            <!-- header -->
+            <div id="header">
+                <div class="logo"><a href="http://www.fusioncharts.com/powercharts/?BS=OfflineDocsLogo" target="_blank"><img src="../assets/ui/images/powerchartsv3.2-logo.jpg" width="180" height="97" alt="PowerCharts v3.2 logo" /></a></div>
+                <h1 class="brand-name">PowerCharts v3.2</h1>
+                <h1 class="logo-text-home"></h1>
+            </div>
+            <!-- content area -->
+            <div class="content-area">
+                <div id="content-area-inner-main">
+                    <h2 class="headline">Using Print Manager</h2>
+					<p style="text-aligh:center;">Print Manager is enabled in this page. It collects data from the charts provided in the page. After the print manager is ready with the image data and is ready to print, the "Print Page" button is enabled through an event. Click on the button to print the charts. </p>
+					<p>&nbsp;</p>	
+
+                    <div class="gen-chart-render">
+
+                        <center>
+                            <span id="chartContainerJan">January Column 2D Chart will load here</span>
+                            <span id="chartContainerFeb">February Column 2D Chart will load here</span>
+                            <span id="chartContainerMarch">March Pie Chart will load here</span>
+                            <span id="gridContainerJan">January Grid will load here</span>
+
+                            <script type="text/javascript"><!--
+
+                                var JanChart = new FusionCharts("../../Charts/Spline.swf", "JanChartId", "400", "300", "0", "1");
+                                JanChart.setXMLUrl("Data-Jan.xml");
+                                JanChart.render("chartContainerJan");
+
+                                var JanGrid = new FusionCharts("../../Charts/SplineArea.swf", "JanGridId", "400", "300", "0", "1");
+                                JanGrid.setXMLUrl("Data-Jan.xml");
+                                JanGrid.render("gridContainerJan");
+
+                                var FebChart = new FusionCharts("../../Charts/Waterfall2D.swf", "FebChartId", "400", "300", "0", "1");
+                                FebChart.setXMLUrl("Data-Feb.xml");
+                                FebChart.render("chartContainerFeb");
+
+                                var MarChart = new FusionCharts("../../Charts/Waterfall2D.swf", "MarChartId", "400", "300", "0", "1");
+                                MarChart.setXMLUrl("Data-Mar.xml");
+                                MarChart.render("chartContainerMarch");
+
+                                FusionCharts.printManager.enabled(true);
+                                // -->
+                            </script>
+
+                            <script type="text/javascript">
+
+                                // The Print Manager takes a  bit of time to make all the charts ready for managed print
+                                // Hence, declaring an event listener to listen to the PrintReadyStateChange evnet that
+                                // Print Manager invokes when all charts are ready for print
+                                // Add an event listener
+                                FusionCharts.addEventListener("PrintReadyStateChange", function (e, a) {
+                                    // Enables Print button when print manager is ready
+                                    document.getElementById('printButton').disabled = !a.ready;
+                                    // Also adds pertinent text
+                                    document.getElementById('status').innerHTML = a.ready ?
+                                        'Charts are ready for print. You may use File->Print now.' :
+                                        'Charts are not ready for managed print. Please wait.'
+                                });
+
+                            </script>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <!-- adds button which will invoke managedPrint() function when Print Manager is ready -->
+                            <button type="button" disabled="disabled" id="printButton" onClick="FusionCharts.printManager.managedPrint()">Print Page</button>
+                            <span id="status">Charts are not ready for managed print. Please wait.</span>
+
+
+                        </center>
+
+                    </div>
+                    <div class="clear"></div>
+                    <p>&nbsp;</p>
+                    <p class="small">    </p>
+                    <div class="underline-dull"></div>
+                </div>
+                <!-- footer -->
+                <div id="footer">
+                    <ul>
+                        <li><a href="index.html"><span>&laquo; Back to list of examples</span></a></li>
+                        <li class="pipe">|</li>
+                        <li><a href="../NoChart.html"><span>Unable to see the chart above?</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,27 @@
+
+<chart palette='2' xaxisname='Appliance' yaxisname='Life Span (yr)' caption='Life Span Chart of Appliances' subcaption='(With Error Values)' showValues='0' halfErrorBar='0' errorBarColor='ff0000' errorBarThickness='2' errorBarWidth='20' canvasPadding=''>
+
+    <categories>
+        <category label='AC - Central' />
+        <category label='AC - Window' />
+        <category label='Heat Pump' />
+        <category label='Coffee Machine' />
+        <category label='Dish Washer' />
+    </categories>
+
+    <dataset seriesName='At Home'>
+        <set value='50' errorValue='10' />
+        <set value='-100' errorValue='12' />
+        <set value='120' errorValue='19' />
+        <set value='90' errorValue='11' />
+        <set value='-98' errorValue='15' />
+    </dataset>
+
+    <dataset seriesName='In Office' >
+        <set value='-11' errorValue='15' />
+        <set value='60' errorValue='13' />
+        <set value='-12' errorValue='16' />
+        <set value='40' errorValue='15.8' />
+        <set value='70' errorValue='17' />
+    </dataset>
+</chart>

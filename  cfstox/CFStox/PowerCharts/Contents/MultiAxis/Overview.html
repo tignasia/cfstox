@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Multi-axis Line Chart &gt; Overview </td>
+  </tr>
+  <tr> 
+    <td class="text" valign="top"><p>The multi-axis line chart from PowerCharts suite is an interactive line chart that allows for the following features:</p>
+      <ul>
+        <li>Multiple axes on the same chart.</li>
+        <li>Interactive axis, which allows the end user to show/hide data-sets (lines) plotting against that axis. </li>
+        <li>Options to make the axis visible or imaginary.</li>
+        <li>Option to draw the axis on left or right side of chart.</li>
+        <li>Interactive options like dynamic sliding of axis from one end to other, upon clicking.</li>
+        <li>Ability to plot multiple data-sets against the same axis.</li>
+        <li>Axis specific properties like:
+          <ul>
+            <li>Upper and lower limits</li>
+            <li>Cosmetic Properties of axis </li>
+            <li>Divisional Lines</li>
+            <li>Cosmetic properties of datasets plotting against the particular axis </li>
+            <li>Number Formatting</li>
+          </ul>
+        </li>
+      </ul>
+      <p>Shown below is a simple multi-axis line chart, with three defined axes: </p></td>
+  </tr>
+  <tr>
+    <td valign="top" class="text"><img src="../ChartSS/Images/MALine.jpg" /></td>
+  </tr>
+  <tr>
+    <td valign="top" class="text"><p>As you can see above, you can select/clear either of the three axis. Upon unchecking an axis, the data lines pertaining to that axis would hide from the chart.</p>
+	<div class="highlightBlock"><div class="msg_handler_slider"> To view the data of the above displayed chart <a>Click here</a>. &raquo;</div> 
+ <div class="msg_body "> 
+ <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab1">XML</a></li>
+      	 <li><a href="#tab2">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab1" class="tab_content">
+    		  <pre class="prettyprint code_container">
+ &lt;chart caption='Power Generator' xAxisName='Time' showValues='0' divLineAlpha='100' numVDivLines='4' vDivLineAlpha='0' showAlternateVGridColor='1'  alternateVGridAlpha='5'&gt;
+   &lt;categories&gt;
+      &lt;category label='00:00s' /&gt;
+      &lt;category label='00:04s' /&gt;
+      &lt;category label='00:08s' /&gt;
+      &lt;category label='00:12s' /&gt;
+      &lt;category label='00:16s' /&gt;
+      &lt;category label='00:20s' /&gt;
+   &lt;/categories&gt;
+   &lt;axis title='Power' titlePos='left' tickWidth='10' divlineisdashed='1' numberSuffix='W'&gt; 
+      &lt;dataset seriesName='Power [W]' &gt;
+         &lt;set value='6' /&gt;
+         &lt;set value='26' /&gt;
+         &lt;set value='16' /&gt;
+         &lt;set value='27' /&gt;
+         &lt;set value='28' /&gt;
+         &lt;set value='33' /&gt;
+      &lt;/dataset&gt;
+   &lt;/axis&gt;
+   &lt;axis title='Temp.' titlePos='left' numDivLines='14' tickWidth='10' divlineisdashed='1' numberSuffix='F' &gt;
+      &lt;dataset seriesName='Temperature'&gt;
+         &lt;set value='296' /&gt;
+         &lt;set value='311' /&gt;
+         &lt;set value='336' /&gt;
+         &lt;set value='371' /&gt;
+         &lt;set value='389' /&gt;
+         &lt;set value='393' /&gt;
+      &lt;/dataset&gt;
+   &lt;/axis&gt;
+   &lt;axis title='Speed[RPM]' titlepos='RIGHT' axisOnLeft='0' numDivLines='10' tickWidth='10' divlineisdashed='1'&gt;   
+      &lt;dataset seriesName='Speed'&gt;
+         &lt;set value='1' /&gt;
+         &lt;set value='11' /&gt;
+         &lt;set value='36' /&gt;
+         &lt;set value='49' /&gt;
+         &lt;set value='68' /&gt;
+         &lt;set value='88' /&gt;
+      &lt;/dataset&gt;
+   &lt;/axis&gt;
+&lt;/chart&gt;</pre>
+    		</div>
+			<div id="tab2" class="tab_content">
+			  <pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Power Generator",
+    "xaxisname":"Time",
+    "showvalues":"0",
+    "divlinealpha":"100",
+    "numvdivlines":"4",
+    "vdivlinealpha":"0",
+    "showalternatevgridcolor":"1",
+    "alternatevgridalpha":"5"
+  },
+  "categories":[{
+      "category":[{
+          "label":"00:00s"
+        },
+        {
+          "label":"00:04s"
+        },
+        {
+          "label":"00:08s"
+        },
+        {
+          "label":"00:12s"
+        },
+        {
+          "label":"00:16s"
+        },
+        {
+          "label":"00:20s"
+        }
+      ]
+    }
+  ],
+  "axis":[{
+      "title":"Power",
+      "titlepos":"left",
+      "tickwidth":"10",
+      "divlineisdashed":"1",
+      &quot;numberSuffix&quot;:&quot;W&quot;
+      "dataset":[{
+          "seriesname":"Power [W]",
+          "data":[{
+              "value":"6"
+            },
+            {
+              "value":"26"
+            },
+            {
+              "value":"16"
+            },
+            {
+              "value":"27"
+            },
+            {
+              "value":"28"
+            },
+            {
+              "value":"33"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title":"Temp.",
+      "titlepos":"left",
+      "numdivlines":"14",
+      "tickwidth":"10",
+      "divlineisdashed":"1",
+      &quot;numberSuffix&quot;:&quot;F&quot;
+      "dataset":[{
+          "seriesname":"Temperature",
+          "data":[{
+              "value":"296"
+            },
+            {
+              "value":"311"
+            },
+            {
+              "value":"336"
+            },
+            {
+              "value":"371"
+            },
+            {
+              "value":"389"
+            },
+            {
+              "value":"393"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title":"Speed[RPM]",
+      "titlepos":"RIGHT",
+      "axisonleft":"0",
+      "numdivlines":"10",
+      "tickwidth":"10",
+      "divlineisdashed":"1",
+      "dataset":[{
+          "seriesname":"Speed",
+          "data":[{
+              "value":"1"
+            },
+            {
+              "value":"11"
+            },
+            {
+              "value":"36"
+            },
+            {
+              "value":"49"
+            },
+            {
+              "value":"68"
+            },
+            {
+              "value":"88"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}</pre>
+			</div>
+	  </div>
+    </div>
+	  <div style="clear:both"></div> </div></div>
+    <p>Also, if you click on any axis that is not the primary or secondary axis (the first left or first right axis from canvas), e.g., &quot;Power&quot; axis in the above chart, it will animate and exchange places with the &quot;Temperature&quot; axis, so as to form the primary axis. </p>
+    <p>If you do not want your users to be able to select visible axes, you can set:</p>
+    <pre class="prettyprint code_container">&lt;chart ... allowSelection='0' ...&gt;</pre>
+    <p>Or, if you want to disallow dynamic shifting of axes (upon clicking), you can set:</p>
+    <pre class="prettyprint code_container">&lt;chart ... allowAxisShift='0' ... &gt;</pre>
+    <p class="text">To make an axis imaginary, you can set:</p>
+    <pre class="prettyprint code_container">&lt;axis showAxis='0' ..&gt;</pre>
+    <p class="text">This axis wouldn't show on the chart now. But any datasets plotted against this axis would show. Since the axis wouldn't show on the chart, even the checkbox for the axis won't show up. This feature can be used when you want particular data-sets to be always visible on the chart, so that the user cannot show/hide it. </p>
+    <p class="text">To position an axis on the right side of canvas, you can set:</p>
+    <pre class="prettyprint code_container">&lt;axis axisOnLeft='0' ..&gt;</pre>    </td>
+  </tr>
+</table>
+</body>
+</html>

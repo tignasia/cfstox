@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Heat map chart &gt; Overview </td>
+  </tr>
+  <tr> 
+    <td valign="top" class="text"><p>The heat map chart is a specialized chart which uses colors to represent data values in a table. Heat map charts are mostly used to plot large and complex data like employee attendance of a company, a periodic table, tracking investments in the stock market, comparing the performance of different companies and many more. You can set different colors for different levels of data. For example, in a chart measuring the level of weekly attendance of a company you can define colors red, yellow, blue and green to determine bad, average, good and excellent percentage of employee attendance respectively. When the chart is rendered the four levels can be easily distinguished by their respective colors.  </p>
+      <p>Key features of this chart are:</p>
+      <ul>
+        <li>Data is arranged in a tabular format containing finite number of rows and columns </li>
+        <li>Both numeric and non-numeric data can be provided to plot data</li>
+        <li>A solid color or a gradient color can be set to display a range of values </li>
+        <li>Interactive legend is used to show or hide data plots </li>
+        <li>Any data which is not mapped by the defined color range remains hidden </li>
+        <li>There are two types of legends : icon legend and gradient legend </li>
+      </ul>      
+      <p>A very basic Heat map chart looks as under: </p></td>
+  </tr>
+  <tr>
+    <td valign="top"><img src="Images/heatmapoverview.jpg" /></td>
+  </tr>
+  <tr>
+    <td valign="top" class="text"><p>And the XML for same can be listed as under: </p></td>
+  </tr>
+  <tr>
+    <td valign="top"> <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab1">XML</a></li>
+      	 <li><a href="#tab2">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab1" class="tab_content"><pre class="prettyprint code_container">
+&lt;chart Caption='PR Visibility (articles)' xAxisName='Week Days' yAxisName='Companies' &gt;
+    
+	&lt;rows&gt;
+		&lt;row id='Yahoo'/&gt;
+		&lt;row id='Google'/&gt;
+		&lt;row id='Microsoft'/&gt;
+		&lt;row id='Symantec'/&gt;
+		&lt;row id='AOL'/&gt;
+		
+	&lt;/rows&gt;
+
+	&lt;columns&gt;
+
+		&lt;column id='MON'/&gt;
+		&lt;column id='TUE'/&gt;
+		&lt;column id='WED'/&gt;
+		&lt;column id='THU'/&gt;
+		&lt;column id='FRI'/&gt;
+		
+	&lt;/columns&gt;
+	
+    &lt;dataset&gt;
+    
+     &lt;set rowId='Google' columnId='Mon' value='68'/&gt;
+     &lt;set rowId='Google' columnId='Tue' value='35'/&gt;
+     &lt;set rowId='Google' columnId='Wed' value='95'/&gt;
+     &lt;set rowId='Google' columnId='Thu' value='17'/&gt;
+     &lt;set rowId='Google' columnId='Fri' value='55'/&gt;
+	 
+     &lt;set rowId='Yahoo' columnId='Mon' value='0'/&gt;
+     &lt;set rowId='Yahoo' columnId='Tue' value='71'/&gt;
+     &lt;set rowId='Yahoo' columnId='Wed' value='70'/&gt;
+     &lt;set rowId='Yahoo' columnId='Thu' value='63'/&gt;
+     &lt;set rowId='Yahoo' columnId='Fri' value='79'/&gt;
+
+     &lt;set rowId='Microsoft' columnId='Mon' value='98'/&gt;
+     &lt;set rowId='Microsoft' columnId='Tue' value='48'/&gt;
+     &lt;set rowId='Microsoft' columnId='Wed' value='31'/&gt;
+     &lt;set rowId='Microsoft' columnId='Thu' value='79'/&gt;
+     &lt;set rowId='Microsoft' columnId='Fri' value='39'/&gt;
+	 
+     &lt;set rowId='Symantec' columnId='Mon' value='89'/&gt;
+     &lt;set rowId='Symantec' columnId='Tue' value='68'/&gt;
+     &lt;set rowId='Symantec' columnId='Wed' value='90'/&gt;
+     &lt;set rowId='Symantec' columnId='Thu' value='19'/&gt;
+     &lt;set rowId='Symantec' columnId='Fri' value='69'/&gt;
+	 
+     &lt;set rowId='AOL' columnId='Mon' value='58'/&gt;
+     &lt;set rowId='AOL' columnId='Tue' value='27'/&gt;
+     &lt;set rowId='AOL' columnId='Wed' value='100'/&gt;
+     &lt;set rowId='AOL' columnId='Thu' value='70'/&gt;
+     &lt;set rowId='AOL' columnId='Fri' value='89'/&gt;
+
+   &lt;/dataset&gt;
+
+   &lt;colorRange gradient='1' minValue='0' code='B63300' startlabel='Very Bad' endLabel="Very Good"&gt;
+   
+        &lt;color code ='FFCC00' maxValue='30' label='BAD'/&gt;
+        &lt;color code ='87B213' maxValue='70' label='AVERAGE'/&gt;
+        &lt;color code ='006384'  maxValue='100' /&gt; 
+	
+   &lt;/colorRange&gt;
+&lt;/chart&gt;</pre>
+    		</div>
+			<div id="tab2" class="tab_content">
+			<pre class="prettyprint code_container">{
+ "chart":{
+    "caption":"Weekly Performance",
+    "subcaption":"In percentage",
+    "xaxisname":"Week Days",
+    "yaxisname":"Companies"
+  },
+  "rows":{
+    "row":[{
+        "id":"Yahoo"
+      },
+      {
+        "id":"Google"
+      },
+      {
+        "id":"Microsoft"
+      },
+      {
+        "id":"Symantec"
+      },
+      {
+        "id":"AOL"
+      }
+    ]
+  },
+  "columns":{
+    "column":[{
+        "id":"MON"
+      },
+      {
+        "id":"TUE"
+      },
+      {
+        "id":"WED"
+      },
+      {
+        "id":"THU"
+      },
+      {
+        "id":"FRI"
+      }
+    ]
+  },
+  "dataset":[{
+      "data":[{
+          "rowid":"Google",
+          "columnid":"Mon",
+          "value":"68"
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Tue",
+          "value":"35"
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Wed",
+          "value":"95"
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Thu",
+          "value":"17"
+        },
+        {
+          "rowid":"Google",
+          "columnid":"Fri",
+          "value":"55.98"
+        },
+        {
+          "rowid":"Yahoo",
+          "columnid":"Mon",
+          "value":"0"
+        },
+        {
+          "rowid":"Yahoo",
+          "columnid":"Tue",
+          "value":"71"
+        },
+        {
+          "rowid":"Yahoo",
+          "columnid":"Wed",
+          "value":"70"
+        },
+        {
+          "rowid":"Yahoo",
+          "columnid":"Thu",
+          "value":"63"
+        },
+        {
+          "rowid":"Yahoo",
+          "columnid":"Fri",
+          "value":"79"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Mon",
+          "value":"98"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Tue",
+          "value":"48"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Wed",
+          "value":"31"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Thu",
+          "value":"79"
+        },
+        {
+          "rowid":"Microsoft",
+          "columnid":"Fri",
+          "value":"39"
+        },
+        {
+          "rowid":"Symantec",
+          "columnid":"Mon",
+          "value":"89"
+        },
+        {
+          "rowid":"Symantec",
+          "columnid":"Tue",
+          "value":"68"
+        },
+        {
+          "rowid":"Symantec",
+          "columnid":"Wed",
+          "value":"90"
+        },
+        {
+          "rowid":"Symantec",
+          "columnid":"Thu",
+          "value":"19"
+        },
+        {
+          "rowid":"Symantec",
+          "columnid":"Fri",
+          "value":"69"
+        },
+        {
+          "rowid":"AOL",
+          "columnid":"Mon",
+          "value":"58"
+        },
+        {
+          "rowid":"AOL",
+          "columnid":"Tue",
+          "value":"27"
+        },
+        {
+          "rowid":"AOL",
+          "columnid":"Wed",
+          "value":"100"
+        },
+        {
+          "rowid":"AOL",
+          "columnid":"Thu",
+          "value":"70"
+        },
+        {
+          "rowid":"AOL",
+          "columnid":"Fri",
+          "value":"89"
+        }
+      ]
+    }
+  ],
+  "colorrange":{
+    "gradient":"1",
+    "minvalue":"0",
+    "code":"AA7F55",
+    "startlabel":"Very Bad",
+    "endlabel":"Very Good",
+    "color":[{
+        "code":"FFDFAA",
+        "maxvalue":"30",
+        "label":"BAD"
+      },
+      {
+        "code":"C0DCC0",
+        "maxvalue":"70",
+        "label":"AVERAGE"
+      },
+      {
+        "code":"007FAA",
+        "maxvalue":"100"
+      }
+    ]
+  }
+}</pre>
+			</div>
+	    </div>
+	  </div>
+	  <div style="clear:both"></div>
+	  <p> The above displayed heat map chart is derived using numeric based mapping. You can also render a heat map chart with non-numeric data.This type of a heat map chart is known as a &quot;Category based heat map chart&quot;. A sample chart is shown below:</p>
+	  <p><img src="Images/Categorybased.jpg"  class="imageBorder"/></p>
+	  The data for the above chart is given below:
+	  <tr>
+  <td>
+	<div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab3">XML</a></li>
+      	<li><a href="#tab4">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab3" class="tab_content">
+    		  <pre class="prettyprint code_container">
+&lt;chart caption='Periodic Table' subCaption='Other Metals-Metalloids' xAxisName='Group' yAxisName='Period' canvasBgColor='FFFFFF' mapByCategory='1' &gt;
+
+&lt;colorRange&gt;
+
+&lt;color code ='CCCCCC' label='Other metals'/&gt;
+&lt;color code ='CCCC99' label='Metalloids'/&gt;
+
+&lt;/colorRange&gt;
+
+&lt;dataset&gt;
+                
+  &lt;set columnId='13' rowId='2' colorRangeLabel='Metalloids' displayValue='B' <strong>color='7F7F00'/</strong>&gt;
+  &lt;set columnId='13' rowId='3' colorRangeLabel='Other metals' displayValue='Al' <strong>color='7FBFAA'</strong>/&gt;
+  &lt;set columnId='14' rowId='3' colorRangeLabel='Metalloids' displayValue='Si'/&gt;
+  &lt;set columnId='13' rowId='4' colorRangeLabel='Other metals' displayValue='Ga'/&gt;
+  &lt;set columnId='14' rowId='4' colorRangeLabel='Metalloids' displayValue='Ge'/&gt;
+  &lt;set columnId='15' rowId='4' colorRangeLabel='Metalloids' displayValue='As'/&gt;
+  &lt;set columnId='13' rowId='5' colorRangeLabel='Other metals' displayValue='In'/&gt;
+  &lt;set columnId='14' rowId='5' colorRangeLabel='Other metals' displayValue='Sn'/&gt;
+  &lt;set columnId='15' rowId='5' colorRangeLabel='Metalloids' displayValue='Sb'/&gt;
+  &lt;set columnId='16' rowId='5' colorRangeLabel='Metalloids' displayValue='Te'/&gt;
+  &lt;set columnId='13' rowId='6' colorRangeLabel='Other metals' displayValue='Tl'/&gt;
+  &lt;set columnId='14' rowId='6' colorRangeLabel='Other metals' displayValue='Pb'/&gt;
+  &lt;set columnId='15' rowId='6' colorRangeLabel='Other metals' displayValue='Bi'/&gt;
+  &lt;set columnId='16' rowId='6' colorRangeLabel='Metalloids' displayValue='Po'/&gt;
+
+&lt;/dataset&gt;
+
+&lt;/chart&gt;
+        
+	 </pre>
+    		</div>
+<div id="tab4" class="tab_content"><pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Periodic Table",
+    "subcaption":"Other Metals-Metalloids",
+    "xaxisname":"Group",
+    "yaxisname":"Period",
+    "canvasbgcolor":"FFFFFF",
+    "mapbycategory":"1",
+    "showcolumnidintooltext":"1",
+    "showrowidintooltext":"1"
+  },
+  "colorrange":{
+    "color":[{
+        "code":"CCCCCC",
+        "label":"Other metals"
+      },
+      {
+        "code":"CCCC99",
+        "label":"Metalloids"
+      }
+    ]
+  },
+  "dataset":[{
+      "data":[{
+          "columnid":"13",
+          "rowid":"2",
+          "colorRangeLabel":"Metalloids",
+          "displayvalue":"B",
+        <strong>  "color":"7F7F00"</strong>
+        },
+        {
+          "columnid":"13",
+          "rowid":"3",
+          "colorRangeLabel":"Other metals",
+          "displayvalue":"Al",
+        <strong>  "color":"7FBFAA"</strong>
+        },
+        {
+          "columnid":"14",
+          "rowid":"3",
+          "colorRangeLabel":"Metalloids",
+          "displayvalue":"Si"
+        },
+        {
+          "columnid":"13",
+          "rowid":"4",
+          "colorRangeLabel":"Other metals",
+          "displayvalue":"Ga"
+        },
+        {
+          "columnid":"14",
+          "rowid":"4",
+          "colorRangeLabel":"Metalloids",
+          "displayvalue":"Ge"
+        },
+        {
+          "columnid":"15",
+          "rowid":"4",
+          "colorRangeLabel":"Metalloids",
+          "displayvalue":"As"
+        },
+        {
+          "columnid":"13",
+          "rowid":"5",
+          "colorRangeLabel":"Other metals",
+          "displayvalue":"In"
+        },
+        {
+          "columnid":"14",
+          "rowid":"5",
+          "colorRangeLabel":"Other metals",
+          "displayvalue":"Sn"
+        },
+        {
+          "columnid":"15",
+          "rowid":"5",
+          "colorRangeLabel":"Metalloids",
+          "displayvalue":"Sb"
+        },
+        {
+          "columnid":"16",
+          "rowid":"5",
+          "colorRangeLabel":"Metalloids",
+          "displayvalue":"Te"
+        },
+        {
+          "columnid":"13",
+          "rowid":"6",
+          "colorRangeLabel":"Other metals",
+          "displayvalue":"Tl"
+        },
+        {
+          "columnid":"14",
+          "rowid":"6",
+          "colorRangeLabel":"Other metals",
+          "displayvalue":"Pb"
+        },
+        {
+          "columnid":"15",
+          "rowid":"6",
+          "colorRangeLabel":"Other metals",
+          "displayvalue":"Bi"
+        },
+        {
+          "columnid":"16",
+          "rowid":"6",
+          "colorRangeLabel":"Metalloids",
+          "displayvalue":"Po"
+        }
+      ]
+    }
+  ]
+}</pre></div>
+	</div></div>
+	<div style="clear:both;"></div>
+	  <p>For more details refer to the <a href="Categorybasedmapping.html">Category based mapping</a> page.
+	  <p>In a heat map chart you can display two types of legends:</p>
+	 
+	  <strong>Gradient legend	  </strong>
+	  <p><img src="Images/gradientlegendmain.jpg" width="436" height="74" class="imageBorder" /></p>
+	  For more details refer to the <a href="gradientlegend.html">Gradient legend</a> page.
+	 <p><strong> Icon legend</strong></p>
+	  <p><img src="Images/iconlegendmain.jpg" class="imageBorder" /></p>
+	  For more details refer to the <a href="iconlegend.html">Icon legends</a> page. <br />
+	  <p> Heat map chart also allows to display the data values in percentage. A chart with percentage values will look as under:</p>
+	  <p><img src="Images/percentmapping.jpg" width="547" height="392" class="imageBorder"/></p>
+	  <p>For more details refer to the<a href="gradientlegend.html#percent"> Gradient legend</a> page.  <br />
+     <p>Each cell in a heat map chart allows you to render 5 labels within itself.&nbsp;You can configure each cell of a heat map chart to show labels in 5 locations of the cell - center, top-left, top-right, bottom-left and bottom-right as shown in the chart below:     
+     <p><img src="Images/Brlabel.jpg" width="155" height="77" class="imageBorder"/>      
+     <p>For more details refer to the <a href="labels.html"> Labels</a> page.
+    </td>
+  </tr>
+  <tr>
+    <td valign="top" class="text">In the following pages we will discuss how to create a simple heat map chart and proceeded with detailed discussion of all the features stated above.  
+  </tr>
+ 
+</table>
+</body>
+</html>

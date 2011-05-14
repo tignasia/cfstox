@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Error  Charts &gt; Error Scatter &gt; Creating a Simple Error Scatter Chart </td>
+  </tr>
+  <tr> 
+ <td valign="top" class="text"><p>Let's create a simple error scatter chart that will  display the comparison in performance of two fictional servers (Server 1 and Server 2). The chart will  plot individual server load with respect to  response time against x-axis and  y-axis respectively as shown below.</p>
+  <p><img src="Images/Errorbar31.jpg"/></p>
+ <p>The data for the above chart can be listed as under: </p>
+ <div class="container">
+    <ul class="tabs">
+       <li><a href="#tab1">XML</a></li>
+       <li><a href="#tab2">JSON</a></li>
+    </ul>
+    <div class="tab_container">
+       <div id="tab1" class="tab_content">
+         <pre class="prettyprint code_container">&lt;chart caption='Server Performance' xAxisName='Server Load (TPS)' yAxisName='Response Time (sec)' useHorizontalErrorBar='1' 
+       halfHorizontalErrorBar='0' halfVerticalErrorBar='0' horizontalErrorBarColor='000000' verticalErrorBarColor='000000' &gt;
+  
+  &lt;categories&gt;
+    &lt;category label='20' x='20' /&gt;
+    &lt;category label='40' x='40' /&gt;
+    &lt;category label='60' x='60' /&gt;
+    &lt;category label='80' x='80' /&gt;
+    &lt;category label='100' x='100' /&gt;
+  &lt;/categories&gt;
+  
+  &lt;dataset seriesName='Server 1' color='009900' anchorRadius='5' anchorBgColor='7ED37E' &gt;
+    &lt;set y='11' x='10' errorValue='3'  /&gt;
+    &lt;set y='9' x='35' errorValue='2'  /&gt;
+    &lt;set y='4' x='50' errorValue='2.5'  /&gt;
+    &lt;set y='14' x='70' errorValue='3' /&gt;
+    &lt;set y='14' x='50' errorValue='2'  /&gt;
+    &lt;set y='3' x='65' errorValue='2.5'  /&gt;
+    &lt;set y='17' x='85' errorValue='2' /&gt;
+    &lt;set y='15' x='15' errorValue='2'  /&gt;
+  &lt;/dataset&gt;
+
+  &lt;dataset seriesName='Server 2' color='0000FF' anchorRadius='4' anchorBgColor='85A5E9' &gt;
+    &lt;set y='14' x='23' errorValue='2'/&gt;
+    &lt;set y='15' x='33' errorValue='3.5'/&gt;
+    &lt;set y='11' x='77' errorValue='3'/&gt;
+    &lt;set y='13' x='89' errorValue='3.5'/&gt;
+    &lt;set y='11' x='95' errorValue='4'/&gt;
+    &lt;set y='2' x='4' errorValue='1.5'/&gt;
+    &lt;set y='7' x='30' errorValue='1.5'/&gt;
+    &lt;set y='11' x='55' errorValue='2'/&gt;
+  &lt;/dataset&gt;
+  
+&lt;/chart&gt;</pre>
+        </div>
+        <div id="tab2" class="tab_content">
+  <pre id="pre-datajson2" class="prettyprint code_container">{
+  "chart":{
+    "caption":"Server Performance",
+    "xaxisname":"Server Load (TPS)",
+    "yaxisname":"Response Time (sec)",
+    "usehorizontalerrorbar":"1",
+    "halfhorizontalerrorbar":"0",
+    "halfverticalerrorbar":"0",
+    "horizontalerrorbarcolor":"000000",
+    "verticalerrorbarcolor":"000000"
+  },
+  "categories":[{
+      "category":[{
+          "label":"20",
+          "x":"20"
+        },
+        {
+          "label":"40",
+          "x":"40"
+        },
+        {
+          "label":"60",
+          "x":"60"
+        },
+        {
+          "label":"80",
+          "x":"80"
+        },
+        {
+          "label":"100",
+          "x":"100"
+        }
+      ]
+    }
+  ],
+  "dataset":[{
+      "seriesname":"Server 1",
+      "color":"009900",
+      "anchorradius":"5",
+      "anchorbgcolor":"7ED37E",
+      "data":[{
+          "y":"11",
+          "x":"10",
+          "errorvalue":"3"
+        },
+        {
+          "y":"9",
+          "x":"35",
+          "errorvalue":"2"
+        },
+        {
+          "y":"4",
+          "x":"50",
+          "errorvalue":"2.5"
+        },
+        {
+          "y":"14",
+          "x":"70",
+          "errorvalue":"3"
+        },
+        {
+          "y":"14",
+          "x":"50",
+          "errorvalue":"2"
+        },
+        {
+          "y":"3",
+          "x":"65",
+          "errorvalue":"2.5"
+        },
+        {
+          "y":"17",
+          "x":"85",
+          "errorvalue":"2"
+        },
+        {
+          "y":"15",
+          "x":"15",
+          "errorvalue":"2"
+        }
+      ]
+    },
+    {
+      "seriesname":"Server 2",
+      "color":"0000FF",
+      "anchorradius":"4",
+      "anchorbgcolor":"85A5E9",
+      "data":[{
+          "y":"14",
+          "x":"23",
+          "errorvalue":"2"
+        },
+        {
+          "y":"15",
+          "x":"33",
+          "errorvalue":"3.5"
+        },
+        {
+          "y":"11",
+          "x":"77",
+          "errorvalue":"3"
+        },
+        {
+          "y":"13",
+          "x":"89",
+          "errorvalue":"3.5"
+        },
+        {
+          "y":"11",
+          "x":"95",
+          "errorvalue":"4"
+        },
+        {
+          "y":"2",
+          "x":"4",
+          "errorvalue":"1.5"
+        },
+        {
+          "y":"7",
+          "x":"30",
+          "errorvalue":"1.5"
+        },
+        {
+          "y":"11",
+          "x":"55",
+          "errorvalue":"2"
+        }
+      ]
+    }
+  ]
+}</pre>
+  </div>
+  </div>
+  </div>
+ </td>
+	</tr>   
+  <tr>
+  <td class="text"><p>In the data  above, we have:</p>
+  <p>
+  <ul>
+  <li>Created the <span class="codeInline">&lt;chart&gt;</span> element which is the starting element of every chart.</li>
+  <li>Specified caption, x-axis name and y-axis name. Also, we have instructed the chart to show horizontal  error bars  by setting the <span class="codeInline">useHorizontalErrorBar</span> attribute to 1. The chart, by default displays the half vertical error bars.</li>
+  <li>In order to show full horizontal and vertical error bars, we have deactivated the <span class="codeInline">halfHorizontalErrorBar</span> and <span class="codeInline">halfVerticalErrorBar</span> attributes respectively  as by default, only positive deviation is displayed.</li>
+  <li>Next, there lies the <span class="codeInline">horizontalErrorBarColor</span> and <span class="codeInline">verticalErrorBarColor</span> attributes which allow you to set a color for the corresponding error bars. Various other visual and functional aspects of error bars have been discussed in the <a href="ErrorScatterConfig.html">Configuration</a> page. Moreover, you can specify innumerable  properties for the <span class="codeInline">&lt;chart&gt;</span> element which will let you control a myriad of functionalities in your chart.  The entire list of attributes   is present in the <a href="../ChartSS/ErrorScatter.html">Chart XML Sheet</a>.</li>
+  <li>Moving on, we have <span class="codeInline">&lt;categories&gt;</span> element which represents a custom label for each <span class="codeInline">&lt;category&gt;</span> element.</li>
+  <li>Thereafter, we add two <span class="codeInline">&lt;dataset&gt;</span> elements and defined  series name, color, anchor radius and anchor background color for both the series.</li>
+  <li> Finally, we provide data for  the respective series using <span class="codeInline">&lt;set&gt;</span> elements. In scatter charts every <span class="codeInline">&lt;set&gt;</span> element can consist of multiple numeric parameters. Here, in this chart, the position of a data point is defined in form of two numeric parameters namely x and y. Additionally, in every <span class="codeInline">&lt;set&gt;</span> element, along with the datavalues we have  conjointly  defined the range of possible errors  (horizontal and vertical) as the value of <span class="codeInline">errorValue</span> attribute. </li>
+  </ul>
+  </p>
+  <p>You can also explicitly specify the amount of horizontal and vertical errors with the help of <span class="codeInline">horizontalErrorValue</span> and <span class="codeInline">verticalErrorValue</span> attributes respectively. Hence, a  <span class="codeInline">&lt;set&gt;</span> element    would look something as under:</p>
+    <pre class="prettyprint code_container">&lt;set x='10' y='11' horizontalErrorValue='3' verticalErrorValue='4'/&gt;</pre>
+   <p>This completes the explanation of our chart data. In the next page we will discuss the various configurable options available exclusively for error scatter charts.</p>
+ 
+  </td>
+  </tr>
+</table>
+</body>
+</html>

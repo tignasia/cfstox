@@ -1,0 +1,39 @@
+PowerCharts v3 - http://www.fusioncharts.com/PowerCharts/ - Version History
+=========================================================================
+Current Version: PowerCharts v3.2.1 (Released on 14th January 2011)
+=========================================================================
+
+Version history
+
+* Automatic rendering of JavaScript charts on devices (like iPad and 
+  iPhone) where Flash player is not supported
+* 5 new chart types:
+    o Heat Map Chart
+    o Box and Whisker Chart
+    o Step Line Chart
+    o Error Line Chart
+    o Error Scatter Chart
+* Support for JSON data format
+* Support for LinkedCharts, where a single data source controls multiple charts
+* Interactive legends in charts that allow for selective 
+  showing/hiding of data series (or slicing, in case of pie charts)
+* Legends now support icons for each data series
+* Better management of labels on charts. Labels now have an auto rendering 
+  mode to prevent them from overlapping, the chart selects the best display mode 
+  for labels depending on the length of the labels and the width of the chart. 
+  Long labels are truncated, with ellipses appended to the truncated end of each
+  label, and a tooltip bearing the completed label text is displayed when 
+  the user hovers over a truncated label.
+* Support for line breaks and wrapping in all text elements including: caption, 
+  sub caption, X-axis title, Y-axis title, Labels and tooltips.
+* In Line charts, data values can now be positioned either above or below the 
+  dataplots. Automatic positioning of data values is also supported.
+* Custom alignment of caption and sub caption using STYLES
+* Advanced print management using JavaScript
+* Additional options for efficient event handling using JavaScript
+* Support for dynamic update of chart properties using JavaScript(barring select scatter and drag charts)
+* Charts now support % based sizes along with dynamic resizing (barring select scatter and drag charts)
+
+=========================================================================
+
+For information on previous versions, please visit http://www.fusioncharts.com/PowerCharts/VersionHistory.asp

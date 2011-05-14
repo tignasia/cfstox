@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title> PowerCharts v3.2 - DrillDown - Using JavaScript as links (j- format) </title>
+        <script type="text/javascript" src="../../Charts/FusionCharts.js"></script>
+        <link href="../assets/ui/css/style.css" rel="stylesheet" type="text/css" />
+        
+    </head>
+
+    <body>
+        <!-- wrapper -->
+        <div id="wrapper">
+            <!-- header -->
+            <div id="header">
+                <div class="logo"><a href="http://www.fusioncharts.com/powercharts/?BS=OfflineDocsLogo" target="_blank"><img src="../assets/ui/images/powerchartsv3.2-logo.jpg" width="180" height="97" alt="PowerCharts v3.2 logo" /></a></div>
+                <h1 class="brand-name"></h1>
+                <h1 class="logo-text-home">PowerCharts v3.2</h1>
+            </div>
+            <!-- content area -->
+            <div class="content-area">
+                <div id="content-area-inner-main">
+                    <h2 class="headline">DrillDown - Using JavaScript as links (j- format) </h2>
+
+                    <div class="gen-chart-render">
+
+                        <center>
+                            <div id="chartContainer">FusionCharts will load here</div>
+
+                            <script type="text/javascript"><!--
+
+                                function myJS(myVar) {
+                                    window.alert(myVar);
+                                }
+
+                                var myChart = new FusionCharts( "../../Charts/Column2D.swf",
+                                "myChartId", "400", "300", "0", "1" );
+                                myChart.setXMLUrl("JSExample.xml");
+                                myChart.render("chartContainer");
+
+                                // -->
+                            </script>
+                        </center>
+
+                    </div>
+                    <div class="clear"></div>
+                    <p>&nbsp;</p>
+                    <p class="small">    </p>
+                    <div class="underline-dull"></div>
+                </div>
+                <!-- footer -->
+                <div id="footer">
+                    <ul>
+                        <li><a href="index.html"><span>&laquo; Back to list of examples</span></a></li>
+                        <li class="pipe">|</li>
+                        <li><a href="../NoChart.html"><span>Unable to see the chart above?</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

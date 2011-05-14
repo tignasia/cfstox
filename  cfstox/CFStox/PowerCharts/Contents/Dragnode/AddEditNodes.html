@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Drag-node Chart &gt; Add &amp; edit Nodes </td>
+  </tr>
+  <tr> 
+    <td valign="top" class="text">
+      <p>You can interactively add a node in an existing chart. To avail this feature you need to render the chart in  <span class="msg_handler"><a>edit mode</a> &raquo;</span><span class="msg_body veryLightYellowBg"> Edit mode can be enabled setting <span class="codeInline">viewMode='0'</span> in <span class="codeInline">&lt;chart&gt;</span> element. </span> You can also edit an existing node or delete a node if required. In this page we will see how these can be achieved.</p>
+      <p>For this, let's take the basic chart, as shown below, which we have created in the previous page. Upon this, we will add a node with text &quot;My new Node&quot; to this chart.</p>
+      <p><img src="../Images/DragNode1.jpg" width="580" height="440" /></p>
+      <p class="header">Adding a node at run-time</p>
+      <p>When in edit mode, the end user can add a node by right clicking on a position over the chart where the node is to be placed and then selecting &quot;Add a node&quot; option from the context menu.</p>
+      <p> <img src="../Images/DragNode9.jpg" width="315" height="236" class="imageBorder" /></p>
+      <p><img src="../Images/DragNode10.jpg" width="431" height="337" /></p>
+      <p>This presents a dialog box, as shown above, to enter the following node information:</p>
+      <ul>
+        <li>&quot;Id&quot; represents the unique identifier for the node</li>
+        <li>&quot;Dataset&quot; represents the series name of the data-set to which this new node will belong to. The node will inherit the visual properties defined for the data-set.</li>
+        <li>&quot;Label&quot; represents the label for the new node</li>
+        <li>&quot;Tooltip&quot; represents the tool-tip for the node</li>
+        <li>A color picker helps you choose the color of the node</li>
+        <li>&quot;Alpha&quot; sets the transparency of the node (where 100 is fully opaque and 0 is fully transparent) </li>
+        <li>&quot;Label Align&quot;&nbsp; sets the alignment vertical alignment (top/middle/bottom) of the label with relation to the node. </li>
+        <li>&quot;Allow Drag&quot; check-box sets the node's to be drag-able by user</li>
+        <li>Shape lets you choose the shape for new node. You can choose rectangle, circle or polygon</li>
+        <li>You can set width, height or radius depending on shape chosen</li>
+        <li>You can also add an image to the node by checking the &quot;Image&quot; check box</li>
+        <li>When &quot;Image&quot; is selected you get another set of customizable options like &quot;Image URL&quot; (which takes the path of the image), width, height and vertical alignment of the image</li>
+        <li>You can add a hyper-link to the node through &quot;URL&quot;. This allows you to set an URL or JavaScript function </li>
+      </ul>
+      <p>The various configurable options are shown in the images below: 
+      <table width="400" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td height="330"><img src="../Images/DragNode10_3.jpg" width="388" height="318" /></td>
+          </tr>
+          <tr>
+            <td  height="330"><img src="../Images/DragNode10_2.jpg" width="389" height="317" /></td>
+          </tr>
+        </table></p>
+        <br />
+      When the user now clicks Submit, he'll see the new node as shown below:
+      <p><img src="../Images/DragNode11.jpg" width="208" height="142" class="imageBorder" /></p>
+      <p class="highlightBlock">
+		
+		  You can define nodes in chart data too. Each node is defined in the data of the chart through <span class="codeInline"><a href="../ChartSS/DragNode.htm#Anchor20">&lt;set&gt;</a></span> element of <span class="codeInline"><a href="../ChartSS/DragNode.htm#Anchor15">&lt;dataset&gt;</a></span> element.  </p>
+    </td></tr>
+    <tr>
+      <td valign="top">  <p class="header">Editing a node at run-time</p>
+        <p>In edit mode, the end user can edit an existing node which is either created using the data provided to the chart while rendering/updating or created at run-time. </p>
+        <p>To edit a node, right click on the node and select&quot;'Edit Node&quot; option from the context menu.</p>
+        <p><img src="../Images/DragNode10_4.jpg" width="269" height="162" class="imageBorder" /></p>
+        <p>This again present a dialog box with all major configurable options for the node. We did some more changes and clicked Submit </p>
+        <p><img src="../Images/DragNode10_5.jpg" width="390" height="314" class="imageBorder" /></p>
+        <p>The node will get updated with new configurations  after Submit is clicked. </p>
+        <p><img src="../Images/DragNode10_51.jpg" width="193" height="119" class="imageBorder" /></p>
+        <p class="highlightBlock">Using the Edit dialog box you can not edit the dataset name, change the id, change the shape type and image options remain disabled (whether applied or not). You can configure rest of the settings.</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+          <p class="header">Deleting a node at run-time</p>
+          <p>In edit mode, the end user can delete a node by right clicking on a node and then selecting &quot;Delete Node&quot;. </p>
+        <p><img src="../Images/DragNode4.jpg" width="369" height="293" class="imageBorder" /></p>
+        <p>The node and its attached connectors would then be deleted, as shown below: </p>
+        <p><img src="../Images/DragNode5.jpg" width="531" height="381" class="imageBorder" /></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top" class="highlightBlock">You can get the latest updated node positions using <a href="JSRead.html">JavaScript</a> or by <a href="Form.html">submitting the updated positions </a>to a server side script.</td>
+    </tr>
+</table>
+</body>
+</html>

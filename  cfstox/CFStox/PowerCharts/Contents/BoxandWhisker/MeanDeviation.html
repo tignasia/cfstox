@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Box and Whisker chart &gt; Mean deviation</td>
+  </tr>
+ 
+  <tr> 
+    <td valign="top" class="text"><p>Mean deviation is the average of distances between each of the values and the mean. By default, the mean deviation is represented by a triangle icon in the data plot. To display the mean deviation  set the <span class="codeInline">showMD</span> attribute to ‘1’. </p>
+      <p class="highlightBlock">Note: The attribute can  be used in the <span class="codeInline">&lt;chart&gt;</span>, <span class="codeInline">&lt;dataset&gt;</span> and <span class="codeInline">&lt;set&gt; </span> elements.</p>   
+        
+        A chart displaying the mean deviation is shown below: <br/>  
+	    <br/>  
+    </p></td>
+</tr>
+<tr>
+    <td valign="top"><img src="Images/DisplayMeandeviation.jpg" class="imageBorder" />
+	<p> In the above screenshot, the chart is displaying the mean deviation icons of each and every data plot. This icon is customizable about which we will discuss <a href="#meandeviation">later</a>. </p>
+	<p> The data for the above chart is given below:</p>
+	</td>
+  </tr>
+  <tr>
+    <td valign="top"> <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab1">XML</a></li>
+      	 <li><a href="#tab2">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab1" class="tab_content"><pre class="prettyprint code_container">
+&lt;chart caption='Visits to a Website' subCaption='In three years' showMD='1' MDIconSides='8' showValues='0'&gt;
+...
+&lt;/chart&gt;</pre></div>
+			<div id="tab2" class="tab_content"><pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Visits to a Website",
+    "subcaption":"In three years",
+    "showmd":"1",
+    "mdiconsides":"8",
+    "showvalues":"0"
+  }
+  ...
+}</pre></div>
+	    </div>
+	  </div>
+	  <div style="clear:both"></div>
+	  <p><br/>
+	    In the above XML, the <span class="codeInline">showMD</span> attribute is set to '1' in the <span class="codeInline">&lt;chart&gt;</span> element. So, all the data plots are displaying the mean deviation icon. The  <span class="codeInline">MDIconSides</span> is set to '8' to display the icon as a circle.  </p>
+	  <p class="header"> <a name="showhidemeandeviation" id="showhidemeandeviation"></a>Show/hide individual mean deviation values </p>
+	  <p> You may want to display the mean deviation icon of one dataset and hide the other. To do this use the <span class="codeInline">showMD</span> attribute in the <span class="codeInline">&lt;dataset&gt;</span> element. A sample  data is given below:</p>
+</td>
+  </tr>	
+   <tr>
+    <td valign="top"> <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab3">XML</a></li>
+      	 <li><a href="#tab4">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab3" class="tab_content">
+    		  <pre class="prettyprint code_container">
+&lt;chart caption='Visits to a Website' subCaption='In three years' showValues='0' MDIconSides='8'&gt;
+...
+&lt;dataset seriesName="January" lowerBoxColor='009FAA' upperboxColor='D4DFFF' mediancolor='FF0000' showMD='1'&gt;
+    &lt;set value='60,133,35,67,89,137,259'/&gt;
+    &lt;set value='139,67,75,114,39,67,191' /&gt;
+    &lt;set value='200,107,197,239,53,26,97' /&gt;
+&lt;/dataset&gt;
+
+&lt;dataset seriesName="February" lowerBoxColor='2A5F55' upperboxColor='D47F00'&gt;
+    &lt;set value='160,303,125,137,169,107,39' /&gt;
+    &lt;set value='139,167,255,124,59,187,151' /&gt;
+    &lt;set value='60,137,157,209,153,126,277' /&gt;
+&lt;/dataset&gt;
+&lt;/chart&gt;
+</pre></div>
+			<div id="tab4" class="tab_content">
+			  <pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Visits to a Website",
+    "subcaption":"In three years",
+    "showvalues":"0",
+    "mdiconsides":"8"
+  },
+  ...
+  "dataset":[{
+      "seriesname":"January",
+      "lowerboxcolor":"009FAA",
+      "upperboxcolor":"D4DFFF",
+      "mediancolor":"FF0000",
+      "showmd":"1",
+      "data":[{
+          "value":"60,133,35,67,89,137,259"
+        },
+        {
+          "value":"139,67,75,114,39,67,191"
+        },
+        {
+          "value":"200,107,197,239,53,26,97"
+        }
+      ]
+    },
+    {
+      "seriesname":"February",
+      "lowerboxcolor":"2A5F55",
+      "upperboxcolor":"D47F00",
+      "data":[{
+          "value":"160,303,125,137,169,107,39"
+        },
+        {
+          "value":"139,167,255,124,59,187,151"
+        },
+        {
+          "value":"60,137,157,209,153,126,277"
+        }
+      ]
+    }
+  ]
+}</pre></div>
+	    </div>
+	  </div>
+	  <div style="clear:both"></div><br/>
+	  In the above data, we have used the <span class="codeInline">showMD</span> attribute in one of the <span class="codeInline">&lt;dataset&gt;</span>element. So, the chart will display the mean deviation icon for the data plots declared in that <span class="codeInline">&lt;dataset&gt;</span> element. For rest of the data plots the icon will not be displayed. The chart will look like as under:<br/>
+	  <br/>
+     </td></tr>
+	 
+<tr>
+    <td valign="top"><img src="Images/SelectiveDisplayMD.jpg" class="imageBorder" /> <br/><br/></td>
+  </tr>
+	
+<tr>
+<td> You can also display the mean deviation icon selectively for any one set of data declared through the  <span class="codeInline">&lt;set&gt;</span> elements. The sample data is given below:<br/>
+    <br/></td></tr> 	
+ <tr>
+    <td valign="top"> <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab5">XML</a></li>
+      	 <li><a href="#tab6">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab5" class="tab_content"><pre class="prettyprint code_container">
+&lt;chart caption='Visits to a Website' subCaption='In three years' showValues='0' MDIconSides='8'&gt;
+...
+&lt;dataset seriesName="January" lowerBoxColor='009FAA' upperboxColor='D4DFFF' mediancolor='FF0000' &gt;
+    &lt;set value='60,133,35,67,89,137,259' showMD='1'/&gt; 
+    &lt;set value='139,67,75,114,39,67,191' /&gt;
+    &lt;set value='200,107,197,239,53,26,97' showMD='1'/&gt;
+&lt;/dataset&gt;
+&lt;/chart&gt;
+</pre></div>
+			<div id="tab6" class="tab_content">
+			  <pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Visits to a Website",
+    "subcaption":"In three years",
+    "showvalues":"0",
+    "mdiconsides":"8"
+  },
+  ...
+  "dataset":[{
+      "seriesname":"January",
+      "lowerboxcolor":"009FAA",
+      "upperboxcolor":"D4DFFF",
+      "mediancolor":"FF0000",
+      "showmd":"1",
+      "data":[{
+          "value":"60,133,35,67,89,137,259"
+        },
+        {
+          "value":"139,67,75,114,39,67,191"
+        },
+        {
+          "value":"200,107,197,239,53,26,97"
+        }
+      ]
+    },
+    {
+      "seriesname":"February",
+      "lowerboxcolor":"2A5F55",
+      "upperboxcolor":"D47F00",
+      "data":[{
+          "value":"160,303,125,137,169,107,39"
+        },
+        {
+          "value":"139,167,255,124,59,187,151"
+        },
+        {
+          "value":"60,137,157,209,153,126,277"
+        }
+      ]
+    }
+  ]
+}</pre></div>
+	    </div>
+	  </div>
+	  <div style="clear:both"></div><br/>
+	  In the above data, we have set <span class="codeInline">showMD = '1'</span> in two of the <span class="codeInline">&lt;set&gt;</span> elements within the <span class="codeInline">&lt;dataset&gt;</span> element. So, the chart will display the mean deviation  icon only for the first and the third data plot. The chart will look like as under:<br/>
+	  <br/></td></tr>
+<tr>
+    <td valign="top"><img src="Images/SelectiveDisplayMD1.jpg" class="imageBorder" /> <br/><br/></td>
+  </tr>	  
+<tr>
+	  <td>The attributes used to customize the mean deviation icon are given below:<BR/><BR/></td>
+  </tr>
+ <tr>
+    <td valign="top" class="text"></td></tr></table>
+	<a name="meandeviation" id="meandeviation"></a><table width="100%" border="0" cellpadding="0" cellspacing="0" class="table">
+      <tr>
+        <td width="180" class="header">Attribute Name </td>
+        <td width="80" class="header">Type</td>
+        <td width="80" class="header">Range</td>
+		<td class="header">Description</td>
+      </tr>
+      <tr>
+        <td class="codeInline">MDIconShape</td>
+        <td>String</td>
+        <td>&nbsp;</td>
+		<td>Specifies the shape of the icon. There are two options polygon and spoke.</td>
+      </tr>
+      <tr class="trVeryLightYellowBg">
+        <td class="codeInline">MDIconRadius</td>
+        <td>Number</td>
+        <td>&nbsp;</td>
+        <td>Specifies the radius of the mean deviation  icon.</td>
+      </tr>
+      <tr>
+        <td class="codeInline">MDIconSides</td>
+        <td>Number</td>
+        <td>&nbsp;</td>
+        <td>Specifies the number of sides for the icon. If the <span class="codeInline">MDIconShape</span> is set as polygon, then the shape of the icon will depend on the number of sides. For example, 3 sides will display a triangle, 8 will display a circle.</td>
+      </tr>
+      <tr class="trVeryLightYellowBg">
+        <td class="codeInline">MDIconColor</td>
+        <td>Hex code</td>
+        <td>&nbsp;</td>
+		<td>Sets the color of the mean deviation  icon.</td>
+      </tr>
+      <tr>
+        <td class="codeInline">MDIconAlpha</td>
+        <td>Number</td>
+        <td>0-100</td>
+        <td>Sets the transparency of the mean deviation  icon.</td>
+      </tr>
+</table> 
+	  <p class="header">Mean deviation Connectors </p>
+	For multiple dataplots, you can draw a line to connect the mean deviation icons of each  dataplot. The attribute <span class="codeInline"> drawMDConnector</span> is set to '1' to connect all the icons of the dataplots. This attribute can be used in <span class="codeInline"> &lt;chart&gt;</span> and <span class="codeInline">&lt;dataset&gt;</span> elements. The color of the connecting line will be same as the color of the mean deviation icon.
+	<p>A chart with the mean deviation connectors  will look similar to the chart shown below:</p>
+	<tr>
+    <td valign="top"><img src="Images/MDConnector.jpg" class="imageBorder" /><br/><br/></td></tr><tr><td valign="top">&nbsp;</td>
+  </tr>	
+   <p class="header">Connect Null data</p>
+If you set the <span class="codeInline">showMD</span> attribute in any of the <span class="codeInline">&lt;set&gt;</span> element to &lsquo;0&rsquo;, the chart will not display the mean deviation  icon of that particular set of data. In this case, the missing mean deviation  is considered as null data. Consequently, the mean deviation connectors will skip this null data.
+<p>An example of this situation is shown below:</p>
+<tr>
+    <td valign="top"><img src="Images/DisconnectedMDdata.jpg" class="imageBorder" /><br/><br/>
+	The XML data is given below:<br/><br/>
+	</td></tr>
+	    <tr>
+    <td valign="top"> <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab7">XML</a></li>
+      	 <li><a href="#tab8">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab7" class="tab_content"><pre class="prettyprint code_container">
+&lt;chart caption='Visits to a Website' subCaption='In three years' drawMeanConnector='1'&gt;
+...
+&lt;dataset seriesName="January" lowerBoxColor='2A5F55' upperboxColor='D47F00' MDIconsides='5' showMD='1' mediancolor='FF0000'&gt;
+    &lt;set value='60,133,35,67,89,137,259' showMD='1'/&gt;
+    &lt;set value='139,67,75,114,39,67,191' showMD='0'/&gt;
+    &lt;set value='200,107,197,239,53,26,97' showMD='1'/&gt;
+	&lt;set value='210,117,187,219,73,96,171' showMD='1'/&gt;
+	&lt;set value='230,107,157,259,93,116,191' showMD='1'/&gt;
+&lt;/dataset&gt;
+&lt;/chart&gt;</pre></div>
+			<div id="tab8" class="tab_content"><pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Visits to a Website",
+    "subcaption":"In three years",
+    "drawmeanconnector":"1"
+  },
+  ...
+  "dataset":[{
+      "seriesname":"January",
+      "lowerboxcolor":"2A5F55",
+      "upperboxcolor":"D47F00",
+      "mdiconsides":"5",
+      "showmd":"1",
+      "mediancolor":"FF0000",
+      "data":[{
+          "value":"60,133,35,67,89,137,259",
+          "showmd":"1"
+        },
+        {
+          "value":"139,67,75,114,39,67,191",
+          "showmd":"0"
+        },
+        {
+          "value":"200,107,197,239,53,26,97",
+          "showmd":"1"
+        },
+        {
+          "value":"210,117,187,219,73,96,171",
+          "showmd":"1"
+        },
+        {
+          "value":"230,107,157,259,93,116,191",
+          "showmd":"1"
+        }
+      ]
+    }
+  ]
+}</pre></div>
+	  </div>
+	  </div>
+	  <div style="clear:both"></div><br/>
+	  In the above XML:<br/><br/>
+	  <ul>
+	  <li>The <span class="codeInline">showMD</span> attribute is set to '0' in the third <span class="codeInline">&lt;set&gt;</span> element to hide the mean deviation icon.</li>
+	  <li>The <span class="codeInline">drawMDConnector</span> is set to '1' to connect the icons</li>
+	  </ul>
+	  <p>The mean deviation connector in the above chart is drawn as a discontinuous line. </p>
+	  <p>You can opt to ignore the null data and draw a continuous connector. To achieve this set <span class="codeInline">connectNullData = '1'</span>. In our above example, the chart will draw the line connecting the mean deviation  icons of the first, second and the fourth, fifth dataplots skipping the third dataplot. This attribute can only be used in the <span class="codeInline">&lt;chart&gt;</span> element.</p>
+	  The chart will look like as under:
+	  <p><img src="Images/ConnectedMDdata.jpg" class="imageBorder" /></p>
+</td>
+  </tr>	
+</table>
+
+</body>
+</html>

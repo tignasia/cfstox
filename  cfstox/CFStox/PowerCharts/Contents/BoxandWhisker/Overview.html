@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Box and Whisker chart &gt; Overview </td>
+  </tr>
+  <tr> 
+    <td valign="top" class="text"><p> Box and whisker chart is a statistical chart which is used to examine and summarize a given set of data. It draws the  statistical conclusion using  <a href="Howitworks.html">five number summary</a> principle. The box and whisker chart is very useful to observe the mean, median, upper and lower quartiles, deviations, etc. for a huge set of data.  Box and whisker charts are most popularly used in chemical industries, weapon industries and many more.</p>
+      <p>Key features of this chart are:</p>
+      <ul>
+        <li>Calculates the mean, median, upper and lower quartiles and the minimum and maximum numbers for a given set of data </li>
+        <li>Calculates and displays the mean deviation, standard deviation and the quartile deviation of a given set of data</li>
+		<li>Interactive legend is used to distinguish between two datasets by highlighting each dataset with different color strips</li>
+        <li>The mean and the deviations of multiple sets of data can be connected by drawing a line </li>
+        <li>Any value which is not residing within the set of values provided can be displayed as outliers</li>
+       
+      </ul>      
+      <p>A basic Box and Whisker chart looks as under: </p></td>
+  </tr>
+  <tr>
+    <td valign="top"><img src="Images/BasicChart.jpg" width="492" height="393" class="imageBorder" /></td>
+  </tr>
+  <tr>
+    <td valign="top" class="text"><p>And the data for same can be listed as under: </p></td>
+  </tr>
+  <tr>
+    <td valign="top"> <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab1">XML</a></li>
+      	 <li><a href="#tab2">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab1" class="tab_content">
+    		  <pre class="prettyprint code_container">
+&lt;chart caption='Visits to a Website' subCaption='In three years'&gt;
+
+&lt;categories&gt;
+    &lt;category label='2008' /&gt;
+    &lt;category label='2009' /&gt;
+    &lt;category label='2010' /&gt;
+&lt;/categories&gt;
+
+&lt;dataset seriesName="January"&gt;
+    &lt;set value='160,133,35,67,89,107,59,133,90,207,47,79' /&gt;
+    &lt;set value='139,67,75,114,39,67,141,201,138,49,22,109' /&gt;
+    &lt;set value='200,107,197,259,23,36,97,211,68,49,199,105' /&gt;
+&lt;/dataset&gt;
+
+&lt;/chart&gt;</pre>
+    		</div>
+			<div id="tab2" class="tab_content">
+			  <pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Visits to a Website",
+    "subcaption":"In three years"
+  },
+  "categories":[{
+      "category":[{
+          "label":"2008"
+        },
+        {
+          "label":"2009"
+        },
+        {
+          "label":"2010"
+        }
+      ]
+    }
+  ],
+  "dataset":[{
+      "seriesname":"January",
+      "data":[{
+          "value":"160,133,35,67,89,107,59,133,90,207,47,79"
+        },
+        {
+          "value":"139,67,75,114,39,67,141,201,138,49,22,109"
+        },
+        {
+          "value":"200,107,197,259,23,36,97,211,68,49,199,105"
+        }
+      ]
+    }
+  ]
+}</pre>
+			</div>
+		 </div>
+	  </div>
+	  <div style="clear:both"></div>
+</td>
+  </tr>
+  <tr>
+    <td valign="top" class="text">
+	<p> Three out of five summary numbers are displayed by default (median, minimum number and maximum number). You can also display the other two five summary numbers (upper and lower quartiles). A sample chart with the quartiles displayed is given below:
+	<p><img src="Images/displayvalues.jpg" class="imageBorder" /></p>
+	<p> Apart from the five summary numbers the box and whisker chart allows you to display the following statistical figures:
+	<ul>
+	<li><a href="Mean.html">Mean</a></li>
+	<li><a href="MeanDeviation.html">Mean Deviation</a></li>
+	<li><a href="StandardDeviation.html">Standard Deviation</a></li>
+	<li><a href="QuartileDeviation.html">Quartile Deviation</a></li>
+	<li><a href="Outliers.html">Outliers</a></li>
+	</ul>
+	A sample chart displaying all the statistical numbers are show below:</p>
+	<p><img src="Images/Alliconsdisplayed.jpg" class="imageBorder" /></p>
+	
+	<p>In the following pages we will discuss how to create a simple Box and Whisker chart and add more features to it.</p>
+    
+  </tr>
+ 
+</table>
+</body>
+</html>

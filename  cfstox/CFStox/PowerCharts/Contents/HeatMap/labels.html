@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Heat map chart &gt; Labels and Tooltips 
+      </td>
+  </tr>
+ 
+  <tr> 
+    <td valign="top" class="text"><p>In a heat map chart a data plot can show multiple labels in different positions. For example, you can display labels at the center and the four corners of a dataplot. The attributes that help in achieving this are discussed below: </p></td>
+</tr>
+ <tr>
+    <td valign="top" class="text">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table">
+      <tr>
+        <td width="120" class="header">Attribute Name</td>
+        <td width="100" class="header">Type</td>
+        <td class="header">Description</td>
+        <td width='320' class="header">Screenshot</td>
+      </tr>
+      <tr>
+        <td><a name="value" id="value"></a>Value</td>
+        <td>Numeric</td>
+        <td>Displays any numeric value at the center of the data plot. All <a href="../FCV3Basics/Advanced/Number_Basics.html">number formatting</a> features will be applicable if this attribute is used. The example screenshot shows the value 32.</td>
+        <td><img src="Images/value.jpg" class='imageBorder' /></td>
+      </tr>
+      <tr>
+        <td><a name="displayvalue" id="displayvalue"></a>displayValue</td>
+        <td>Numeric/String</td>
+        <td>Displays any numeric or string value at the center of the data plot. This attribute overwrites the data of the <span class="codeInline">value</span> attribute when both are present. Number formatting features are not applicable on the value of this attribute. It is set to 'Ge' as displayed in the image beside.</td>
+        <td><img src="Images/displayvalue.jpg" width="152" height="76" class='imageBorder' /></td>
+      </tr>
+      
+      <tr>
+        <td><a name="tl" id="tl"></a>tlLabel</td>
+        <td>Numeric/String</td>
+        <td>Displays a label on the top left corner of a data plot. It is set with the value '32' as displayed in the image beside.</td>
+        <td><img src="Images/tllabel.jpg" class='imageBorder' /></td>
+      </tr>
+      <tr>
+        <td><a name="tr" id="tr"></a>trLabel</td>
+        <td>Numeric/String</td>
+        <td>Displays a label on the top right corner of a data plot. It is set to 'Metalloids' as displayed in the image beside.</td>
+        <td><img src="Images/Trlabel.jpg" class='imageBorder' /></td>
+      </tr>
+      <tr>
+        <td><a name="bl" id="bl"></a>blLabel</td>
+        <td>Numeric/String</td>
+        <td>Displays a label on the bottom left corner of the data plot. It is set to 'Group' as displayed in the image beside. </td>
+        <td><img src="Images/Bllabel.jpg" class='imageBorder'/></td>
+      </tr>
+      <tr>
+        <td><a name="br" id="br"></a>brLabel</td>
+        <td>Numeric/String</td>
+        <td>Displays the label on the bottom right corner of the data plot. It is set to 'Germanium' as displayed in the image beside.</td>
+        <td><img src="Images/Brlabel.jpg" class='imageBorder' /></td>
+      </tr>
+      </table>
+	  <p></p>
+	  <tr>
+    <td valign="top" class="header">Using Styles to specify font properties of the data labels </td>
+  </tr>
+  <tr>
+    <td valign="top" class="text"><p>If you do not want all the text on your chart to have similar font properties, you can use STYLES to define individual font properties for different text on the chart including all the labels. Using STYLES, you can specify a different font name, size, color, background color and border color and also make the text bold or italicized.</p>
+	  <p>Shown below are changes made in the basic font properties of all the data labels and a shadow effect added using styles. </p>
+	<img src="Images/labelsStyle.jpg" class='imageBorder' />
+	<p> The data for the above style changes is given below:</p>
+		<tr>
+    <td valign="top"> <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab7">XML</a></li>
+      	<li><a href="#tab8">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab7" class="tab_content">
+    		  <pre class="prettyprint code_container">
+&lt;chart caption='Periodic Table' subCaption='Other Metals-Metalloids' xAxisName='Group' yAxisName='Period' canvasBgColor='FFFFFF' mapByCategory='1'&gt;
+...
+<strong>&lt;styles&gt;
+  &lt;definition&gt;
+    &lt;style name='tlLabelFont' type='font' font='Arial' size='16' color='800080' bold='1'/&gt;
+    &lt;style name='trLabelFont' type='font' font='verdana' size='14' color='AA3F55' underline='1'/&gt;
+    &lt;style name='blLabelFont' type='font' font='trebuchet MS' size='18' color='7F1F00' italic='1'/&gt;
+    &lt;style name='brLabelFont' type='font' font='trebuchet MS' size='12' color='0000FF' bgcolor='D4ABFF'/&gt;
+    &lt;style name='datavaluesFont' type='font' font='Arial' size='22' color='2A3FAA' bold='1'/&gt;
+    &lt;style name='datavaluesShadow' type='shadow' strength='2' quality='1'/&gt;
+  &lt;/definition&gt;
+  &lt;application&gt;
+    &lt;apply toObject='tldatavalues' styles='tlLabelFont'/&gt;
+    &lt;apply toObject='trdatavalues' styles='trLabelFont'/&gt;
+    &lt;apply toObject='bldatavalues' styles='blLabelFont'/&gt;
+    &lt;apply toObject='brdatavalues' styles='brLabelFont'/&gt;
+    &lt;apply toObject='datavalues' styles='datavaluesFont'/&gt;
+    &lt;apply toObject='datavalues' styles='datavaluesShadow'/&gt;
+  &lt;/application&gt;
+&lt;/styles&gt;</strong>
+
+&lt;/chart&gt;
+</pre>
+    		</div>
+			<div id="tab8" class="tab_content"><pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Periodic Table",
+    "subcaption":"Other Metals-Metalloids",
+    "xaxisname":"Group",
+    "yaxisname":"Period",
+    "canvasbgcolor":"FFFFFF",
+    "mapbycategory":"1"
+  },
+...
+ <strong>"styles":{
+    "definition":[{
+        "name":"tlLabelFont",
+        "type":"font",
+        "font":"Arial",
+        "size":"16",
+        "color":"800080",
+        "bold":"1"
+      },
+      {
+        "name":"trLabelFont",
+        "type":"font",
+        "font":"verdana",
+        "size":"14",
+        "color":"AA3F55",
+        "underline":"1"
+      },
+      {
+        "name":"blLabelFont",
+        "type":"font",
+        "font":"trebuchet MS",
+        "size":"18",
+        "color":"7F1F00",
+        "italic":"1"
+      },
+      {
+        "name":"brLabelFont",
+        "type":"font",
+        "font":"trebuchet MS",
+        "size":"12",
+        "color":"0000FF",
+        "bgcolor":"D4ABFF"
+      },
+      {
+        "name":"datavaluesFont",
+        "type":"font",
+        "font":"Arial",
+        "size":"22",
+        "color":"2A3FAA",
+        "bold":"1"
+      },
+      {
+        "name":"datavaluesShadow",
+        "type":"shadow",
+        "strength":"2",
+        "quality":"1"
+      }
+    ],
+    "application":[{
+        "toobject":"tldatavalues",
+        "styles":"tlLabelFont"
+      },
+      {
+        "toobject":"trdatavalues",
+        "styles":"trLabelFont"
+      },
+      {
+        "toobject":"bldatavalues",
+        "styles":"blLabelFont"
+      },
+      {
+        "toobject":"brdatavalues",
+        "styles":"brLabelFont"
+      },
+      {
+        "toobject":"datavalues",
+        "styles":"datavaluesFont"
+      },
+      {
+        "toobject":"datavalues",
+        "styles":"datavaluesShadow"
+      }
+    ]
+  }</strong>
+}</pre></div></div></div>
+<div style="clear:both"></div></td>
+  </tr>
+	    <tr>
+	      <td>&nbsp;</td>
+  </tr>
+	    <tr>
+	      <td valign="top" class='header'><a name="tooltip" id="tooltip"></a>Configuring tooltips </td>
+  </tr>
+	   
+	    <tr>
+	      <td><p>By default, Heat map chart shows the value or display value as tool tip for that data item. It also includes all the values provided through <span class="codeInline">trLabel</span>, <span class="codeInline">tlLabel</span>, <span class="codeInline">brlabel</span> and <span class="codeInline">bllabel</span> attributes along with the values of <span class="codeInline">trType</span>, <span class="codeInline">tlType</span>, <span class="codeInline">brType</span> and <span class="codeInline">blType</span> attributes. A screenshot displaying the tooltip with all the mentioned values is given below:</p>
+         <tr>
+    <td valign="top"><p><img src="Images/DefaultTooltip.jpg"  class="imageBorder"/></p>
+      <p>The data for the above screenshot is given below: </p>
+    </td></tr>
+	<tr>
+    <td valign="top"> <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab1">XML</a></li>
+      	 <li><a href="#tab2">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab1" class="tab_content">
+    		  <pre class="prettyprint code_container">&lt;chart 
+<strong>tlType='Atomic Number' brType='Name' blType='Isotope' trType='Atomic Weight'</strong> mapByCategory='1'
+caption='Periodic Table' subCaption='Other Metals-Metalloids' canvasBgColor='FFF5CE'  
+xAxisName='Group' yAxisName='Period' canvasBgColor='FFFFFF' 
+canvasBorderThickness='1'&gt;
+...
+  &lt;dataset&gt;
+                
+    &lt;set columnId='1' rowId='1'  <strong>colorRangeLabel='Other nonmetals' tlLabel='1' brLabel='Hydrogen' trLabel='1.00794' blLabel='3' displayValue='H'</strong> /&gt;
+...
+
+  &lt;/dataset&gt;
+
+&lt;/chart&gt;</pre>
+   		  </div>
+			<div id="tab2" class="tab_content">
+			  <pre class="prettyprint code_container">{
+  "chart":{
+<strong>    &quot;tltype&quot;:&quot;Atomic Number&quot;,
+    &quot;brtype&quot;:&quot;Name&quot;,
+    &quot;bltype&quot;:&quot;Isotope&quot;,
+    &quot;trtype&quot;:&quot;Atomic Weight&quot;,
+    "caption":"Periodic Table",</strong>
+    &quot;mapbycategory&quot;:&quot;1&quot;,
+    "subcaption":"Other Metals-Metalloids",
+    "canvasbgcolor":"FFF5CE",
+    "xaxisname":"Group",
+    "yaxisname":"Period",
+    "canvasborderthickness":"1"
+  },
+  ...
+   "dataset":[{
+      "data":[{
+          "columnid":"1",
+          "rowid":"1",
+          "colorrangelabel":"Other nonmetals",
+<strong>          "tllabel":"1",
+          "brlabel":"Hydrogen",
+          "trlabel":"1.00794",
+          "bllabel":"3",
+          "displayvalue":"H"</strong>
+        },
+...
+]
+    }
+  ]
+}
+</pre>
+		  </div>
+	    </div>
+	  </div>
+	  <div style="clear:both"></div>
+
+  <p> <br />
+    You can also customize the information displayed in the tooltip. To do this, you need to use the attribute <span class="codeInline">tooltext</span> through the<span class="codeInline"> &lt;set&gt;</span> element. The value of the attribute should be the information that you want to provide. A screenshot displaying customized tooltip is shown below:</p>
+  <tr>
+    <td valign="top"><p><img src="Images/Customizedtooltip.jpg" width="240" height="129"  class="imageBorder"/></p>
+      <p>The data for the above screenshot is given below: </p>
+    </td></tr>
+    </tr>
+    <tr>
+    <td valign="top"> <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab3">XML</a></li>
+      	 <li><a href="#tab4">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab3" class="tab_content">
+    		  <pre class="prettyprint code_container">&lt;chart caption='Periodic Table' subCaption='Other Metals-Metalloids' canvasBgColor='FFF5CE'  xAxisName='Group' yAxisName='Period' canvasBgColor='FFFFFF' mapByCategory='1'
+tlType='Atomic Number' brType='Name' blType='Isotope' trType='Atomic Weight'
+canvasBorderThickness='1'&gt;
+...
+  &lt;dataset&gt;
+                
+    &lt;set tooltext='Discovered by Henry Cavendish in 1766' columnId='1' rowId='1'  colorRangeLabel='Other nonmetals' tlLabel='1' brLabel='Hydrogen' trLabel='1.00794' blLabel='3' displayValue='H'/&gt;
+...
+
+  &lt;/dataset&gt;
+
+&lt;/chart&gt;</pre>
+    		</div>
+			<div id="tab4" class="tab_content">
+			  <pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Periodic Table",
+    "subcaption":"Other Metals-Metalloids",
+    "canvasbgcolor":"FFF5CE",
+    "xaxisname":"Group",
+    "yaxisname":"Period",
+    "mapbycategory":"1",
+    "tltype":"Atomic Number",
+    "brtype":"Name",
+    "bltype":"Isotope",
+    "trtype":"Atomic Weight",
+    "canvasborderthickness":"1"
+  },
+  ...
+   "dataset":[{
+      "data":[{
+          "columnid":"1",
+          "rowid":"1",
+          "colorrangelabel":"Other nonmetals",
+          "tllabel":"1",
+          "brlabel":"Hydrogen",
+          "trlabel":"1.00794",
+          "bllabel":"3",
+          "displayvalue":"H",
+          <strong>"tooltext":"Discovered by Henry Cavendish in 1766"</strong>
+        },
+...
+  ]
+    }
+  ]
+}
+</pre>
+			</div>
+	    </div>
+	  </div>
+	  <div style="clear:both"></div></td></tr>
+</table>
+<p></p>
+</body>
+</html>

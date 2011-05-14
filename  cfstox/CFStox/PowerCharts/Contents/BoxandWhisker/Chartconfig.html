@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Box and Whisker chart &gt; Configuring five summary numbers<br/>
+      <br/></td>
+  </tr>
+ 
+  <tr> 
+    <td valign="top" class="text">PowerCharts allows you to customize all the <a href="Howitworks.html">5 summary numbers</a> and their deviations according to your requirement. In this page we will discuss the following: <br/>
+      <br/>
+	<ul>
+	<li><a href="#showhide">Show or hide the five summary numbers </a></li>
+	<li><a href="#median">Customize the median</a></li>
+	<li><a href="#quartiles">Customize the quartiles and the quartile boxes</a></li>
+	<li><a href="#whiskers">Customize the whiskers or the upper and lower limit</a></li>
+	</ul>  <br/>    
+</td>
+</tr>
+<tr>
+	  <td class="header"><a name="showhide" id="showhide"></a>Show or Hide the five summary numbers</td>
+  </tr>
+<tr>
+<td> <p>The six attributes which are used to control the display of the five-summary numbers are:</p> 
+</td></tr>
+ <tr>
+    <td valign="top" class="text">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table">
+      <tr>
+        <td width="180" class="header">Attribute name for <span class="codeInline">&lt;chart&gt;</span> and <span class="codeInline">&lt;dataset&gt; </span> elements</td>
+        <td width="140" class="header">Attribute name for <span class="codeInline">&lt;set&gt;</span> element</td>
+        <td width="70" class="header">Type</td>
+        <td width="70" class="header">Range</td>
+		<td width="70" class="header">Default Value</td>
+        <td class="header">Description</td>
+      </tr>
+      <tr>
+        <td class="codeInline">showValues</td>
+        <td class="codeInline">showValue</td>
+        <td>Boolean</td>
+        <td>0/1</td>
+		<td>1</td>
+		<td>          Sets whether to show or hide the five summary numbers. If this attribute is set to '0', none of the summary numbers will be displayed. When this is set off the individual settings through <span class="codeInline">showMinValues</span>, <span class="codeInline">showMaxValues</span>, <span class="codeInline">showMedianValues</span>, <span class="codeInline">showQ1Values</span>, <span class="codeInline">showQ3Values</span> attributes will not work. </td>
+      </tr>
+      <tr class="trVeryLightYellowBg">
+        <td class="codeInline">showMinValues</td>
+        <td class="codeInline">showMinValue</td>
+        <td>Boolean</td>
+        <td>0/1</td>
+		<td>1</td>
+		<td>Sets whether to display or hide the minimum number or the lower limit.</td>
+      </tr>
+      <tr>
+        <td class="codeInline">showMaxValues</td>
+        <td class="codeInline">showMaxValue</td>
+        <td>Boolean</td>
+        <td>0/1</td>
+		<td>1</td>
+		<td>Sets whether to display or hide the maximum number or the lower limit.</td>
+      </tr>
+      <tr class="trVeryLightYellowBg">
+        <td class="codeInline">showMedianValues</td>
+        <td class="codeInline">showMedianValue</td>
+        <td>Boolean</td>
+        <td>0/1</td>
+		<td>1</td>
+		<td>Sets whether to display or hide  the median.</td>
+      </tr>
+      <tr>
+        <td class="codeInline">showQ1Values</td>
+        <td class="codeInline">showQ1Value</td>
+        <td>Boolean</td>
+        <td>0/1</td>
+		<td>0</td>
+		<td>Sets whether to display or hide  the lower quartile.</td>
+      </tr>
+	   <tr class="trVeryLightYellowBg">  
+        <td class="codeInline">showQ3Values</td>
+        <td class="codeInline">showQ3Value</td>
+        <td>Boolean</td>
+		<td>0/1</td>
+        <td>0</td>
+		<td>Sets whether to display or hide  upper quartile value.</td>
+      </tr>
+</table> 
+	  <br/>
+	  Note that: 
+	 <ul>
+	<li>Attributes used in the <span class="codeInline">&lt;chart&gt;</span> element are applicable globally to all the dataplots of the chart</li>
+	<li>The setting of the attributes declared in the <span class="codeInline">&lt;dataset&gt;</span> element overrides the settings declared in the <span class="codeInline">&lt;chart&gt;</span> element</li>
+	<li>The setting of the attributes declared in the <span class="codeInline">&lt;set&gt;</span> element overrides the settings declared in the other two elements</li>
+	</ul>
+	<p class="header"><a name="showall" id="showall"></a>Show all five-summary numbers</p>
+	<p>Let's see how all the five-summary numbers displayed in a chart. The chart will look like as under:</p></td></tr>
+	<tr>
+    <td valign="top"><img src="Images/displayvalues.jpg" class="imageBorder" />
+	<p> The  settings for the above chart is given below through <span class="codeInline">showQ1Values </span>and <span class="codeInline">showQ3Values</span> attributes:</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"> <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab1">XML</a></li>
+      	 <li><a href="#tab2">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab1" class="tab_content"><pre class="prettyprint code_container">
+&lt;chart caption='Visits to a Website' subCaption='In three years'<strong> showQ1Values='1' showQ3Values='1'</strong>&gt;
+...
+&lt;/chart&gt;</pre></div>
+			<div id="tab2" class="tab_content"><pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Visits to a Website",
+    "subcaption":"In three years",
+    <strong>"showq1values":"1",
+    "showq3values":"1"</strong>
+  }
+}</pre></div>
+	  </div>
+	  </div>
+	  <div style="clear:both"></div><br/>
+</td>
+  </tr>	
+   <tr>
+  <td> In the above data, within the <span class="codeInline">&lt;chart&gt;</span> element we have set <span class="codeInline">showQ1Values</span> and <span class="codeInline">showQ3Values</span> to '1'. This allows the chart to display the lower and the upper quartile values along with the minimum, maximum and the median values which are displayed by default.<br/><br/>
+  </td>
+  </tr>
+  <tr>
+  <td>
+  <div class="imageBorder" style="padding:10px;">
+ <div class="msg_handler_slider"> You can also display each of the 5 summary numbers selectively as per your requirement. <a>Click here</a> to see in more details. &raquo;</div> 
+ <div class="msg_body "> 
+To hide the five summary numbers selectively you need to individually set the value of the respective attribute to '0' which you may not want to display in the chart.  Let's create a chart  displaying only the maximum and minimum values. The chart will look like as under:
+
+  <p><img src="Images/selectivedisplay.jpg" class="imageBorder" /></p>
+  The setting required in the data is as follows:
+  <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab3">XML</a></li>
+      	 <li><a href="#tab4">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab3" class="tab_content"><pre class="prettyprint code_container">
+&lt;chart caption='Visits to a Website' subCaption='In three years' 
+<strong>showQ1Values='0' showQ3Values='0' showMedianValues='0'</strong> <strong>showMinValues='1' showMaxValues='1'</strong>&gt;
+...
+&lt;/chart&gt;</pre>
+    		</div>
+			<div id="tab4" class="tab_content"><pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Visits to a Website",
+    "subcaption":"In three years",
+    <strong>"showq1values":"0",
+    "showq3values":"0",
+    "showmedianvalues":"0",
+    "showminvalues":"1",
+    "showmaxvalues":"1"</strong>
+  }
+}</pre>
+			</div>
+	  </div>
+    </div>
+	  <div style="clear:both"></div> 
+	  In the above data, 
+	  <ul>
+	    <li>The <span class="codeInline">showValues</span> attribute is set to '1' to primarily display all the values in the chart</li>
+	    <li> The attributes <span class="codeInline">showMedianValues</span>, <span class="codeInline">showQ1Values</span> and <span class="codeInline">showQ3Values</span> are set to '0' in order to hide median, Q1 and Q3 values</li>
+	    <li> The attributes <span class="codeInline">showMinValues</span> and <span class="codeInline">showMaxValues</span> are set to '1', hence, displaying only these values</li>
+	  </ul></div></div>
+  
+	 
+	  <p class="header"><a name="median" id="median"></a>Customizing the Median (Q2)</p>
+	
+	   The &quot;Median&quot; for a set of numbers is represented by a line at the center of the box plot. The median acts as the separator between the upper and lower quartile boxes.
+       <p> The attributes used to customize the median are given below:</p>
+       <table width="100%" border="0" cellpadding="0" cellspacing="0" class="table">
+      <tr>
+        <td width="120" class="header">Attribute Name </td>
+		<td width="100" class="header">Type</td>
+		<td width="100" class="header">Range</td>
+		<td class="header">Description</td>
+       
+      </tr>
+      <tr>
+        <td class="codeInline">medianColor</td>
+        <td>Hex code</td>
+		<td>&nbsp;</td>
+        <td>Sets the color of the line which represents the median.</td>
+      </tr>
+      <tr class="trVeryLightYellowBg">
+        <td class="codeInline">medianThickness</td>
+        <td>Number</td>
+        <td>&nbsp;</td>
+		<td>Sets the thickness of the median line.</td>
+	  </tr>
+      <tr>
+        <td class="codeInline">medianAlpha</td>
+        <td>Number</td>
+        <td>0-100</td>
+        <td>Sets the transparency of the median line.</td>
+      </tr>
+</table>
+	  <p class="highlightBlock"> Note: All the three attributes can  be used in the  <span class="codeInline">&lt;chart&gt;</span>, <span class="codeInline">&lt;dataset&gt;</span> and <span class="codeInline">&lt;set&gt; </span> elements.</p>
+	  
+	  <p class="header"><a name="quartiles" id="quartiles"></a>Customizing the upper and lower quartiles (Q1 and Q3)</p>
+	  The quartiles of a set of data are spread as two boxes separated by the median. The roof of the upper quartile box represents the exact value of the upper quartile (Q3) . The base of the lower quartile box represents the exact value of the lower quartile (Q1).
+	  <p> The attributes used to customize the quartile points and the boxes are discussed in the table below:</p>
+	  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="table">
+      <tr>
+        <td width="120" class="header">Attribute Name </td>
+		<td width="100" class="header">Type</td>
+		<td width="100" class="header">Range</td>
+		<td class="header">Description</td>
+       
+      </tr>
+      <tr>
+        <td class="codeInline">upperQuartileColor</td>
+        <td>Hex code</td>
+		<td>&nbsp;</td>
+        <td>Sets the color of the line that represents the exact value of the upper quartile. This line is the roof of the upper quartile box.</td>
+      </tr>
+      <tr class="trVeryLightYellowBg">
+        <td class="codeInline">UpperQuartileThickness</td>
+        <td>Number</td>
+        <td>&nbsp;</td>
+		<td>Sets the thickness of the upper quartile line.</td>
+	  </tr>
+      <tr>
+        <td class="codeInline">UpperQuartileAlpha</td>
+        <td>Number</td>
+        <td>0-100</td>
+        <td>Sets the transparency of the upper quartile line.</td>
+      </tr>
+	  <tr class="trVeryLightYellowBg">
+        <td class="codeInline">lowerQuartileColor</td>
+        <td>Hex code</td>
+        <td>&nbsp;</td>
+        <td>Sets the color of the line that represents the exact value of the lower quartile value. This line is the base of the lower quartile box.</td>
+      </tr>
+	  <tr>
+        <td class="codeInline">lowerQuartileThickness</td>
+        <td>Number</td>
+        <td>&nbsp;</td>
+		<td>Sets the thickness of the lower quartile line.</td>
+	  </tr>
+	  <tr class="trVeryLightYellowBg">
+        <td class="codeInline">lowerQuartileAlpha</td>
+        <td>Number</td>
+        <td>0-100</td>
+		<td>Sets the transparency of the lower quartile line.</td>
+	  </tr>
+	  <tr>
+        <td class="codeInline">upperBoxColor</td>
+        <td>Hex code</td>
+        <td>&nbsp;</td>
+		<td>Sets the color of the upper quartile box.</td>
+	  </tr>
+	  <tr class="trVeryLightYellowBg">
+	  <td class="codeInline">upperBoxAlpha</td>
+        <td>Number</td>
+        <td>0-100</td>
+		<td>Sets the transparency of the upper quartile box.</td>
+	  </tr>
+	  <tr>
+        <td class="codeInline">lowerBoxColor</td>
+        <td>Hex code</td>
+        <td>&nbsp;</td>
+		<td>Sets the color of the lower quartile box.</td>
+	  </tr>
+	  <tr class="trVeryLightYellowBg">
+        <td class="codeInline">lowerBoxAlpha</td>
+        <td>Number</td>
+        <td>0-100</td>
+		<td>Sets the transparency of the lower quartile box.</td>
+	  </tr>
+	   <tr>
+        <td class="codeInline">upperBoxBorderColor</td>
+        <td>Hex code</td>
+        <td>&nbsp;</td>
+		<td>Sets the color of the two sides of the upper quartile box.</td>
+	  </tr>
+	   <tr class="trVeryLightYellowBg">
+        <td class="codeInline">upperBoxBorderThickness</td>
+        <td>Number</td>
+        <td>&nbsp;</td>
+		<td>Sets the thickness of the two sides of the upper quartile box.</td>
+	  </tr>
+	   <tr>
+        <td class="codeInline">upperBoxBorderAlpha</td>
+        <td>Number</td>
+        <td>0-100</td>
+		<td>Sets the transparency of the two sides of the upper quartile box.</td>
+	  </tr>
+	   <tr class="trVeryLightYellowBg">
+        <td class="codeInline">lowerBoxBorderColor</td>
+        <td>Hex code</td>
+        <td>&nbsp;</td>
+		<td>Sets the color of the two sides of the lower quartile box.</td>
+	  </tr>
+	   <tr>
+        <td class="codeInline">lowerBoxBorderAlpha</td>
+        <td>Number</td>
+        <td>0-100</td>
+		<td>Sets the transparency of the two sides of the lower quartile box.</td>
+	  </tr>
+	  </table>
+	  <p class="header"> <a name="whiskers" id="whiskers"></a>Customizing the minimum and maximum numbers (lower and upper whiskers)</p>
+	  The chart displays the biggest number of a set of values as the upper whisker and the smallest number of the set as the lower whisker.
+	  <p>The attributes used to customize the whiskers are discussed in the table below:</p>
+	  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="table">
+      <tr>
+        <td width="120" class="header">Attribute Name </td>
+		<td width="100" class="header">Type</td>
+		<td width="100" class="header">Range</td>
+		<td class="header">Description</td>
+      </tr>
+	  <tr class="trVeryLightYellowBg">
+        <td class="codeInline">upperWhiskerColor</td>
+        <td>Hex code</td>
+		<td>&nbsp;</td>
+       <td>Sets the color of the upper whisker of the data plot.</td>
+      </tr>
+      <tr>
+        <td class="codeInline">upperWhiskerThickness</td>
+        <td>Number</td>
+        <td>&nbsp;</td>
+		<td>Sets the thickness of the upper whisker of the data plot.</td>
+	  </tr>
+      <tr class="trVeryLightYellowBg">
+        <td class="codeInline">upperWhiskerAlpha</td>
+        <td>Number</td>
+        <td>0-100</td>
+        <td>Sets the transparency of the upper whisker of the data plot.</td>
+      </tr>
+	  <tr>
+        <td class="codeInline">lowerWhiskerColor</td>
+        <td>Hex code</td>
+        <td>&nbsp;</td>
+        <td>Sets the color of the lower whisker of the data plot.</td>
+      </tr>
+	  <tr class="trVeryLightYellowBg">
+        <td class="codeInline">lowerWhiskerThickness</td>
+        <td>Number</td>
+        <td>&nbsp;</td>
+		<td>Sets the thickness of the lower whisker of the data plot.</td>
+	  </tr>
+	  <tr>
+        <td class="codeInline">lowerWhiskerAlpha</td>
+        <td>Number</td>
+        <td>0-100</td>
+		<td>Sets the transparency of the lower whisker of the data plot.</td>
+	  </tr>
+	  <tr class="trVeryLightYellowBg">
+        <td class="codeInline">whiskersLimitWidthRatio</td>
+        <td>number</td>
+        <td>&nbsp;</td>
+		<td>Sets the width of the whiskers in percentage with respect to the width of the box plot.</td>
+	  </tr>
+	 </table>
+	</td>
+  </tr>
+</table>
+
+</body>
+</html>

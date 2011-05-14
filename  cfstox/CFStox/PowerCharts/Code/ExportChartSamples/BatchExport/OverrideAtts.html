@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>PowerCharts v3.2 - Client-side BatchExport with override attributes</title>
+        <script type="text/javascript" src="../../../Charts/FusionCharts.js"></script>
+        <script type="text/javascript" src="../../../Charts/FusionChartsExportComponent.js"></script>
+        <link href="../../assets/ui/css/style.css" rel="stylesheet" type="text/css" />
+       
+        <script type="text/javascript"><!--
+            //Define a function, which will be invoked when user clicks the batch-export-initiate button
+            function initiateExport(){
+                myExportComponent.BeginExport();
+            }
+            //-->
+        </script>
+
+    </head>
+
+    <body>
+        <!-- wrapper -->
+        <div id="wrapper">
+            <!-- header -->
+            <div id="header">
+                <div class="logo"><a href="http://www.fusioncharts.com/powercharts/?BS=OfflineDocsLogo" target="_blank"><img src="../../assets/ui/images/powerchartsv3.2-logo.jpg" width="180" height="97" alt="PowerCharts v3.2 logo" /></a></div>
+                <h1 class="brand-name"></h1>
+                <h1 class="logo-text-home">PowerCharts v3.2</h1>
+            </div>
+            <!-- content area -->
+            <div class="content-area">
+                <div id="content-area-inner-main">
+                    <h2 class="headline">Client-side BatchExport with override attributes</h2>
+
+                        <table align='center'>
+                            <tr>
+                                <td>
+                                    <div id="chart1div" align="center">The chart will appear within this DIV. This text will be replaced by the chart.</div>
+                                    <script type="text/javascript"><!--
+                                        //Build the chart. Make sure to have registerWithJS as 1
+                                        var myChart1 = new FusionCharts("../../../Charts/Spline.swf", "myChartId1", "350", "300", "0", "1");
+                                        myChart1.setXMLUrl("SimpleExample.xml");
+                                        myChart1.render("chart1div");
+                                        //-->
+                                    </script>
+                                </td>
+                                <td>
+                                    <div id="chart2div" align="center">The chart will appear within this DIV. This text will be replaced by the chart.</div>
+                                    <script type="text/javascript"><!--
+                                        //Build the chart. Make sure to have registerWithJS as 1
+                                        var myChart2 = new FusionCharts("../../../Charts/Spline.swf", "myChartId2", "350", "300", "0", "1");
+                                        myChart2.setXMLUrl("SimpleExample.xml");
+                                        myChart2.render("chart2div");
+                                        //-->
+                                    </script>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div id="chart3div" align="center">The chart will appear within this DIV. This text will be replaced by the chart.</div>
+                                    <script type="text/javascript"><!--
+                                        //Build the chart. Make sure to have registerWithJS as 1
+                                        var myChart3 = new FusionCharts("../../../Charts/Waterfall2D.swf", "myChartId3", "350", "300", "0", "1");
+                                        myChart3.setXMLUrl("SimpleExample.xml");
+                                        myChart3.render("chart3div");
+                                        //-->
+                                    </script>
+                                </td>
+                                <td align='center'>
+                                    <input type='button' onClick="javascript:initiateExport();" value="Begin batch export" />
+                                    <BR /><BR />
+                                    <!-- We also create a DIV to contain the FusionCharts batch exporter component -->
+                                    <div id="fcexpDiv" align="center">FusionCharts Export Handler Component</div>
+                                    <script type="text/javascript"><!--
+                                        //Initialize Batch Exporter with DOM Id as fcBatchExporter
+                                        var myExportComponent = new FusionChartsExportObject("fcBatchExporter", "../../../Charts/FCExporter.swf");
+
+                                        //Add the charts to queue. The charts are referred to by their DOM Id.
+                                        myExportComponent.sourceCharts = ['myChartId1','myChartId2','myChartId3'];
+
+                                        //------- Export related Attributes ------//
+                                        myExportComponent.exportAttributes.showExportDialog = '1';
+
+                                        //------ Export Component Attributes ------//
+                                        //Set the mode as full mode
+                                        myExportComponent.componentAttributes.fullMode='1';
+                                        //Set saving mode as both. This allows users to download individual charts/ as well as download all charts as a single file.
+                                        myExportComponent.componentAttributes.saveMode='both';
+                                        //Show allowed export format drop-down
+                                        myExportComponent.componentAttributes.showAllowedTypes = '1';
+                                        //Cosmetics
+                                        //Width and height
+                                        myExportComponent.componentAttributes.width = '350';
+                                        myExportComponent.componentAttributes.height = '140';
+                                        //Message - caption of export component
+                                        myExportComponent.componentAttributes.showMessage = '1';
+                                        myExportComponent.componentAttributes.message = 'Click on button above to begin export of charts. Then save from here.';
+                                        //Render the exporter SWF in our DIV fcexpDiv
+                                        myExportComponent.Render("fcexpDiv");
+                                        //-->
+                                    </script>
+                                </td>
+                            </tr>
+                        </table>
+
+                    <div class="underline-dull"></div>
+                </div>
+            </div>
+            <!-- footer -->
+            <div id="footer">
+                <ul>
+                    <li><a href="../index.html"><span>&laquo; Back to list of examples</span></a></li>
+                    <li class="pipe">|</li>
+                    <li><a href="../../NoChart.html"><span>Unable to see the chart above?</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>

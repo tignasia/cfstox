@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+<style type="text/css">
+.specialHighlight { background-color:#FFECD2;} 
+</style>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Drag-node Chart &gt; Reading data using JavaScript </td>
+  </tr>
+  <tr> 
+    <td valign="top" class="text">
+      <p>In our previous section, we had seen how to submit the updated data from chart to a server side script as form elements. You can also access the updated XML data at client-side using JavaScript. You can parse this data and update your data sources through AJAX etc. Here, we'll see how to read the updated data using JavaScript functions present on the same page.</p>    
+    </td>
+  </tr>
+  
+  <tr>
+    <td valign="top" class="text"> Once the chart is rendered, whenever we need access to chart's updated data as XML, we can simple call the <span class="codeInline">getXMLData()</span> function on the chart: 
+      <br />
+      <br />
+      <pre class="prettyprint code_container"><span class="codeComment">//Get a reference to our chart</span>
+var ourChart = FusionCharts(&quot;NodeChart&quot;); 
+<span class="codeComment">//Get the data from chart </span>
+var xmlRtn = ourChart.getXMLData();
+<span class="codeComment">//Show it to user in alert box.</span>
+alert(xmlRtn);</pre>      
+    </td>
+  </tr>
+  <tr>
+    <td valign="top" class="text">&nbsp;</td>
+  </tr>
+  <tr>
+    <td valign="top" class="highlightBlock text">The function <span class="codeInline"><a href="../FCV3Basics/JavaScript/JS_DataBackFromChart.html#drag">getXMLData</a>()</span>returns the latest/changed data. This function is also used to retrieve the original data from the chart. To<a href="../FCV3Basics/JavaScript/JS_DataBackFromChart.html#drag"> get the original data</a> from the chart you need pass <span class="codeInline">false</span> as a parameter to the function. e.g., <span class="codeInline">var xmlRtn = ourChart.getXMLData(<strong>false</strong>);</span></td>
+  </tr>
+	<tr>
+	<td>
+	<p>Let's take an example to view the updated XML using the <span class="codeInline">getXMLData</span> function.
+	To show the changes we have used the same chart which is used in the <a href="Overview.html">Overview</a> page. We will make the following run-time changes in the chart:</p>
+	<ul>
+	<li>Delete Node 3 from the top right corner of the chart</li>
+	<li>Added the label named "New Label" on the top right corner of the chart</li>
+	<li>Added a new Node named as "New Node" below "Node 4"</li>
+	<li>Added a connector named as "New C1" between "Node 9" and "New Node"</li></ul><br/>
+	 After making the changes the chart will look as under:</td></tr>
+	 <tr>
+    <td valign="top"><p><img src="../Images/DragNodegetXML.jpg"  class="imageBorder"/></p>
+	Try it <a href="../../Code/SpecialCharts/DragNode_getXMLData.html" target="_blank">Live</a>!
+	<p>For the above chart, we get the following XML data by using the <span class="codeInline">getXMLData</span> function. Note that, in the XML data, shown below, we have used highlighted blocks to specifiy the nodes where the changes have been made. The data is as under:    </p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"> 
+    		  <pre class="prettyprint code_container">
+&lt;chart palette='2' xaxisminvalue='0' xaxismaxvalue='100' yaxisminvalue='0' yaxismaxvalue='100' is3d='1' showformbtn='1' viewmode='0' &gt;
+        &lt;dataset seriesname='DS1' &gt;
+          &lt;set id='1' x='12' y='79' name='Node 1 with a long label' height='56' width='70' shape='RECTANGLE' toolText='Node 1 with a long label' color='FE3233'/&gt;
+          &lt;set id='2' x='59' y='15' name='Node 2' height='56' width='40' shape='RECTANGLE' toolText='Node 2' color='FE9191'/&gt;
+          &lt;set id='4' x='38.2631578947368' y='45.7246376811594' name='Node 4' radius='37' shape='CIRCLE' toolText='Node 4' color='FE8181'/&gt;
+          &lt;set id='5' x='40' y='85' name='Node 5' height='67' width='45' shape='RECTANGLE' toolText='Node 5' color='FE7272'/&gt;
+          &lt;set id='6' x='69' y='85' name='Node 6' height='67' width='45' shape='RECTANGLE' toolText='Node 6' color='72D4FE'/&gt;
+          &lt;set id='7' x='87' y='45' name='Node 7' numSides='3' radius='47' shape='POLYGON' toolText='Node 7' color='FE5151'/&gt;
+          &lt;set id='8' x='65' y='60' name='Node 8' numSides='5' radius='47' shape='POLYGON' toolText='Node 8' color='FE9191'/&gt;
+          &lt;set id='9' x='12' y='20' name='Node 9' radius='37' shape='CIRCLE' toolText='Node 9' color='33C1FE'/&gt;
+          &lt;set id='10' x='80' y='12' name='Node 10' numSides='4' radius='47' shape='POLYGON' toolText='Node 10' color='33C1FE'/&gt;
+          <span class="specialHighlight">&lt;set id='ND' x='37.8947368421053' y='16.231884057971' name='New Node' height='30' width='30' shape='RECTANGLE' toolText='New Node' color='afd8f8'/&gt;</span>
+        &lt;/dataset&gt;
+        &lt;connectors color='FF0000' stdthickness='5' &gt;
+          &lt;connector from='1' to='9' color='BBBB00' strength='0.96' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link label' /&gt;
+          &lt;connector from='1' to='5' color='BBBB00' strength='0.8' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link12' /&gt;
+          &lt;connector from='1' to='8' color='BBBB00' strength='0.8' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link2' /&gt;
+          &lt;connector from='1' to='4' color='BBBB00' strength='0.3' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link3' /&gt;
+          &lt;connector from='2' to='4' color='BBBB00' strength='0.4' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link4' /&gt;
+          &lt;connector from='2' to='8' color='BBBB00' strength='0.33' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link1' /&gt;
+          &lt;connector from='4' to='5' color='BBBB00' strength='0.7' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link6' /&gt;
+          &lt;connector from='4' to='8' color='FF5904' strength='0.6' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='' /&gt;
+          &lt;connector from='5' to='8' color='BBBB00' strength='0.6' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link9' /&gt;
+          &lt;connector from='7' to='8' color='BBBB00' strength='0.5' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link10' /&gt;
+          &lt;connector from='7' to='10' color='BBBB00' strength='0.3' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='link11' /&gt;
+          <span class="specialHighlight">&lt;connector from='ND' to='9' color='ffbe3c' strength='0' alpha='100' arrowAtStart='1' arrowAtEnd='1' link='' label='New C1' /&gt;</span>
+        &lt;/connectors&gt;
+        &lt;labels &gt;
+          &lt;label text='A Note added as Text Label' x='18' y='5' color='60634E' alpha='100' fontSize='10' bgColor='' borderColor='' padding='5' allowDrag='1' /&gt;
+          <span class="specialHighlight">&lt;label text='New Label' x='88.0701754385965' y='91.0144927536232' color='60634e' alpha='100' fontSize='10' bgColor='bcfffc' borderColor='' padding='7' allowDrag='1' /&gt;</span>
+        &lt;/labels&gt;
+      &lt;/chart&gt;
+</pre></td></tr>
+</table>
+</body>
+</html>

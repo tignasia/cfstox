@@ -1,0 +1,128 @@
+<chart caption='Periodic Table' xAxisLabel='Group' yAxisLabel='Period' canvasBgColor='FFF5CE' mapByCategory='1' showColumnIdInTooltext='1' showRowIdInToolText='1'  bgColor='ffffff' borderAlpha='100' >
+ 
+ 
+    <colorRange mapBypercent='0' gradient='0'>
+
+		<color code ='FF6666' label='Alkali metals'/>
+		<color code ='FFDEAD' label='Alkaline earth metals'/>
+		<color code ='FFC0C0' label='Transition elements'/>
+		<color code ='CCCCCC' label='Other metals'/>
+		<color code ='CCCC99' label='Metalloids'/>
+		<color code ='A0FFA0' label='Other nonmetals'/>
+		<color code ='FFFF99' label='Halogens'/>
+		<color code ='C0FFFF' label='Noble gases'/>
+		<color code ='FCFCFC' label='Unknown'/>
+
+	</colorRange>
+	<dataset>
+		
+		<set columnId='1' rowId='1'  value='1' colorRangeLabel='Other nonmetals' displayValue='H' tooltext='Hydrogen'/>
+		<set columnId='1' rowId='2'  colorRangeLabel='Alkali metals' displayValue='Li' tooltext='Lithium'/>
+		<set columnId='1' rowId='3'  colorRangeLabel='Alkali metals' displayValue='Na' tooltext='Sodium'/>
+		<set columnId='1' rowId='4'  colorRangeLabel='Alkali metals' displayValue='K' tooltext='Potassium'/>
+		<set columnId='1' rowId='5'  colorRangeLabel='Alkali metals' displayValue='Rb' tooltext='Rubidium'/>
+		<set columnId='1' rowId='6'  colorRangeLabel='Alkali metals' displayValue='Cs' tooltext='Caesium'/>
+		<set columnId='1' rowId='7'  colorRangeLabel='Alkali metals' displayValue='Fr' tooltext='Francium'/>
+		<set columnId='1' rowId='8'  colorRangeLabel='Unknown' displayValue='Uue' tooltext='Ununennium'/>
+		<set columnId='2' rowId='4'  colorRangeLabel='Alkaline earth metals' displayValue='Ca' tooltext='Calcium'/>
+		<set columnId='2' rowId='3'  colorRangeLabel='Alkaline earth metals' displayValue='Mg' tooltext='Magnesium'/>
+		<set columnId='2' rowId='8'  colorRangeLabel='Unknown' displayValue='Ubn' tooltext='Unbunulium'/>
+		<set columnId='2' rowId='5'  colorRangeLabel='Alkaline earth metals' displayValue='Sr' tooltext='Strontium'/>
+		<set columnId='2' rowId='6'  colorRangeLabel='Alkaline earth metals' displayValue='Ba' tooltext='Barium'/>
+		<set columnId='2' rowId='7'  colorRangeLabel='Alkaline earth metals' displayValue='Ra' tooltext='Radium'/>
+		<set columnId='2' rowId='2'  colorRangeLabel='Alkaline earth metals' displayValue='Be' tooltext='Beryllium'/>
+		<set columnId='3' rowId='5'  colorRangeLabel='Transition elements' displayValue='Y' tooltext='Yttrium'/>
+		<set columnId='3' rowId='4'  colorRangeLabel='Transition elements' displayValue='Sc' tooltext='Scandium'/>
+		<set columnId='4' rowId='7'  colorRangeLabel='Transition elements' displayValue='Rf' tooltext='Rutherfordium'/>
+		<set columnId='4' rowId='6'  colorRangeLabel='Transition elements' displayValue='Hf' tooltext='Hafnium'/>
+		<set columnId='4' rowId='5'  colorRangeLabel='Transition elements' displayValue='Zr' tooltext='Zircomium'/>
+		<set columnId='4' rowId='4'  colorRangeLabel='Transition elements' displayValue='Ti' tooltext='Titanium'/>
+		<set columnId='5' rowId='5'  colorRangeLabel='Transition elements' displayValue='Nb' tooltext='Niobium'/>
+		<set columnId='5' rowId='4'  colorRangeLabel='Transition elements' displayValue='V' tooltext='Vanadium'/>
+		<set columnId='5' rowId='7'  colorRangeLabel='Transition elements' displayValue='Db' tooltext='Dubnium'/>
+		<set columnId='5' rowId='6'  colorRangeLabel='Transition elements' displayValue='Ta' tooltext='Tantalum'/>
+		<set columnId='6' rowId='5'  colorRangeLabel='Transition elements' displayValue='Mo' tooltext='Molybdenum'/>
+		<set columnId='6' rowId='6'  colorRangeLabel='Transition elements' displayValue='W' tooltext='Tungsten'/>
+		<set columnId='6' rowId='7'  colorRangeLabel='Transition elements' displayValue='Sg' tooltext='Seaborgium'/>
+		<set columnId='6' rowId='4'  colorRangeLabel='Transition elements' displayValue='Cr' tooltext='Chronium'/>
+		<set columnId='7' rowId='7'  colorRangeLabel='Transition elements' displayValue='Bh' tooltext='Bohrium'/>
+		<set columnId='7' rowId='6'  colorRangeLabel='Transition elements' displayValue='Re' tooltext='Rhenium'/>
+		<set columnId='7' rowId='4'  colorRangeLabel='Transition elements' displayValue='Mn' tooltext='Manganese'/>
+		<set columnId='7' rowId='5'  colorRangeLabel='Transition elements' displayValue='Tc' tooltext='Technetium'/>
+		<set columnId='8' rowId='5'  colorRangeLabel='Transition elements' displayValue='Ru' tooltext='Ruthenium'/>
+		<set columnId='8' rowId='4'  colorRangeLabel='Transition elements' displayValue='Fe' tooltext='Iron'/>
+		<set columnId='8' rowId='7'  colorRangeLabel='Transition elements' displayValue='Hs' tooltext='Hassium'/>
+		<set columnId='8' rowId='6'  colorRangeLabel='Transition elements' displayValue='Os' tooltext='Osmium'/>
+		<set columnId='9' rowId='5'  colorRangeLabel='Transition elements' displayValue='Rh' tooltext='Rhodium'/>
+		<set columnId='9' rowId='4'  colorRangeLabel='Transition elements' displayValue='Co' tooltext='Cobalt'/>
+		<set columnId='9' rowId='7'  colorRangeLabel='Unknown' displayValue='Mt' tooltext='Meitnerium'/>
+		<set columnId='9' rowId='6'  colorRangeLabel='Transition elements' displayValue='Ir' tooltext='Iridium'/>
+		<set columnId='10' rowId='7' colorRangeLabel='Unknown' displayValue='Ds' tooltext='Darmstadtium'/>
+		<set columnId='10' rowId='6' colorRangeLabel='Transition elements' displayValue='Pt' tooltext='Platinum'/>
+		<set columnId='10' rowId='4' colorRangeLabel='Transition elements' displayValue='Ni' tooltext='Nickel'/>
+		<set columnId='10' rowId='5' colorRangeLabel='Transition elements' displayValue='Pd' tooltext='Palladium'/>
+		<set columnId='11' rowId='4' colorRangeLabel='Transition elements' displayValue='Cu' tooltext='Copper'/>
+		<set columnId='11' rowId='6' colorRangeLabel='Transition elements' displayValue='Au' tooltext='Gold'/>
+		<set columnId='11' rowId='7' colorRangeLabel='Unknown' displayValue='Rg' tooltext='Roentgenium'/>
+		<set columnId='11' rowId='5' colorRangeLabel='Transition elements' displayValue='Ag' tooltext='Silver'/>
+		<set columnId='12' rowId='7' colorRangeLabel='Transition elements' displayValue='Uub' tooltext='Ununbium'/>
+		<set columnId='12' rowId='6' colorRangeLabel='Transition elements' displayValue='Hg' tooltext='Mercury'/>
+		<set columnId='12' rowId='5' colorRangeLabel='Transition elements' displayValue='Cd' tooltext='Cadmium'/>
+		<set columnId='12' rowId='4' colorRangeLabel='Transition elements' displayValue='Zn' tooltext='Zinc'/>
+		<set columnId='13' rowId='2' colorRangeLabel='Metalloids' displayValue='B' tooltext='Boron'/>
+		<set columnId='13' rowId='7' colorRangeLabel='Unknown' displayValue='Uut' tooltext='Ununtrium'/>
+		<set columnId='13' rowId='5' colorRangeLabel='Other metals' displayValue='In' tooltext='Indium'/>
+		<set columnId='13' rowId='3' colorRangeLabel='Other metals' displayValue='Al' tooltext='Aluminium'/>
+		<set columnId='13' rowId='6' colorRangeLabel='Other metals' displayValue='Tl' tooltext='Thallium'/>
+		<set columnId='13' rowId='4' colorRangeLabel='Other metals' displayValue='Ga' tooltext='Gallium'/>
+		<set columnId='14' rowId='4' colorRangeLabel='Metalloids' displayValue='Ge' tooltext='Germanium'/>
+		<set columnId='14' rowId='3' colorRangeLabel='Metalloids' displayValue='Si' tooltext='Silicon'/>
+		<set columnId='14' rowId='5' colorRangeLabel='Other metals' displayValue='Sn' tooltext='Tin'/>
+		<set columnId='14' rowId='6' colorRangeLabel='Other metals' displayValue='Pb' tooltext='Lead'/>
+		<set columnId='14' rowId='7' colorRangeLabel='Unknown' displayValue='Uuq' tooltext='Ununquadium'/>
+		<set columnId='14' rowId='2' colorRangeLabel='Other nonmetals' displayValue='C' tooltext='Carbon'/>
+		<set columnId='15' rowId='6' colorRangeLabel='Other metals' displayValue='Bi' tooltext='Bismuth'/>
+		<set columnId='15' rowId='2' colorRangeLabel='Other nonmetals' displayValue='N' tooltext='Nitrogen'/>
+		<set columnId='15' rowId='5' colorRangeLabel='Metalloids' displayValue='Sb' tooltext='Antimony'/>
+		<set columnId='15' rowId='4' colorRangeLabel='Metalloids' displayValue='As' tooltext='Arsenic'/>
+		<set columnId='15' rowId='3' colorRangeLabel='Other nonmetals' displayValue='P' tooltext='Phosphorus'/>
+		<set columnId='15' rowId='7' colorRangeLabel='Unknown' displayValue='Uup' tooltext='Ununpentium'/>
+		<set columnId='16' rowId='5' colorRangeLabel='Metalloids' displayValue='Te' tooltext='Tellurium'/>
+		<set columnId='16' rowId='4' colorRangeLabel='Other nonmetals' displayValue='Se' tooltext='Selenium'/>
+		<set columnId='16' rowId='6' colorRangeLabel='Metalloids' displayValue='Po' tooltext='Polonium'/>
+		<set columnId='16' rowId='2' colorRangeLabel='Other nonmetals' displayValue='O' tooltext='Oxygen'/>
+		<set columnId='16' rowId='3' colorRangeLabel='Other nonmetals' displayValue='S' tooltext='Sulfur'/>
+		<set columnId='16' rowId='7' colorRangeLabel='Unknown' displayValue='Uuh' tooltext='Ununhexium'/>
+		<set columnId='17' rowId='5' colorRangeLabel='Halogens' displayValue='I' tooltext='Iodine'/>
+		<set columnId='17' rowId='6' colorRangeLabel='Halogens' displayValue='At' tooltext='Astatine'/>
+		<set columnId='17' rowId='2' colorRangeLabel='Halogens' displayValue='F' tooltext='Fluorine'/>
+		<set columnId='17' rowId='3' colorRangeLabel='Halogens' displayValue='Cl' tooltext='Chlorine'/>
+		<set columnId='17' rowId='4' colorRangeLabel='Halogens' displayValue='Br' tooltext='Bromine'/>
+		<set columnId='17' rowId='7' colorRangeLabel='Unknown' displayValue='Uus' tooltext='Ununseptium'/>
+		<set columnId='18' rowId='5' colorRangeLabel='Noble gases' displayValue='Xe' tooltext='Xenon'/>
+		<set columnId='18' rowId='6' colorRangeLabel='Noble gases' displayValue='Rn' tooltext='Radon'/>
+		<set columnId='18' rowId='4' colorRangeLabel='Noble gases' displayValue='Kr' tooltext='Krypton'/>
+		<set columnId='18' rowId='3' colorRangeLabel='Noble gases' displayValue='Ar' tooltext='Argon'/>
+		<set columnId='18' rowId='2' colorRangeLabel='Noble gases' displayValue='Ne' tooltext='Neon'/>
+		<set columnId='18' rowId='1' colorRangeLabel='Noble gases' displayValue='He' tooltext='Helium'/>
+		<set columnId='18' rowId='7' colorRangeLabel='Unknown' displayValue='Uuo' tooltext='Ununoctium'/>
+		<set columnId='18' rowId='7' colorRangeLabel='Unknown' displayValue='Uuo' tooltext='Ununoctium'/>
+
+	</dataset>
+
+	
+
+	<Styles>
+		<definition>
+			<style name='MyFirstFontStyle' type='font' size='12' bold='1' />
+			<style name='MySecondFontStyle' type='font' size='9' bold='1' />
+			<style name='MyThirdFontStyle' type='font' size='10' bold='1' color='1F1F1F'/>
+		</definition>
+		<application>
+			<apply toObject='DATAVALUES' styles='MyFirstFontStyle' />
+			<apply toObject='BR_DATAVALUES' styles='MySecondFontStyle' />
+			<apply toObject='TL_DATAVALUES' styles='MySecondFontStyle' />
+		</application>
+	</Styles>
+
+</chart>

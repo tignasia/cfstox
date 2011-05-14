@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Box and Whisker chart &gt; Standard deviation</td>
+  </tr>
+ 
+  <tr> 
+    <td valign="top" class="text"><p>Standard deviation is the variation or the dispersion from the mean. To display the standard deviation set <span class="codeInline">showSD='1'</span>. By default, the standard deviation  is represented by a triangle icon in the data plot. </p>
+		  <p class="highlightBlock">This attribute can be used in all the three elements (<span class="codeInline">&lt;chart&gt;</span>, <span class="codeInline">&lt;dataset&gt;</span> and <span class="codeInline">&lt;set&gt;</span>).</p>   
+       
+        A chart displaying the standard deviation is shown below: <br/>  
+	    <br/>  
+    </p></td>
+</tr>
+<tr>
+    <td valign="top"><img src="Images/DisplaySD.jpg" class="imageBorder" />
+	<p> In the above screenshot, the chart is displaying the standard deviation icons of each and every data plot. This icon is customizable about which we will discuss <a href="#standarddeviation">later</a>. </p>
+	<p> The setting for the above chart is given below:</p>
+	</td>
+  </tr>
+  <tr>
+    <td valign="top"> <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab1">XML</a></li>
+      	 <li><a href="#tab2">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab1" class="tab_content"><pre class="prettyprint code_container">
+&lt;chart caption='Visits to a Website' subCaption='In three years' showSD='1' SDIconSides='5' showValues='0'&gt;
+...
+&lt;/chart&gt;</pre></div>
+			<div id="tab2" class="tab_content"><pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Visits to a Website",
+    "subcaption":"In three years",
+    "showsd":"1",
+    "sdiconsides":"5",
+    "showvalues":"0"
+  }
+  ...
+}</pre></div>
+	    </div>
+	  </div>
+	  <div style="clear:both"></div>
+	  <p><br/>
+	    In the above data, the <span class="codeInline">showSD</span> attribute is set to '1' in the <span class="codeInline">&lt;chart&gt;</span> element. So, all the data plots are displaying the standard deviation icon.  The attribute <span class="codeInline">SDIconSides</span> is set to '5' to display the icon as a pentagon.  </p>
+	  <p class="header"> <a name="showhideSD" id="showhideSD"></a>Show/hide individual standard deviation values </p>
+	  <p> You may want to display the standard deviation icon of one dataset and hide the other. To do this use the <span class="codeInline">showSD</span> attribute in the <span class="codeInline">&lt;dataset&gt;</span> element. A sample  data is given below:</p>
+</td>
+  </tr>	
+   <tr>
+    <td valign="top"> <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab3">XML</a></li>
+      	 <li><a href="#tab4">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab3" class="tab_content">
+    		  <pre class="prettyprint code_container">
+&lt;chart caption='Visits to a Website' subCaption='In three years' showValues='0' SDIconSides='5'&gt;
+...
+&lt;dataset seriesName="January" lowerBoxColor='009FAA' upperboxColor='D4DFFF' mediancolor='FF0000' showSD='1'&gt;
+    &lt;set value='60,133,35,67,89,137,259'/&gt;
+    &lt;set value='139,67,75,114,39,67,191' /&gt;
+    &lt;set value='200,107,197,239,53,26,97' /&gt;
+&lt;/dataset&gt;
+
+&lt;dataset seriesName="February" lowerBoxColor='2A5F55' upperboxColor='D47F00'&gt;
+    &lt;set value='160,303,125,137,169,107,39' /&gt;
+    &lt;set value='139,167,255,124,59,187,151' /&gt;
+    &lt;set value='60,137,157,209,153,126,277' /&gt;
+&lt;/dataset&gt;
+&lt;/chart&gt;
+</pre></div>
+			<div id="tab4" class="tab_content">
+			  <pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Visits to a Website",
+    "subcaption":"In three years",
+    "showvalues":"0",
+    "sdiconsides":"5"
+  },
+  ...
+  "dataset":[{
+      "seriesname":"January",
+      "lowerboxcolor":"009FAA",
+      "upperboxcolor":"D4DFFF",
+      "mediancolor":"FF0000",
+      "showsd":"1",
+      "data":[{
+          "value":"60,133,35,67,89,137,259"
+        },
+        {
+          "value":"139,67,75,114,39,67,191"
+        },
+        {
+          "value":"200,107,197,239,53,26,97"
+        }
+      ]
+    },
+    {
+      "seriesname":"February",
+      "lowerboxcolor":"2A5F55",
+      "upperboxcolor":"D47F00",
+      "data":[{
+          "value":"160,303,125,137,169,107,39"
+        },
+        {
+          "value":"139,167,255,124,59,187,151"
+        },
+        {
+          "value":"60,137,157,209,153,126,277"
+        }
+      ]
+    }
+  ]
+}</pre></div>
+	    </div>
+	  </div>
+	  <div style="clear:both"></div><br/>
+	  In the above XML, we have used the <span class="codeInline">showSD</span> attribute in only one of the <span class="codeInline">&lt;dataset&gt;</span>element. So, the chart will display the standard deviation icon for the data plots declared in that <span class="codeInline">&lt;dataset&gt;</span> element. For rest of the data plots the icon will not be displayed. The chart will look like as under:<br/><br/>
+     </td></tr>
+	 
+<tr>
+    <td valign="top"><img src="Images/SelectiveDisplaySD.jpg" class="imageBorder" /> <br/><br/></td>
+  </tr>
+	
+<tr>
+<td> You can also display the standard deviation icon selectively for any one set of data declared through the  <span class="codeInline">&lt;set&gt;</span> elements. The sample data is given below:<br/>
+    <br/></td></tr> 	
+ <tr>
+    <td valign="top"> <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab5">XML</a></li>
+      	 <li><a href="#tab6">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab5" class="tab_content"><pre class="prettyprint code_container">
+&lt;chart caption='Visits to a Website' subCaption='In three years' showValues='0' SDIconSides='5'&gt;
+...
+&lt;dataset seriesName="January" lowerBoxColor='2A5F55' upperboxColor='D47F00' mediancolor='FF0000' &gt;
+    &lt;set value='60,133,35,67,89,137,259' showSD='1'/&gt; 
+    &lt;set value='139,67,75,114,39,67,191' /&gt;
+    &lt;set value='200,107,197,239,53,26,97' showSD='1'/&gt;
+&lt;/dataset&gt;
+&lt;/chart&gt;
+</pre></div>
+			<div id="tab6" class="tab_content"><pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Visits to a Website",
+    "subcaption":"In three years",
+    "showvalues":"0",
+    "sdiconsides":"5"
+  },
+  ...
+  "dataset":[{
+      "seriesname":"January",
+      "lowerboxcolor":"2A5F55",
+      "upperboxcolor":"D47F00",
+      "mediancolor":"FF0000",
+      "data":[{
+          "value":"60,133,35,67,89,137,259",
+          "showsd":"1"
+        },
+        {
+          "value":"139,67,75,114,39,67,191"
+        },
+        {
+          "value":"200,107,197,239,53,26,97",
+          "showsd":"1"
+        }
+      ]
+    }
+  ]
+}</pre></div>
+	    </div>
+	  </div>
+	  <div style="clear:both"></div><br/> 
+	  In the above XML, we have used the <span class="codeInline">showSD</span> attribute in two of the <span class="codeInline">&lt;set&gt;</span> elements within the <span class="codeInline">&lt;dataset&gt;</span> element. So, the chart will display the standard deviation icon only for the first and the third data plot. The chart will look like as under:<br/><br/></td></tr>
+<tr>
+    <td valign="top"><img src="Images/SelectiveDisplaySD1.jpg" class="imageBorder" /> <br/><br/></td>
+  </tr>	  
+<tr>
+	  <td>The attributes used to customize the standard deviation icon are given below:<BR/><BR/></td>
+  </tr>
+ <tr>
+    <td valign="top" class="text"></td></tr></table>
+	<a name="standarddeviation" id="standarddeviation"></a><table width="100%" border="0" cellpadding="0" cellspacing="0" class="table">
+      <tr>
+        <td width="180" class="header">Attribute Name </td>
+        <td width="80" class="header">Type</td>
+        <td width="80" class="header">Range</td>
+		<td class="header">Description</td>
+      </tr>
+      <tr>
+        <td>SDIconShape</td>
+        <td>String</td>
+        <td>&nbsp;</td>
+		<td>Specifies the shape of the icon. There are two options polygon and spoke.</td>
+      </tr>
+      <tr class="trVeryLightYellowBg">
+        <td>SDIconShape</td>
+        <td>Number</td>
+        <td>&nbsp;</td>
+        <td>Specifies the radius of the standard deviation  icon.</td>
+      </tr>
+      <tr>
+        <td>SDIconSides</td>
+        <td>Number</td>
+        <td>&nbsp;</td>
+        <td>Specifies the number of sides for the icon. If the <span class="codeInline">SDIconShape</span> is set as polygon, then the shape of the icon will depend on the number of sides. For example, 3 sides will display a triangle, 8 will display a circle.</td>
+      </tr>
+      <tr class="trVeryLightYellowBg">
+        <td>SDIconColor</td>
+        <td>Hex code</td>
+        <td>&nbsp;</td>
+		<td>Sets the color of the standard deviation  icon.</td>
+      </tr>
+      <tr>
+        <td>SDIconAlpha</td>
+        <td>Number</td>
+        <td>0-100</td>
+        <td>Sets the transparency of the standard deviation  icon.</td>
+      </tr>
+</table> 
+	  <p class="header">Standard deviation Connectors </p>
+	For multiple dataplots, you can draw a line to connect the standard deviation icons of each dataplot. The attribute <span class="codeInline"> drawSDConnector</span> is set to '1' to connect all the icons of the dataplots. This attribute can be used in <span class="codeInline"> &lt;chart&gt;</span> and <span class="codeInline">&lt;dataset&gt;</span> elements. The color of the connecting line will be same as the color of the standard deviation icon.
+	<p> A chart with standard deviation connectors will look like as under:</p>
+	<tr>
+    <td valign="top"><img src="Images/SDConnector.jpg" class="imageBorder" /><br/><br/>
+	
+	</td></tr>
+    
+   <p class="header">Connect Null data</p>
+If you set the <span class="codeInline">showSD</span> attribute in any of the <span class="codeInline">&lt;set&gt;</span> element to ‘0’, the chart will not display the standard deviation  icon of that particular set of data. In this case, the missing standard deviation  is considered as null data. Consequently, the standard deviation connectors will skip this null data.
+<p>An example of this situation is shown below:</p>
+<tr>
+    <td valign="top"><img src="Images/DisconnectedSDdata.jpg" class="imageBorder" /><br/><br/>
+	</td></tr>
+	    <tr>
+    <td valign="top"> <div class="container">
+	    <ul class="tabs">
+   	    <li><a href="#tab7">XML</a></li>
+      	 <li><a href="#tab8">JSON</a></li>
+	    </ul>
+   	 <div class="tab_container">
+    		<div id="tab7" class="tab_content">
+    		  <pre class="prettyprint code_container">
+&lt;chart caption='Visits to a Website' subCaption='In three years' drawSDConnector='1' SDIconSides='5'&gt;
+...
+&lt;dataset seriesName="January" lowerBoxColor='2A5F55' upperboxColor='D47F00' mediancolor='FF0000'&gt;
+    &lt;set value='60,133,35,67,89,137,259' showSD='1'/&gt;
+    &lt;set value='139,67,75,114,39,67,191' showSD='0'/&gt;
+    &lt;set value='200,107,197,239,53,26,97' showSD='1'/&gt;
+    &lt;set value='210,117,187,219,73,96,171' showSD='1'/&gt; 
+    &lt;set value='230,107,157,259,93,116,191' showSD='1'/&gt;
+&lt;/dataset&gt;
+&lt;/chart&gt;</pre>
+   		</div>
+			<div id="tab8" class="tab_content"><pre class="prettyprint code_container">{
+  "chart":{
+    "caption":"Visits to a Website",
+    "subcaption":"In three years",
+    "drawsdconnector":"1",
+    "sdiconsides":"5"
+  },
+  ...
+  "dataset":[{
+      "seriesname":"January",
+      "lowerboxcolor":"2A5F55",
+      "upperboxcolor":"D47F00",
+      "mediancolor":"FF0000",
+      "data":[{
+          "value":"60,133,35,67,89,137,259",
+          "showsd":"1"
+        },
+        {
+          "value":"139,67,75,114,39,67,191",
+          "showsd":"0"
+        },
+        {
+          "value":"200,107,197,239,53,26,97",
+          "showsd":"1"
+        },
+        {
+          "value":"210,117,187,219,73,96,171",
+          "showsd":"1"
+        },
+        {
+          "value":"230,107,157,259,93,116,191",
+          "showsd":"1"
+        }
+      ]
+    }
+  ]
+}</pre></div>
+	  </div>
+	  </div>
+	  <div style="clear:both"></div><br/>
+	  In the above XML:<br/><br/>
+	  <ul>
+	  <li>The <span class="codeInline">showSD</span> attribute is set to '0' in the third <span class="codeInline">&lt;set&gt;</span> element to hide the standard deviation icon</li>
+	  <li>The <span class="codeInline">drawSDConnector</span> is set to '1' to connect the icons</li>
+	  </ul>
+	  <p>The standard deviation  connector in the above chart is drawn as a discontinuous line. </p>
+	  <p>You can opt to ignore the null data and draw a continuous connector. To achieve this set <span class="codeInline">connectNullData = '1'</span>. In our above example, the chart will draw the line connecting the SD icons of the first, second and the fourth, fifth dataplots skipping the third dataplot. This attribute can only be used in the <span class="codeInline">&lt;chart&gt;</span> element.</p>
+	  The chart will look like as under:
+	  <p><img src="Images/ConnectedSDdata.jpg" class="imageBorder" /></p>
+</td>
+  </tr>	
+</table>
+
+</body>
+</html>

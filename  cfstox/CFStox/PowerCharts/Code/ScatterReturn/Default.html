@@ -1,0 +1,122 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+        <title>PowerCharts v3 PowerCharts</title>
+        <script type="text/javascript" src="../../Charts/FusionCharts.js"></script>
+
+        <script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js"></script>
+        <link href="../assets/ui/css/style.css" rel="stylesheet" type="text/css" />
+        <script language="JavaScript">
+            /**
+             * readXMLFromChart() method is called when the user pressed the
+             * button to return XML data
+             */
+            function readXMLFromChart(){
+                //Get a reference to our chart
+                var ourChart = getChartFromId("SelectChart");
+		
+                //Get the data from chart
+                var xmlRtn = ourChart.getXMLData();
+                //Show it to user in alert box.
+                alert(xmlRtn);
+            }
+            /**
+             * getDataFromChart method is called when the user has pressed the
+             * button to show returned data from chart.
+             */
+            function getDataFromChart(){
+                //Get a reference to our chart
+                var ourChart = getChartFromId("SelectChart");
+
+
+                //Now generate a tabular format of data returned as array
+                var arrData = ourChart.getData();
+                //If no data has been selected return an error
+                if (arrData.length==0){
+                    alert("Please select atleast one data point on chart by drawing a rectangle");
+                    return;
+                }
+                var i,j;
+                //Now we'll generate an HTML string for it
+                var strHTML = "<table width='100%' align='center' cellpadding='2' class='text' style='font-size:13px; color: #333333'>";
+                for (i=0; i<arrData.length; i++){
+                    //Iterate through each row of data
+                    //First column contains the dataset id.
+                    //Add dataset id
+                    strHTML = strHTML + "<tr><td bgColor='#F1F1F1'><b>" + arrData[i][0] + "</b></td><td>";
+
+                    //Iterate through all the data in this dataset
+                    for (j=1; j<arrData[i].length; j++){
+                        //Add data to HTML code
+                        strHTML = strHTML + arrData[i][j];
+                        //Add separator comma to all but last item
+                        if (j<arrData[i].length-1){
+                            strHTML = strHTML  + ", ";
+                        }
+                    }
+                    strHTML = strHTML + "</td></tr>";
+                }
+                //Close table tag
+                strHTML = strHTML + "</table>";
+                //Write the data to the required div
+                var tableDiv = document.getElementById('tableDataContainer');
+                tableDiv.innerHTML = strHTML;
+            }
+
+        </script>
+
+    </head>
+    <body>
+        <!-- wrapper -->
+        <div id="wrapper">
+            <!-- header -->
+            <div id="header">
+                <div class="logo"><a href="http://www.fusioncharts.com/powercharts/?BS=OfflineDocsLogo" target="_blank"><img src="../assets/ui/images/powerchartsv3.2-logo.jpg" width="180" height="97" alt="PowerCharts v3.2 logo" /></a></div>
+                <h1 class="brand-name"></h1>
+                <h1 class="logo-text-home">PowerCharts v3.2</h1>
+            </div>
+            <!-- content area -->
+            <div class="content-area">
+                <div id="content-area-inner-main">
+                    <h2 class="headline">Select Scatter chart demo</h2>
+					<p style="text-align:center;">Click and drag on the chart to create a rectangular box over the points that you wish to select.Once selected, click on View Data/View XML.</p>
+					<p>&nbsp;</p>				
+
+                    <div class="gen-chart-render"><div id="chartdiv" align="center"> FusionCharts. </div
+                        ><script type="text/javascript">
+                            var chart = new FusionCharts("../../Charts/SelectScatter.swf", "SelectChart", "550", "400", "0", "1");
+                            chart.setDataURL("Data.xml");
+                            chart.render("chartdiv");
+                        </script>
+                        <div class="clear"></div>
+                        <p>&nbsp;</p>
+
+                        <!-- action buttons -->
+                        <div class="qua-button-holder">
+                            <a class="qua qua-button view-chart-data" href="javascript:void(0)" onClick="getDataFromChart()"><span>View Data</span></a>
+                            <a class="qua qua-button view-chart-data" href="javascript:void(0)" onClick="readXMLFromChart()"><span>View XML</span></a>
+                        </div>
+
+                        <p>&nbsp;</p>
+                        <table class="table" width='580' align='center' cellpadding='2' cellspacing='1' border='1'>
+                            <tr >
+                                <td clas="header" align='center'>
+                                    <p>Data is returned by the chart as Array. The data is converted into tabular format using JavaScript.</p>
+									<div id="tableDataContainer">Please select the required points from chart.</div>
+                                </td>
+                            </tr>
+                        </table>
+                        <p>&nbsp;</p>
+                        
+                    </div>
+                    <!-- footer -->
+                    <div id="footer">
+                        <ul>
+                            <li class="pipe"></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

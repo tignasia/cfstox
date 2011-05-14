@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PowerCharts v3 Documentation</title>
+<link rel="stylesheet" href="../css/Style.css" type="text/css" />
+<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css" />
+<script type="text/javascript" src="../assets/ui/js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../assets/ui/js/lib.js" ></script>
+</head>
+
+<body>
+<table width="98%" border="0" cellspacing="0" cellpadding="3" align="center">
+  <tr> 
+    <td class="pageHeader">Drag-node Chart &gt; Add text Labels</td>
+  </tr>
+  <tr> 
+    <td valign="top" class="text">
+      <p>PowerCharts 3.2 introduces the features to create individual floating text labels on the chart. It helps in defining a strict text content that can be shown and dragged anywhere on the chart.&nbsp;As of now, you can only add/delete a label, but you can not edit a label. </p>
+      <p>The first chart that we created in Overview page contains a pre-defined label with text &quot;A Node added as Text Label&quot;. We would add another label on chart. The image below shows how the chart looks with the pre-defined label. </p>
+      <p><img src="../Images/DragNode1.jpg" width="580" height="440" /></p>
+      <p>We well see how we can add the label in the following section. </p>
+    <tr>
+      <td valign="top">
+		 <p class="header">Adding a text Label at run-time</p>
+		 <p>When in edit mode, you can add a text label. You need to  right click on a   position over the chart where you wish the label to be placed. Then   select &quot;Add a Label &quot; option from the context menu.</p>
+		
+		 <p><img src="../Images/DragNode15_0.jpg" width="344" height="181" class="imageBorder" /></p>
+		 <p><img src="../Images/DragNode15_1.jpg" width="322" height="262" /></p>
+		 <p>This pops up a dialog box, as shown above, requesting the following information:</p>
+		 <ul>
+         <li>&quot;Label&quot; represents the text of the label</li>
+		   <li>&quot;Alpha&quot; sets the transparency of the label. 100 is fully opaque and 0 is completely transparent </li>
+		   <li>&quot;Size&quot; allows you to set the size of the font in pixels </li>
+		   <li>&quot;Background&quot; represents the background color of the label. To set the color you can either use the color picker or enter the hexadecimal code</li>
+		   <li>&quot;Padding&quot; sets the space around the label</li>
+		   <li>&quot;Font Color&quot; sets the color of the font of the label. To set the font color you can either use the color picker or enter the hexadecimal code </li>
+		   <li>&quot;Border Color&quot; represents the color of the border of the label. To set the border color you can either use the color picker or enter the hexadecimal color code</li>
+         <li>&quot;Allow Drag&quot; sets whether the label will be fixed or drag-able </li>
+		 </ul>
+		  <br/>
+		 <table width="640" border="0" cellspacing="0" cellpadding="0" class="table" style="border:none !important;">
+  <tr>
+    <td><img src="../Images/DragNode15_2.jpg" width="314" height="259" /></td>
+    <td><img src="../Images/DragNode15_3.jpg" width="315" height="256" /></td>
+  </tr>
+  <tr>
+    <td align="center" class="imageCaption">Select colors using color picker  </td>
+    <td align="center" class="imageCaption">Finally submit </td>
+  </tr>
+</table>
+
+		
+		 <p>When Submit is clicked the label would then be visible as under:</p>
+		 <p> <img src="../Images/DragNode15_4.jpg" width="276" height="178" class="imageBorder" /></p>
+		 <p>You can drag the label to any position on the chart. </p>
+		 <p class="highlightBlock">You can define labels in chart data too. Each label is defined in the data of the chart through <span class="codeInline"><a href="../ChartSS/DragNode.htm#AnchorLabels">&lt;label&gt;</a></span> element inside <span class="codeInline"><a href="../ChartSS/DragNode.htm#AnchorLabels">&lt;labels&gt;</a></span> element. </p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        <p class="header">Deleting a text Label at run-time</p>
+        <p>In edit mode, the user can also selectively delete labels right clicking on the label and then selecting &quot;Delete Label&quot;.</p>
+        <p><img src="../Images/DragNode15_5.jpg" width="336" height="214" class="imageBorder" /></p>
+        <p class="highlightBlock">You can get the latest updated node positions using <a href="JSRead.html">JavaScript</a> or by <a href="Form.html">submitting the updated positions </a>to a server side script.</p>
+      </td>
+    </tr>
+    
+</table>
+</body>
+</html>

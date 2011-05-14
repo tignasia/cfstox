@@ -1,0 +1,26 @@
+<chart palette='1' piefillAlpha='24' hoverFillColor='EEEEEE' plotborderColor='CCCCCC' showPlotBorder='1' useHoverColor='1' showLabels='1' caption="Tom's Friend List" basefontColor='504D55'>
+	<category label='Friends' >
+		<category label='His Friends' value='10'>
+			<category label='Best Friends' toolText='&lt;LI&gt;Lorraine Allen Hughes{BR}Glenda Mason{BR}Peter Charles{BR}Akhil Dhanuka&lt;/LI&gt;' />
+			<category label='Good Friends' toolText='&lt;LI&gt;Patrick Xavier{BR}Claire Taylor{BR}Rebecca Coggins{BR}Kate Finning&lt;/LI&gt;' />
+			<category label='friends' toolText='&lt;LI&gt;Candy Ashbury{BR}Marlene Greenwood-Streeter{BR}Ruth Bahnuik{BR}Cathy Daly &lt;/LI&gt;' />
+			<category label='Acquaintances' toolText='&lt;LI&gt;Lucille Grading{BR}Garry Brookes{BR}Joan Borrowscale{BR}Ann Kavanagh &lt;/LI&gt;'/>
+			<category label="haven't met" toolText='&lt;LI&gt;Blanche Charles{BR}Alan Hamer{BR}Rosalind Dunning{BR}Edna Ellis &lt;/LI&gt;'/>
+		</category>
+		<category label='Our Mutual Friends' value='5'>
+			<category label='Best Friends' toolText='&lt;LI&gt;John Beddows{BR}Susan Mills{BR}Mike Parker{BR}Claire Taylor&lt;/LI&gt;'/>
+			<category label='Good Friends' toolText='&lt;LI&gt;Sue Weighell{BR}Ruth Bahnuik{BR}Janice Deverick{BR}Gwen Walker&lt;/LI&gt;'/>
+			<category label='friends' toolText='&lt;LI&gt;Barbara Barker{BR}Janet Sorfleet{BR}Joan Jones{BR}Carol Patricia Nichols&lt;/LI&gt;'/>
+			<category label='Acquaintances' toolText='&lt;LI&gt;William Marner{BR}Lindsay Harwood{BR}Milton Gray{BR}Tony Houghton &lt;/LI&gt;'/>
+			<category label="haven't met" toolText='&lt;LI&gt;Susan Curtis{BR}Ian Holland{BR}Margaret Mckeown{BR}Vivian Simmonds&lt;/LI&gt;'/>
+		</category>
+	</category>
+   <styles>
+      <definition>
+         <style name='myHTMLFont' type='font' isHTML='1' />
+      </definition>
+      <application>
+         <apply toObject='TOOLTIP' styles='myHTMLFont' />
+      </application>
+   </styles>
+</chart>

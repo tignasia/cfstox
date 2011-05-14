@@ -1,0 +1,85 @@
+﻿<chart Caption='Job Happiness Index By Roles' subCaption='(The chart uses random data for demonstration purposes only)' showValues='1'>
+    
+        <rows>
+            <row id='Admin'/>
+            <row id='Accounting'/>
+            <row id='Operations'/>
+            <row id='Marketing'/>
+            <row id='Sales'/>
+            <row id='Engineering'/>
+            <row id='Communications'/>
+        </rows>
+
+        <columns>
+               <column id='Energy' />
+               <column id='Telecom' />
+               <column id='Retail' />
+               <column id='High-Tech' />
+               <column id='Transportation' />
+        </columns>
+        
+    <dataset>
+    
+		<set rowId='Admin' columnId='Energy' value='2' showValue='0' />
+		<set rowId='Admin' columnId='Telecom' value='3' showValue='0' />
+		<set rowId='Admin' columnId='Retail' value='3' showValue='0' />
+		<set rowId='Admin' columnId='High-Tech' value='2' showValue='0' />
+		<set rowId='Admin' columnId='Transportation' value='1' displayValue=':(' />
+		
+		<set rowId='Accounting' columnId='Energy' value='3' showValue='0' />
+		<set rowId='Accounting' columnId='Telecom' value='2' showValue='0' />
+		<set rowId='Accounting' columnId='Retail' value='2' showValue='0' />
+		<set rowId='Accounting' columnId='High-Tech' value='3' showValue='0' />
+		<set rowId='Accounting' columnId='Transportation' value='2' showValue='0' />
+		
+		<set rowId='Operations' columnId='Energy' value='3' showValue='0' />
+		<set rowId='Operations' columnId='Telecom' value='3' showValue='0' />
+		<set rowId='Operations' columnId='Retail' value='4' showValue='0' />
+		<set rowId='Operations' columnId='High-Tech' value='3' showValue='0' />
+		<set rowId='Operations' columnId='Transportation' value='3' showValue='0' />		
+		
+		<set rowId='Marketing' columnId='Energy' value='2' showValue='0' />
+		<set rowId='Marketing' columnId='Telecom' value='3' showValue='0' />
+		<set rowId='Marketing' columnId='Retail' value='4' showValue='0' />
+		<set rowId='Marketing' columnId='High-Tech' value='3' showValue='0' />
+		<set rowId='Marketing' columnId='Transportation' value='2' showValue='0' />
+		
+		<set rowId='Sales' columnId='Energy' value='4' showValue='0' />
+		<set rowId='Sales' columnId='Telecom' value='3' showValue='0' />
+		<set rowId='Sales' columnId='Retail' value='4' showValue='0' />
+		<set rowId='Sales' columnId='High-Tech' value='3' showValue='0' />
+		<set rowId='Sales' columnId='Transportation' value='3' showValue='0' />	
+		
+		<set rowId='Engineering' columnId='Energy' value='4' showValue='0' />
+		<set rowId='Engineering' columnId='Telecom' value='4' showValue='0' />
+		<set rowId='Engineering' columnId='Retail' value='2' showValue='0' />
+		<set rowId='Engineering' columnId='High-Tech' value='4' showValue='0' />
+		<set rowId='Engineering' columnId='Transportation' value='3' showValue='0' />	
+		
+		<set rowId='Communications' columnId='Energy' value='3' showValue='0' />
+		<set rowId='Communications' columnId='Telecom' value='5' displayValue=':)'/>
+		<set rowId='Communications' columnId='Retail' value='4' showValue='0' />
+		<set rowId='Communications' columnId='High-Tech' value='3' showValue='0' />
+		<set rowId='Communications' columnId='Transportation' value='3' showValue='0' />
+
+   </dataset>
+
+
+	<colorRange gradient='1' minValue='0' code='000000' startlabel='Quitting tomorrow ' endLabel="Love it!">
+        <color code='FFFFFF' maxvalue='5' showValue='0'/> 
+     </colorRange>
+
+	<styles>
+
+	    <definition>
+	        <style name='TextStyle' type='font' font='Verdana' size='24' color='639ACE' bold='1' />
+	    </definition>
+
+	    <application>
+	        <apply toObject='DATAVALUES' styles='TextStyle' />
+	    </application>
+
+	  </styles>
+
+</chart>
+
