@@ -45,8 +45,8 @@
 		local.data = historical(symbol:arguments.symbol,startdate:arguments.startdate,enddate:arguments.enddate);
 		structAppend(local,local.data);
 		local.result = session.objects.SystemService.RunSystem(SystemName:"arguments.SystemName",qryDataHA:local.HAdata,qryDataOriginal:local.OriginalData);
-		//dump(local.result);
-		session.objects.ReportService.BacktestReport(local.result);
+		//dump(local.result.get("tradeHistory") );
+		session.objects.ReportService.BacktestReport(tradeBean:local.result.get("tradeHistory"),symbol:arguments.symbol);
 		request.method = "backtest";  
 		return local;
 		</cfscript>
