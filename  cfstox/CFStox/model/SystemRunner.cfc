@@ -41,14 +41,15 @@
 		local.TradeBean 	= createObject("component","cfstox.model.TradeBean").init(local.strData);
 		local.Databeans = StructNew(); 			
 		</cfscript>
-		<cfloop  query="arguments.qryDataOriginal" startrow="1">
+		<cfloop  query="arguments.qryDataHA" startrow="5">
 			<cfscript>
 			//array five data beans 
 			//todo: use one data bean to store original and HA data
+			//todo: fix currentrow 
 			local.Databeans.HA_DataBeans = SetupTestData(qryData:arguments.qryDataHA);
-			local.Databeans.Original_DataBeans = SetupTestData(qryData:arguments.qryDataOriginal);	
+			local.Databeans.Original_DataBeans = SetupTestData(qryData:arguments.qryDataOriginal);
 			</cfscript>
-			<cfinvoke component="#session.objects.system#" method="System_ha_longIII"  argumentcollection="#local.DataBeans.Original_DataBeans#"  returnvariable="DataBeanToday" /> 
+			<cfinvoke component="#session.objects.system#" method="System_ha_longIII"  argumentcollection="#local.Databeans.HA_DataBeans#"  returnvariable="DataBeanToday" /> 
 			<!--- <cfset ProcessTrackingBean(TrackingBean:local.TrackingBean,dataBeans:DataBeans) /> --->
 			<!--- <cfset arguments.trackingBean.processDailyData(DataBeanToday) /> --->
 			<cfscript>

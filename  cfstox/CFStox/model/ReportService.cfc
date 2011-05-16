@@ -60,7 +60,7 @@
 		<cfset local.PDFfilename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "#arguments.data.symbol#" & ".pdf"/>
 		<cfset local.Excelfilename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "#arguments.data.symbol#" & ".xls"/>
 		<cfset local.columns = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,RSI,LOCALHIGH,LOCALLOW,LINEARREG,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LRSDELTA,PP,R1,R2,S1,S2">
-		<cfsavecontent variable="Stockdata">
+		<cfsavecontent variable="local.Stockdata">
 		<cfoutput>
 		<table>
 		<cfloop list="#local.columns#" index="i">
@@ -77,7 +77,7 @@
 		</table>
 		</cfoutput>
 		</cfsavecontent>
-		<cffile action="write" file="#local.Excelfilename#" output="#stockdata#"   />
+		<cffile action="write" file="#local.Excelfilename#" output="#local.stockdata#"   />
 		<!--- todo: apply patch
 		<cfdocument  format="PDF" filename="#local.PDFfilename#" overwrite="true" orientation = "landscape">
 		<cfoutput>#stockData#</cfoutput>
@@ -87,9 +87,31 @@
 	
 	<cffunction name="BacktestReport" description="I output a report" access="public" displayname="" output="false" returntype="void">
 		<cfargument name="TradeBean" required="true">
+		<cfargument name="Symbol" required="true">
 		<cfset var local = structNew() />
-		<cfdump label="tradebean results" var="#arguments.tradebean.Get("tradeHistory")#">
-		<cfabort>
+		<cfset local.i = 1 />
+		<cfset local.j = 1 />
+		<cfset local.alen = arguments.tradebean.size() />
+		<cfset local.Excelfilename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "#arguments.symbol#_trades" & ".xls"/>
+		<cfset local.columns = "Date,Description,Entry_Exit,Price">
+		<cfsavecontent variable="local.Stockdata">
+		<cfoutput>
+		<table>
+		<cfloop list="#local.columns#" index="local.i">
+		<th>#local.i#</th>
+		</cfloop>
+		<cfloop from="1" to="#local.alen#" index="local.j">
+		<tr>
+			<td>#arguments.tradebean[local.j].date#</td>
+			<td>#arguments.tradebean[local.j].TradeDescription#</td>
+			<td>#arguments.tradebean[local.j].TradeEntryExitPoint#</td>
+			<td>#arguments.tradebean[local.j].TradePrice#</td>
+		</tr>
+		</cfloop>
+		</table>
+		</cfoutput>
+		</cfsavecontent>
+		<cffile action="write" file="#local.Excelfilename#" output="#local.stockdata#"   />
 		<cfreturn />
 	</cffunction>
 	

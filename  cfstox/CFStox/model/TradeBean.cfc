@@ -127,43 +127,71 @@
 		// the condition is part of the system
 		// process exisiting trades
 		//dump(arguments.DataBeanToday.GetMemento());
-		if(get("OpenLongAlert")  /* AND DataBeanToday.Get("High") GT Get("R1") AND NOT get("LongPosition") */  )
+		if(get("OpenLongAlert")  AND DataBeanToday.Get("High") GT Get("R1") AND NOT get("LongPosition")   )
 		{
 		set("OpenLong",true);
+		set("OpenLongAlert",false);
+		//
+		local.trade1 = Duplicate(variables.trade);
+		local.trade1.date = arguments.DataBeanToday.get("Date");
+		local.trade1.TradeDescription = "Open Long Position";
+		local.trade1.TradeEntryExitPoint = "R1: #get("R1")# High:#DataBeanToday.Get("High")#" ;
+		local.trade1.TradePrice = "" ;
+		local.nextindex = variables.tradeHistory.size();
+		variables.tradeHistory[local.nextindex+1] = local.trade1;
+		//
 		}
-		if(get("OpenShortAlert") /* AND DataBeanToday.Get("Low") LT Get("S1") AND NOT get("ShortPosition") */ )
+		/* if(get("OpenShortAlert") AND DataBeanToday.Get("Low") LT Get("S1") AND NOT get("ShortPosition")  )
 		{
 		set("OpenShort",true);
-		}
-		if(get("CloseLongAlert") /* AND DataBeanToday.Get("Low") LT Get("S1") AND get("LongPosition") */ )
+		} */
+		if(get("CloseLongAlert")  AND DataBeanToday.Get("Low") LT Get("S1") AND get("LongPosition")  )
 		{
 		set("CloseLong",true);
 		}
-		if(get("CloseShortAlert") /* AND DataBeanToday.Get("High") GT Get("R1") AND get("ShortPosition") */ )
+		/* if(get("CloseShortAlert") AND DataBeanToday.Get("High") GT Get("R1") AND get("ShortPosition")  )
 		{
 		set("OpenShort",true);
-		}
+		} */
 		// process new alerts
 		if(DataBeanToday.get("OpenLongAlert") )
 		{
 		set("OpenLongAlert",true);
 		set("R1",arguments.DataBeanToday.get("R1"));
+		//
+		local.trade1 = Duplicate(variables.trade);
+		local.trade1.date = arguments.DataBeanToday.get("Date");
+		local.trade1.TradeDescription = "OpenLongAlert";
+		local.trade1.TradeEntryExitPoint = "R1: #arguments.DataBeanToday.get("R1")#" ;
+		local.trade1.TradePrice = "" ;
+		local.nextindex = variables.tradeHistory.size();
+		variables.tradeHistory[local.nextindex+1] = local.trade1;
+		//
 		}
-		if(DataBeanToday.get("OpenShortAlert") )
+		/* if(DataBeanToday.get("OpenShortAlert") )
 		{
 		set("OpenShortAlert",true);
 		set("S1",arguments.DataBeanToday.get("S1"));
-		}
-		if(DataBeanToday.get("CloseLongAlert") /* AND get("LongPosition") */)
+		//
+		local.trade1 = Duplicate(variables.trade);
+		local.trade1.date = arguments.DataBeanToday.get("Date");
+		local.trade1.TradeDescription = "OpenShortAlert";
+		local.trade1.TradeEntryExitPoint = "S1: #arguments.DataBeanToday.get("S1")#" ;
+		local.trade1.TradePrice = "" ;
+		local.nextindex = variables.tradeHistory.size();
+		variables.tradeHistory[local.nextindex+1] = local.trade1;
+		//
+		} */
+		if(DataBeanToday.get("CloseLongAlert") AND get("LongPosition") )
 		{
 		set("CloseLongAlert",true);
 		set("S1",arguments.DataBeanToday.get("S1"));
 		}
-		if(get("CloseShortAlert")  /* AND get("ShortPosition")*/  )
+		/* if(get("CloseShortAlert")  AND get("ShortPosition")  )
 		{
 		set("CloseShortAlert",true);
 		set("R1",arguments.DataBeanToday.get("R1"));
-		}
+		} */
 		recordTrades(arguments.DataBeanToday);
 		return;
 		</cfscript>
@@ -183,7 +211,7 @@
 		set("LongPosition",true);
 		local.trade1.date = arguments.DataBeanToday.get("Date");
 		local.trade1.TradeDescription = "Open Long position";
-		local.trade1.TradeEntryExitPoint = "R1";
+		local.trade1.TradeEntryExitPoint = "R1: #get("R1")# high:#arguments.DataBeanToday.get("high")#" ;
 		// todo:fix 
 		local.trade1.TradePrice = arguments.DataBeanToday.get("R1");
 		local.nextindex = variables.tradeHistory.size();
@@ -195,7 +223,7 @@
 		set("ShortPosition",true);
 		local.trade2.date = arguments.DataBeanToday.get("Date");
 		local.trade2.TradeDescription = "Open Short position";
-		local.trade2.TradeEntryExitPoint = "S1";
+		local.trade2.TradeEntryExitPoint = "S1: #get("S1")# low:#arguments.DataBeanToday.get("low")#";
 		local.trade2.TradePrice = arguments.DataBeanToday.get("S1");
 		local.nextindex = variables.tradeHistory.size();
 		variables.tradeHistory[local.nextindex+1] = local.trade2;
