@@ -22,51 +22,62 @@
 	</cffunction>
 	
 	<cffunction name="TestSystem" description="called from SystemService.RunSystem" access="public" displayname="" output="false" returntype="Any">
-		<cfargument name="qryData" required="true" />
+		<cfargument name="qryDataHA" required="true" />
+		<cfargument name="qryDataOriginal" required="true" />
 		<cfargument name="SystemName" required="true" />
 		<cfargument name="summary" 	 required="false" default="true" />
+		<!---  
+		DataBean: stores data for a particular date
+		TrackingBean: tracks the previous status of the stock
+		TradeBean: determines entry and exit points, tracks trade history
+		--->
 		<cfscript>
-		var testData = StructNew();	
-		var local = InitTestSystem(argumentCollection:arguments);			
+		var local = StructNew();	
+		//var local = InitTestSystem(argumentCollection:arguments);
+		// load with data so doesnt error
+		local.strData = session.objects.Utility.QrytoStruct(query:arguments.qryDataOriginal,rownumber:1);
+		//dump(local.strData);
+		local.TrackingBean 	= createObject("component","cfstox.model.TrackingBean").init(local.strData);
+		local.TradeBean 	= createObject("component","cfstox.model.TradeBean").init(local.strData);
+		local.Databeans = StructNew(); 			
 		</cfscript>
-		<cfloop  query="arguments.qryData" startrow="#local.startrow#">
+		<cfloop  query="arguments.qryDataOriginal" startrow="1">
 			<cfscript>
-			// five data beans 
-			testdata = SetupTestData(argumentCollection:arguments);	
-			testData.Trackingbean = local.TrackingBean; 
+			//array five data beans 
+			//todo: use one data bean to store original and HA data
+			local.Databeans.HA_DataBeans = SetupTestData(qryData:arguments.qryDataHA);
+			local.Databeans.Original_DataBeans = SetupTestData(qryData:arguments.qryDataOriginal);	
 			</cfscript>
-			<!-- returns a tradebean with the trades the system made  -->
- 			<cfinvoke component="#session.objects.system#" method="#arguments.SystemName#"  argumentcollection="#testdata#"  returnvariable="resultData" /> 
+			<cfinvoke component="#session.objects.system#" method="System_ha_longIII"  argumentcollection="#local.DataBeans.Original_DataBeans#"  returnvariable="DataBeanToday" /> 
+			<!--- <cfset ProcessTrackingBean(TrackingBean:local.TrackingBean,dataBeans:DataBeans) /> --->
+			<!--- <cfset arguments.trackingBean.processDailyData(DataBeanToday) /> --->
 			<cfscript>
-			//<!--- record system name, date, entry price --->
-			local.DataBeanToday = RecordIndicators(testdata.DataBeanToday);
-			recordTrades(local.DataBeanToday,local.trackingBean);
-			</cfscript> 
+			local.TradeBean.ProcessTrades(DataBeanToday);
+			</cfscript>
 		</cfloop>
-		<!--- return the action results ---->
-		<cfset local.trades = variables.TradeArray />
-		<cfset local.BeanCollection = variables.BeanArray />
-		<cfset local.symbol = local.DataBeanToday.Get("symbol") />
-		<cfreturn local />
+		<cfreturn local.TradeBean />
 	</cffunction>
 	
 	<cffunction name="InitTestSystem" description="called from SystemService.RunSystem" access="public" displayname="" output="false" returntype="Any">
-		<cfargument name="qryData" required="true" />
+		<cfargument name="qryDataHA" required="true" />
+		<cfargument name="qryDataOriginal" required="true" />
 		<cfargument name="SystemName" required="true" />
-		<cfargument name="summary" 	 required="false" default="true" />
+		<cfargument name="summary" 	 required="false" default="false" />
 		<cfscript>
 		var local = structNew();
 		reset();
 		local.bResult = false;
 		local.dataArray = ArrayNew(1);
-		local.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:1);
+		local.dataArrayHA = ArrayNew(1);
+		local.dataArrayOriginal = ArrayNew(1);
+		local.DataArrayHA[1] = session.objects.Utility.QrytoStruct(query:arguments.qryDataHA,rownumber:1);
+		local.DataArrayOriginal[1] = session.objects.Utility.QrytoStruct(query:arguments.qryDataOriginal,rownumber:1);
 		// the trackingbean saves the system state ie if we are long 
-		local.TrackingBean 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]); 
-		if(NOT arguments.summary){
-		local.startrow =5;
+		if(arguments.summary){
+		local.startrow = arguments.qryDataHA.recordcount - 14;
 		}
 		else{
-		local.startrow = arguments.qryData.recordcount - 14;
+		local.startrow =5;
 		}
 		</cfscript>
 		<cfreturn local />
@@ -78,20 +89,23 @@
 		var data = structNew();
 		data.dataArray = ArrayNew(1);
 		data.rowcount = arguments.qryData.currentrow;
+		/* for x = 1 to x = 5  */
 		data.DataArray[5] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:data.rowcount-4);
 		data.DataArray[4] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:data.rowcount-3);
 		data.DataArray[3] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:data.rowcount-2);
 		data.DataArray[2] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:data.rowcount-1);
 		data.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:data.rowcount);
-		data.DataBean4 = createObject("component","cfstox.model.TradeBean").init(data.DataArray[5]);
-		data.DataBean3 = createObject("component","cfstox.model.TradeBean").init(data.DataArray[4]); 
-		data.DataBean2 = createObject("component","cfstox.model.TradeBean").init(data.DataArray[3]); 
-		data.DataBean1 = createObject("component","cfstox.model.TradeBean").init(data.DataArray[2]);  
-		data.DataBeanToday 	= createObject("component","cfstox.model.TradeBean").init(data.DataArray[1]); 
+		data.DataBean4 = createObject("component","cfstox.model.DataBean").init(data.DataArray[5]);
+		data.DataBean3 = createObject("component","cfstox.model.DataBean").init(data.DataArray[4]); 
+		data.DataBean2 = createObject("component","cfstox.model.DataBean").init(data.DataArray[3]); 
+		data.DataBean1 = createObject("component","cfstox.model.DataBean").init(data.DataArray[2]);  
+		data.DataBeanToday 	= createObject("component","cfstox.model.DataBean").init(data.DataArray[1]); 
+		//dump(data.DataArray[1],true);
+		//dump(data.DataBeanToday.getMemento(),true); 
 		</cfscript>
 		<cfreturn data />
 	</cffunction>
-
+	
 	<cffunction name="RunBreakOutReport"description="called from SystemService.RunBreakOutReport" access="public" displayname="" output="false" returntype="Any">
 		<cfargument name="qryData" required="true" />
 		<!--- only run for recent activity. false for backtesting --->
@@ -105,7 +119,7 @@
 		local.highLowArray = ArrayNew(2);
 		local.arrayCount = 1;
 		local.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:1);
-		local.TrackingBean 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]); 
+		local.TrackingBean 	= createObject("component","cfstox.model.TrackingBean").init(); 
 		local.DataBean2 = createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]); 
 		local.DataBean1 = createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]); 
 		local.DataBeanToday 	= createObject("component","cfstox.model.TradeBean").init(local.DataArray[1]);
@@ -454,5 +468,13 @@
 	<cfreturn />
 	</cffunction>
 
+	<cffunction name="Dump" description="utility" access="public" displayname="test" output="false" returntype="Any">
+		<cfargument name="object" required="true" />
+		<cfargument name="abort" required="false"  default="true"/>
+		<cfdump label="bean:" var="#arguments.object#">
+		<cfif arguments.abort>
+			<cfabort>
+		</cfif>
+	</cffunction>
 	
 </cfcomponent>

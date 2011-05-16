@@ -57,21 +57,19 @@
 	</cffunction>
 	
 	<cffunction name="System_ha_longIII" description="called from systemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
-		<!--- based on optimum trades in X - US Steel --->
-		<!--- based on two down days followed by up day --->
 		<cfargument name="DataBean4" required="true" />
 		<cfargument name="DataBean3" required="true" />
 		<cfargument name="DataBean2" required="true" />
 		<cfargument name="DataBean1" required="true" />
 		<cfargument name="DataBeanToday" required="true" />
-		<cfargument name="TrackingBean" required="true" />
 		<cfset var local = StructNew() />
 		<cfset local.Patterns = GetCandlePatterns(argumentcollection:arguments) />
-		<cfif arguments.DataBean3.Get("HKClose") GT arguments.DataBean3.Get("HKOpen")>
-		</cfif>   
-		<cfif arguments.DataBean2.Get("HKClose") GT arguments.DataBean2.Get("HKOpen")>
-		</cfif>
 		<cfif arguments.DataBeanToday.Get("HKClose") GT arguments.DataBeanToday.Get("HKOpen")>
+			<cfset DataBeanToday.Set("OpenLongAlert",true) />
+			<cfset DataBeanToday.Set("CloseShortAlert",true) />
+		<cfelse>
+			<cfset DataBeanToday.Set("OpenShortAlert",true) />
+			<cfset DataBeanToday.Set("CloseLongAlert",true) />
 		</cfif> 
 		<cfreturn DataBeanToday />
 	</cffunction>

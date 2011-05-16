@@ -25,12 +25,13 @@
 		<!--- todo: add breakout, real body height and volume data to query --->
 		<!--- todo: fix the various getstockdata methods --->
 		<cfargument name="SystemName" required="true"  />
-		<cfargument name="qryData" required="true" />
+		<cfargument name="qryDataHA" required="true" />
+		<cfargument name="qryDataOriginal" required="true" />
 		<cfargument name="ReportType" required="false" default="backtest" hint="backtest,watchlist"/>
 		<cfargument name="summary" required="false" default="true" />
 		<cfset var local = structnew() />
-		<cfset local.results		= session.objects.systemRunner.testSystem(SystemName:arguments.systemName,qryData:arguments.qryData,summary:arguments.summary) >
-		<cfset local.ReportData 	= session.objects.ReportService.RunReport(SystemName:arguments.SystemName,ReportName:"Backtest",type:"Excel",data:local.results) />
+		<!--- returns a tradebean with results of system --->
+		<cfset local.results = session.objects.systemRunner.testSystem(SystemName:arguments.systemName,qryDataHA:arguments.qryDataHA,qryDataOriginal:arguments.qryDataOriginal,summary:arguments.summary) >
 		<cfif arguments.ReportType EQ "watchlist">
 		<!---- loop over the BeanArray and get open and close setups and entries/exits--->
 		<!--- make seperate containers for breakouts, breakdowns, each report category

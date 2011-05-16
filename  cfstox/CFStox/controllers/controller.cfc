@@ -38,19 +38,15 @@
 		<cfargument name="symbol" required="true" />
 		<cfargument name="startdate" required="true" />
 		<cfargument name="enddate" required="true" />
+		<cfargument name="SystemName" required="false" default="System_ha_longIII">
 		<cfscript>
 		var local = structnew(); 
 		local.view = "historical";
-		
-		local.HAdata 		= session.objects.SystemService.GetHAStockData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") ; 
-		local.OriginalData 	= session.objects.SystemService.GetOriginalStockData();
-		local.result 		= session.objects.SystemService.RunSystem(SystemName:"System_ha_longIII",qryData: local.HAdata);
-		local.high			= session.objects.SystemService.GetHigh();
-		local.low			= session.objects.SystemService.GetLow();
-		local.xmldata 		= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.symbol#",qrydata:local.OriginalData,startdate:"#arguments.startdate#", high:local.high, low:local.low);
-		local.xmldataha 	= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.Symbol#",qrydata:local.HAData ,startdate:"#arguments.startdate#", high:local.high, low:local.low);
-		structAppend(request,local);
-		structAppend(request,arguments); 
+		local.data = historical(symbol:arguments.symbol,startdate:arguments.startdate,enddate:arguments.enddate);
+		structAppend(local,local.data);
+		local.result = session.objects.SystemService.RunSystem(SystemName:"arguments.SystemName",qryDataHA:local.HAdata,qryDataOriginal:local.OriginalData);
+		//dump(local.result);
+		session.objects.ReportService.BacktestReport(local.result);
 		request.method = "backtest";  
 		return local;
 		</cfscript>
@@ -96,4 +92,9 @@
 	<cfreturn />
 	</cffunction>	
 
+	<cffunction name="Dump" description="utility" access="public" displayname="test" output="false" returntype="Any">
+		<cfargument name="object" required="true" />
+		<cfdump label="bean:" var="#arguments.object#">
+		<cfabort>
+	</cffunction>
 </cfcomponent>

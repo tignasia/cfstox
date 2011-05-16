@@ -85,6 +85,13 @@
 		<cfreturn />
 	</cffunction>
 	
+	<cffunction name="BacktestReport" description="I output a report" access="public" displayname="" output="false" returntype="void">
+		<cfargument name="TradeBean" required="true">
+		<cfset var local = structNew() />
+		<cfdump label="tradebean results" var="#arguments.tradebean.Get("tradeHistory")#">
+		<cfabort>
+		<cfreturn />
+	</cffunction>
 	
 	<cffunction name="TradeReport" description="I output a PDF of the trades" access="public" displayname="" output="false" returntype="void">
 		<cfargument name="data" required="true">
