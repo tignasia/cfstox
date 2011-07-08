@@ -27,9 +27,9 @@
 		<cfargument name="SystemName" required="true" />
 		<cfargument name="summary" 	 required="false" default="true" />
 		<!---  
-		DataBean: stores data for a particular date
-		TrackingBean: tracks the previous status of the stock
-		TradeBean: determines entry and exit points, tracks trade history
+		DataBean: stores data for a particular date, actions defined by system
+		TrackingBean: tracks the previous status of the stock ie preev high/low, R1, S1
+		TradeBean: resp for trading based on flags in the databean
 		--->
 		<cfscript>
 		var local = StructNew();	
@@ -37,26 +37,27 @@
 		// load with data so doesnt error
 		local.strData = session.objects.Utility.QrytoStruct(query:arguments.qryDataOriginal,rownumber:1);
 		//dump(local.strData);
-		local.TrackingBean 	= createObject("component","cfstox.model.TrackingBean").init(local.strData);
-		local.TradeBean 	= createObject("component","cfstox.model.TradeBean").init(local.strData);
-		local.Databeans = StructNew(); 			
+		local.Beans = StructNew(); 		
+		local.Beans.Databeans = StructNew(); 		
+		local.Beans.TrackingBean 	= createObject("component","cfstox.model.TrackingBean").init(local.strData);
+		local.Beans.TradeBean 	= createObject("component","cfstox.model.TradeBean").init(local.strData);
 		</cfscript>
 		<cfloop  query="arguments.qryDataHA" startrow="5">
 			<cfscript>
 			//array five data beans 
 			//todo: use one data bean to store original and HA data
 			//todo: fix currentrow 
-			local.Databeans.HA_DataBeans = SetupTestData(qryData:arguments.qryDataHA);
-			local.Databeans.Original_DataBeans = SetupTestData(qryData:arguments.qryDataOriginal);
+			local.Beans.Databeans.HA_DataBeans = SetupTestData(qryData:arguments.qryDataHA);
+			local.Beans.Databeans.Original_DataBeans = SetupTestData(qryData:arguments.qryDataOriginal);
 			</cfscript>
-			<cfinvoke component="#session.objects.system#" method="System_ha_longIII"  argumentcollection="#local.Databeans.HA_DataBeans#"  returnvariable="DataBeanToday" /> 
+			<cfinvoke component="#session.objects.system#" method="Open_Long_R2_Break"  argumentcollection="#local.Beans#"  returnvariable="DataBeanToday" /> 
 			<!--- <cfset ProcessTrackingBean(TrackingBean:local.TrackingBean,dataBeans:DataBeans) /> --->
 			<!--- <cfset arguments.trackingBean.processDailyData(DataBeanToday) /> --->
 			<cfscript>
-			local.TradeBean.ProcessTrades(DataBeanToday);
+			local.Beans.TradeBean.ProcessTrades(DataBeanToday);
 			</cfscript>
 		</cfloop>
-		<cfreturn local.TradeBean />
+		<cfreturn local.Beans.TradeBean />
 	</cffunction>
 	
 	<cffunction name="InitTestSystem" description="called from SystemService.RunSystem" access="public" displayname="" output="false" returntype="Any">

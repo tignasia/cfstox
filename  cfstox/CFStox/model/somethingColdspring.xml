@@ -1,0 +1,19 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans>
+	<bean id="somethingDAO" class="somethingDAO">
+		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
+	</bean>
+	<bean id="somethingGateway" class="somethingGateway">
+		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
+	</bean>
+	<bean id="somethingService" class="somethingService">
+		<constructor-arg name="somethingDAO">
+			<ref bean="somethingDAO"/>
+		</constructor-arg>
+		<constructor-arg name="somethingGateway">
+			<ref bean="somethingGateway"/>
+		</constructor-arg>
+	</bean>
+</beans>

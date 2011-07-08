@@ -180,6 +180,11 @@
 		<cfset queryAddColumn(arguments.query,"R2",'Decimal',local.pivots.r2) >
 		<cfset queryAddColumn(arguments.query,"S1",'Decimal',local.pivots.s1) >
 		<cfset queryAddColumn(arguments.query,"S2",'Decimal',local.pivots.s2) >
+		<cfset local.PivotBreak = session.objects.TA.PivotBreak(qryData:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"R1Break",'Decimal',local.PivotBreak.r1break) >
+		<cfset queryAddColumn(arguments.query,"R2Break",'Decimal',local.PivotBreak.r2break) >
+		<cfset queryAddColumn(arguments.query,"S1Break",'Decimal',local.PivotBreak.s1break) >
+		<cfset queryAddColumn(arguments.query,"S2Break",'Decimal',local.PivotBreak.s2break) >
 		<cfset local.LocalHighLows = session.objects.TA.LocalHighLow(qryData:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"LocalHigh","VarChar",local.LocalHighLows.LocalHighs) />
 		<cfset queryAddColumn(arguments.query,"LocalLow","VarChar",local.LocalHighLows.LocalLows) />

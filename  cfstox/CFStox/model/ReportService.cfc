@@ -57,9 +57,10 @@
 	<cffunction name="HistoryReport" description="I output a report" access="public" displayname="" output="false" returntype="void">
 		<cfargument name="data" required="true">
 		<cfset var local = structNew() />
+		<!--- <cfset dump(arguments.data) /> --->
 		<cfset local.PDFfilename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "#arguments.data.symbol#" & ".pdf"/>
 		<cfset local.Excelfilename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "#arguments.data.symbol#" & ".xls"/>
-		<cfset local.columns = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,RSI,LOCALHIGH,LOCALLOW,LINEARREG,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LRSDELTA,PP,R1,R2,S1,S2">
+		<cfset local.columns = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,RSI,LOCALHIGH,LOCALLOW,LINEARREG,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LRSDELTA,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break">
 		<cfsavecontent variable="local.Stockdata">
 		<cfoutput>
 		<table>
@@ -535,6 +536,15 @@
 		<cfset var filepath = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\">
 		<cfset var filename = filepath & "#arguments.data.symbol#" />
 		<cfreturn filename/>
+	</cffunction>
+	
+	<cffunction name="Dump" description="utility" access="public" displayname="test" output="false" returntype="Any">
+		<cfargument name="object" required="true" />
+		<cfargument name="abort" required="false"  default="true"/>
+		<cfdump label="bean:" var="#arguments.object#">
+		<cfif arguments.abort>
+			<cfabort>
+		</cfif>
 	</cffunction>
 <!--- save comments  --->
 
