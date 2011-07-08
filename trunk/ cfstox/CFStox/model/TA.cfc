@@ -238,6 +238,39 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 		<cfreturn local />
 	</cffunction>
 
+ <cffunction  name="PivotBreak" hint="Support/resistance">
+		<cfargument name="qryData" required="true" />
+		<cfscript>
+		var local = structNew();
+		local.qryrows = arguments.qrydata.recordcount;
+		local.S1Break = arrayNew(1);
+		local.S2Break = arraynew(1);
+		local.R1Break = arrayNew(1);
+		local.R2Break = arraynew(1);
+		for(i=1;i<=local.qryrows;i++){
+		local.S1Break[i] = FALSE;
+		local.S2Break[i] = FALSE;
+		local.R1Break[i] = FALSE;
+		local.R2Break[i] = FALSE;
+		} 
+		for(i=3;i<=local.qryrows;i++){ 
+		    if(arguments.qryData.high[i] GT arguments.qryData.R1[i-1] ) {
+		    local.R1Break[i] = TRUE;
+		    }
+		     if(arguments.qryData.high[i] GT arguments.qryData.R2[i-1] ) {
+		    local.R2break[i] = TRUE;
+		    }
+		     if(arguments.qryData.low[i] LT arguments.qryData.S1[i-1] ) {
+		    local.S1Break[i] = TRUE;
+		    }
+		    if(arguments.qryData.low[i] LT arguments.qryData.S2[i-1] ) {
+		    local.S2Break[i] = TRUE;
+		    }
+	    }
+		</cfscript>
+		<cfreturn local />
+	</cffunction>
+
 	<cffunction name="CandleSticksFunction" description="" access="public" displayname="" output="false" returntype="Numeric">
 		<!--- 
 		> 0 the bullish version of the pattern detected (price trend interpreted going up)

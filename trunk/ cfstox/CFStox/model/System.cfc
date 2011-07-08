@@ -56,22 +56,61 @@
 		<cfreturn DataBeanToday />
 	</cffunction>
 	
-	<cffunction name="System_ha_longIII" description="called from systemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
-		<cfargument name="DataBean4" required="true" />
-		<cfargument name="DataBean3" required="true" />
-		<cfargument name="DataBean2" required="true" />
-		<cfargument name="DataBean1" required="true" />
-		<cfargument name="DataBeanToday" required="true" />
+	<cffunction name="Open_Long_R2_Break" description="high greater than R2 two days ago" access="public" displayname="test" output="false" returntype="Any">
+		<cfargument name="Beans" required="true" />
+		<!--- <cfargument name="Beans.DataBean4" required="true" />
+		<cfargument name="Beans.DataBean3" required="true" />
+		<cfargument name="Beans.DataBean2" required="true" />
+		<cfargument name="Beans.DataBean1" required="true" />
+		<cfargument name="Beans.DataBeanToday" required="true" />
+		<cfargument name="Beans.TrackingBean" required="true" /> --->
 		<cfset var local = StructNew() />
+		<cfset local.up = false />
+		<cfset local.reversal = false />
 		<cfset local.Patterns = GetCandlePatterns(argumentcollection:arguments) />
-		<cfif arguments.DataBeanToday.Get("HKClose") GT arguments.DataBeanToday.Get("HKOpen")>
-			<cfset DataBeanToday.Set("OpenLongAlert",true) />
-			<cfset DataBeanToday.Set("CloseShortAlert",true) />
+		<!---- Open new long position  --->
+		<cfif arguments.Beans.DataBeanToday.Get("HKClose") GT arguments.Beans.DataBeanToday.Get("HKOpen")
+			AND Beans.DataBeanToday.Get("High") GT Beans.DataBean2.Get("R2")	>
+			<cfset Beans.DataBeanToday.Set("OpenLongAlert",true) />
+			<!--- <cfset Beans.DataBeanToday.Set("CloseShortAlert",true) />
 		<cfelse>
-			<cfset DataBeanToday.Set("OpenShortAlert",true) />
-			<cfset DataBeanToday.Set("CloseLongAlert",true) />
+			<cfset Beans.DataBeanToday.Set("OpenShortAlert",true) />
+			<cfset Beans.DataBeanToday.Set("CloseLongAlert",true) /> --->
 		</cfif> 
-		<cfreturn DataBeanToday />
+		<cfreturn Beans.DataBeanToday />
+	</cffunction>
+	
+	<cffunction name="System_ha_longIII" description="called from systemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
+		<cfargument name="Beans" required="true" />
+		<!--- <cfargument name="Beans.DataBean4" required="true" />
+		<cfargument name="Beans.DataBean3" required="true" />
+		<cfargument name="Beans.DataBean2" required="true" />
+		<cfargument name="Beans.DataBean1" required="true" />
+		<cfargument name="Beans.DataBeanToday" required="true" />
+		<cfargument name="Beans.TrackingBean" required="true" /> --->
+		<cfset var local = StructNew() />
+		<cfset local.up = false />
+		<cfset local.reversal = false />
+		<cfset local.Patterns = GetCandlePatterns(argumentcollection:arguments) />
+		<!---- Open new long position  --->
+		<cfif arguments.Beans.DataBeanToday.Get("HKClose") GT arguments.Beans.DataBeanToday.Get("HKOpen")
+			AND Beans.DataBeanToday.Get("High") GT Beans.DataBean1.Get("R1")	>
+			<cfset Beans.DataBeanToday.Set("OpenLongAlert",true) />
+			<!--- <cfset Beans.DataBeanToday.Set("CloseShortAlert",true) />
+		<cfelse>
+			<cfset Beans.DataBeanToday.Set("OpenShortAlert",true) />
+			<cfset Beans.DataBeanToday.Set("CloseLongAlert",true) /> --->
+		</cfif> 
+		<cfif arguments.Beans.DataBeanToday.Get("HKClose") GT arguments.Beans.DataBeanToday.Get("HKOpen")
+			AND Beans.DataBeanToday.Get("High") GT Beans.DataBean1.Get("R1")	>
+			<cfset Beans.DataBeanToday.Set("OpenLongAlert",true) />
+			<!--- <cfset Beans.DataBeanToday.Set("CloseShortAlert",true) />
+		<cfelse>
+			<cfset Beans.DataBeanToday.Set("OpenShortAlert",true) />
+			<cfset Beans.DataBeanToday.Set("CloseLongAlert",true) /> --->
+		</cfif> 
+		
+		<cfreturn Beans.DataBeanToday />
 	</cffunction>
 	
 	<cffunction name="System_ha_III" description="called from systemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">

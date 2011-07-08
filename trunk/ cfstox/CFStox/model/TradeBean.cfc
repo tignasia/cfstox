@@ -127,7 +127,10 @@
 		// the condition is part of the system
 		// process exisiting trades
 		//dump(arguments.DataBeanToday.GetMemento());
-		if(get("OpenLongAlert")  AND DataBeanToday.Get("High") GT Get("R1") AND NOT get("LongPosition")   )
+		// the databean should ask the trackingbean for this info. This is part of the system and should not be in the tradebean
+		// the tradebean should only be resp for implementing the system calls
+		// 
+		if(get("OpenLongAlert")  AND NOT get("LongPosition")   )
 		{
 		set("OpenLong",true);
 		set("OpenLongAlert",false);
@@ -141,18 +144,18 @@
 		variables.tradeHistory[local.nextindex+1] = local.trade1;
 		//
 		}
-		/* if(get("OpenShortAlert") AND DataBeanToday.Get("Low") LT Get("S1") AND NOT get("ShortPosition")  )
+		if(get("OpenShortAlert") AND DataBeanToday.Get("Low") LT Get("S1") AND NOT get("ShortPosition")  )
 		{
 		set("OpenShort",true);
-		} */
+		} 
 		if(get("CloseLongAlert")  AND DataBeanToday.Get("Low") LT Get("S1") AND get("LongPosition")  )
 		{
 		set("CloseLong",true);
 		}
-		/* if(get("CloseShortAlert") AND DataBeanToday.Get("High") GT Get("R1") AND get("ShortPosition")  )
+		if(get("CloseShortAlert") AND DataBeanToday.Get("High") GT Get("R1") AND get("ShortPosition")  )
 		{
 		set("OpenShort",true);
-		} */
+		} 
 		// process new alerts
 		if(DataBeanToday.get("OpenLongAlert") )
 		{
