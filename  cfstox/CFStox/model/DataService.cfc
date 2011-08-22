@@ -158,10 +158,14 @@
 		<cfargument name="query" required="true" />
 		<cfset local.num = session.objects.TA.GetIndicator(Indicator:"linearReg",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"linearReg",'Decimal',local.num) > 
+		<cfset local.num = session.objects.TA.GetIndicator(Indicator:"linearReg",qryPrices:arguments.query,optInTimePeriod:10) />
+		<cfset queryAddColumn(arguments.query,"linearReg10",'Decimal',local.num) > 
 		<cfset local.num = session.objects.TA.GetIndicator(Indicator:"linearRegAngle",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"linearRegAngle",'Decimal',local.num) >
 		<cfset local.num = session.objects.TA.GetIndicator(Indicator:"linearRegSlope",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"linearRegSlope",'Decimal',local.num) >
+		<cfset local.num = session.objects.TA.GetIndicator(Indicator:"linearRegSlope",qryPrices:arguments.query,optInTimePeriod:10) />
+		<cfset queryAddColumn(arguments.query,"linearRegSlope10",'Decimal',local.num) >
 		<cfset local.num = session.objects.TA.GetIndicator(Indicator:"linearRegIntercept",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"linearRegIntercept",'Decimal',local.num) >
 		<cfset local.LRSArray = session.objects.TA.LRSDelta(qryData:arguments.query) />

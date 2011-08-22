@@ -38,13 +38,13 @@
 		<cfargument name="symbol" required="true" />
 		<cfargument name="startdate" required="true" />
 		<cfargument name="enddate" required="true" />
-		<cfargument name="SystemName" required="false" default="System_ha_longIII">
+		<cfargument name="SystemName" required="false" default="ShortEntryLSRSys1">
 		<cfscript>
 		var local = structnew(); 
 		local.view = "historical";
 		local.data = historical(symbol:arguments.symbol,startdate:arguments.startdate,enddate:arguments.enddate);
 		structAppend(local,local.data);
-		local.result = session.objects.SystemService.RunSystem(SystemName:"arguments.SystemName",qryDataHA:local.HAdata,qryDataOriginal:local.OriginalData);
+		local.result = session.objects.SystemService.RunSystem(SystemName:arguments.SystemName,qryDataHA:local.HAdata,qryDataOriginal:local.OriginalData);
 		//dump(local.result.get("tradeHistory") );
 		session.objects.ReportService.BacktestReport(tradeBean:local.result.get("tradeHistory"),symbol:arguments.symbol);
 		request.method = "backtest";  
@@ -88,6 +88,7 @@
 	<cfset session.objects.DataService 		= createObject("component","cfstox.model.Dataservice").init() />
 	<cfset session.objects.SystemService 	= createObject("component","cfstox.model.SystemService").init() />
 	<cfset session.objects.SystemRunner 	= createObject("component","cfstox.model.SystemRunner").init() />
+	<cfset session.objects.SystemTriggers	= createObject("component","cfstox.model.SystemTriggers").init() />
 	<cfset session.objects.ReportService	= createObject("component","cfstox.model.ReportService").init() />
 	<cfreturn />
 	</cffunction>	

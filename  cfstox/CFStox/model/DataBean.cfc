@@ -19,9 +19,11 @@
 		set("CCI",strData.CCI);
 		set("RSI",strData.RSI); 
 		set("LinearReg",strData.LinearReg);
+		set("LinearReg10",strData.linearReg10); 
 		set("LinearRegAngle",strData.LinearRegAngle);
 		set("LinearRegIntercept",strData.LinearRegIntercept);
 		set("LinearRegSlope",strData.LinearRegSlope);
+		set("LinearRegSlope10",strData.LinearRegSlope10);
 		set("LRSDelta",strData.LRSDelta);
 		set("Momentum",strData.Momentum);
 		set("S1",strData.S1);

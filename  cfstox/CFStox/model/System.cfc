@@ -1,4 +1,4 @@
-<cfcomponent  displayname="systemconditions" hint="I test conditions for entry and exit" output="false">
+<cfcomponent  displayname="systemconditions" hint="I store the actual systems" output="false">
 
 	<cffunction name="init" description="init method" access="public" displayname="init" output="false" returntype="system">
 		<!--- persistent variable to store trades and results --->
@@ -10,6 +10,39 @@
 		<cfreturn this/>
 	</cffunction>
 	
+	<cffunction name="Runsystem" description="drop when LR is positive - overbought" access="public" displayname="test" output="false" returntype="Any">
+		<!--- system description: stock overbought and price drops below S1 --->
+		<cfargument name="Beans" required="true" />
+		<cfset var local = StructNew() />
+		<!--- <cfdump label="arguments" var="#arguments#">
+		<cfabort> --->
+		<cfset local.Sysname = arguments.Beans.SystemName />
+		<cfinvoke method="#local.sysname#"  argumentcollection="#arguments#"  returnvariable="Bean" /> 
+		<cfreturn Bean />
+	</cffunction>
+	
+	<cffunction name="ShortEntryLSRSys1" description="drop when LR is positive - overbought" access="public" displayname="test" output="false" returntype="Any">
+		<!--- system description: stock overbought and price drops below S1 --->
+		<cfargument name="Beans" required="true" />
+		<cfset var local = StructNew() />
+		<!--- <cfdump label="arguments" var="#arguments#">
+		<cfabort> --->
+		
+		<cfscript>
+		local.databeantoday = arguments.beans.Databeans.original_databeans.DataBeanToday;
+		local.boolGoShort = false;
+		// <!--- entry filter:  ----->
+		local.boolGoShort = session.objects.SystemTriggers.LRS10setup(beans:arguments.Beans.DataBeans.Original_DataBeans.DataBeanToday);
+		// <!--- entry criteria:  ----->
+		local.boolGoShort = session.objects.SystemTriggers.S1Break(beans:arguments.Beans.Databeans.Original_DataBeans);
+		if (local.boolGoShort) 
+		{
+		local.databeantoday.Set("OpenShort","true");
+		}
+		</cfscript>
+		<cfreturn local.databeantoday />
+	</cffunction>
+	
 	<cffunction name="all_long_entry" description="" access="public" displayname="test" output="false" returntype="Any">
 		<!--- based on optimum trades in X - US Steel --->
 		<!--- based on two down days followed by up day --->
@@ -18,7 +51,6 @@
 		<cfset local.Patterns = GetCandlePatterns(argumentcollection:arguments) />
 		<cfreturn arguments.arrDataBeans />
 	</cffunction>
-	
 	
 	<cffunction name="long_entry_HA" description="" access="public" displayname="test" output="false" returntype="Any">
 		<!--- based on optimum trades in X - US Steel --->
