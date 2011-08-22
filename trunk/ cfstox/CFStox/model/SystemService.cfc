@@ -24,6 +24,7 @@
 		<!--- todo: create custom HA bars and custom indicators --->
 		<!--- todo: add breakout, real body height and volume data to query --->
 		<!--- todo: fix the various getstockdata methods --->
+		<!--- todo: remove duplicate methods from systemrunner; remove systemrunner altogether--->
 		<cfargument name="SystemName" required="true"  />
 		<cfargument name="qryDataHA" required="true" />
 		<cfargument name="qryDataOriginal" required="true" />
@@ -31,7 +32,28 @@
 		<cfargument name="summary" required="false" default="true" />
 		<cfset var local = structnew() />
 		<!--- returns a tradebean with results of system --->
-		<cfset local.results = session.objects.systemRunner.testSystem(SystemName:arguments.systemName,qryDataHA:arguments.qryDataHA,qryDataOriginal:arguments.qryDataOriginal,summary:arguments.summary) >
+		<cfscript>
+		local.strData = session.objects.Utility.QrytoStruct(query:arguments.qryDataOriginal,rownumber:1);
+		//dump(local.strData);
+		local.Beans = StructNew(); 		
+		local.Beans.Databeans = StructNew(); 		
+		local.Beans.TrackingBean 	= createObject("component","cfstox.model.TrackingBean").init(local.strData);
+		local.Beans.TradeBean 		= createObject("component","cfstox.model.TradeBean").init(local.strData);
+		// todo: this is fucking up for some reason and value is actually "arguments.systemname" wtf?; fix later 8/21/2011
+		local.Beans.SystemName 		= "ShortEntryLSRSys1";
+		</cfscript>
+		<cfloop  query="arguments.qryDataHA" startrow="5">
+			<cfscript>
+			//array five data beans 
+			//todo: use one data bean to store original and HA data
+			//todo: fix currentrow 
+			local.Beans.Databeans.HA_DataBeans = SetupTestData(qryData:arguments.qryDataHA);
+			local.Beans.Databeans.Original_DataBeans = SetupTestData(qryData:arguments.qryDataOriginal);
+			local.DataBeanToday = session.objects.system.runSystem(local.Beans);
+			local.Beans.TradeBean.ProcessTrades(local.DataBeanToday);
+			</cfscript>
+		</cfloop>
+		
 		<cfif arguments.ReportType EQ "watchlist">
 		<!---- loop over the BeanArray and get open and close setups and entries/exits--->
 		<!--- make seperate containers for breakouts, breakdowns, each report category
@@ -39,7 +61,30 @@
 		delete everything above them and do a structappend to the watchlist struct
 		once all symbols have been run, fire off the Watchlist Report and send it the watchlist struct--->
 		</cfif>
-		<cfreturn local.results />
+		<cfreturn local.Beans.TradeBean />
+	</cffunction>
+	
+	<cffunction name="SetupTestData" description="sets up data elements" access="public" displayname="" output="false" returntype="Any">
+		<cfargument name="qryData" required="true" />
+		<cfscript>
+		var data = structNew();
+		data.dataArray = ArrayNew(1);
+		data.rowcount = arguments.qryData.currentrow;
+		/* for x = 1 to x = 5  */
+		data.DataArray[5] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:data.rowcount-4);
+		data.DataArray[4] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:data.rowcount-3);
+		data.DataArray[3] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:data.rowcount-2);
+		data.DataArray[2] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:data.rowcount-1);
+		data.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:data.rowcount);
+		data.DataBean4 = createObject("component","cfstox.model.DataBean").init(data.DataArray[5]);
+		data.DataBean3 = createObject("component","cfstox.model.DataBean").init(data.DataArray[4]); 
+		data.DataBean2 = createObject("component","cfstox.model.DataBean").init(data.DataArray[3]); 
+		data.DataBean1 = createObject("component","cfstox.model.DataBean").init(data.DataArray[2]);  
+		data.DataBeanToday 	= createObject("component","cfstox.model.DataBean").init(data.DataArray[1]); 
+		//dump(data.DataArray[1],true);
+		//dump(data.DataBeanToday.getMemento(),true); 
+		</cfscript>
+		<cfreturn data />
 	</cffunction>
 	
 	<cffunction name="RunWatchlist" description="" access="public" displayname="" output="false" returntype="Any">
@@ -130,7 +175,6 @@
 	</cfif>
 	 <cfreturn local.tradetrim />
 	</cffunction>
-	
 	
 	<cffunction name="GetHigh" description="I return original data" access="public" displayname="" output="false" returntype="Any" >
 		<cfscript>

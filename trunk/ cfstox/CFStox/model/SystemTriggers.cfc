@@ -1,6 +1,6 @@
-<cfcomponent  displayname="system" hint="I test systems using given data" output="false">
+<cfcomponent  displayname="system" hint="I contain the entry and exit filters and triggers" output="false">
 
-	<cffunction name="init" description="init method" access="public" displayname="init" output="false" returntype="system">
+	<cffunction name="init" description="init method" access="public" displayname="init" output="false" returntype="systemTriggers">
 		<!--- persistent variable to store trades and results --->
 		<cfreturn this/>
 	</cffunction>
@@ -18,6 +18,42 @@
 		SMAUp
 		SMADown
 		--->
+	
+	<cffunction name="LRS10setup" description="called from system" access="public" displayname="LRS10setup" output="false" returntype="boolean">
+		<cfargument name="Beans" required="true" />
+		<cfscript>
+		var local = StructNew(); 
+		if (arguments.beans.get("LinearRegSlope10") GT 1 ) 
+		{
+		return true;
+		}
+		else
+		{
+		return false;
+		}
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="S1Break" description="called from system" access="public" displayname="S1Break" output="false" returntype="boolean">
+		<cfargument name="Beans" required="true" />
+		<!--- todo: this doesnt look exactly right - fix 8/21/2011 --->
+		<!--- <cfdump label="Beans" var="#arguments.beans#">
+		<cfabort> --->
+		<cfscript>
+		//var local = StructNew(); 
+		if (arguments.beans.DataBeanToday.get("Low") LT arguments.beans.DataBean4.get("S1") ) 
+		{
+		return true;
+		}
+		else
+		{
+		return false;
+		}
+		</cfscript>
+	</cffunction>
+	
+	<!---- todo:delete all this crap --->	
+	
 	<cffunction name="UpsideBreakout" description="called from system" access="public" displayname="UpsideBreakout" output="false" returntype="boolean">
 		<!--- based on optimum trades in X - US Steel --->
 		<!--- <cfargument name="TradeBeanTwo" required="true" />

@@ -123,6 +123,8 @@
 		Set("CloseShortAlert","false");
 		Set("CloseShort","false"); --->
 		<cfscript>
+		var local = structNew();
+		local.trade = false;
 		// open long alert places a long trade if condition is met
 		// the condition is part of the system
 		// process exisiting trades
@@ -130,72 +132,35 @@
 		// the databean should ask the trackingbean for this info. This is part of the system and should not be in the tradebean
 		// the tradebean should only be resp for implementing the system calls
 		// 
-		if(get("OpenLongAlert")  AND NOT get("LongPosition")   )
+		if(DataBeanToday.get("OpenLong")     ) //AND NOT get("LongPosition")
 		{
 		set("OpenLong",true);
-		set("OpenLongAlert",false);
-		//
-		local.trade1 = Duplicate(variables.trade);
-		local.trade1.date = arguments.DataBeanToday.get("Date");
-		local.trade1.TradeDescription = "Open Long Position";
-		local.trade1.TradeEntryExitPoint = "R1: #get("R1")# High:#DataBeanToday.Get("High")#" ;
-		local.trade1.TradePrice = "" ;
-		local.nextindex = variables.tradeHistory.size();
-		variables.tradeHistory[local.nextindex+1] = local.trade1;
-		//
+		local.trade = "OpenLong";
 		}
-		if(get("OpenShortAlert") AND DataBeanToday.Get("Low") LT Get("S1") AND NOT get("ShortPosition")  )
+		if(DataBeanToday.get("OpenShort")    ) //AND NOT get("ShortPosition")
 		{
 		set("OpenShort",true);
+		local.trade = "OpenShort";
 		} 
-		if(get("CloseLongAlert")  AND DataBeanToday.Get("Low") LT Get("S1") AND get("LongPosition")  )
+		if(DataBeanToday.get("CloseLong")  AND get("LongPosition")  )
 		{
 		set("CloseLong",true);
+		local.trade = "CloseLong";
 		}
-		if(get("CloseShortAlert") AND DataBeanToday.Get("High") GT Get("R1") AND get("ShortPosition")  )
+		if(DataBeanToday.get("CloseShort") AND get("ShortPosition")  )
 		{
-		set("OpenShort",true);
+		set("CloseShort",true);
+		local.trade = "CloseShort";
 		} 
-		// process new alerts
-		if(DataBeanToday.get("OpenLongAlert") )
+		if(local.trade)
 		{
-		set("OpenLongAlert",true);
-		set("R1",arguments.DataBeanToday.get("R1"));
-		//
 		local.trade1 = Duplicate(variables.trade);
 		local.trade1.date = arguments.DataBeanToday.get("Date");
-		local.trade1.TradeDescription = "OpenLongAlert";
-		local.trade1.TradeEntryExitPoint = "R1: #arguments.DataBeanToday.get("R1")#" ;
-		local.trade1.TradePrice = "" ;
+		local.trade1.TradeDescription = local.trade;
+		local.trade1.TradePrice = DataBeanToday.get("Close") ;
 		local.nextindex = variables.tradeHistory.size();
 		variables.tradeHistory[local.nextindex+1] = local.trade1;
-		//
 		}
-		/* if(DataBeanToday.get("OpenShortAlert") )
-		{
-		set("OpenShortAlert",true);
-		set("S1",arguments.DataBeanToday.get("S1"));
-		//
-		local.trade1 = Duplicate(variables.trade);
-		local.trade1.date = arguments.DataBeanToday.get("Date");
-		local.trade1.TradeDescription = "OpenShortAlert";
-		local.trade1.TradeEntryExitPoint = "S1: #arguments.DataBeanToday.get("S1")#" ;
-		local.trade1.TradePrice = "" ;
-		local.nextindex = variables.tradeHistory.size();
-		variables.tradeHistory[local.nextindex+1] = local.trade1;
-		//
-		} */
-		if(DataBeanToday.get("CloseLongAlert") AND get("LongPosition") )
-		{
-		set("CloseLongAlert",true);
-		set("S1",arguments.DataBeanToday.get("S1"));
-		}
-		/* if(get("CloseShortAlert")  AND get("ShortPosition")  )
-		{
-		set("CloseShortAlert",true);
-		set("R1",arguments.DataBeanToday.get("R1"));
-		} */
-		recordTrades(arguments.DataBeanToday);
 		return;
 		</cfscript>
 	</cffunction>	

@@ -41,6 +41,7 @@
 		local.Beans.Databeans = StructNew(); 		
 		local.Beans.TrackingBean 	= createObject("component","cfstox.model.TrackingBean").init(local.strData);
 		local.Beans.TradeBean 	= createObject("component","cfstox.model.TradeBean").init(local.strData);
+		local.Beans.SystemName = arguments.systemName;
 		</cfscript>
 		<cfloop  query="arguments.qryDataHA" startrow="5">
 			<cfscript>
@@ -50,9 +51,7 @@
 			local.Beans.Databeans.HA_DataBeans = SetupTestData(qryData:arguments.qryDataHA);
 			local.Beans.Databeans.Original_DataBeans = SetupTestData(qryData:arguments.qryDataOriginal);
 			</cfscript>
-			<cfinvoke component="#session.objects.system#" method="Open_Long_R2_Break"  argumentcollection="#local.Beans#"  returnvariable="DataBeanToday" /> 
-			<!--- <cfset ProcessTrackingBean(TrackingBean:local.TrackingBean,dataBeans:DataBeans) /> --->
-			<!--- <cfset arguments.trackingBean.processDailyData(DataBeanToday) /> --->
+			<cfinvoke component="#session.objects.system#" method="runSystem"  argumentcollection="#local.Beans#"  returnvariable="DataBeanToday" /> 
 			<cfscript>
 			local.Beans.TradeBean.ProcessTrades(DataBeanToday);
 			</cfscript>
