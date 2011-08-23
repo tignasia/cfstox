@@ -45,7 +45,7 @@
 		local.data = historical(symbol:arguments.symbol,startdate:arguments.startdate,enddate:arguments.enddate);
 		structAppend(local,local.data);
 		local.result = session.objects.SystemService.RunSystem(SystemName:arguments.SystemName,qryDataHA:local.HAdata,qryDataOriginal:local.OriginalData);
-		//dump(local.result.get("tradeHistory") );
+		//dump(local.result.get("tradeHistory"),"TradeHistory:" );
 		session.objects.ReportService.BacktestReport(tradeBean:local.result.get("tradeHistory"),symbol:arguments.symbol);
 		request.method = "backtest";  
 		return local;
@@ -95,7 +95,12 @@
 
 	<cffunction name="Dump" description="utility" access="public" displayname="test" output="false" returntype="Any">
 		<cfargument name="object" required="true" />
-		<cfdump label="bean:" var="#arguments.object#">
-		<cfabort>
+		<cfargument name="label" required="false" default="bean:"/>
+		<cfargument name="abort" required="false"  default="true" />
+		<cfdump label="#arguments.label#" var="#arguments.object#">
+		<cfif arguments.abort>
+			<cfabort>
+		</cfif>
 	</cffunction>
+	
 </cfcomponent>

@@ -42,14 +42,17 @@
 		// todo: this is fucking up for some reason and value is actually "arguments.systemname" wtf?; fix later 8/21/2011
 		local.Beans.SystemName 		= "ShortEntryLSRSys1";
 		</cfscript>
-		<cfloop  query="arguments.qryDataHA" startrow="5">
+		<cfloop  query="arguments.qryDataOriginal" startrow="5">
 			<cfscript>
+			local.rowcounter = arguments.qryDataOriginal.currentrow;
 			//array five data beans 
 			//todo: use one data bean to store original and HA data
 			//todo: fix currentrow 
-			local.Beans.Databeans.HA_DataBeans = SetupTestData(qryData:arguments.qryDataHA);
-			local.Beans.Databeans.Original_DataBeans = SetupTestData(qryData:arguments.qryDataOriginal);
+			local.Beans.Databeans.HA_DataBeans = SetupTestData(qryData:arguments.qryDataHA,rowcounter:local.rowcounter);
+			local.Beans.Databeans.Original_DataBeans = SetupTestData(qryData:arguments.qryDataOriginal,rowcounter:local.rowcounter);
 			local.DataBeanToday = session.objects.system.runSystem(local.Beans);
+			//dump(local.databeantoday);
+			//session.objects.utility.trace(local.Beans.Databeans,"Local.beans.databeans from systemService");
 			local.Beans.TradeBean.ProcessTrades(local.DataBeanToday);
 			</cfscript>
 		</cfloop>
@@ -66,16 +69,17 @@
 	
 	<cffunction name="SetupTestData" description="sets up data elements" access="public" displayname="" output="false" returntype="Any">
 		<cfargument name="qryData" required="true" />
+		<cfargument name="rowcounter" required="true" />
 		<cfscript>
 		var data = structNew();
 		data.dataArray = ArrayNew(1);
 		data.rowcount = arguments.qryData.currentrow;
 		/* for x = 1 to x = 5  */
-		data.DataArray[5] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:data.rowcount-4);
-		data.DataArray[4] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:data.rowcount-3);
-		data.DataArray[3] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:data.rowcount-2);
-		data.DataArray[2] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:data.rowcount-1);
-		data.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:data.rowcount);
+		data.DataArray[5] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:arguments.rowcounter-4);
+		data.DataArray[4] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:arguments.rowcounter-3);
+		data.DataArray[3] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:arguments.rowcounter-2);
+		data.DataArray[2] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:arguments.rowcounter-1);
+		data.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:arguments.rowcounter);
 		data.DataBean4 = createObject("component","cfstox.model.DataBean").init(data.DataArray[5]);
 		data.DataBean3 = createObject("component","cfstox.model.DataBean").init(data.DataArray[4]); 
 		data.DataBean2 = createObject("component","cfstox.model.DataBean").init(data.DataArray[3]); 

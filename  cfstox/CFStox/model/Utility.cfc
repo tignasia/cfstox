@@ -1,6 +1,7 @@
 <cfcomponent output="false">
 	
 	<cffunction name="init"  >
+		<cfset variables.SnapShot = ArrayNew(1) />
 		<cfreturn this />
 	</cffunction>
 

@@ -53,6 +53,9 @@
 			</cfscript>
 			<cfinvoke component="#session.objects.system#" method="runSystem"  argumentcollection="#local.Beans#"  returnvariable="DataBeanToday" /> 
 			<cfscript>
+			//session.objects.utility.trace(local.Beans.Databeans,"DataBeans from SystemRunner");
+			//dump(local.Beans.Databeans,"Databean Collection:");
+			//dump(DataBeanToday,"DatabeanToday");
 			local.Beans.TradeBean.ProcessTrades(DataBeanToday);
 			</cfscript>
 		</cfloop>
@@ -471,7 +474,8 @@
 
 	<cffunction name="Dump" description="utility" access="public" displayname="test" output="false" returntype="Any">
 		<cfargument name="object" required="true" />
-		<cfargument name="abort" required="false"  default="true"/>
+		<cfargument name="label" required="false" default="bean:"/>
+		<cfargument name="abort" required="false"  default="true" />
 		<cfdump label="bean:" var="#arguments.object#">
 		<cfif arguments.abort>
 			<cfabort>
