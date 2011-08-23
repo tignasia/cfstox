@@ -37,7 +37,7 @@
 		local.boolGoShort = session.objects.SystemTriggers.S1Break(beans:arguments.Beans.Databeans.Original_DataBeans);
 		if (local.boolGoShort) 
 		{
-		local.databeantoday.Set("OpenShort","true");
+		local.databeantoday.Set("OpenShort",true);
 		}
 		</cfscript>
 		<cfreturn local.databeantoday />

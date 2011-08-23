@@ -124,7 +124,7 @@
 		Set("CloseShort","false"); --->
 		<cfscript>
 		var local = structNew();
-		local.trade = false;
+		local.tradeType = "";
 		// open long alert places a long trade if condition is met
 		// the condition is part of the system
 		// process exisiting trades
@@ -135,29 +135,29 @@
 		if(DataBeanToday.get("OpenLong")     ) //AND NOT get("LongPosition")
 		{
 		set("OpenLong",true);
-		local.trade = "OpenLong";
+		local.tradeType = "OpenLong";
 		}
 		if(DataBeanToday.get("OpenShort")    ) //AND NOT get("ShortPosition")
 		{
 		set("OpenShort",true);
-		local.trade = "OpenShort";
+		local.tradeType = "OpenShort";
 		} 
 		if(DataBeanToday.get("CloseLong")  AND get("LongPosition")  )
 		{
 		set("CloseLong",true);
-		local.trade = "CloseLong";
+		local.tradeType = "CloseLong";
 		}
 		if(DataBeanToday.get("CloseShort") AND get("ShortPosition")  )
 		{
 		set("CloseShort",true);
-		local.trade = "CloseShort";
+		local.tradeType = "CloseShort";
 		} 
-		if(local.trade)
+		if(local.tradeType NEQ "")
 		{
 		local.trade1 = Duplicate(variables.trade);
 		local.trade1.date = arguments.DataBeanToday.get("Date");
-		local.trade1.TradeDescription = local.trade;
-		local.trade1.TradePrice = DataBeanToday.get("Close") ;
+		local.trade1.TradeDescription = local.tradeType;
+		local.trade1.TradePrice = arguments.DataBeanToday.get("Close") ;
 		local.nextindex = variables.tradeHistory.size();
 		variables.tradeHistory[local.nextindex+1] = local.trade1;
 		}

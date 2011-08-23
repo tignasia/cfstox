@@ -46,7 +46,7 @@
 		Set("OpenLongAlert","false");
 		Set("OpenLong","false");
 		Set("OpenShortAlert","false");
-		Set("OpenShort","false");
+		Set("OpenShort",false);
 		Set("CloseLongAlert","false");
 		Set("CloseLong","false");
 		Set("CloseShortAlert","false");

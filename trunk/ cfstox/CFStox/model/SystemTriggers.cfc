@@ -21,9 +21,10 @@
 	
 	<cffunction name="LRS10setup" description="called from system" access="public" displayname="LRS10setup" output="false" returntype="boolean">
 		<cfargument name="Beans" required="true" />
+		<cfargument name="LRSLevel" required="false" default=1 />
 		<cfscript>
 		var local = StructNew(); 
-		if (arguments.beans.get("LinearRegSlope10") GT 1 ) 
+		if (arguments.beans.get("LinearRegSlope10") GT arguments.LRSLevel) 
 		{
 		return true;
 		}
