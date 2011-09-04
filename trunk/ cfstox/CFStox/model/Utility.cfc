@@ -4,7 +4,7 @@
 		<cfset variables.SnapShot = ArrayNew(1) />
 		<cfreturn this />
 	</cffunction>
-
+	
 	<cffunction name="QryToArray" access="public" output="false" returntype="Array">
 		<cfargument name="query" required="true">
 		<cfset var local = structNew() />
