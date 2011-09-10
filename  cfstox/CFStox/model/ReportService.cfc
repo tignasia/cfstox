@@ -13,30 +13,9 @@
 		<cfscript>
 		var local = StructNew() ;
 		local.ReportResults = ReportSetup(reportName:arguments.reportName,Data:arguments.Data);
-		OutputReport(content:local.reportResults,symbol:arguments.symbol,filetype:"PDF",ReportName:"HistoryReport");
-		OutputReport(content:local.reportResults,symbol:arguments.symbol,filetype:"excel",ReportName:"HistoryReport");  
+		OutputReport(content:local.reportResults,symbol:arguments.symbol,filetype:"PDF",ReportName:"#arguments.ReportName#");
+		OutputReport(content:local.reportResults,symbol:arguments.symbol,filetype:"excel",ReportName:"#arguments.ReportName#");  
 		</cfscript> 
-		<cfreturn />
-	</cffunction>
-
-	<cffunction name="OutputReport" description="I output a array" access="public" displayname="" output="false" returntype="void">
-		<!---- regardless of the report, the final output should be a list of headers and an array --->
-		<cfargument name="content" required="true">
-		<cfargument name="symbol" required="true">
-		<cfargument name="filetype" required="true">
-		<cfargument name="reportName" required="true">
-		<cfset local.rootpath = session.objects.utility.getdirectorypath() />
-		<cfset local.PDFfilename = "#local.rootpath#..\Data\" & "#arguments.symbol#" & "#arguments.reportName#" & ".pdf"/>
-		<cfset local.Excelfilename = "#local.rootpath#..\Data\" & "#arguments.symbol#" & "#arguments.reportName#" & ".xls"/>
-		<cfif arguments.filetype EQ "PDF">
-			<cfdocument  format="PDF" filename="#local.PDFfilename#" overwrite="true" orientation = "landscape">
-			<cfoutput>#arguments.content#</cfoutput>
-			</cfdocument>
-		<cfelseif arguments.filetype EQ "excel">
-			<cffile action="write" file="#local.Excelfilename#" output="#arguments.content#"   />
-		</cfif>
-		<!--- for excel --->
-		<!--- <cffile action="write" file="#local.Excelfilename#" output="#local.stockdata#"   /> --->
 		<cfreturn />
 	</cffunction>
 	
@@ -55,21 +34,14 @@
 			</cfcase>
 			<cfcase value="BacktestReport">
 				<cfset local.headers = "Date,Description,Entry_Exit,Price">
-				<cfoutput>
-				<table>
-				<cfloop list="#local.columns#" index="local.i">
-				<th>#local.i#</th>
-				</cfloop>
+				<cfset local.alen = arguments.data.size() />
+				<cfset local.dataArray = ArrayNew(2) />
 				<cfloop from="1" to="#local.alen#" index="local.j">
-				<tr>
-					<td>#arguments.tradebean[local.j].date#</td>
-					<td>#arguments.tradebean[local.j].TradeDescription#</td>
-					<td>#arguments.tradebean[local.j].TradeEntryExitPoint#</td>
-					<td>#arguments.tradebean[local.j].TradePrice#</td>
-				</tr>
+					<cfset local.DataArray[local.j][1] = arguments.data[local.j].date />
+					<cfset local.DataArray[local.j][2] = arguments.data[local.j].TradeDescription />
+					<cfset local.DataArray[local.j][3] = arguments.data[local.j].TradeEntryExitPoint />
+					<cfset local.DataArray[local.j][4] = arguments.data[local.j].TradePrice />
 				</cfloop>
-				</table>
-				</cfoutput>
 			</cfcase>
 			<cfcase value="ProfitReport">
 				<cfoutput>
@@ -151,36 +123,28 @@
 		<cfreturn local.Reportdata />
 	</cffunction>
 	
-	<!---- these reports loop over i --->
-	<cffunction name="HistoryReport" description="I output a report" access="public" displayname="" output="false" returntype="void">
-		<cfargument name="data" required="true">
-		<cfset var local = structNew() />
-		<!--- <cfset dump(arguments.data) /> --->
-		<cfset local.columns = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,RSI,LOCALHIGH,LOCALLOW,LINEARREG,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LRSDELTA,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break">
-		<cfsavecontent variable="local.Stockdata">
-		<cfoutput>
-		<table>
-		<cfloop list="#local.columns#" index="i">
-		<th>#i#</th>
-		</cfloop>
-		<cfloop from="1" to="#arguments.data.recordcount#" index="j">
-		<tr>
-			<cfloop list="#local.columns#" index="k">
-			<td>#arguments.data[k][j]#</td>
-			</cfloop>
-		</tr>
-		</cfloop>
-		</table>
-		</cfoutput>
-		</cfsavecontent>
-		<cffile action="write" file="#local.Excelfilename#" output="#local.stockdata#"   />
-		<!--- todo: apply patch
-		<cfdocument  format="PDF" filename="#local.PDFfilename#" overwrite="true" orientation = "landscape">
-		<cfoutput>#stockData#</cfoutput>
-		</cfdocument> --->
+	<cffunction name="OutputReport" description="I output a array" access="public" displayname="" output="false" returntype="void">
+		<!---- regardless of the report, the final output should be a list of headers and an array --->
+		<cfargument name="content" required="true">
+		<cfargument name="symbol" required="true">
+		<cfargument name="filetype" required="true">
+		<cfargument name="reportName" required="true">
+		<cfset local.rootpath = session.objects.utility.getdirectorypath() />
+		<cfset local.PDFfilename = "#local.rootpath#..\Data\" & "#arguments.symbol#" & "#arguments.reportName#" & ".pdf"/>
+		<cfset local.Excelfilename = "#local.rootpath#..\Data\" & "#arguments.symbol#" & "#arguments.reportName#" & ".xls"/>
+		<cfif arguments.filetype EQ "PDF">
+			<cfdocument  format="PDF" filename="#local.PDFfilename#" overwrite="true" orientation = "landscape">
+			<cfoutput>#arguments.content#</cfoutput>
+			</cfdocument>
+		<cfelseif arguments.filetype EQ "excel">
+			<cffile action="write" file="#local.Excelfilename#" output="#arguments.content#"   />
+		</cfif>
+		<!--- for excel --->
+		<!--- <cffile action="write" file="#local.Excelfilename#" output="#local.stockdata#"   /> --->
 		<cfreturn />
 	</cffunction>
-	
+	<!---- these reports loop over i --->
+		
 	<cffunction name="BeanReport" description="I output a PDF of the bean status" access="public" displayname="" output="false" returntype="void">
 		<cfargument name="data" required="true">
 		<cfset var local = structNew() />

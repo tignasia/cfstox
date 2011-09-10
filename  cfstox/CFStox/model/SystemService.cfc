@@ -31,7 +31,11 @@
 		<cfargument name="ReportType" required="false" default="backtest" hint="backtest,watchlist"/>
 		<cfargument name="summary" required="false" default="true" />
 		<cfset var local = structnew() />
-		<!--- returns a tradebean with results of system --->
+		<!--- 
+		databean has data for given day 
+		trackingbean keeps track of state of system - persistent singleton
+		tradebean keeps track of the trades and the results - this should prob be in a simple array
+		--->
 		<cfscript>
 		local.strData = session.objects.Utility.QrytoStruct(query:arguments.qryDataOriginal,rownumber:1);
 		//dump(local.strData);
