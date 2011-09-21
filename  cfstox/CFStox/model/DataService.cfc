@@ -192,6 +192,8 @@
 		<cfset local.LocalHighLows = session.objects.TA.LocalHighLow(qryData:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"LocalHigh","VarChar",local.LocalHighLows.LocalHighs) />
 		<cfset queryAddColumn(arguments.query,"LocalLow","VarChar",local.LocalHighLows.LocalLows) />
+		<cfset queryAddColumn(arguments.query,"LocalHighValue","VarChar",local.LocalHighLows.LocalHighValue) />
+		<cfset queryAddColumn(arguments.query,"LocalLowValue","VarChar",local.LocalHighLows.LocalLowValue) />
 		<cfreturn arguments.query />	
 	</cffunction>
 

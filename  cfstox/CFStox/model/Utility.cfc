@@ -6,13 +6,17 @@
 	</cffunction>
 	
 	<cffunction name="QryToArray" access="public" output="false" returntype="Array">
-		<cfargument name="query" required="true">
+		<cfargument name="query" required="true" />
+		<cfargument name="columnlist" required="false"  />
 		<cfset var local = structNew() />
+		<cfif NOT StructKeyExists(arguments,"columnlist")>
+			<cfset arguments.columnlist = arguments.query.columnList />
+		</cfif>
 		<cfset local.returnArray = ArrayNew(2) />
 		<cfscript>
 		local.qryrows = arguments.query.recordcount;
 		//Convert data and append
-		local.cols = listToArray(arguments.query.columnList);
+		local.cols = listToArray(arguments.columnList);
        	for(i=1;i<=local.qryrows;i++){   
 			for (j=1;j <= local.cols.size(); j++) { 
 				local.returnArray[i][j] = query["#local.cols[j]#"][i];
