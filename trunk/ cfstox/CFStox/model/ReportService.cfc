@@ -29,8 +29,14 @@
 			<cfcase value="HistoryReport">
 				<!--- <cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,RSI,LOCALHIGH,LOCALLOW,LINEARREG,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LRSDELTA,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break">
 				 --->
-				 <cfset local.headers = arguments.data.columnlist>
-				<cfset local.dataArray = session.Objects.Utility.QryToArray(query:arguments.data) />
+				 <cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,RSI,LINEARREG,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LRSDELTA,LOCALHIGH,LOCALHIGHVALUE,LOCALLOW,,LOCALLOWVALUE,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break">
+				 
+				<!---  <cfset local.headers = arguments.data.columnlist> --->
+				<cfset local.dataArray = session.Objects.Utility.QryToArray(query:arguments.data,columnlist:local.headers) />
+			</cfcase>
+			<cfcase value="BreakoutReport">
+				<cfset local.headers = "DATEONE,OPEN,HIGH,LOW,CLOSE,LOCALHIGH,LOCALHIGHVALUE,LOCALLOW,LOCALLOWVALUE,PP,R1,R1BREAK,R2,R2BREAK,S1,S1BREAK,S2,S2BREAK" />
+				<cfset local.dataArray = session.Objects.Utility.QryToArray(query:arguments.data,columnlist:local.headers) />
 			</cfcase>
 			<cfcase value="BacktestReport">
 				<cfset local.headers = "Date,Description,Entry_Exit,Price">
@@ -144,7 +150,22 @@
 		<cfreturn />
 	</cffunction>
 	<!---- these reports loop over i --->
-		
+	
+	<!--- Fields 
+	ADX	CCI	CLOSE	DATEONE	HIGH	LINEARREG	LINEARREG10	LINEARREGANGLE	LINEARREGINTERCEPT	
+	LINEARREGSLOPE	LINEARREGSLOPE10	LOCALHIGH	LOCALLOW	LOW	LRSDELTA	
+	MOMENTUM	OPEN	PP	
+	R1	R1BREAK	R2	R2BREAK	
+	RSI	
+	S1	S1BREAK	S2	S2BREAK	
+	SYMBOL	VOLUME --->
+	
+	<cffunction name="getBreakoutReportHeaders" description="I set the columns for the breakout report" access="public" displayname="" output="false" returntype="void">
+		<cfset var local = structNew() />
+		<cfset local.headers = "DATEONE,OPEN,HIGH,LOW,CLOSE,LOCALHIGH,LOCALLOW,PP,R1,R1BREAK,R2,R2BREAK,S1,S1BREAK,S2,S2BREAK" />
+		<cfreturn local.headers />
+	</cffunction>
+	
 	<cffunction name="BeanReport" description="I output a PDF of the bean status" access="public" displayname="" output="false" returntype="void">
 		<cfargument name="data" required="true">
 		<cfset var local = structNew() />

@@ -222,6 +222,10 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 		local.qryrows = arguments.qrydata.recordcount;
 		local.LocalHighs = arrayNew(1);
 		local.LocalLows = arraynew(1);
+		local.LocalHighValue = arrayNew(1);
+		local.LocalLowValue = arraynew(1);
+		local.LocalHigh = 0;
+		local.LocalLow = 0;
 		for(i=1;i<=local.qryrows;i++){
 		local.LocalHighs[i] = FALSE;
 		local.LocalLows[i] = FALSE;
@@ -229,10 +233,15 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 		for(i=3;i<=local.qryrows;i++){ 
 		    if(arguments.qryData.high[i-2] LT arguments.qryData.high[i-1] AND arguments.qryData.high[i] LT arguments.qryData.high[i-1] ) {
 		    local.LocalHighs[i-1] = TRUE;
+		    local.LocalHigh = arguments.qryData.high[i-1];
 		    }
+		    local.LocalHighValue[i-1] = local.LocalHigh;
+		    
 		    if(arguments.qryData.low[i-2] GT arguments.qryData.low[i-1] AND arguments.qryData.low[i] GT arguments.qryData.low[i-1]) {
 		    local.LocalLows[i-1] = TRUE;
+		    local.LocalLow = arguments.qryData.low[i-1]; 
 		    }
+		    local.LocalLowValue[i-1] = local.LocalLow;
 	    }
 		</cfscript>
 		<cfreturn local />
