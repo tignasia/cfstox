@@ -27,9 +27,9 @@
 		<cfset local.dataArray = ArrayNew(2) />
 		<cfswitch  expression="#arguments.ReportName#">
 			<cfcase value="HistoryReport">
-				<!--- <cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,RSI,LOCALHIGH,LOCALLOW,LINEARREG,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LRSDELTA,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break">
+				<!--- <cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,RSI,LOCALHIGH,LOCALLOW,LINEARREG,LINEARREG10,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LINEARREGSLOPE10,LRSDELTA,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break">
 				 --->
-				 <cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,RSI,LINEARREG,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LRSDELTA,LOCALHIGH,LOCALHIGHVALUE,LOCALLOW,,LOCALLOWVALUE,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break">
+				 <cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,RSI,LINEARREG,LINEARREG10,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LINEARREGSLOPE10,LRSDELTA,LOCALHIGH,LOCALHIGHVALUE,LOCALLOW,LOCALLOWVALUE,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break">
 				 
 				<!---  <cfset local.headers = arguments.data.columnlist> --->
 				<cfset local.dataArray = session.Objects.Utility.QryToArray(query:arguments.data,columnlist:local.headers) />
@@ -129,12 +129,16 @@
 		<cfreturn local.Reportdata />
 	</cffunction>
 	
-	<cffunction name="OutputReport" description="I output a array" access="public" displayname="" output="false" returntype="void">
+	<cffunction name="OutputReport" description="I write the report files" access="public" displayname="" output="false" returntype="void">
 		<!---- regardless of the report, the final output should be a list of headers and an array --->
 		<cfargument name="content" required="true">
 		<cfargument name="symbol" required="true">
 		<cfargument name="filetype" required="true">
 		<cfargument name="reportName" required="true">
+		<!--- fix for google requiring "NYSE" for IOC and others.  --->
+		<cfif left(arguments.symbol,4) EQ "NYSE" >
+			<cfset arguments.symbol = right(arguments.symbol,3) >
+		</cfif>
 		<cfset local.rootpath = session.objects.utility.getdirectorypath() />
 		<cfset local.PDFfilename = "#local.rootpath#..\Data\" & "#arguments.symbol#" & "#arguments.reportName#" & ".pdf"/>
 		<cfset local.Excelfilename = "#local.rootpath#..\Data\" & "#arguments.symbol#" & "#arguments.reportName#" & ".xls"/>
