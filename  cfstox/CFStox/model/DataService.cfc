@@ -59,12 +59,50 @@
 		<cfreturn local />
 	</cffunction>
 
+	<cffunction name="CheckDatabase" description="" access="public" displayname="" output="false" returntype="Any">
+		<cfset var local = StructNew() />
+		<!--- 
+		SPY will be used as the canonical list of dates the market was open 
+		see if we already have the data for the symbol and dates requested
+		check for a start day record and if not found keep going back until we get a record
+		end day is a little trickier because it could be today
+		if the last day is not today 
+		try to get data for the last day we have it until today. We'll work with what we have.
+		--->
+		<!--- handle the start date --->
+		<cfset local.MarketFlag = false>
+		<cfset arguments.startDate = DateFormat(arguments.startdate, "mm-dd-yyyy")>
+		<cfset local.DayofWeek = DayofWeek("#arguments.startdate#") />
+		<!--- see if we have data for the startdate --->
+		<cfset local.qryStock = session.objects.DataDAO.Read(symbol:"SPY",date:"arguments.startdate") />
+		<cfif local.qryStock.recordcount EQ 1> <!--- market was open --->
+			<cfset local.MarketFlag = true />		
+		</cfif>
+		<cfif local.MarketFlag EQ FALSE >
+			<cfloop from="-1" to="-14" index="i" step="-1">
+	  			<cfset arguments.StartDate = DateAdd('d',i,arguments.startdate) /> 
+	  			<cfset local.qryStock = session.objects.DataDAO.Read(symbol:"SPY",date:"arguments.startdate") />
+	  			<cfif local.qryStock.recordcount EQ 1> <!--- market was open --->
+					<cfset local.MarketFlag = true />		
+					<cfbreak>
+				</cfif>
+			</cfloop>
+		</cfif>
+		<!--- handle the end date --->
+		<cfset local.qryStock = session.objects.DataDAO.Read(symbol:"SPY",date:"arguments.enddate") />
+		<cfif local.qryStock.recordcount EQ 1> <!--- market was open --->
+			<cfset local.MarketFlag = true />		
+		</cfif>
+		<cfreturn />
+	</cffunction>
+	
 	<cffunction name="GetStockDataGoogle" description="I return a stock data bean" access="public" displayname="GetStockData" output="false" returntype="Any">
 		<cfargument name="Symbol" 		required="true"  />
 		<cfargument name="startdate" 	required="false" default=#CreateDate(2010,1,1)# />
 		<cfargument name="enddate" 		required="false" default=#now()# />
 		<cfset var local = structnew() />
 		<cfset reset() />
+		<!-- todo: seperate out returning the raw data as a query; open,high low close volume -->
 		<cftry>
 		<cfset results = session.objects.http.getHTTPGoogle(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") />
 		<cfcatch>
