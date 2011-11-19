@@ -1,36 +1,37 @@
 
-<cfcomponent displayname="DataDAO" hint="table ID column = ">
+<cfcomponent displayname="HistoryDAO" hint="table ID column = ">
 
-	<cffunction name="init" access="public" output="false" returntype="DataDAO">
-		<cfargument name="dsn" type="string" required="false" default="CFStox">
+	<cffunction name="init" access="public" output="false" returntype="modelzDAO">
+		<cfargument name="dsn" type="string" required="true">
 		<cfset variables.dsn = arguments.dsn>
 		<cfreturn this>
 	</cffunction>
 	
 	<cffunction name="create" access="public" output="false" returntype="boolean">
-		<cfargument name="qryData" type="Struct" required="true" />
-		<cfset var local = StructNew() />
-		<cfset local.qCreate = "" />
+		<cfargument name="qryData" type="Query" required="true" />
+		<cfset var return_value = true  />
+		<cfset var qCreate = "" />
 		<cftry>
-			<cfquery name="local.qCreate" datasource="#variables.dsn#">
+			<cfquery name="qCreate" datasource="#application.dsn#">
 				INSERT INTO History
-					([Dateone]
-					,[Symbol]
-					,[Open]
-					,[High]
-					,[Low]
-					,[Close]
-					,[Volume]
+					(
+					DATEONE
+					,SYMBOL
+					,Open
+					,High
+					,Low
+					,Close
+					,Volume
 					)
 				VALUES
 					(
-					<cfqueryparam value="#arguments.qryData.DateOne#"  />,
-					<cfqueryparam value="#arguments.qryData.Symbol#"  />,
-					<cfqueryparam value="#arguments.qryData.Open#"  />,
-					<cfqueryparam value="#arguments.qryData.High#"  />,
-					<cfqueryparam value="#arguments.qryData.Low#"  />,
-					<cfqueryparam value="#arguments.qryData.Close#"  />,
-					<cfqueryparam value="#arguments.qryData.Volume#"  />
+					<cfqueryparam value="#arguments.qryData.DATEONE#" CFSQLType="cf_sql_date" null="#not len(arguments.qryData.getDATEONE())#" />
+					,<cfqueryparam value="#arguments.qryData.SYMBOL#" CFSQLType="cf_sql_varchar" null="#not len(arguments.qryData.SYMBOL)#" />
+					,<cfqueryparam value="#arguments.qryData.Open#" CFSQLType="cf_sql_varchar" null="#not len(arguments.qryData.Open)#" />
+					,<cfqueryparam value="#arguments.qryData.High#" CFSQLType="cf_sql_varchar" null="#not len(arguments.qryData.High)#" />
+					,<cfqueryparam value="#arguments.qryData.Low#" CFSQLType="cf_sql_varchar" null="#not len(arguments.qryData.Low)#" />
+					,<cfqueryparam value="#arguments.qryData.Close#" CFSQLType="cf_sql_varchar" null="#not len(arguments.qryData.Close)#" />
+					,<cfqueryparam value="#arguments.qryData.Volume#" CFSQLType="cf_sql_varchar" null="#not len(arguments.qryData.Volume)#" />
 					)
 			</cfquery>
 			<cfcatch type="database">
@@ -50,32 +51,36 @@
 			<cfset return_value = false  />	
 			</cfcatch>
 		</cftry>
-		<cfreturn true />
+		<cfreturn return_value />
 	</cffunction>
 
-	<cffunction name="read" access="public" output="false" returntype="any">
-		<cfargument name="Symbol" required="true" />
-		<cfargument name="date" required="false"  />
-		<cfset var local = StructNew() />
-		<cfset local.qRead = "" />
-		<cfset local.strReturn = structNew() />
-		<cftry>
-			<cfquery name="local.qRead" datasource="#variables.dsn#">
-				SELECT
-					Dateone
-					,Symbol
-					,[Open]
-					,[High]
-					,[Low]
-					,[Close]
-					,[Volume]
-				FROM	History h
-				WHERE	1=1
-				AND h.Symbol = '#arguments.Symbol#'
+	<cffunction name="getqryData" access="public" output="false" returntype="query">
+		<cfargument name="date" required="false" default="" />
+		<cfargument name="symbol" required="true" default="" />
+		<cfset var qryGetqryData = "" />
+			<cftry>
+			<cfquery name="qryGetqryData" datasource="#variables.dsn#">
+				SELECT					
+					, History.DATEONE
+					, History.SYMBOL
+					, History.Open
+					, History.High
+					, History.Low
+					, History.Close
+					, History.Volume
+				FROM	History
+				WHERE	1=1 
+				<cfif len(arguments.SYMBOL)>
+					AND History.SYMBOL = <cfqueryparam value="#arguments.SYMBOL)#"  />
+				</cfif>
+				<cfif len(arguments.date)>
+					AND History.DATEONE = <cfqueryparam value="#arguments.date)#"  />
+				</cfif>
+				
 			</cfquery>
 			<cfcatch type="database">
-				
-				<cfthrow type="dbError"
+			
+			<cfthrow type="dbError"
 			message="Error occurred while connecting to the database:" detail="<br/>
 			<strong>REASON:</strong><br/>
 			#cfcatch.message#<br />
@@ -87,32 +92,28 @@
 			<br/>:
 			"
 			/>
-			<cfset return_value = false  />	
 			</cfcatch>
 		</cftry>
-		<!--- <cfif qRead.recordCount>
-			<cfset strReturn = queryRowToStruct(qRead)>
-			<cfset arguments.qryData.init(argumentCollection=strReturn)>
-		</cfif> --->
-		<cfreturn local.qRead />
+		<cfreturn qryGetqryData />
 	</cffunction>
-
+	
 	<cffunction name="update" access="public" output="false" returntype="boolean">
 		<cfargument name="qryData" type="qryData" required="true" />
-		<cfset var local = StructNew() />
-		<cfset local.qUpdate = "" />
+
+		<cfset var qUpdate = "" />
 		<cftry>
-			<cfquery name="local.qUpdate" datasource="#variables.dsn#">
-				UPDATE	Stocks
+			<cfquery name="qUpdate" datasource="#variables.dsn#">
+				UPDATE	History
 				SET
-					Date = <cfqueryparam value="#arguments.qryData.Date#" CFSQLType="cf_sql_timestamp" null="#not len(arguments.qryData.Date)#" />
-					,Symbol = <cfqueryparam value="#arguments.qryData.Symbol#" CFSQLType="cf_sql_char" null="#not len(arguments.qryData.Symbol)#" />
-					,Open = <cfqueryparam value="#arguments.qryData.Open#" CFSQLType="cf_sql_decimal" null="#not len(arguments.qryData.Open)#" />
-					,High = <cfqueryparam value="#arguments.qryData.High#" CFSQLType="cf_sql_decimal" null="#not len(arguments.qryData.High)#" />
-					,Low = <cfqueryparam value="#arguments.qryData.Low#" CFSQLType="cf_sql_decimal" null="#not len(arguments.qryData.Low)#" />
-					,Close = <cfqueryparam value="#arguments.qryData.Close#" CFSQLType="cf_sql_decimal" null="#not len(arguments.qryData.Close)#" />
-					,Volume = <cfqueryparam value="#arguments.qryData.Volume#" CFSQLType="cf_sql_integer" null="#not len(arguments.qryData.Volume)#" />
-				WHERE	
+					DATEONE = <cfqueryparam value="#arguments.qryData.getDATEONE()#" CFSQLType="" null="#not len(arguments.qryData.getDATEONE())#" />,
+					SYMBOL = <cfqueryparam value="#arguments.qryData.getSYMBOL()#" CFSQLType="cf_sql_varchar" null="#not len(arguments.qryData.getSYMBOL())#" />,
+					Open = <cfqueryparam value="#arguments.qryData.getOpen()#" CFSQLType="cf_sql_varchar" null="#not len(arguments.qryData.getOpen())#" />,
+					High = <cfqueryparam value="#arguments.qryData.getHigh()#" CFSQLType="cf_sql_varchar" null="#not len(arguments.qryData.getHigh())#" />,
+					Low = <cfqueryparam value="#arguments.qryData.getLow()#" CFSQLType="cf_sql_varchar" null="#not len(arguments.qryData.getLow())#" />,
+					Close = <cfqueryparam value="#arguments.qryData.getClose()#" CFSQLType="cf_sql_varchar" null="#not len(arguments.qryData.getClose())#" />,
+					Volume = <cfqueryparam value="#arguments.qryData.getVolume()#" CFSQLType="cf_sql_varchar" null="#not len(arguments.qryData.getVolume())#" />
+				WHERE
+					
 			</cfquery>
 			<cfcatch type="database">
 				<cfreturn false />
@@ -122,13 +123,13 @@
 	</cffunction>
 
 	<cffunction name="delete" access="public" output="false" returntype="boolean">
-		<cfargument name="Symbol" type="string" required="true" />
+		<cfargument name="qryData" type="qryData" required="true" />
+
 		<cfset var qDelete = "">
 		<cftry>
 			<cfquery name="qDelete" datasource="#variables.dsn#">
 				DELETE FROM	History 
-				WHERE	1=1
-				AND Symbol = '#arguments.symbol#'
+				WHERE	
 			</cfquery>
 			<cfcatch type="database">
 				<cfreturn false />
@@ -142,8 +143,9 @@
 		<cfset var qExists = "">
 		<cfquery name="qExists" datasource="#variables.dsn#" maxrows="1">
 			SELECT count(1) as idexists
-			FROM	Stocks
-			WHERE	
+			FROM	History
+			WHERE	History.DATEONE = qryData.DATEONE
+			AND History.SYMBOL = qryData.SYMBOL
 		</cfquery>
 		<cfif qExists.idexists>
 			<cfreturn true />
@@ -165,6 +167,7 @@
 
 	<cffunction name="queryRowToStruct" access="private" output="false" returntype="struct">
 		<cfargument name="qry" type="query" required="true">
+		
 		<cfscript>
 			/**
 			 * Makes a row of a query into a structure.
@@ -194,4 +197,5 @@
 			return stReturn;
 		</cfscript>
 	</cffunction>
+
 </cfcomponent>
