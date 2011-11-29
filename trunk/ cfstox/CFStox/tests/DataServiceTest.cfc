@@ -9,54 +9,59 @@
 		this.http 		= createObject("component","cfstox.model.http").init();
 		this.indicators = createObject("component","cfstox.model.indicators").init();
 		this.controller = createObject("component","cfstox.controllers.controller").init();
+		session.objects.DataDAO = createObject("component","cfstox.model.DataDao").init("CFStox");
 		</cfscript>
 	</cffunction>
 
+<!---  
+SetDates
+GetRawData
+GetStockData
+GetStockDataGoogle
+--->
+
+	<cffunction name="testSetDates" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data = this.DataService.SetDates(startdate:"2/1/2010",enddate:"6/10/2010");
+		debug(local.data);
+		</cfscript>
+	</cffunction>
+
+	<cffunction name="testGetRawDataGoogle" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.Googledata = this.DataService.GetRawData(source:"Google",symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
+		debug(local.Googledata);
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testGetRawDataYahoo" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.Yahoodata = this.DataService.GetRawData(source:"Yahoo",symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
+		debug(local.Yahoodata);
+		</cfscript>
+	</cffunction>
+	
 	<cffunction name="testGetStockData" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
 		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
 		debug(local.data);
+		//local.data = this.DataService.GetHAStockData();
+		//debug(local.data);
 		</cfscript>
 	</cffunction>
-
-	<cffunction name="testGetStockDataYahoo" access="public" returntype="void">
-		<cfscript>
-		var local = structNew();
-		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
-		debug(local.data);
-		</cfscript>
-	</cffunction>
-
-	<cffunction name="testGetStockDataHAY" access="public" returntype="void">
-		<cfscript>
-		var local = structNew();
-		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
-		debug(local.data);
-		local.data = this.DataService.GetHAStockData();
-		debug(local.data);
-		
-		</cfscript>
-	</cffunction>
-	
-	<cffunction name="testGetStockDataHAG" access="public" returntype="void">
-		<cfscript>
-		var local = structNew();
-		local.data = this.DataService.GetStockDataGoogle(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
-		debug(local.data);
-		local.data = this.DataService.GetHAStockData();
-		debug(local.data);
-		</cfscript>
-	</cffunction>
-	
-	<cffunction name="testGetStockDataGoogle" access="public" returntype="void">
+			
+	<!--- <cffunction name="testGetStockDataGoogle" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
 		local.data = this.DataService.GetStockDataGoogle(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
 		debug(local.data);
 		</cfscript>
 	</cffunction>
-	
+	 --->
 	<!--- <cffunction name="testGetStockDataSDate" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
@@ -81,42 +86,7 @@
 		</cfscript>
 	</cffunction>
 	 --->
-	<cffunction name="testGetTechnicalData" access="public" returntype="void">
-		<cfscript>
-		var local = structNew();
-		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
-		local.data = this.DataService.GetHAStockData();
-		debug(local.data);
-		</cfscript>
-	</cffunction>
-
-	<cffunction name="testGetTechnicalDataGoogle" access="public" returntype="void">
-		<cfscript>
-		var local = structNew();
-		local.data = this.DataService.GetStockDataGoogle(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
-		local.data = this.DataService.GetHAStockData();
-		debug(local.data);
-		</cfscript>
-	</cffunction>
-`	
-	<cffunction name="testGetOriginalStockData" access="public" returntype="void">
-		<cfscript>
-		var local = structNew();
-		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
-		local.data = this.DataService.GetOriginalStockData();
-		debug(local.data);
-		</cfscript>
-	</cffunction>
 	
-	<cffunction name="GetHAStockData" access="public" returntype="void">
-		<cfscript>
-		var local = structNew();
-		local.data = this.DataService.GetStockData(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
-		local.data = this.DataService.GetHAStockData();
-		debug(local.data);
-		</cfscript>
-	</cffunction>
-
 
 	<!--- End Specific Test Cases --->
 	<cffunction name="tearDown" access="public" returntype="void">

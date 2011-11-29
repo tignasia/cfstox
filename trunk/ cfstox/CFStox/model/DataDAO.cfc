@@ -72,6 +72,9 @@
 				FROM	History h
 				WHERE	1=1
 				AND h.Symbol = '#arguments.Symbol#'
+				<cfif StructKeyExists(arguments,"date") >
+				AND h.DateOne = <cfqueryparam  value="#arguments.date#" cfsqltype="cf_sql_date">
+				</cfif>
 			</cfquery>
 			<cfcatch type="database">
 				

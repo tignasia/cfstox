@@ -1,109 +1,143 @@
-<cfcomponent  displayname="systemconditions" hint="I store the actual systems" output="false">
+<cfcomponent  displayname="system" hint="I contain the entry and exit filters and triggers" output="false">
 
-	<cffunction name="init" description="init method" access="public" displayname="init" output="false" returntype="system">
+	<cffunction name="init" description="init method" access="public" displayname="init" output="false" returntype="systemTriggers">
 		<!--- persistent variable to store trades and results --->
 		<cfreturn this/>
 	</cffunction>
-		
-	<cffunction name="reset" description="init method" access="public" displayname="init" output="false" returntype="system">
-		<!--- persistent variable to store trades and results --->
-		<cfreturn this/>
-	</cffunction>
-	
-	<cffunction name="Runsystem" description="drop when LR is positive - overbought" access="public" displayname="test" output="false" returntype="Any">
-		<cfargument name="Beans" required="true" />
-		<cfset var local = StructNew() />
-		<cfset local.Sysname = arguments.Beans.SystemName />
-		<cfinvoke method="#local.sysname#"  argumentcollection="#arguments#"  returnvariable="Bean" /> 
-		<cfreturn Bean />
-	</cffunction>
-	
-	<cffunction name="ShortEntryRVBD" description="Max profit from riverbed drops" access="public" displayname="test" output="false" returntype="Any">
-		<!--- system description:  
-		high relative to mean
-		close less than open - red candle previous day
-		entry less than prev low
-		CCI values 74, 83, 74, 122
-		RSI values 47, 49, 62, 63 
-		LRI 22 24 29 28
-		LR slope < prev linear reg slope
-		local high 
-		R1 break    
+		<!--- 
+		UpsideBreakout 
+		DownsideBreakdown
+		LongEntryStopTriggered
+		ShortEntryStopTriggered
+		LongExitStopTriggered
+		ShortExitStopTriggered
+		NewLocalHigh
+		NewLocalLow
+		Weakness
+		HighVolume
+		SMAUp
+		SMADown
 		--->
+	
+	<cffunction name="LRS10setup" description="called from system" access="public" displayname="LRS10setup" output="false" returntype="boolean">
 		<cfargument name="Beans" required="true" />
-		<cfset var local = StructNew() />
-		<!--- <cfdump label="arguments" var="#arguments#">
-		<cfabort> --->
-		
+		<cfargument name="LRSLevel" required="false" default=1 />
 		<cfscript>
-		local.databeantoday = arguments.beans.Databeans.original_databeans.DataBeanToday;
-		local.boolGoShort = false;
-		// <!--- entry filter:  ----->
-		local.boolGoShort = session.objects.SystemTriggers.LRS10setup(beans:arguments.Beans.DataBeans.Original_DataBeans.DataBeanToday);
-		// <!--- entry criteria:  ----->
-		local.boolGoShort = session.objects.SystemTriggers.S1Break(beans:arguments.Beans.Databeans.Original_DataBeans);
-		if (local.boolGoShort) 
+		var local = StructNew(); 
+		if (arguments.beans.get("LinearRegSlope10") GT arguments.LRSLevel) 
 		{
-		local.databeantoday.Set("OpenShort",true);
+		return true;
+		}
+		else
+		{
+		return false;
 		}
 		</cfscript>
-		<cfreturn local.databeantoday />
 	</cffunction>
 	
-	<cffunction name="ShortEntryLSRSys1" description="drop when LR is positive - overbought" access="public" displayname="test" output="false" returntype="Any">
-		<!--- system description: stock overbought and price drops below S1 --->
+	<cffunction name="S1Break" description="called from system" access="public" displayname="S1Break" output="false" returntype="boolean">
 		<cfargument name="Beans" required="true" />
-		<cfset var local = StructNew() />
-		<!--- <cfdump label="arguments" var="#arguments#">
+		<!--- todo: this doesnt look exactly right - fix 8/21/2011 --->
+		<!--- <cfdump label="Beans" var="#arguments.beans#">
 		<cfabort> --->
-		
 		<cfscript>
-		local.databeantoday = arguments.beans.Databeans.original_databeans.DataBeanToday;
-		local.boolGoShort = false;
-		// <!--- entry filter:  ----->
-		local.boolGoShort = session.objects.SystemTriggers.LRS10setup(beans:arguments.Beans.DataBeans.Original_DataBeans.DataBeanToday);
-		// <!--- entry criteria:  ----->
-		local.boolGoShort = session.objects.SystemTriggers.S1Break(beans:arguments.Beans.Databeans.Original_DataBeans);
-		if (local.boolGoShort) 
+		//var local = StructNew(); 
+		if (arguments.beans.DataBeanToday.get("Low") LT arguments.beans.DataBean4.get("S1") ) 
 		{
-		local.databeantoday.Set("OpenShort",true);
+		return true;
+		}
+		else
+		{
+		return false;
 		}
 		</cfscript>
-		<cfreturn local.databeantoday />
 	</cffunction>
 	
-	<cffunction name="all_long_entry" description="" access="public" displayname="test" output="false" returntype="Any">
+	<!---- todo:delete all this crap --->	
+	
+	<cffunction name="UpsideBreakout" description="called from system" access="public" displayname="UpsideBreakout" output="false" returntype="boolean">
 		<!--- based on optimum trades in X - US Steel --->
-		<!--- based on two down days followed by up day --->
-		<cfargument name="arrDataBeans" required="true" />
-		<cfset var local = StructNew() />
-		<cfset local.Patterns = GetCandlePatterns(argumentcollection:arguments) />
-		<cfreturn arguments.arrDataBeans />
+		<!--- <cfargument name="TradeBeanTwo" required="true" />
+		<cfargument name="TradeBeanOne" required="true" />
+		<cfargument name="DataBeanToday" required="true" />
+		<cfargument name="TrackingBean" required="true" /> --->
+		<cfargument name="BeanCollection" required="true" />
+		<cfscript>
+		var local = StructNew(); 
+		local.boolGoLong = true;
+		local.boolGoShort = true;
+		local.Patterns = CandlePattern(TB2:DataBean2, TB1:DataBean1, TB:DataBeanToday ); 
+		</cfscript>
 	</cffunction>
 	
-	<cffunction name="long_entry_HA" description="" access="public" displayname="test" output="false" returntype="Any">
+	<cffunction name="System_ha_longII" description="called from systemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
 		<!--- based on optimum trades in X - US Steel --->
 		<!--- based on two down days followed by up day --->
-		<cfargument name="arrDataBeans" required="true" />
+		<cfargument name="DataBean2" required="true" />
+		<cfargument name="DataBean1" required="true" />
+		<cfargument name="DataBeanToday" required="true" />
+		<cfargument name="TrackingBean" required="true" />
 		<cfset var local = StructNew() />
-		<cfset local.Patterns = GetCandlePatterns(argumentcollection:arguments) />
+		<cfset local.boolGoLong = true />
+		<cfset local.boolGoShort = true />
+		<cfset local.Patterns = CandlePattern(TB2:DataBean2, TB1:DataBean1, TB:DataBeanToday ) />
+		<cfif local.Patterns.OCpattern EQ "LLH"
+			AND arguments.DataBeanToday.Get("HKHigh") GT arguments.DataBean1.Get("R2")>
+			<cfset DataBeanToday.Set("HKGoLong",true) />
+			<cfset DataBeanToday.Set("UseR2Entry",true) />
+		</cfif> 
+		<cfif arguments.DataBeanToday.Get("HKClose") LT arguments.DataBeanToday.Get("HKOpen")>
+			<cfset DataBeanToday.Set("HKCloseLong",true) />
+			<cfset DataBeanToday.Set("UseS2Entry",true) />
+		</cfif>  
+		<!--- go short --->
+		<cfif local.Patterns.OCpattern EQ "HHL"
+		AND arguments.DataBeanToday.Get("HKLow") LT arguments.DataBean1.Get("S2")>
+			<cfset DataBeanToday.Set("HKGoShort",true) />
+			<cfset DataBeanToday.Set("UseR2Entry",true) />
+		</cfif> 
+		<cfif arguments.DataBeanToday.Get("HKClose") GT arguments.DataBeanToday.Get("HKOpen")>
+			<cfset DataBeanToday.Set("HKCloseShort",true) />
+			<cfset DataBeanToday.Set("UseS2Entry",true) />
+		</cfif>     	   		
+		<cfreturn DataBeanToday />
+	</cffunction>
+	
+	<cffunction name="System_Short_Stops" description="called from systemRunner - short w/tight stops" access="public" displayname="test" output="false" returntype="Any">
+		<!--- based on optimum trades in X - US Steel --->
+		<!--- based on two down days followed by up day --->
+		<cfargument name="DataBean2" required="true" />
+		<cfargument name="DataBean1" required="true" />
+		<cfargument name="DataBeanToday" required="true" />
+		<cfargument name="TrackingBean" required="true" />
+		<cfset var local = StructNew() />
+		<!--- todo:remove and pass as argument --->
+		<cfset local.Patterns = CandlePattern(TB2:DataBean2, TB1:DataBean1, TB:DataBeanToday ) />
 		<cfif local.Patterns.OCpattern EQ "LLH">
+			<cfset arguments.TrackingBean.Set("ShortEntryStop",false) />
 		</cfif> 
 		<cfif local.Patterns.OCpattern EQ "HLL">
+			<cfset arguments.TrackingBean.Set("ShortEntryStop",true) />
+			<cfset arguments.TrackingBean.Set("ShortEntryStopDays",0) />
+			<cfset arguments.TrackingBean.Set("ShortEntryStopLevel",arguments.DataBeanToday.get("S1")) />
 		</cfif> 
-		<cfreturn arguments.arrDataBeans />
+		<cfif arguments.DataBeanToday.Get("HKClose") LT arguments.DataBeanToday.Get("HKOpen")>
+			<cfset DataBeanToday.Set("HKCloseLong",true) />
+			<cfset DataBeanToday.Set("UseS2Entry",true) />
+		</cfif>  
+		<cfreturn DataBeanToday />
 	</cffunction>
 	
 	<cffunction name="AKAMShort_S1entry_R1Exit" description="called from systemRunner - short w/tight stops" access="public" displayname="test" output="false" returntype="Any">
 		<!--- based on optimum trades in AKAM Short --->
 		<!--- based on two down days enter at break of S1 --->
-		<cfargument name="DataBean3" required="true" />
 		<cfargument name="DataBean2" required="true" />
+		<cfargument name="DataBean1" required="true" />
 		<cfargument name="DataBeanToday" required="true" />
 		<cfargument name="TrackingBean" required="true" />
 		<cfset var local = StructNew() />
 		<!--- todo:remove and pass as argument --->
-		<cfset local.Patterns = CandlePattern(TB2:DataBean3, TB1:DataBean2, TB:DataBeanToday ) />
+		<cfset local.Patterns = CandlePattern(TB2:DataBean2, TB1:DataBean1, TB:DataBeanToday ) />
 		<!--- this system always has a short entry stop  --->
 		<cfif local.Patterns.OCpattern EQ "HLL">
 			<cfset arguments.TrackingBean.Set("ShortEntryStop",true) />
@@ -117,77 +151,46 @@
 		<cfreturn DataBeanToday />
 	</cffunction>
 	
-	<cffunction name="Open_Long_R2_Break" description="high greater than R2 two days ago" access="public" displayname="test" output="false" returntype="Any">
-		<cfargument name="Beans" required="true" />
-		<!--- <cfargument name="Beans.DataBean4" required="true" />
-		<cfargument name="Beans.DataBean3" required="true" />
-		<cfargument name="Beans.DataBean2" required="true" />
-		<cfargument name="Beans.DataBean1" required="true" />
-		<cfargument name="Beans.DataBeanToday" required="true" />
-		<cfargument name="Beans.TrackingBean" required="true" /> --->
-		<cfset var local = StructNew() />
-		<cfset local.up = false />
-		<cfset local.reversal = false />
-		<cfset local.Patterns = GetCandlePatterns(argumentcollection:arguments) />
-		<!---- Open new long position  --->
-		<cfif arguments.Beans.DataBeanToday.Get("HKClose") GT arguments.Beans.DataBeanToday.Get("HKOpen")
-			AND Beans.DataBeanToday.Get("High") GT Beans.DataBean2.Get("R2")	>
-			<cfset Beans.DataBeanToday.Set("OpenLongAlert",true) />
-			<!--- <cfset Beans.DataBeanToday.Set("CloseShortAlert",true) />
-		<cfelse>
-			<cfset Beans.DataBeanToday.Set("OpenShortAlert",true) />
-			<cfset Beans.DataBeanToday.Set("CloseLongAlert",true) /> --->
-		</cfif> 
-		<cfreturn Beans.DataBeanToday />
-	</cffunction>
-	
 	<cffunction name="System_ha_longIII" description="called from systemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
-		<cfargument name="Beans" required="true" />
-		<!--- <cfargument name="Beans.DataBean4" required="true" />
-		<cfargument name="Beans.DataBean3" required="true" />
-		<cfargument name="Beans.DataBean2" required="true" />
-		<cfargument name="Beans.DataBean1" required="true" />
-		<cfargument name="Beans.DataBeanToday" required="true" />
-		<cfargument name="Beans.TrackingBean" required="true" /> --->
+		<!--- based on optimum trades in X - US Steel --->
+		<!--- based on two down days followed by up day --->
+		<cfargument name="DataBean2" required="true" />
+		<cfargument name="DataBean1" required="true" />
+		<cfargument name="DataBeanToday" required="true" />
+		<cfargument name="TrackingBean" required="true" />
 		<cfset var local = StructNew() />
-		<cfset local.up = false />
-		<cfset local.reversal = false />
-		<cfset local.Patterns = GetCandlePatterns(argumentcollection:arguments) />
-		<!---- Open new long position  --->
-		<cfif arguments.Beans.DataBeanToday.Get("HKClose") GT arguments.Beans.DataBeanToday.Get("HKOpen")
-			AND Beans.DataBeanToday.Get("High") GT Beans.DataBean1.Get("R1")	>
-			<cfset Beans.DataBeanToday.Set("OpenLongAlert",true) />
-			<!--- <cfset Beans.DataBeanToday.Set("CloseShortAlert",true) />
-		<cfelse>
-			<cfset Beans.DataBeanToday.Set("OpenShortAlert",true) />
-			<cfset Beans.DataBeanToday.Set("CloseLongAlert",true) /> --->
+		<cfset local.boolGoLong = true>
+		<cfif arguments.DataBean2.Get("HKClose") GT arguments.DataBean2.Get("HKOpen")>
+			<cfset local.boolGoLong = false />
+		</cfif>   
+		<cfif local.boolGoLong AND arguments.DataBean1.Get("HKClose") GT arguments.DataBean1.Get("HKOpen")>
+			<cfset local.boolGoLong = false />
+		</cfif>
+		<cfif local.boolGoLong AND arguments.DataBeanToday.Get("HKClose") GT arguments.DataBeanToday.Get("HKOpen")>
+			<cfset DataBeanToday.Set("HKGoLong",true) />
+			<cfset DataBeanToday.Set("UseR2Entry",true) />
 		</cfif> 
-		<cfif arguments.Beans.DataBeanToday.Get("HKClose") GT arguments.Beans.DataBeanToday.Get("HKOpen")
-			AND Beans.DataBeanToday.Get("High") GT Beans.DataBean1.Get("R1")	>
-			<cfset Beans.DataBeanToday.Set("OpenLongAlert",true) />
-			<!--- <cfset Beans.DataBeanToday.Set("CloseShortAlert",true) />
-		<cfelse>
-			<cfset Beans.DataBeanToday.Set("OpenShortAlert",true) />
-			<cfset Beans.DataBeanToday.Set("CloseLongAlert",true) /> --->
-		</cfif> 
-		
-		<cfreturn Beans.DataBeanToday />
+		<cfif arguments.DataBeanToday.Get("HKClose") LT arguments.DataBeanToday.Get("HKOpen")>
+			<cfset DataBeanToday.Set("HKCloseLong",true) />
+			<cfset DataBeanToday.Set("UseS2Entry",true) />
+		</cfif>     		
+		<cfreturn DataBeanToday />
 	</cffunction>
 	
 	<cffunction name="System_ha_III" description="called from systemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
 		<!--- based on optimum trades in X - US Steel --->
 		<!--- based on two down days followed by up day --->
-		<cfargument name="DataBean3" required="true" />
 		<cfargument name="DataBean2" required="true" />
+		<cfargument name="DataBean1" required="true" />
 		<cfargument name="DataBeanToday" required="true" />
 		<cfargument name="TrackingBean" required="true" />
 		<cfset var local = StructNew() />
 		<cfscript>
 		local.boolGoLong = false;
-		local.tb2open = arguments.DataBean3.Get("HKOpen");
-		local.tb2close = arguments.DataBean3.Get("HKClose");
-		local.tb1open = arguments.DataBean2.Get("HKOpen");
-		local.tb1close = arguments.DataBean2.Get("HKClose");
+		local.tb2open = arguments.DataBean2.Get("HKOpen");
+		local.tb2close = arguments.DataBean2.Get("HKClose");
+		local.tb1open = arguments.DataBean1.Get("HKOpen");
+		local.tb1close = arguments.DataBean1.Get("HKClose");
 		local.tbopen = arguments.DataBeanToday.Get("HKOpen");
 		local.tbclose = arguments.DataBeanToday.Get("HKClose");
 		if (
@@ -217,10 +220,10 @@
 	</cffunction>
 	
 	<cffunction name="System_hekin_ashi_short" description="called from SystemRunner - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
-		<cfargument name="DataBean3" required="true" />
 		<cfargument name="DataBean2" required="true" />
+		<cfargument name="DataBean1" required="true" />
 		<cfargument name="DataBeanToday" required="true" />
-		<cfif DataBean3.Get("HKHigh") LT DataBean2.Get("HKHigh") AND DataBeanToday.Get("HKHigh") GT DataBean2.Get("HKHigh")>		
+		<cfif DataBean2.Get("HKHigh") LT DataBean1.Get("HKHigh") AND DataBeanToday.Get("HKHigh") GT DataBean1.Get("HKHigh")>		
 			<cfset DataBeanToday.Set("HKGoShort",true) />
 		</cfif>
 		<cfreturn DataBeanToday />
@@ -328,6 +331,7 @@
 		Set("NewLowReversal","false");
 		--->
 		<!--- new local high ---->
+		<!--- new local high ---->
 		<!--- <cfif  arguments.TBeanToday.Get("HKhigh") GT arguments.TrackingBean.get("PreviousLocalHigh")
 				AND NOT arguments.TrackingBean.get("NewHighBreakout")>
 			<cfset arguments.TrackingBean.set("NewHighBreakout",true)>
@@ -343,28 +347,17 @@
 			<cfset arguments.TBeanToday.set("PreviousLocalLowDate",arguments.TrackingBean.get("PreviousLocalLowDate")>	
 		</cfif> --->
 		<!--- todo:use TrackingBean for this --->
-		<!--- todo:experiment with using real body, shadow body, or a combination --->
 		<cfif arguments.TBeanTwoDaysAgo.get("HKhigh") LT arguments.TBeanOneDayAgo.get("HKhigh") AND
-				arguments.TBeanToday.Get("HKhigh") LT arguments.TBeanOneDayAgo.Get("HKhigh") >
+				arguments.TBeanOneDayAgo.Get("HKhigh") GT arguments.TBeanToday.Get("HKhigh")  >
 				<cfset arguments.TBeanToday.set("NewHighReversal",true)>	
 		</cfif>
-		<cfif arguments.TBeanTwoDaysAgo.get("HKlow") GT arguments.TBeanOneDayAgo.get("HKlow") AND
-				arguments.TBeanToday.Get("HKlow") GT arguments.TBeanOneDayAgo.Get("HKlow") >
-				<cfset arguments.TBeanToday.set("NewLowReversal",true)>	
-		</cfif>
-	<cfreturn />
-	</cffunction>
-	
-	<cffunction name="System_Breakout" description="I find new highs and lows" access="public" displayname="" output="false" returntype="Void">
-		<cfargument name="TBeanOneDayAgo" required="true" />
-		<cfargument name="TBeanToday" required="true" />
-		<cfset var local = Structnew() />
-		<cfif 	arguments.TBeanToday.Get("HKhigh") GT arguments.TBeanOneDayAgo.Get("HKhigh") >
-				<cfset arguments.TBeanToday.set("NewHigh",true)>	
-		</cfif>
-		<cfif  arguments.TBeanToday.Get("HKlow") LT arguments.TBeanOneDayAgo.Get("HKlow") >
-				<cfset arguments.TBeanToday.set("NewLow",true)>	
-		</cfif>
+		<!--- <cfif (variables.arraycounter -1) AND  arguments.TBeanToday.Get("HKhigh") GT variables.HLData[variables.arrayCounter-1][2]
+				AND arguments.TBeanOneDayAgo.get("HKhigh") LT variables.HLData[variables.arrayCounter-1][2] >
+			<cfset arguments.TBeanToday.set("NewHighBreakout",true)>
+			<cfset arguments.TBeanToday.set("PreviousLocalHigh",variables.HLData[variables.arrayCounter-1][2])>
+			<cfset arguments.TBeanToday.set("PreviousLocalHighDate",variables.HLData[variables.arrayCounter-1][3])>	
+		</cfif> --->
+		
 	<cfreturn />
 	</cffunction>
 	
@@ -430,99 +423,89 @@
 		<cfreturn  />
 	</cffunction>
 	
-	<cffunction name="GetCandlePatterns" description="called from system - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
-		<!--- Takes TradeBeans as arguments --->
-		<!--- Returns the hekien-ashi candlestick open high low and close for past 5 days--->
-		<cfargument name="DataBean4" required="false" />
-		<cfargument name="DataBean3" required="false" />
-		<cfargument name="DataBean2" required="false" />
-		<cfargument name="DataBean1" required="false" />
-		<cfargument name="DataBeanToday" required="false" />
-		<cfscript>
-		var local = StructNew();
-		local.arrDataBean = arrayNew(1);
-		local.arrDataBean[1] = arguments.DataBean4;
-		local.arrDataBean[2] = arguments.DataBean3;
-		local.arrDataBean[3] = arguments.DataBean2;
-		local.arrDataBean[4] = arguments.DataBean1;
-		local.arrDataBean[5] = arguments.DataBeanToday;
-		local.arrData = ArrayNew(2);
-		local.strData = "HKOpen,HKHigh,HkLow,HKClose";
-		
-		for (local.x = 1; local.x <= 4; local.x++) { 
-		try {
-		local.arrData[local.x][1] =  local.arrDataBean[local.x].Get("HKClose");
-		local.arrData[local.x][2] =  local.arrDataBean[local.x+1].Get("HKOpen");
-			}
-		catch (Any e) {
-		WriteOutput("Error: " & e.message);
-		dump(e.message, local.arrDataBean[local.x]);
-		}
-		}
-		local.OCpattern = CandlePattern(local.arrData);
-		//local.OpenPattern = "";
-		
-		for (local.xx = 1; local.xx <= 4; local.xx++) { 
-
-			for (local.x = 1; local.x <= 3; local.x++) { 
-			try {
-			local.listItem = JavaCast("String",ListGetAt(local.strData,local.x));
-			local.arrData[local.x][1] =  local.arrDataBean[local.x].Get("#local.listitem#");
-			local.arrData[local.x][2] =  local.arrDataBean[local.x+1].Get("#local.listitem#");
-			}
-			catch (Any e) {
-			WriteOutput("Error: " & e.message);
-			dump(error:e.message, object:local.arrDataBean[local.x+1]);
-			}
-			}
-		
-			switch(local.xx){
-			case 1:
-			local.OpenPattern = CandlePattern(local.arrData);
-			break;
-			case 2:
-			local.HighPattern = CandlePattern(local.arrData);
-			break;
-			case 3:
-			local.LowPattern = CandlePattern(local.arrData);
-			break;
-			case 4:
-			local.ClosePattern = CandlePattern(local.arrData);
-			break;
-			}
-		}
-		return local; 
-		</cfscript>
-	</cffunction>
-	
 	<cffunction name="CandlePattern" description="called from system - heiken-ashi system" access="public" displayname="test" output="false" returntype="Any">
 		<!--- Takes TradeBeans as arguments --->
-		<!--- Returns the hekien-ashi candlestick open high low and close for past 5 days--->
-		<cfargument name="dataArray" required="true" />
+		<!--- based on two down days followed by up day --->
+		<cfargument name="TB4" required="false" />
+		<cfargument name="TB3" required="false" />
+		<cfargument name="TB2" required="false" />
+		<cfargument name="TB1" required="false" />
+		<cfargument name="TB" required="false" />
 		<cfscript>
 		var local = StructNew();
-		local.pattern = "";
-		local.x = 1;
-		// open-close
-		for (local.x = 1; local.x <= 4; local.x++ ) {
-			if(arguments.dataArray[local.x][1] GT arguments.dataArray[local.x][2]){
-			local.pattern = Local.pattern & "H";
-			}	   
-			else {
-			local.pattern = Local.pattern & "L";
-			}
+			
+		local.OCpattern = "";
+		local.OpenPattern = "";
+		local.HighPattern = "";
+		local.LowPattern = "";
+		local.ClosePattern = "";
+		if(arguments.TB2.Get("HKClose") GT arguments.TB2.Get("HKOpen")){
+		local.OCpattern = Local.OCpattern & "H";
+		}	   
+		else {
+		local.OCpattern = Local.OCpattern & "L";
 		}
-		return local.pattern;			
+		
+		if(arguments.TB1.Get("HKClose") GT arguments.TB1.Get("HKOpen")){
+		local.OCpattern = Local.OCpattern & "H";
+		}
+		else {
+		local.OCpattern = Local.OCpattern & "L";
+		}	
+		if(arguments.TB.Get("HKClose") GT arguments.TB.Get("HKOpen")){
+		local.OCpattern = Local.OCpattern & "H";
+		}
+		else{
+		local.OCpattern = Local.OCpattern & "L";
+		}	
+		// close pattern  
+		if(arguments.TB2.Get("HKClose") GT arguments.TB1.Get("HKClose")){
+		local.ClosePattern = Local.ClosePattern & "L";
+		} else {
+		local.ClosePattern = Local.ClosePattern & "H";
+		}	   
+		if(arguments.TB1.Get("HKClose") GT arguments.TB.Get("HKClose")){
+		local.ClosePattern = Local.ClosePattern & "L";
+		} else {
+		local.ClosePattern = Local.ClosePattern & "H";
+		}	
+		
+		// open pattern  
+		if(arguments.TB2.Get("HKOpen") GT arguments.TB1.Get("HKOpen")){
+		local.OpenPattern = Local.OpenPattern & "L";
+		} else {
+		local.OpenPattern = Local.OpenPattern & "H";
+		}	   
+		if(arguments.TB1.Get("HKOpen") GT arguments.TB.Get("HKOpen")){
+		local.OpenPattern = Local.OpenPattern & "L";
+		} else {
+		local.OpenPattern = Local.OpenPattern & "H";
+		}	
+		
+		// high pattern  
+		if(arguments.TB2.Get("HKHigh") GT arguments.TB1.Get("HKHigh")){
+		local.HighPattern = Local.HighPattern & "L";
+		} else {
+		local.HighPattern = Local.HighPattern & "H";
+		}	   
+		if(arguments.TB1.Get("HKHigh") GT arguments.TB.Get("HKHigh")){
+		local.HighPattern = Local.HighPattern & "L";
+		} else {
+		local.HighPattern = Local.HighPattern & "H";
+		}	
+		
+		// low pattern  
+		if(arguments.TB2.Get("HKLow") GT arguments.TB1.Get("HKLow")){
+		local.LowPattern = Local.LowPattern & "L";
+		} else {
+		local.LowPattern = Local.LowPattern & "H";
+		}	   
+		if(arguments.TB1.Get("HKLow") GT arguments.TB.Get("HKLow")){
+		local.LowPattern = Local.LowPattern & "L";
+		} else {
+		local.LowPattern = Local.LowPattern & "H";
+		}
+		return local;			
 		</cfscript>
-	</cffunction>
-	
-	<cffunction name="Dump" description="utility" access="public" displayname="test" output="false" returntype="Any">
-		<!--- Takes TradeBeans as arguments --->
-		<!--- Returns the hekien-ashi candlestick open high low and close for past 5 days--->
-		<cfargument name="error" required="true" />
-		<cfargument name="object" required="true" />
-		<cfdump label="error:" var="#arguments.error#">
-		<cfdump label="bean:" var="#arguments.object.GetMemento()#">
-		<cfabort>
 	</cffunction>
 </cfcomponent>
