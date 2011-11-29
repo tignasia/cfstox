@@ -13,7 +13,7 @@
 		<cfscript>
 		var local = StructNew() ;
 		local.ReportResults = ReportSetup(reportName:arguments.reportName,Data:arguments.Data);
-		OutputReport(content:local.reportResults,symbol:arguments.symbol,filetype:"PDF",ReportName:"#arguments.ReportName#");
+		//OutputReport(content:local.reportResults,symbol:arguments.symbol,filetype:"PDF",ReportName:"#arguments.ReportName#");
 		OutputReport(content:local.reportResults,symbol:arguments.symbol,filetype:"excel",ReportName:"#arguments.ReportName#");  
 		</cfscript> 
 		<cfreturn />

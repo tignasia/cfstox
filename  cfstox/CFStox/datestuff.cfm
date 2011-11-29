@@ -12,28 +12,39 @@
 	<cfset session.objects.ReportService	= createObject("component","cfstox.model.ReportService").init() />
 	<cfset session.objects.DataDAO			= createObject("component","cfstox.model.DataDAO").init() />
 <!--- load SPY  --->
-<cfset startdate = "11/01/2011" />
-<cfset enddate = now() />
-<cfset symbol = "SPY" />
-<cfset qrySPYdata = session.objects.DataService.GetStockDataGoogle(symbol:"SPY",startdate:"#startdate#",enddate:"#enddate#")/>  
-<cfdump label="SPYdata" var="#qrySPYdata.googledata#">	
+<cfset startdate = "5/30/2011" />
+<cfset enddate = "11/24/2011" />
+<cfset dates = session.objects.DataService.SetDates(startdate:startdate,enddate:enddate)>
+<cfdump  label="dates" var="#dates#">
+
+
+<!--- <cfset symbol = "SPY" />
+<cfset Arrays = createObject("java", "java.util.Arrays") />
+<cfdump label="arrays" var="#Arrays#"> --->
+<!--- <cfset qrySPYdata = session.objects.DataService.GetRawDataGoogle(symbol:"SPY",startdate:"#startdate#",enddate:"#enddate#")/>   --->
 <!--- delete existing --->
-<cfset local.qryStock = session.objects.DataDAO.Delete(symbol:"SPY") />
+<!--- <cfset local.qryStock = session.objects.DataDAO.Delete(symbol:"SPY") /> --->
 <!--- insert new --->
-<cfset local.symbolArray = ArrayNew(1) >
-<cfloop from="1" to="#qrySPYdata.googledata.recordcount#" index="i">
+<!--- <cfset local.symbolArray = ArrayNew(1) /> --->
+<!--- todo: use more Java array functions --->
+<!--- todo: use HighStock with jQuery to get more jQuery experience --->
+<!--- <cfset symArray = local.symbolArray.toArray() />
+<cfdump label="jArray" var="#symArray#" />
+<cfset Arrays.fill(jarray,"SPY")> --->
+
+<!--- <cfloop from="1" to="#qrySPYdata.recordcount#" index="i">
  <cfset local.symbolArray[i] = symbol>
 </cfloop>
-<cfset queryAddColumn(qrySPYdata.googledata,"Symbol",'VarChar',local.symbolArray) > 
-<cfloop query="qrySPYdata.googledata" >
+<cfset queryAddColumn(qrySPYdata,"Symbol",'VarChar',local.symbolArray) > 
+<cfloop query="qrySPYdata" >
 	<!--- <cfset local.qryStock = session.objects.DataDAO.Create(local.qryStock.currentrow) /> --->
-	<cfset crow = session.objects.utility.QrytoStruct(qrySPYdata.googledata,qrySPYdata.googledata.currentrow) />
+	<cfset crow = session.objects.utility.QrytoStruct(qrySPYdata,qrySPYdata.currentrow) />
 	<cfset local.qryStock = session.objects.DataDAO.Create(crow) />
 </cfloop>
 <!--- read back  --->
 <cfset local.qryStock = session.objects.DataDAO.Read(symbol:"SPY") />
 <cfdump label="result:" var="#local.qryStock#">
-</cfoutput>	
+</cfoutput>	 --->
 <!--- 
 <cfset startdate = "05/01/1958">
 #startdate#<br/>
@@ -49,7 +60,7 @@ Mydate:<br/>
 #mydate#<br/>
 <cfset mydate = DateAdd('d',-1,mydate) />
 #mydate#<br/>
-</cfoutput>
+
 
 <cfset local.MarketFlag = false>
 		<cfset arguments.startDate = DateFormat(arguments.startdate, "mm-dd-yyyy")>
@@ -70,3 +81,4 @@ Mydate:<br/>
 			</cfloop>
 		</cfif>
  --->
+</cfoutput>
