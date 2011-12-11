@@ -12,9 +12,9 @@
 	
 	<cffunction name="Runsystem" description="drop when LR is positive - overbought" access="public" displayname="test" output="false" returntype="Any">
 		<cfargument name="Beans" required="true" />
+		<cfargument name="SystemName" required="true" />
 		<cfset var local = StructNew() />
-		<cfset local.Sysname = arguments.Beans.SystemName />
-		<cfinvoke method="#local.sysname#"  argumentcollection="#arguments#"  returnvariable="Bean" /> 
+		<cfinvoke method="#arguments.SystemName#"  argumentcollection="#arguments#"  returnvariable="Bean" /> 
 		<cfreturn Bean />
 	</cffunction>
 	
@@ -46,6 +46,133 @@
 		{
 		local.databeantoday.Set("OpenShort",true);
 		}
+		</cfscript>
+		<cfreturn local.databeantoday />
+	</cffunction>
+	
+	<cffunction name="TestSystemABX" description="Used as test system as part of unit tests" access="private" displayname="TestSystem" output="false" returntype="Any">
+		<cfargument name="Beans" required="true" />
+		<cfset var local = StructNew() />
+		<cfscript>
+		// local.TestData = this.SystemService.SetupSystem(systemName:"TestSystemABX",qryData:this.data);
+		//	local.Results = this.SystemService.FindTrades(qryData:this.data,TestData:local.TestData	);
+		
+		local.databeantoday = arguments.beans.Databeans.original_databeans.DataBeanToday;
+		local.boolGoShort = false;
+		// <!--- entry filter:  ----->
+		local.boolGoShort = session.objects.SystemTriggers.CCIOverbought(beans:arguments.Beans.DataBeans.Original_DataBeans);
+		if (local.boolGoShort) 
+		{
+		local.databeantoday.Set("OpenShort",true);
+		}
+		
+		// <!--- open trade condition:  ----->
+		// <!--- stop loss condition:  ----->
+		// <!--- exit condition:  ----->
+		</cfscript>
+		<cfreturn local.databeantoday />
+	</cffunction>
+	
+	<cffunction name="ShortAMZN" description="Go Short AMZN when overbought and drops" access="private" displayname="ShortAMZN" output="false" returntype="Any">
+		<cfargument name="Beans" required="true" />
+		<!--- 
+		arguments.beans.TrackingBean 
+		arguments.beans.TradeBean
+		arguments.beans.Databeans.DataBeanToday
+		arguments.beans.Databeans.DataBean1
+		--->
+		<cfset var local = StructNew() />
+		<cfscript>
+		local.databeantoday = arguments.beans.Databeans.original_databeans.DataBeanToday;
+		local.boolOpenShort = false;
+		local.boolCloseShort = false;
+		// <!--- entry filter: Overbought ----->
+		local.boolOpenShort = session.objects.SystemTriggers.CCIOverbought(beans:arguments.Beans.DataBeans.Original_DataBeans);
+		// entry point: price drops below previous low
+		//if (local.boolOpenShort)
+		//{
+		//local.boolOpenShort = session.objects.SystemTriggers.PreviousLow(beans:arguments.Beans.DataBeans.Original_DataBeans);
+		//} 
+		// stop loss - price greater than previous low 
+		if (arguments.beans.TrackingBean.Get("OpenShort"))
+		{
+		local.boolCloseShort = session.objects.SystemTriggers.SupportTriggered(beans:arguments.Beans.DataBeans.Original_DataBeans);
+		} 
+		// exit
+		if (local.boolOpenShort) 
+		{
+		local.databeantoday.Set("OpenShort",true);
+		}
+		if (local.boolCloseShort) 
+		{
+		local.databeantoday.Set("CloseShort",true);
+		}
+		</cfscript>
+		<cfreturn local.databeantoday />
+	</cffunction>
+	
+	<cffunction name="ShortDates" description="test of entries and exits using dates" access="private" displayname="ShortAMZN" output="false" returntype="Any">
+		<cfargument name="Beans" required="true" />
+		<!--- 
+		arguments.beans.TrackingBean 
+		arguments.beans.TradeBean
+		arguments.beans.Databeans.DataBeanToday
+		arguments.beans.Databeans.DataBean1
+		--->
+		<cfset var local = StructNew() />
+		<cfscript>
+		local.databeantoday = arguments.beans.Databeans.original_databeans.DataBeanToday;
+		local.boolOpenShort = false;
+		local.boolCloseShort = false;
+		local.boolOpenLong = false;
+		local.boolCloseLong = false;
+		// SHORT 
+		if (arguments.beans.TrackingBean.Get("Status") EQ "Short")
+		{
+			local.boolCloseShort = session.objects.SystemTriggers.ExitShortDates(beans:arguments.Beans.DataBeans.Original_DataBeans);
+		} 
+			// exit
+			if (local.boolCloseShort) 
+			{
+			local.databeantoday.Set("CloseShort",true);
+			arguments.beans.TrackingBean.Set("Status","");
+			}
+		
+		// <!--- entry filter: Overbought ----->
+		// If we are not already short 
+		if (arguments.beans.TrackingBean.Get("Status") EQ "" AND NOT local.boolCloseShort)
+		{
+		local.boolOpenShort = session.objects.SystemTriggers.EntryShortDates(beans:arguments.Beans.DataBeans.Original_DataBeans);
+		} 
+			if (local.boolOpenShort) 
+			{
+			local.databeantoday.Set("OpenShort",true);
+			arguments.beans.TrackingBean.Set("Status","Short");
+			}
+		
+		// LONG
+		if (arguments.beans.TrackingBean.Get("Status") EQ "Long")
+		{
+			local.boolCloseLong = session.objects.SystemTriggers.ExitLongDates(beans:arguments.Beans.DataBeans.Original_DataBeans);
+		} 
+			// exit
+			if (local.boolCloseLong) 
+			{
+			local.databeantoday.Set("CloseLong",true);
+			arguments.beans.TrackingBean.Set("Status","");
+			}
+		
+		// <!--- entry filter: Overbought ----->
+		// If we are not already short 
+		if (arguments.beans.TrackingBean.Get("Status") EQ "" AND NOT local.boolCloseLong)
+		{
+		local.boolOpenLong = session.objects.SystemTriggers.EntryLongDates(beans:arguments.Beans.DataBeans.Original_DataBeans);
+		} 
+			if (local.boolOpenLong) 
+			{
+			local.databeantoday.Set("OpenLong",true);
+			arguments.beans.TrackingBean.Set("Status","Long");
+			}		
 		</cfscript>
 		<cfreturn local.databeantoday />
 	</cffunction>

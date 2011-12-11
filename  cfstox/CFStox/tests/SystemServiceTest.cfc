@@ -12,7 +12,7 @@
 			this.DataService 	= createObject("component","cfstox.model.DataService").init();
 			this.Utility 		= createObject("component","cfstox.model.Utility").init();
 			this.SystemService 	= createObject("component","cfstox.model.SystemService").init();
-			this.data = this.DataService.GetStockData(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
+			this.data = this.DataService.GetStockData(symbol:"AMZN",startdate:"07/1/2011",enddate:"12/05/2011");
 			//debug(data);
 			
 		</cfscript>
@@ -54,7 +54,19 @@
 		debug(local.Results);
 		</cfscript>	
 	</cffunction>
-		
+	
+	<cffunction name="testFindTrades" returntype="void" access="public">
+		<cfscript>
+		var local = structNew();
+		makePublic(this.SystemService,"SetUpSystem");
+		local.TestData = this.SystemService.SetupSystem(systemName:"ShortDates",qryData:this.data);
+		makePublic(this.SystemService,"FindTrades");
+		local.Results = this.SystemService.FindTrades(qryData:this.data,TestData:local.TestData	);
+		// trades are stored in the tradehistory
+		debug(local.Results.getMemento());
+		</cfscript>	
+	</cffunction>
+			
 	<cffunction name="tearDown" returntype="void" access="public">
 		<!--- Any code needed to return your environment to normal goes here --->
 	</cffunction>

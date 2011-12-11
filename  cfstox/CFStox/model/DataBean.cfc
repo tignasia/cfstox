@@ -17,6 +17,7 @@
 		set("Volume",strData.Volume);
 		set("ADX",strData.ADX);
 		set("CCI",strData.CCI);
+		set("CCI5",strData.CCI5);
 		set("RSI",strData.RSI); 
 		set("LinearReg",strData.LinearReg);
 		set("LinearReg10",strData.linearReg10); 

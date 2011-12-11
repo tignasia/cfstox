@@ -19,7 +19,7 @@ The triggers are granular conditions such as RSI above a certain amount
 		local.qryDataHA 			= arguments.qryData.qryDataHA ;
 		local.TestData			 	= SetupSystem(qryData:arguments.qryData);
 		local.TestData.SystemName 	= "#arguments.systemName#";
-		local.results 				= FindTrades();
+		local.results 				= FindTrades(local.TestData);
 		</cfscript>
 	</cffunction>
 	
@@ -63,7 +63,7 @@ The triggers are granular conditions such as RSI above a certain amount
 		openlong, setlongentry, longstop, closelong  
 		openshort, setshortentry, shortstop, closeshort
 		--->
-		<cfargument name="SystemName" required="false"  default="ShortEntryRVBD" />
+		<cfargument name="SystemName" required="false"  default="No System" />
 		<cfargument name="qryData" required="true" />
 		<!--- 
 		databean has data for given day 
@@ -75,28 +75,33 @@ The triggers are granular conditions such as RSI above a certain amount
 		local.qryDataOriginal = arguments.qryData.qryDataOriginal ;
 		local.qryDataHA = arguments.qryData.qryDataHA ;
 		local.strData = session.objects.Utility.QrytoStruct(query:local.qryDataOriginal,rownumber:1);
-		local.TestData = GetBeans(strData:local.strData);
+		local.TestData = GetBeans(strData:local.strData,systemName:arguments.systemName);
 		return local.testData;
 		</cfscript>
 	</cffunction>
 	
 	<cffunction name="GetBeans" description="Returns trading beans" access="private" displayname="" output="false" returntype="Struct">
 		<cfargument name="strData" required="true" />
+		<cfargument name="systemName" required="false" default="No System" />
 		<cfscript>
 		local.TestData 					= StructNew(); 		
 		local.TestData.Databeans 		= StructNew(); 		
 		local.TestData.TrackingBean 	= createObject("component","cfstox.model.TrackingBean").init(arguments.strData);
-		local.TestData.TradeBean 		= createObject("component","cfstox.model.TradeBean").init(arguments.strData);
+		local.TestData.TradeBean 		= createObject("component","cfstox.model.TradeBean").init(strData:arguments.strData,systemName:arguments.systemName);
 		return local.TestData;
 		</cfscript>
 	</cffunction>
 	
-	<cffunction name="FindTrades" description="Runs the named system" access="public" displayname="" output="false" returntype="Query">
+	<cffunction name="FindTrades" description="Runs the named system" access="private" displayname="" output="false" returntype="Any">
 		<cfargument name="qryData" required="true"  />
+		<cfargument name="TestData" required="true"  />
 		<cfscript>
 		var local = structnew();
+		local.systemName = arguments.TestData.TradeBean.Get("SystemName");
 		local.qryDataOriginal = arguments.qryData.qryDataOriginal ;
 		local.qryDataHA = arguments.qryData.qryDataHA ;
+		local.Beans.TrackingBean = arguments.TestData.TrackingBean;
+		local.beans.TradeBean = arguments.TestData.TradeBean;
 		</cfscript>
 		<cfloop  query="local.qryDataOriginal" startrow="5">
 			<cfscript>
@@ -106,13 +111,14 @@ The triggers are granular conditions such as RSI above a certain amount
 			//todo: fix currentrow 
 			local.Beans.Databeans.HA_DataBeans 			= SetupDataBeans(qryData:local.qryDataHA,rowcounter:local.rowcounter);
 			local.Beans.Databeans.Original_DataBeans 	= SetupDataBeans(qryData:local.qryDataOriginal,rowcounter:local.rowcounter);
-			local.DataBeanToday = session.objects.system.runSystem(local.Beans);
+			local.DataBeanToday = session.objects.system.runSystem(beans:local.Beans,systemName:"#local.systemName#");
 			//dump(local.databeantoday);
 			//session.objects.utility.trace(local.Beans.Databeans,"Local.beans.databeans from systemService");
-			local.Beans.TradeBean.ProcessTrades(local.DataBeanToday);
+			arguments.TestData.TradeBean.ProcessTrades(local.DataBeanToday);
 			</cfscript>
 		</cfloop>
-		<cfreturn />
+		<!--- trades are stored in the tradehistory --->
+		<cfreturn arguments.TestData.TradeBean />
 	</cffunction>
 		
 	<cffunction name="SetupDataBeans" description="sets up data elements" access="private" displayname="" output="false" returntype="Any">
