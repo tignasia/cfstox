@@ -202,12 +202,23 @@
 		<cfset queryAddColumn(arguments.query,"LRSdelta","Decimal", local.LRSarray) >
 		<cfset local.num = session.objects.TA.GetIndicator(Indicator:"Momentum",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"Momentum",'Decimal',local.num) >
+		
+		<cfset local.FastSlope = session.objects.TA.Slope(qryPrices:arguments.query,length:5,value:"High") />
+		<cfset queryAddColumn(arguments.query,"FastSlope",'Decimal',local.FastSlope) >
+		
+		<cfset local.SlowSlope = session.objects.TA.Slope(qryPrices:arguments.query,length:14,value:"High") />
+		<cfset queryAddColumn(arguments.query,"SlowSlope",'Decimal',local.SlowSlope) >
+		
 		<cfset local.num = session.objects.TA.GetIndicator(Indicator:"RSI",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"RSI",'Decimal',local.num) >
 		<cfset local.num = session.objects.TA.GetIndicator(Indicator:"ADX",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"ADX",'Decimal',local.num) >
 		<cfset local.num = session.objects.TA.GetIndicator(Indicator:"CCI",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"CCI",'Decimal',local.num) >
+		
+		<cfset local.num = session.objects.TA.GetIndicator(Indicator:"CCI",qryPrices:arguments.query,optInTimePeriod:5) />
+		<cfset queryAddColumn(arguments.query,"CCI5",'Decimal',local.num) >
+		
 		<cfset local.Pivots = session.objects.TA.PivotPoints(qryData:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"PP",'Decimal',local.pivots.pp) >
 		<cfset queryAddColumn(arguments.query,"R1",'Decimal',local.pivots.r1) >

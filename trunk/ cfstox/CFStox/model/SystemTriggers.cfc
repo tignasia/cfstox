@@ -19,6 +19,57 @@
 		SMADown
 		--->
 	
+	<cffunction name="TestIndicator" description="test indicatior state" access="public" displayname="TestIndicator" output="false" returntype="Any">
+		<cfargument name="Beans" required="true" />
+		<cfargument name="Indicator" required="true" />
+		<cfinvoke method="#arguments.Indicator#"  argumentcollection="#arguments#"  returnvariable="State" /> 
+		<cfreturn State />
+	</cffunction>
+	
+	<cffunction name="EntryLongDates" description="called from system" access="public" displayname="EntryLongDates" output="false" returntype="boolean">
+		<cfargument name="Beans" required="true" />
+		<cfargument name="Overbought" required="false" default=80 />
+		<cfscript>
+		if (ListFind("08/01/2011,08/22/2011,09/12/2011",dateformat(arguments.beans.DataBeanToday.Get("Date"),"mm/dd/yyyy"))) 
+		{ return true;  }
+		else
+		{ return false; }
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="EntryShortDates" description="called from system" access="public" displayname="EntryShortDates" output="false" returntype="boolean">
+		<cfargument name="Beans" required="true" />
+		<cfargument name="Overbought" required="false" default=80 />
+		<cfscript>
+		if (ListFind("08/02/2011,08/19/2011,10/04/2011",dateformat(arguments.beans.DataBeanToday.Get("Date"),"mm/dd/yyyy"))) 
+		{ return true;  }
+		else
+		{ return false; }
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="ExitLongDates" description="called from system" access="public" displayname="ExitLongDates" output="false" returntype="boolean">
+		<cfargument name="Beans" required="true" />
+		<cfargument name="Overbought" required="false" default=80 />
+		<cfscript>
+		if (ListFind("07/26/2011,08/18/2011,09/14/2011",dateformat(arguments.beans.DataBeanToday.Get("Date"),"mm/dd/yyyy"))) 
+		{ return true;  }
+		else
+		{ return false; }
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="ExitShortDates" description="called from system" access="public" displayname="ExitShortDates" output="false" returntype="boolean">
+		<cfargument name="Beans" required="true" />
+		<cfargument name="Overbought" required="false" default=80 />
+		<cfscript>
+		if (ListFind("08/10/2011,09/01/2011,10/11/2011",dateformat(arguments.beans.DataBeanToday.Get("Date"),"mm/dd/yyyy"))) 
+		{ return true;  }
+		else
+		{ return false; }
+		</cfscript>
+	</cffunction>
+	
 	<cffunction name="LRS10setup" description="called from system" access="public" displayname="LRS10setup" output="false" returntype="boolean">
 		<cfargument name="Beans" required="true" />
 		<cfargument name="LRSLevel" required="false" default=1 />
@@ -32,6 +83,64 @@
 		{
 		return false;
 		}
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="RSIoverbought" description="called from system" access="public" displayname="RSIoverbought" output="false" returntype="boolean">
+		<cfargument name="Beans" required="true" />
+		<cfargument name="Overbought" required="false" default=60 />
+		<cfscript>
+		if (arguments.beans.DataBeanToday.get("RSI") GTE arguments.Overbought AND arguments.beans.DataBean1.get("RSI") LT arguments.Overbought) 
+		{ return true;  }
+		else
+		{ return false; }
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="CCIoverboughtCross" description="called from system" access="public" displayname="RSIoverbought" output="false" returntype="boolean">
+		<cfargument name="Beans" required="true" />
+		<cfargument name="Overbought" required="false" default=80 />
+		<cfscript>
+		if (arguments.beans.DataBeanToday.get("CCI") GTE arguments.Overbought AND arguments.beans.DataBean1.get("CCI") LT arguments.Overbought) 
+		{ return true;  }
+		else
+		{ return false; }
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="CCIoverbought" description="called from system" access="public" displayname="RSIoverbought" output="false" returntype="boolean">
+		<cfargument name="Beans" required="true" />
+		<cfargument name="Overbought" required="false" default=80 />
+		<cfscript>
+		if (arguments.beans.DataBeanToday.get("CCI5") GTE arguments.Overbought) 
+		{ return true;  }
+		else
+		{ return false; }
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="PreviousLow" description="called from system" access="public" displayname="PreviousLow" output="false" returntype="boolean">
+		<!--- low below previous low  --->
+		<cfargument name="Beans" required="true" />
+		<cfargument name="Overbought" required="false" default=80 />
+		<cfscript>
+		if (arguments.beans.DataBeanToday.get("low") LTE arguments.beans.DataBean1.get("low")) 
+		{ return true;  }
+		else
+		{ return false; }
+		</cfscript>
+	</cffunction>
+	
+	
+	<cffunction name="SupportTriggered" description="called from system" access="public" displayname="BrokenLow" output="false" returntype="boolean">
+		<!--- rise above previous low  --->
+		<cfargument name="Beans" required="true" />
+		<cfargument name="Overbought" required="false" default=80 />
+		<cfscript>
+		if (arguments.beans.DataBeanToday.get("High") GTE arguments.beans.DataBean1.get("open")) 
+		{ return true;  }
+		else
+		{ return false; }
 		</cfscript>
 	</cffunction>
 	

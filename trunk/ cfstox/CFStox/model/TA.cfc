@@ -215,6 +215,49 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 		<cfreturn local />
 	</cffunction>
 	
+	<cffunction  name="Slope" hint="Slope">
+		<cfargument name="qryPrices" required="true" />
+		<cfargument name="value" required="true" />
+		<cfargument name="length" required="true" />
+		<cfscript>
+		var local = structNew();
+		local.qryrows = arguments.qryPrices.recordcount;
+		local.aryOpen 	= ArrayNew(1);
+		local.aryHigh 	= ArrayNew(1);
+		local.aryLow 	= ArrayNew(1);
+		local.aryClose 	= ArrayNew(1);
+		local.arySlope 	= ArrayNew(1);		
+		for(i=1;i<=local.qryrows;i++)
+		{ 
+			local.aryOpen[i]	= arguments.qryPrices.open[i]; 
+			local.aryHigh[i]	= arguments.qryPrices.high[i]; 
+			local.aryLow[i]		= arguments.qryPrices.low[i]; 
+			local.aryClose[i]	= arguments.qryPrices.close[i]; 
+			local.arySlope[i]	= 0;
+		    if(i GT length)
+		    {
+		    	switch(arguments.value)
+		    	{ 
+		    	case "Open": 
+        		local.value = (local.aryOpen[i] - local.aryOpen[i-length])/ length;  
+        		break;
+        		case "High": 
+        		local.value = (local.aryHigh[i] - local.aryHigh[i-length])/ length;  
+        		break;
+        		case "Low": 
+        		local.value = (local.aryLow[i] - local.aryLow[i-length])/ length;  
+        		break;
+        		case "Close": 
+        		local.value = (local.aryClose[i] - local.aryClose[i-length])/ length;  
+        		break;
+        		}
+		  	 local.arySlope[i] = local.value ;
+		    }
+	    }
+		</cfscript>
+		<cfreturn local.arySlope />
+	</cffunction>
+	
 	<cffunction  name="LocalHighLow" hint="Support/resistance">
 		<cfargument name="qryData" required="true" />
 		<cfscript>

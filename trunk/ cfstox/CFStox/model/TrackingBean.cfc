@@ -40,6 +40,7 @@
 		Set("CloseLong","false");
 		Set("CloseShortAlert","false");
 		Set("CloseShort","false");
+		Set("Status","");
 		Set("UseR1Entry","false");
 		Set("UseR2Entry","false");
 		Set("UseS1Entry","false");

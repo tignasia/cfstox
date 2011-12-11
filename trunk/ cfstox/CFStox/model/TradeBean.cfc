@@ -2,6 +2,7 @@
 
 	<cffunction name="init" description="init method" access="public" displayname="init" output="false" returntype="TradeBean">
 		<cfargument name="strData"  />
+		<cfargument name="SystemName"  />
 		<cfscript>
 		set("Symbol",strData.Symbol);	
 		set("Date",strData.DateOne);	
@@ -86,6 +87,7 @@
 		Set("R2Status","");
 		Set("S1Status","");
 		Set("S2Status","");
+		Set("SystemName",arguments.systemName);
 		variables.trade = StructNew();
 		variables.trade.date = "";
 		variables.trade.TradeDescription = "";
@@ -142,12 +144,12 @@
 		set("OpenShort",true);
 		local.tradeType = "OpenShort";
 		} 
-		if(DataBeanToday.get("CloseLong")  AND get("LongPosition")  )
+		if(DataBeanToday.get("CloseLong") )
 		{
 		set("CloseLong",true);
 		local.tradeType = "CloseLong";
 		}
-		if(DataBeanToday.get("CloseShort") AND get("ShortPosition")  )
+		if(DataBeanToday.get("CloseShort")   )
 		{
 		set("CloseShort",true);
 		local.tradeType = "CloseShort";

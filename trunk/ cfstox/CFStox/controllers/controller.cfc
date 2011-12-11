@@ -13,7 +13,7 @@
 		<cfscript>
 		var local = structnew(); 
 		local.view = "historical";
-		session.objects.DataService.GetStockDataGoogle(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") ; 
+		session.objects.DataService.GetStockData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") ; 
 		local.HAdata 		= session.objects.DataService.GetHAStockData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") ; 
 		local.OriginalData 	= session.objects.DataService.GetOriginalStockData();
 		local.high			= session.objects.DataService.GetHigh();
@@ -21,7 +21,7 @@
 		local.xmldata 		= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.symbol#",qrydata:local.OriginalData,startdate:"#arguments.startdate#", high:local.high, low:local.low);
 		local.xmldataha 	= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.Symbol#",qrydata:local.HAData,startdate:"#arguments.startdate#", high:local.high, low:local.low);
 		session.objects.ReportService.ReportRunner(reportName:"HistoryReport",data:local.OriginalData,symbol:arguments.symbol);
-		session.objects.ReportService.ReportRunner(reportName:"BreakoutReport",data:local.OriginalData,symbol:arguments.symbol);
+		//session.objects.ReportService.ReportRunner(reportName:"BreakoutReport",data:local.OriginalData,symbol:arguments.symbol);
 		structAppend(request,local); 
 		structAppend(request,arguments);
 		request.method = "historical";
