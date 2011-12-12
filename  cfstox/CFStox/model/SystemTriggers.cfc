@@ -97,32 +97,62 @@
 		</cfscript>
 	</cffunction>
 	
-	<cffunction name="CCIoverboughtCross" description="called from system" access="public" displayname="RSIoverbought" output="false" returntype="boolean">
+	<cffunction name="CCICrossDown" description="called from system" access="public" displayname="RSIoverbought" output="false" returntype="boolean">
 		<cfargument name="Beans" required="true" />
 		<cfargument name="Overbought" required="false" default=80 />
 		<cfscript>
-		if (arguments.beans.DataBeanToday.get("CCI") GTE arguments.Overbought AND arguments.beans.DataBean1.get("CCI") LT arguments.Overbought) 
+		if (
+		(arguments.beans.DataBeanToday.get("CCI5") LTE arguments.beans.DataBean1.get("CCI5") ) AND
+		(arguments.beans.DataBean1.get("CCI5") GTE arguments.beans.DataBean2.get("CCI5") ) 
+		)
 		{ return true;  }
 		else
 		{ return false; }
 		</cfscript>
 	</cffunction>
 	
-	<cffunction name="CCIoverbought" description="called from system" access="public" displayname="RSIoverbought" output="false" returntype="boolean">
+	<cffunction name="CCICrossUp" description="called from system" access="public" displayname="RSIoverbought" output="false" returntype="boolean">
 		<cfargument name="Beans" required="true" />
-		<cfargument name="Overbought" required="false" default=80 />
+		<cfargument name="Overbought" required="false" default=-80 />
 		<cfscript>
-		if (arguments.beans.DataBeanToday.get("CCI5") GTE arguments.Overbought) 
+		if (
+		(arguments.beans.DataBeanToday.get("CCI5") GTE arguments.beans.DataBean1.get("CCI5") ) AND
+		(arguments.beans.DataBean1.get("CCI5") LTE arguments.beans.DataBean2.get("CCI5") ) 
+		)
 		{ return true;  }
 		else
 		{ return false; }
 		</cfscript>
 	</cffunction>
 	
-	<cffunction name="PreviousLow" description="called from system" access="public" displayname="PreviousLow" output="false" returntype="boolean">
+	<cffunction name="CCIoverbought" description="called from system" access="public" displayname="CCIoverbought" output="false" returntype="boolean">
+		<cfargument name="Beans" required="true" />
+		<cfargument name="Overbought" required="false" default=80 />
+		<cfscript>
+		if (arguments.beans.DataBeanToday.get("CCI5") GTE arguments.Overbought 
+		OR arguments.beans.DataBean1.get("CCI5") GTE arguments.Overbought 
+		OR arguments.beans.DataBean2.get("CCI5") GTE arguments.Overbought 
+		)
+		{ return true;  }
+		else
+		{ return false; }
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="CCIoverSold" description="called from system" access="public" displayname="CCIoverSold" output="false" returntype="boolean">
+		<cfargument name="Beans" required="true" />
+		<cfargument name="OverSold" required="false" default=-80 />
+		<cfscript>
+		if (arguments.beans.DataBeanToday.get("CCI5") LTE arguments.OverSold) 
+		{ return true;  }
+		else
+		{ return false; }
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="PreviousLowBreak" description="called from system" access="public" displayname="PreviousLow" output="false" returntype="boolean">
 		<!--- low below previous low  --->
 		<cfargument name="Beans" required="true" />
-		<cfargument name="Overbought" required="false" default=80 />
 		<cfscript>
 		if (arguments.beans.DataBeanToday.get("low") LTE arguments.beans.DataBean1.get("low")) 
 		{ return true;  }

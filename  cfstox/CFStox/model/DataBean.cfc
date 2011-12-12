@@ -87,6 +87,9 @@
 		Set("R2Status","");
 		Set("S1Status","");
 		Set("S2Status","");
+		Set("TBStatus","");
+		Set("TBStatusChange","");
+		Set("TradeType","");
 		return this;
 		</cfscript>
 	</cffunction>
