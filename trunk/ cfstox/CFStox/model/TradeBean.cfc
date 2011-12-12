@@ -88,6 +88,9 @@
 		Set("S1Status","");
 		Set("S2Status","");
 		Set("SystemName",arguments.systemName);
+		variables.tracker = StructNew();
+		variables.trackhistory = ArrayNew(1);
+		
 		variables.trade = StructNew();
 		variables.trade.date = "";
 		variables.trade.TradeDescription = "";
@@ -127,33 +130,67 @@
 		<cfscript>
 		var local = structNew();
 		local.tradeType = "";
+		
+		local.tracker1 = Duplicate(variables.tracker);
+		local.tracker1.date = arguments.DataBeanToday.get("Date");
+		local.tracker1.tbstatusChange = arguments.DataBeanToday.get("TBStatusChange");	
 		// open long alert places a long trade if condition is met
 		// the condition is part of the system
 		// process exisiting trades
 		//dump(arguments.DataBeanToday.GetMemento());
 		// the databean should ask the trackingbean for this info. This is part of the system and should not be in the tradebean
 		// the tradebean should only be resp for implementing the system calls
-		// 
-		if(DataBeanToday.get("OpenLong")     ) //AND NOT get("LongPosition")
-		{
-		set("OpenLong",true);
-		local.tradeType = "OpenLong";
-		}
-		if(DataBeanToday.get("OpenShort")    ) //AND NOT get("ShortPosition")
-		{
-		set("OpenShort",true);
-		local.tradeType = "OpenShort";
-		} 
-		if(DataBeanToday.get("CloseLong") )
-		{
-		set("CloseLong",true);
-		local.tradeType = "CloseLong";
-		}
-		if(DataBeanToday.get("CloseShort")   )
-		{
-		set("CloseShort",true);
-		local.tradeType = "CloseShort";
-		} 
+		//
+		/* local.TradeType = DataBeanToday.get("TradeType")
+		switch(local.TradeType){
+			case "OpenLong":
+			local.OpenPattern = CandlePattern(local.arrData);
+			break;
+			case "OpenShort":
+			local.HighPattern = CandlePattern(local.arrData);
+			break;
+			case "CloseLong":
+			local.LowPattern = CandlePattern(local.arrData);
+			break;
+			case "CloseShort":
+			local.ClosePattern = CandlePattern(local.arrData);
+			break;
+			} */
+		
+		local.TradeType = DataBeanToday.get("TradeType");
+		switch(local.TradeType){
+			case "OpenLong":
+				set("OpenLong",true);
+				local.tradeType = "OpenLong";
+				local.tracker1.TradeDescription = local.tradeType;
+			break;
+			case "OpenShort":
+				set("OpenShort",true);
+				local.tradeType = "OpenShort";
+				local.tracker1.TradeDescription = local.tradeType;
+			break;
+			case "CloseLong":
+				set("CloseLong",true);
+				local.tradeType = "CloseLong";
+				local.tracker1.TradeDescription = local.tradeType;
+			break;
+			case "CloseShort":
+				set("CloseShort",true);
+				local.tradeType = "CloseShort";
+				local.tracker1.TradeDescription = local.tradeType;
+			break;
+			case "OpenLongCloseShort":
+				set("OpenLongCloseShort",true);
+				local.tradeType = "OpenLongCloseShort";
+				local.tracker1.TradeDescription = local.tradeType;
+			break;
+			case "OpenShortCloseLong":
+				set("OpenShortCloseLong",true);
+				local.tradeType = "OpenShortCloseLong";
+				local.tracker1.TradeDescription = local.tradeType;
+			break;
+			}
+				
 		if(local.tradeType NEQ "")
 		{
 		local.trade1 = Duplicate(variables.trade);
@@ -163,6 +200,9 @@
 		local.nextindex = variables.tradeHistory.size();
 		variables.tradeHistory[local.nextindex+1] = local.trade1;
 		}
+		
+		local.nextindex1 = variables.trackHistory.size();
+		variables.trackHistory[local.nextindex1+1] = local.tracker1;
 		return;
 		</cfscript>
 	</cffunction>	
