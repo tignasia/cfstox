@@ -14,13 +14,13 @@
 		var local = structnew(); 
 		local.view = "historical";
 		session.objects.DataService.GetStockData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") ; 
-		local.HAdata 		= session.objects.DataService.GetHAStockData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") ; 
-		local.OriginalData 	= session.objects.DataService.GetOriginalStockData();
+		local.qryDataHA		= session.objects.DataService.GetHAStockData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") ; 
+		local.qryDataOriginal = session.objects.DataService.GetOriginalStockData();
 		local.high			= session.objects.DataService.GetHigh();
 		local.low			= session.objects.DataService.GetLow();
-		local.xmldata 		= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.symbol#",qrydata:local.OriginalData,startdate:"#arguments.startdate#", high:local.high, low:local.low);
-		local.xmldataha 	= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.Symbol#",qrydata:local.HAData,startdate:"#arguments.startdate#", high:local.high, low:local.low);
-		session.objects.ReportService.ReportRunner(reportName:"HistoryReport",data:local.OriginalData,symbol:arguments.symbol);
+		local.xmldata 		= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.symbol#",qrydata:local.qryDataOriginal,startdate:"#arguments.startdate#", high:local.high, low:local.low);
+		local.xmldataha 	= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.Symbol#",qrydata:local.qryDataHA,startdate:"#arguments.startdate#", high:local.high, low:local.low);
+		session.objects.ReportService.ReportRunner(reportName:"HistoryReport",data:local.qryDataOriginal,symbol:arguments.symbol);
 		//session.objects.ReportService.ReportRunner(reportName:"BreakoutReport",data:local.OriginalData,symbol:arguments.symbol);
 		structAppend(request,local); 
 		structAppend(request,arguments);
@@ -39,16 +39,17 @@
 		<cfargument name="symbol" required="true" />
 		<cfargument name="startdate" required="true" />
 		<cfargument name="enddate" required="true" />
-		<cfargument name="SystemName" required="false" default="ShortEntryLSRSys1">
+		<cfargument name="SystemName" required="false" default="PivotSystem">
 		<cfscript>
 		var local = structnew(); 
 		local.view = "historical";
 		local.data = historical(symbol:arguments.symbol,startdate:arguments.startdate,enddate:arguments.enddate);
 		structAppend(local,local.data);
-		local.result = session.objects.SystemService.RunSystem(SystemName:arguments.SystemName,qryDataHA:local.HAdata,qryDataOriginal:local.OriginalData);
+		local.result = session.objects.SystemService.RunSystem(SystemName:arguments.SystemName,qryData:local.data);
 		//dump(local.result.get("tradeHistory"),"TradeHistory:" );
 		//local.output = local.result.get("tradeHistory");
 		//dump(local.output,"trade history"); 
+		//dump(local.result.getMemento());
 		session.objects.ReportService.ReportRunner(reportName:"BacktestReport",data:local.result.get("tradeHistory"),symbol:arguments.symbol);
 		request.method = "backtest";  
 		return local;

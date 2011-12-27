@@ -60,6 +60,8 @@
 		Set("UseR2Entry","false");
 		Set("UseS1Entry","false");
 		Set("UseS2Entry","false");
+		Set("TradeDate","00/00/0000");
+		Set("TradePrice",0);
 		Set("EntryDate","00/00/0000");
 		Set("EntryPrice",0);
 		Set("EntryPoint","R2");
