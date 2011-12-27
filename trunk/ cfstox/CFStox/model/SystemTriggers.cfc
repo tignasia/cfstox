@@ -97,6 +97,34 @@
 		</cfscript>
 	</cffunction>
 	
+	<cffunction name="S2Break" description="called from system" access="public" displayname="RSIoverbought" output="false" returntype="boolean">
+		<cfargument name="Beans" required="true" />
+		<cfscript>
+		if (arguments.beans.DataBeanToday.get("low") LTE arguments.beans.DataBean1.get("S2") ) 
+		{ return true;  }
+		else
+		{ return false; }
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="CheckR2Status" description="called from system" access="public" displayname="RSIoverbought" output="false" returntype="boolean">
+		<cfargument name="Beans" required="true" />
+		<cfargument name="Overbought" required="false" default=60 />
+		<cfscript>
+		if (arguments.beans.DataBeanToday.get("High") GTE arguments.beans.DataBean1.get("R2") 
+		OR arguments.beans.DataBean1.get("High") GTE arguments.beans.DataBean2.get("R2") 
+		OR arguments.beans.DataBean2.get("High") GTE arguments.beans.DataBean3.get("R2")
+		OR arguments.beans.DataBean3.get("High") GTE arguments.beans.DataBean4.get("R2")
+		OR arguments.beans.DataBean4.get("High") GTE arguments.beans.DataBean5.get("R2")
+		//OR arguments.beans.DataBean5.get("High") GTE arguments.beans.DataBean6.get("R2")
+		        
+		)
+		{ return true;  }
+		else
+		{ return false; }
+		</cfscript>
+	</cffunction>
+	
 	<cffunction name="CCICrossDown" description="called from system" access="public" displayname="RSIoverbought" output="false" returntype="boolean">
 		<cfargument name="Beans" required="true" />
 		<cfargument name="Overbought" required="false" default=80 />
@@ -131,7 +159,11 @@
 		<cfscript>
 		if (arguments.beans.DataBeanToday.get("CCI5") GTE arguments.Overbought 
 		OR arguments.beans.DataBean1.get("CCI5") GTE arguments.Overbought 
-		OR arguments.beans.DataBean2.get("CCI5") GTE arguments.Overbought 
+		OR arguments.beans.DataBean2.get("CCI5") GTE arguments.Overbought
+		OR arguments.beans.DataBean3.get("CCI5") GTE arguments.Overbought
+		OR arguments.beans.DataBean4.get("CCI5") GTE arguments.Overbought
+		OR arguments.beans.DataBean5.get("CCI5") GTE arguments.Overbought
+		OR arguments.beans.DataBean5.get("CCI") GTE arguments.Overbought        
 		)
 		{ return true;  }
 		else
@@ -154,13 +186,40 @@
 		<!--- low below previous low  --->
 		<cfargument name="Beans" required="true" />
 		<cfscript>
-		if (arguments.beans.DataBeanToday.get("low") LTE arguments.beans.DataBean1.get("low")) 
+		if (arguments.beans.DataBeanToday.get("low") LTE arguments.beans.DataBean1.get("low")
+		//AND arguments.beans.DataBeanToday.get("close") LTE arguments.beans.DataBeanToday.get("open")
+		) 
 		{ return true;  }
 		else
 		{ return false; }
 		</cfscript>
 	</cffunction>
 	
+	<cffunction name="PreviousHighBreak" description="called from system" access="public" displayname="PreviousLow" output="false" returntype="boolean">
+		<!--- low below previous low  --->
+		<cfargument name="Beans" required="true" />
+		<cfscript>
+		if (arguments.beans.DataBeanToday.get("high") GTE arguments.beans.DataBean1.get("high")
+		//AND arguments.beans.DataBeanToday.get("close") GTE arguments.beans.DataBeanToday.get("open")
+		) 
+		{ return true;  }
+		else
+		{ return false; }
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="PreviousHighBreakp50" description="called from system" access="public" displayname="PreviousLow" output="false" returntype="boolean">
+		<!--- low below previous low  --->
+		<cfargument name="Beans" required="true" />
+		<cfscript>
+		if (arguments.beans.DataBeanToday.get("high") GTE (arguments.beans.DataBean1.get("high") + .50)
+		//AND arguments.beans.DataBeanToday.get("close") GTE arguments.beans.DataBeanToday.get("open")
+		) 
+		{ return true;  }
+		else
+		{ return false; }
+		</cfscript>
+	</cffunction>
 	
 	<cffunction name="SupportTriggered" description="called from system" access="public" displayname="BrokenLow" output="false" returntype="boolean">
 		<!--- rise above previous low  --->
@@ -189,6 +248,34 @@
 		{
 		return false;
 		}
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="PivotBreak" description="called from system" access="public" displayname="S1Break" output="false" returntype="boolean">
+		<cfargument name="Beans" required="true" />
+		<cfargument name="PivotPoint" required="true" />
+		<!--- todo: this doesnt look exactly right - fix 8/21/2011 --->
+		<!--- <cfdump label="Beans" var="#arguments.beans#">
+		<cfabort> --->
+		<cfscript>
+		// heh was using pivot points instead of high and low. Interesting. You'ld have to reverse engineer them' 
+		var local = StructNew();
+		local.target = false;
+		//var local = StructNew(); 
+		If (arguments.PivotPoint EQ "R1" OR arguments.PivotPoint EQ "R2")
+			{
+			if (arguments.beans.DataBeanToday.get("High") 
+			GT arguments.beans.DataBean1.get("#arguments.pivotPoint#") ) 
+			{local.target = true;}
+			}
+			
+		If (arguments.PivotPoint EQ "S1" OR arguments.PivotPoint EQ "S2")	
+			{
+			if (arguments.beans.DataBeanToday.get("low") 
+			LT arguments.beans.DataBean1.get("#arguments.pivotPoint#") ) 
+			{local.target = true;}
+		}
+		return local.target;
 		</cfscript>
 	</cffunction>
 	

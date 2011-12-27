@@ -196,7 +196,7 @@
 		local.trade1 = Duplicate(variables.trade);
 		local.trade1.date = arguments.DataBeanToday.get("Date");
 		local.trade1.TradeDescription = local.tradeType;
-		local.trade1.TradePrice = arguments.DataBeanToday.get("Close") ;
+		local.trade1.TradePrice = arguments.DataBeanToday.get("TradePrice") ;
 		local.nextindex = variables.tradeHistory.size();
 		variables.tradeHistory[local.nextindex+1] = local.trade1;
 		}

@@ -38,14 +38,28 @@
 				<cfset local.dataArray = session.Objects.Utility.QryToArray(query:arguments.data,columnlist:local.headers) />
 			</cfcase>
 			<cfcase value="BacktestReport">
-				<cfset local.headers = "Date,Description,Entry_Exit,Price">
+				<cfset local.headers = "Date,Description,Entry_Exit,Price,Profit,NetProfit">
 				<cfset local.alen = arguments.data.size() />
 				<cfset local.dataArray = ArrayNew(2) />
+				<cfset local.Profit = 0 />
+				<cfset local.NetProfit = 0 />
+				
 				<cfloop from="1" to="#local.alen#" index="local.j">
+					<cfif arguments.data[local.j].TradeDescription EQ "OpenShort">
+						<cfset local.Profit = 0 />
+						<cfset local.TradeTracker = arguments.data[local.j].TradePrice />
+					</cfif>
+					<cfif arguments.data[local.j].TradeDescription EQ "CloseShort">
+						<cfset local.Profit = local.TradeTracker - arguments.data[local.j].TradePrice />
+						<cfset local.NetProfit = local.NetProfit + local.Profit >
+						<cfset local.TradeTracker = 0 />
+					</cfif>
 					<cfset local.DataArray[local.j][1] = arguments.data[local.j].date />
 					<cfset local.DataArray[local.j][2] = arguments.data[local.j].TradeDescription />
 					<cfset local.DataArray[local.j][3] = arguments.data[local.j].TradeEntryExitPoint />
 					<cfset local.DataArray[local.j][4] = arguments.data[local.j].TradePrice />
+					<cfset local.DataArray[local.j][5] = local.Profit />
+					<cfset local.DataArray[local.j][6] = local.NetProfit />
 				</cfloop>
 			</cfcase>
 			<cfcase value="ProfitReport">

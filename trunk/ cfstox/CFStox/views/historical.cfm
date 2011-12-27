@@ -24,7 +24,7 @@ Heiken-Ashi Data
 </cfoutput>
 
 <cfform >
-<cfgrid  format="flash" name="myHAGrid" query="request.HAData" rowheaders="false" height="250" autowidth="true">
+<cfgrid  format="flash" name="myHAGrid" query="request.qryDataHA" rowheaders="false" height="250" autowidth="true">
 </cfgrid>
 </cfform> 
 
@@ -42,7 +42,7 @@ Original Data
 </cfoutput>
 
 <cfform >
-<cfgrid  format="flash" name="myOriginalGrid" query="request.OriginalData" rowheaders="false" height="250" autowidth="true">
+<cfgrid  format="flash" name="myOriginalGrid" query="request.qryDataOriginal" rowheaders="false" height="250" autowidth="true">
 </cfgrid>
 </cfform> 
 

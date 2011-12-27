@@ -18,8 +18,9 @@ The triggers are granular conditions such as RSI above a certain amount
 		local.qryDataOriginal 		= arguments.qryData.qryDataOriginal ;
 		local.qryDataHA 			= arguments.qryData.qryDataHA ;
 		local.TestData			 	= SetupSystem(qryData:arguments.qryData);
-		local.TestData.SystemName 	= "#arguments.systemName#";
-		local.results 				= FindTrades(local.TestData);
+		local.TestData.TradeBean.Set("SystemName",arguments.systemName);
+		local.results 				= FindTrades(qryData:local,TestData:local.TestData);
+		return local.results;
 		</cfscript>
 	</cffunction>
 	
@@ -103,7 +104,7 @@ The triggers are granular conditions such as RSI above a certain amount
 		local.Beans.TrackingBean = arguments.TestData.TrackingBean;
 		local.beans.TradeBean = arguments.TestData.TradeBean;
 		</cfscript>
-		<cfloop  query="local.qryDataOriginal" startrow="5">
+		<cfloop  query="local.qryDataOriginal" startrow="6">
 			<cfscript>
 			local.rowcounter = local.qryDataOriginal.currentrow;
 			//array five data beans 
@@ -129,11 +130,13 @@ The triggers are granular conditions such as RSI above a certain amount
 		data.dataArray = ArrayNew(1);
 		data.rowcount = arguments.qryData.currentrow;
 		/* for x = 1 to x = 5  */
+		data.DataArray[6] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:arguments.rowcounter-5);
 		data.DataArray[5] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:arguments.rowcounter-4);
 		data.DataArray[4] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:arguments.rowcounter-3);
 		data.DataArray[3] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:arguments.rowcounter-2);
 		data.DataArray[2] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:arguments.rowcounter-1);
 		data.DataArray[1] = session.objects.Utility.QrytoStruct(query:arguments.qryData,rownumber:arguments.rowcounter);
+		data.DataBean5 = createObject("component","cfstox.model.DataBean").init(data.DataArray[6]);
 		data.DataBean4 = createObject("component","cfstox.model.DataBean").init(data.DataArray[5]);
 		data.DataBean3 = createObject("component","cfstox.model.DataBean").init(data.DataArray[4]); 
 		data.DataBean2 = createObject("component","cfstox.model.DataBean").init(data.DataArray[3]); 
@@ -143,10 +146,14 @@ The triggers are granular conditions such as RSI above a certain amount
 		<cfreturn data />
 	</cffunction>
 		
-	<cffunction name="dump" description="" access="private" displayname="" output="true" returntype="void">
+	<cffunction name="Dump" description="utility" access="public" displayname="test" output="false" returntype="Any">
 		<cfargument name="object" required="true" />
-		<cfdump var="#arguments.object#">
-			<cfreturn />
+		<cfargument name="label" required="false" default="bean:"/>
+		<cfargument name="abort" required="false"  default="true" />
+		<cfdump label="#arguments.label#" var="#arguments.object#">
+		<cfif arguments.abort>
+			<cfabort>
+		</cfif>
 	</cffunction>
 		
 </cfcomponent>
