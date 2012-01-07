@@ -72,6 +72,7 @@
 		Set("R2Status","");
 		Set("S1Status","");
 		Set("S2Status","");
+		Set("Tradelength",0);
 		return this;
 		</cfscript>
 	</cffunction>

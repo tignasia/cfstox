@@ -278,6 +278,81 @@
 		return local.target;
 		</cfscript>
 	</cffunction>
+		
+	<cffunction name="CheckHKStops" description="called from system" access="public" displayname="S1Break" output="false" returntype="boolean">
+		<cfargument name="Beans" required="true" />
+		<cfargument name="PivotPoint" required="true" />
+		<!--- dynamic stops based on how long we've had the trade --->
+		
+		<cfscript>
+		var local = StructNew();
+		local.target = false;
+				
+		If (arguments.PivotPoint EQ "L_PP") //long position 
+			{
+			if (arguments.beans.DataBeanToday.get("Low") 
+			LT arguments.beans.DataBean1.get("PP") ) 
+			{local.target = true;}
+			}
+		If (arguments.PivotPoint EQ "S_PP") //short position 
+			{
+			if (arguments.beans.DataBeanToday.get("High") 
+			GT arguments.beans.DataBean1.get("PP") ) 
+			{local.target = true;}
+			}
+			
+		If (arguments.PivotPoint EQ "R1" OR arguments.PivotPoint EQ "R2")
+			{
+			if (arguments.beans.DataBeanToday.get("High") 
+			GT arguments.beans.DataBean1.get("#arguments.pivotPoint#") ) 
+			{local.target = true;}
+			}
+			
+		If (arguments.PivotPoint EQ "S1" OR arguments.PivotPoint EQ "S2")	
+			{
+			if (arguments.beans.DataBeanToday.get("low") 
+			LT arguments.beans.DataBean1.get("#arguments.pivotPoint#") ) 
+			{local.target = true;}
+		}
+		return local.target;
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="HKTrendchange" description="called from system" access="public" displayname="S1Break" output="false" returntype="boolean">
+		<cfargument name="HKdatabeantoday" required="true" />
+		<cfargument name="HKBeans" required="true" />
+		<cfargument name="Position" required="true" />
+		<!--- if previous 2 hk candle greeen and previous red, enter at break of S1 --->
+		<cfscript>
+		var local = StructNew();
+		local.target = false;
+		If ( arguments.HKdatabeantoday.get("Open") LT arguments.HKdatabeantoday.get("Close") )
+		{
+		local.HKCurrentCandle = "Green";
+		}
+		else
+		{
+		local.HKCurrentCandle = "Red";
+		}
+		
+		If ( arguments.HKbeans.DataBean1.get("Open") LT arguments.HKbeans.DataBean1.get("Close") )
+		{
+		local.HKPrevCandle = "Green";
+		}
+		else
+		{
+		local.HKPrevCandle = "Red";
+		}
+		
+		If (local.HKPrevCandle EQ "Red" AND local.HKCurrentCandle EQ "Red" And arguments.position EQ "Short")
+		local.target = true;
+		
+		If (local.HKPrevCandle EQ "Green" AND local.HKCurrentCandle EQ "Green" And arguments.position EQ "Long")
+		local.target = true;
+		
+		return local.target;
+		</cfscript>
+	</cffunction>
 	
 	<!---- todo:delete all this crap --->	
 	
