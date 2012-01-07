@@ -59,7 +59,7 @@
 		<cfscript>
 		var local = structNew();
 		makePublic(this.SystemService,"SetUpSystem");
-		local.TestData = this.SystemService.SetupSystem(systemName:"PivotSystem",qryData:this.data);
+		local.TestData = this.SystemService.SetupSystem(systemName:"HeikenAshiPivotSystem",qryData:this.data);
 		makePublic(this.SystemService,"FindTrades");
 		local.Results = this.SystemService.FindTrades(qryData:this.data,TestData:local.TestData	);
 		// trades are stored in the tradehistory

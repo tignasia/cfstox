@@ -64,8 +64,6 @@
 		var local = StructNew();
 		local.triggers 	=	arguments.triggers;
 		local.beans 	=	arguments.Beans;
-		
-		
 		//local.triggers.boolCloseShort = session.objects.SystemTriggers.PreviousHighBreakP50(beans:local.beans);
 		local.triggers.boolCloseShort = session.objects.SystemTriggers.PivotBreak(beans:local.beans,PivotPoint:"R1");
 		//local.triggers.boolOpenShort = session.objects.SystemTriggers.CheckR2Status(beans:local.beans);
@@ -78,7 +76,6 @@
 		if (local.triggers.boolCloseShort){
 			local.triggers.ShortExitPoint 	= "R1_1";	
 		}
-		
 		return local.triggers;
 		</cfscript> 
 	</cffunction>
@@ -139,8 +136,11 @@
 		<cfset var local = StructNew() />
 		<cfscript>
 		 	
+		local.HKdatabeantoday 	= arguments.beans.Databeans.HA_DataBeans.DataBeanToday;
+		local.HKbeans 			= arguments.beans.Databeans.HA_DataBeans;
 		local.databeantoday 	= arguments.beans.Databeans.original_databeans.DataBeanToday;
 		local.beans 			= arguments.beans.Databeans.original_databeans;
+		local.TrackingBean 		= arguments.beans.TrackingBean;
 		local.triggers 			= StructNew();
 		local.triggers.boolOpenShort 	= false;
 		local.triggers.boolCloseShort 	= false;
@@ -200,9 +200,52 @@
 		local.strStatus.Status6 = arguments.beans.TrackingBean.Get("Status");
 		}
 		
+		if (local.strStatus.initialStatus EQ arguments.beans.TrackingBean.Get("Status"))
+		{
+			local.tradelength = arguments.beans.TrackingBean.Get("Tradelength");
+			arguments.beans.TrackingBean.Set("Tradelength",local.tradelength + 1);
+		}
+		else
+		{
+		arguments.beans.TrackingBean.Set("Tradelength",0);
+		}
 		local.databeantoday.Set("TBStatusChange",local.strStatus);			
 		</cfscript>
 		<cfreturn local.databeantoday />	
+	</cffunction>
+	
+	<cffunction name="HeikenAshiPivotSystem" description="System based on piviot points" access="private" displayname="PivotSystem" output="false" returntype="Any">
+		<!--- system description:  
+		short entry:
+		high previously above R2
+		break below previous s2
+		short exit:
+		break above previous r1  
+		--->
+		<cfargument name="triggers" required="true" />
+		<cfargument name="beans" required="true" />
+		<cfargument name="HKdatabeantoday" required="true" />
+		<cfargument name="HKbeans" required="true" />
+		<cfscript>
+		var local = StructNew();
+		local.triggers 	=	arguments.triggers;
+		local.beans 	=	arguments.Beans;
+		//close short position if high > previous pivot point 
+		local.triggers.boolCloseShort = session.objects.SystemTriggers.CheckHKStops(beans:local.beans,PivotPoint:"S_PP");
+		// enter short position if previous HK candle is red and s1 broken 
+		local.triggers.boolOpenShort = session.objects.SystemTriggers.HKTrendchange(HKdatabeantoday:arguments.HKdatabeantoday,HKbeans:arguments.HKbeans,Position:"Short");
+		if (local.triggers.boolOpenShort){
+			local.triggers.boolOpenShort = session.objects.SystemTriggers.CheckHKStops(beans:local.beans,PivotPoint:"S1");
+		}
+		
+		if (local.triggers.boolOpenShort){
+			local.triggers.ShortEntryPoint 	= "S1_1";
+		}
+		if (local.triggers.boolCloseShort){
+			local.triggers.ShortExitPoint 	= "PP";	
+		}
+		return local.triggers;
+		</cfscript> 
 	</cffunction>
 	
 	<cffunction name="SetEntryExit" description="" access="private" displayname="CCISystem" output="false" returntype="Struct">
@@ -253,6 +296,9 @@
 			break;
 			case "H_1":
 			arguments.Beans.DatabeanToday.Set("TradePrice", arguments.beans.DataBean1.get("High") );
+			break;
+			case "PP":
+			arguments.Beans.DatabeanToday.Set("TradePrice", arguments.beans.DataBean1.get("PP") );
 			break;
 			}
 		return local.triggers;

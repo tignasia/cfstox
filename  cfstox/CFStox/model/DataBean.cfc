@@ -30,7 +30,8 @@
 		set("S1",strData.S1);
 		set("S2",strData.S2);
 		set("R1",strData.R1);
-		set("R2",strData.R2); 
+		set("R2",strData.R2);
+		set("PP",strData.PP);  
 		// trade info
 		Set("NewHighBreakout","false"); //high greater than prev local high
 		Set("NewHighReversal","false"); // bounce off new local high 
