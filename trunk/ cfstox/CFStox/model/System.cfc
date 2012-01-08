@@ -231,7 +231,7 @@
 		local.triggers 	=	arguments.triggers;
 		local.beans 	=	arguments.Beans;
 		//close short position if high > previous pivot point 
-		local.triggers.boolCloseShort = session.objects.SystemTriggers.CheckHKStops(beans:local.beans,PivotPoint:"S_PP");
+		local.triggers.boolCloseShort = session.objects.SystemTriggers.CheckHKStops(beans:local.beans,PivotPoint:"R1");
 		// enter short position if previous HK candle is red and s1 broken 
 		local.triggers.boolOpenShort = session.objects.SystemTriggers.HKTrendchange(HKdatabeantoday:arguments.HKdatabeantoday,HKbeans:arguments.HKbeans,Position:"Short");
 		if (local.triggers.boolOpenShort){
