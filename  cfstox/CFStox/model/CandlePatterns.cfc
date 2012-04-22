@@ -1,6 +1,6 @@
 <cfcomponent output="false">
 <!--- todo run these and the ones in TA and see if there is a significant difference   --->
-	<cffunction name="isBearishDarkCloudCover" description="" access= displayname="" output= returntype=>
+	<cffunction name="BearishDarkCloudCover" description="" access="public" displayname="" output="false" returntype="Struct">
 		<!---
 		BEARISH DARK CLOUD COVER
 		Type: 	Reversal
@@ -23,11 +23,29 @@
 		3. Then we see a black body characterized by an open above the high of the previous day on the second day.
 		4. The second black candlestick closes within and below the midpoint of the previous white body.
 		 --->
-		
+		<!----
+		<cfif trend EQ "UP">
+			<cfset flag = true />
+		</cfif>
+		<cfif day two close GT day two open>
+			<cfset flag = true />
+		</cfif>
+		<cfif day one open GT day two high>
+			<cfset flag = true /> 
+		</cfif>
+		<cfif day one close LT day two pivot point>
+			<cfset flag = true />
+		</cfif>
+		<cfif flag>
+			<cfset struct.flag = flag />
+			<cfset struct.CandleType = "BEARISH DARK CLOUD COVER" />		
+			<cfset struct.reliablity = "High">
+		</cfif>
+		--->
 	<cfreturn />
 	</cffunction>
 	
-	<cffunction name="isBearishKicking" description="" access= displayname="" output= returntype=>
+	<cffunction name="BearishKicking" description="" access= displayname="" output= returntype=>
 		<!--- 
 		BEARISH KICKING
 		Type: 	Reversal
@@ -65,7 +83,7 @@
 	<cfreturn />
 	</cffunction>
 
-	<cffunction name="isBearishAbandonedBaby" description="" access= displayname="" output= returntype=>
+	<cffunction name="BearishAbandonedBaby" description="" access= displayname="" output= returntype=>
 		<!---  
 		BEARISH ABANDONED BABY
 		Type: 	Reversal
@@ -103,7 +121,7 @@
 	<cfreturn />
 	</cffunction>
 	
-	<cffunction name="isBearishEveningStar" description="" access= displayname="" output= returntype=>
+	<cffunction name="BearishEveningStar" description="" access= displayname="" output= returntype=>
 		<!---  
 		BEARISH EVENING STAR
 		Type: 			Reversal
@@ -142,43 +160,8 @@
 				--->
 		<cfreturn />
 	</cffunction>
-	
-	<cffunction name="Function" description="" access= displayname="" output= returntype=>
-	<!--- BEARISH EVENING DOJI STAR
-Type: 	Reversal
-Relevance: 	Bearish
-Prior Trend: 	Bullish
-Reliability: 	High
-Confirmation: 	Suggested
-No. of Sticks: 	3
-
- 
-
-Definition:             Get the highest rated stock from Americanbulls for this pattern >>>
-
-This is a major top reversal pattern formed by three candlesticks. The first candlestick is a long white body; the second is a doji characterized by a higher gap thus forming a doji star. The third one is a black candlestick with a closing price, which is within the first day’s white real body. It is a meaningful top pattern.
-
-Recognition Criteria:
-1. Market is characterized by uptrend.
-2. We see a white candlestick in the first day.
-3. Then we see a Doji that gaps in the direction of the previous uptrend on the second day.
-4. Finally the third day is a black candlestick.
-
-Explanation:
-
-The first white body, while the market is in an uptrend, shows the continuing bullish nature of the market. Then a Doji appears showing the diminishing power of the longs. The strong black real body on the third day proves that bears have taken over. An ideal Bearish Evening Doji Star Pattern has a gap before and after the middle real body. The second gap is rare, but lack of it does not take away from the power of this formation.
-
-Important Factors:
-
-The Doji may be more than one, two or even three.
-
-Doji’s gaps are not important.
-
-The reliability of this pattern is very high, but still a confirmation in the form of a black candlestick with a lower close or a gap-down is suggested. 	
-	 --->	<cfreturn />
-	</cffunction>
-	
-	<cffunction name="isBearishThreeBlackCrows" description="" access= displayname="" output= returntype=>
+		
+	<cffunction name="BearishThreeBlackCrows" description="" access= displayname="" output= returntype=>
 		<!---  
 		BEARISH THREE BLACK CROWS
 		Type: 	Reversal
@@ -215,6 +198,39 @@ The reliability of this pattern is very high, but still a confirmation in the fo
 	</cffunction>
 
 	<cffunction name="Function" description="" access= displayname="" output= returntype=>
+		<!--- BEARISH EVENING DOJI STAR
+	Type: 	Reversal
+	Relevance: 	Bearish
+	Prior Trend: 	Bullish
+	Reliability: 	High
+	Confirmation: 	Suggested
+	No. of Sticks: 	3
+
+	Definition:             Get the highest rated stock from Americanbulls for this pattern >>>
+	
+	This is a major top reversal pattern formed by three candlesticks. The first candlestick is a long white body; the second is a doji characterized by a higher gap thus forming a doji star. The third one is a black candlestick with a closing price, which is within the first day’s white real body. It is a meaningful top pattern.
+	
+	Recognition Criteria:
+	1. Market is characterized by uptrend.
+	2. We see a white candlestick in the first day.
+	3. Then we see a Doji that gaps in the direction of the previous uptrend on the second day.
+	4. Finally the third day is a black candlestick.
+	
+	Explanation:
+	
+	The first white body, while the market is in an uptrend, shows the continuing bullish nature of the market. Then a Doji appears showing the diminishing power of the longs. The strong black real body on the third day proves that bears have taken over. An ideal Bearish Evening Doji Star Pattern has a gap before and after the middle real body. The second gap is rare, but lack of it does not take away from the power of this formation.
+	
+	Important Factors:
+	
+	The Doji may be more than one, two or even three.
+	
+	Doji’s gaps are not important.
+	
+	The reliability of this pattern is very high, but still a confirmation in the form of a black candlestick with a lower close or a gap-down is suggested. 	
+		 --->	<cfreturn />
+	</cffunction>
+
+	<cffunction name="Function" description="" access= displayname="" output= returntype=>
 <!--- 
 		BEARISH THREE INSIDE DOWN
 Type: 	Reversal
@@ -244,7 +260,6 @@ The reliability of this pattern is very high, but still a confirmation in the fo
  --->
 		<cfreturn />
 	</cffunction>
-
 
 	<cffunction name="Function" description="" access= displayname="" output= returntype=>
 		<!--- 

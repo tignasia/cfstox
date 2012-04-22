@@ -11,166 +11,51 @@
 	 <!---  <cfset super.TestCase(this) /> --->
 	  <!--- Place additional setUp and initialization code here --->
 		<cfscript>
-		 this.TA = createObject("component","cfstox.model.TA").init();
-		 this.http = createObject("component","cfstox.model.http").init();
-		this.indicators = createObject("component","cfstox.model.indicators").init();
+		createObject("component","cfstox.controllers.Controller").init();
+		this.DataService 	= createObject("component","cfstox.model.DataService").init();
+		this.Utility 		= createObject("component","cfstox.model.Utility").init();
+		this.SystemService 	= createObject("component","cfstox.model.SystemService").init();
+		this.data = this.DataService.GetStockData(symbol:"CSX",startdate:"04/01/2012",enddate:"04/20/2012");
+		this.stockdata = this.data.OrgData;
+		this.TA = createObject("component","cfstox.model.TA").init();
 		</cfscript>
+		<!--- <cfdump var="#this.TA#">
+		<cfabort> --->
 	</cffunction>
 
-	<cffunction name="testMisc" access="public" returntype="void">
-		<cfscript>
-		var local = structNew();
-		local.array = arrayNew(1);
-		local.data = local.array.getClass(); 
-		local.something = local.array.size();
-		debug(local.something);
-		debug(local.array);
-		debug(local.data);
-		local.sdata = local.getClass(); 
-		debug(local.sdata);
-		writeOutput("<strong>Class:</strong> " & local.data & "	");
-		methods = local.data.getMethods();  
-		fields = local.data.getFields();  
-		writeOutput("<strong>Fields</strong>" & " ");
-		for(x = 1; x LTE arrayLen(fields); ++x) 
-	            writeOutput(fields[x] & " ");
-		writeOutput("<strong>Methods</strong>" & " ");
-		for(x = 1; x LTE arrayLen(methods); ++x) 
-	            writeOutput(methods[x] & "	");
-	        
-		/* local.data = this.http.gethttp("ABX");
-		local.num = this.TA.SMA(aryPrices:local.data); */
-		</cfscript>
-	</cffunction>
-
-	<cffunction name="testSMA" access="public" returntype="void">
-		<cfscript>
-		var local = structNew();
-		local.data = this.http.gethttp("ABX");
-		local.array = arrayNew(1);
-		/* debug(local.data); */
-		</cfscript>
-		<cfloop query="local.data">
-   			<cfset local.array[local.data.CurrentRow]= local.data.close />
-		</cfloop>
-		<cfscript>
-		debug(local.array);	
-		local.num = this.TA.SMA(aryPrices:local.array); 
-		debug(local.num); 
-		</cfscript>
-	</cffunction>
-
-	<cffunction name="testDX" access="public" returntype="void">
-		<cfscript>
-		var local = structNew();
-		local.data = this.http.gethttp("ABX");
-		local.num = this.TA.DX(qryPrices:local.data);
-		debug(local.num); 
-		</cfscript>
-	</cffunction>
-
-	<cffunction name="testADX" access="public" returntype="void">
-		<cfscript>
-		var local = structNew();
-		local.data = this.http.gethttp("ABX");
-		local.num = this.TA.DX(qryPrices:local.data);
-		debug(local.num); 
-		</cfscript>
-	</cffunction>
-	
 	<cffunction name="testGetIndicator" access="public" returntype="void">
+		
 		<cfscript>
 		var local = structNew();
-		var sortedData = "";
-		var dataraw = this.http.gethttp("SPY");
+		local.num = this.TA.GetIndicator(Indicator:"SMA",qryPrices:this.stockdata); 
+		debug(local.num);
+		local.num = this.TA.GetIndicator(Indicator:"DX",qryPrices:this.stockdata); 
+		debug(local.num);
+		local.num = this.TA.GetIndicator(Indicator:"ADX",qryPrices:this.stockdata); 
+		debug(local.num);
+		local.num = this.TA.GetIndicator(Indicator:"CCI",qryPrices:this.stockdata); 
+		debug(local.num);
+		local.num = this.TA.GetIndicator(Indicator:"RSI",qryPrices:this.stockdata); 
+		debug(local.num);
 		</cfscript>
-		<cfquery   dbtype="query"  name="sortedData" >
-			select * from dataraw order by DateOne asc
-		</cfquery>
+	</cffunction>
+	
+	<cffunction name="testGetData" access="public" returntype="void">
 		<cfscript>
-		local.num = this.TA.GetIndicator(Indicator:"SMA",qryPrices:sortedData); 
-		debug(local.num);
-		
-		local.num = this.TA.GetIndicator(Indicator:"DX",qryPrices:sortedData); 
-		debug(local.num);
-		local.num = this.TA.GetIndicator(Indicator:"ADX",qryPrices:sortedData); 
-		debug(local.num);
-		local.num = this.TA.GetIndicator(Indicator:"CCI",qryPrices:sortedData); 
-		debug(local.num);
-		/* local.num = this.TA.GetIndicator(Indicator:"PLUS_DI",qryPrices:sortedData); */
-	/* 	local.num = this.TA.GetIndicator(Indicator:"PLUS_DM",qryPrices:sortedData);  */
-		/* local.num = this.TA.GetIndicator(Indicator:"linearReg",qryPrices:sortedData);
-		local.num = this.TA.GetIndicator(Indicator:"linearRegAngle",qryPrices:sortedData);
-		local.num = this.TA.GetIndicator(Indicator:"linearRegSlope",qryPrices:sortedData);
-		local.num = this.TA.GetIndicator(Indicator:"linearRegIntercept",qryPrices:sortedData); */
-		/* local.num = this.TA.GetIndicator(Indicator:"Momentum",qryPrices:sortedData); */
-		local.num = this.TA.GetIndicator(Indicator:"RSI",qryPrices:sortedData); 
-		debug(local.num);
-		
+		debug(this.StockData);
 		</cfscript>
 	</cffunction>
 	
-	<cffunction name="testAdd2" access="public" returntype="void">
-		<cfscript>
-		var num = this.mycomp.add(1,1);
-		addTrace("num == " & num );
-		assertEquals(num,3,"Intentionally failing so you can see what a failure looks like.");
-		</cfscript>
-	</cffunction>
-
-	<cffunction name="testSomethingElse2" access="public" returntype="void">
-	<cfset var myExpression = evaluate("1+1 eq 2") />
-    <cfset addTrace(" myExpression == " & myExpression) />
-    <cfset assertTrue(myExpression) />
-	</cffunction>
-	
-	<cffunction name="testwritefile" access="public" returntype="void">
-	<cfscript>
-	var local = structnew();
-	local.filepath = "Data";
-	local.filename = "test.xml";
-	local.filedata = "This is test data";
-	local.result = this.mycomp.writeData(filepath:local.filepath, filename:local.filename, filedata:local.filedata);
-	</cfscript>
-	</cffunction>
-	
-	<cffunction name="testPath" access="public" returntype="void">
-	<cfscript>
-	var local = structnew();
-	local.filepath = GetBaseTemplatePath();
-	debug(local.filepath);
-	local.basepath = GetDirectoryFromPath(GetBaseTemplatePath());
-	debug(local.basepath);
-	local.comppath = this.mycomp.getbasepath();
-	debug(local.comppath);
-	local.dirpath = this.mycomp.getdirectorypath();
-	debug(local.dirpath);
-	local.metadata = getmetadata(this.mycomp);
-	debug(this.mycomp);
-	debug(local.metadata);
-	</cfscript>
-	</cffunction>
-	
-	<cffunction name="testPercentChange" access="public" returntype="void">
+	<cffunction name="testGetCandle" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
-		local.array = arrayNew(2);
-		local.data = this.http.gethttp("ABX");
-		debug(local.data);
-		</cfscript>
-		<cfloop query="local.data">
-			<cfset local.array[local.data.CurrentRow][1] = local.data.dateone />
-   			<cfset local.array[local.data.CurrentRow][2] = local.data.open />
-			<cfset local.array[local.data.CurrentRow][3] = local.data.high />
-			<cfset local.array[local.data.CurrentRow][4] = local.data.low />
-			<cfset local.array[local.data.CurrentRow][5] = local.data.close />
-		</cfloop>
-		<cfscript>	
-		local.num = this.Indicators.PercentChange(values:local.array, period:5); 
-		debug(local.num); 
+		local.num = this.TA.GetCandle(Candle:"AbandonedBaby",qryPrices:this.stockdata); 
+		debug(local.num);
+		local.num = this.TA.GetCandle(Candle:"HaramiCross",qryPrices:this.stockdata); 
+		debug(local.num);
 		</cfscript>
 	</cffunction>
-
+	
 	<!--- End Specific Test Cases --->
 
 	<cffunction name="tearDown" access="public" returntype="void">

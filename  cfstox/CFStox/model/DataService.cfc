@@ -181,6 +181,8 @@
 		<cfset queryAddColumn(local.OrgData,"Symbol",'VarChar',local.symbolArray) > 
 		<cfset variables.qryDataOriginal = GetTechnicalIndicators(query:local.OrgData)  />
 		<cfset variables.qryDataHA = GetTechnicalIndicators(query:local.HKData)  />
+		<cfset variables.OrgData = local.OrgData />
+		<cfset variables.HKData  = local.HKData />
 		<cfreturn variables />
 	</cffunction>
 		
