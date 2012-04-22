@@ -385,6 +385,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 		<cfargument name="optInTimePeriod" type="Numeric"  default="14" required="false" hint="length of MA" />
 		<cfargument name="outBegIdx" 	type="Numeric"  default="1" required="false" />
 		<cfargument name="outNBElement" type="Numeric"  default="1" required="false" />
+		<cfargument name="optInPenetration" type="Numeric"  default="1" required="false" />
 		
 		<cfscript>
 		var local = structNew();
@@ -508,8 +509,10 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 				MInteger outBegIdx, MInteger outNBElement, 
 				double[] outRealUpperBand, double[] outRealMiddleBand, double[] outRealLowerBand)   --->
 				<cfset local.result = variables.talib.BBANDS(arguments.startIdx,arguments.endIdx,
-						local.srtArrays.aryHigh,local.srtArrays.aryLow,local.acceration,local.optInMaximum,Minteger1,Minteger2,local.srtArrays.aryOut) />
+						local.srtArrays.aryHigh,local.srtArrays.aryLow,local.acceration,local.optInMaximum,
+						Minteger1,Minteger2,local.srtArrays.aryOut) />
 			</cfcase>
+			
 			<cfdefaultcase>
 				<cfthrow type="Application" message="Invalid indicator type">
 			</cfdefaultcase>
@@ -539,6 +542,132 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 		<cfreturn  foo />
 	</cffunction>
 
+	<cffunction  name="GetCandle">
+		<!--- data should be passed into the function oldest first --->
+		<cfargument name="Candle" 	type="String"  required="true" />
+		<cfargument name="startIdx" 	type="Numeric"  default="0" required="false"  hint="where to start calculating"/> 
+		<cfargument name="qryPrices" 	type="query" required="true"  hint="the array of prices to base on"/>
+		<cfargument name="endIdx" 		type="Numeric"  default="#arguments.qryprices.recordcount-1#" required="false" />
+		<cfargument name="optInTimePeriod" type="Numeric"  default="14" required="false" hint="length of MA" />
+		<cfargument name="outBegIdx" 	type="Numeric"  default="1" required="false" />
+		<cfargument name="outNBElement" type="Numeric"  default="1" required="false" />
+		<cfargument name="optInPenetration" type="Numeric"  default="1" required="false" />
+		
+		<cfscript>
+		var local = structNew();
+		local.returndata = Structnew();
+		local.srtArrays = ProcessArrays(qryPrices: arguments.qryPrices);
+		/* arguments is a struct so it's passed by reference */
+		DoJavaCast(arguments);
+	    Minteger1  = server.loader.create("com.tictactec.ta.lib.MInteger"); 
+		Minteger2  = server.loader.create("com.tictactec.ta.lib.MInteger"); 
+		Minteger1.value = 0;
+		Minteger2.value = 0;
+		</cfscript>
+		<cftry>
+		<!---- 
+		High Reliablity Bullish
+		Piercing Line 	Kicking 	Abandoned Baby 	Morning Doji Star 	Morning Star
+		Three Inside Up 	Three Outside Up 	Three White Soldiers 	 Concealing Baby Swallow
+		
+		Medium Reliablity Bullish
+		Dragonfly Doji 	Long Legged Doji 	Engulfing 	Gravestone Doji 	Doji Star
+		Harami Cross 	Homing Pigeon 	Matching Low 	Meeting Lines 	Stick Sandwich
+		Three Stars in the South 	Tri Star 	Three River 	Breakaway 	Ladder Bottom 	
+		
+		Low Reliablity Bullish
+		Belt Hold 	Hammer 	Inverted Hammer 	Harami 	
+		
+		BULLISH CONTINUATION PATTERNS
+      	HIGH RELIABILITY
+		Side-by-side-White Lines 	Mat Hold 	Rising Three Methods
+		
+		MEDIUM RELIABILITY
+		Upside Gap Three Methods 	Upside Tasuki Gap
+		
+		LOW RELIABILITY
+		Separating Lines 	Three Line Strike
+		
+		BULLISH REVERSAL/CONTINUATION PATTERNS 
+		LOW RELIABILITY
+		Long White Candlestick 	White Marubozu 	White Closing Marubozu 	White Opening Marubozu
+		---->
+		
+		<!---- 
+		BEARISH REVERSAL PATTERNS
+      	
+		HIGH RELIABILITY
+		Dark Cloud Cover 	Kicking 	Abandoned Baby 	Evening Star 	Evening Doji Star
+		Three Black Crows 	Three Inside Down 	Three Outside Down 	 Upside Gap Two Crows 	
+		
+		MEDIUM RELIABILITY
+		Dragonfly Doji 	Long Legged Doji 	Engulfing 	Gravestone Doji 	Doji Star
+		Harami Cross 	Meeting Lines 	Advance Block 	Deliberation 	Tri Star
+		Two Crows 	Breakaway
+		
+		LOW RELIABILITY
+		Belt Hold 	Hanging Man 	Shooting Star 	Harami
+		
+		BEARISH CONTINUATION PATTERNS 
+      	HIGH RELIABILITY
+		Falling Three Methods 	
+
+		MEDIUM RELIABILITY
+		In Neck 	On Neck 	Downside Gap Three Methods 	Downside Tasuki Gap 	Side By Side White Lines 	 
+
+		LOW RELIABILITY
+		Separating Lines 	Thrusting 	Three Line Strike 	  	  	 
+ 
+    	BEARISH REVERSAL/CONTINUATION PATTERNS 
+      	LOW RELIABILITY
+		Long Black Candlestick 	Black Marubozu 	Black Closing Marubozu 	Black Opening Marubozu 	
+
+		---->
+		
+		<!----- ----->
+		<cfswitch expression="#arguments.Candle#">
+			
+			<cfcase value="AbandonedBaby">
+				<!---- optInPenetration:(From 0 to TA_REAL_MAX) *    Percentage of penetration of a candle within another candle ----> 
+				<!---- cdlAbandonedBaby(int startIdx, int endIdx, double[] inOpen, double[] inHigh, double[] inLow, double[] inClose, double optInPenetration, MInteger outBegIdx, MInteger outNBElement, int[] outInteger) --->
+				<cfset local.result = variables.talib.cdlAbandonedBaby(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInPenetration,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
+				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
+			</cfcase>
+			<cfcase value="HaramiCross">
+				<!---- optInPenetration:(From 0 to TA_REAL_MAX) *    Percentage of penetration of a candle within another candle ----> 
+				<!---- cdlHaramiCross(int startIdx, int endIdx, double[] inOpen, double[] inHigh, double[] inLow, double[] inClose, MInteger outBegIdx, MInteger outNBElement, int[] outInteger) --->
+				<cfset local.result = variables.talib.cdlHaramiCross(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
+				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
+			</cfcase>		
+			<cfdefaultcase>
+				<cfthrow type="Application" message="Invalid indicator type">
+			</cfdefaultcase>
+		</cfswitch>
+		<cfcatch type="application">
+		   <h3>Invalid indicator type passed to GetIndicator</h3>
+		</cfcatch>
+		</cftry>
+		<cfset local.returndata.outBegIdx = MInteger1.value />
+		<cfset local.returndata.outNBElement = MInteger2.value />
+		<cfset local.foobar = duplicate(local.srtArrays.aryOutCandle) />
+		<cfset local.bar = ArraytoList(local.foobar) >
+		<cfset local.foo = ListToArray(local.bar, ",", true) >
+		<!--- 'for loop' should stop prior to outNbElement, not dataLen --->
+		<!--- outNBElement is the numer of the last cell containing data --->
+		<!--- outBegIndex is the number of starting rows to pad with zeros --->
+		
+		<cfloop from="1" to="#local.returndata.outBegIdx#" index="i">
+			<cfset ArrayPrepend(local.foo,"0")>
+		</cfloop>  
+	 	<cfloop from="1" to="#local.returndata.outBegIdx#" index="i">
+			<cfset ArrayDeleteAt(local.foo,local.foo.size() )>
+		</cfloop> 
+		<cfset local.returndata.outData = local.foo />
+		<cfset local.returndata.dataType = arguments.Candle />
+		<cfreturn  local.returndata />
+	</cffunction>
+	
+	
 	<cffunction  name="PLUS_DI">
 		<cfargument name="startIdx" 	type="Numeric"  default="1" required="false"  hint="where to start calculating"/> 
 		<cfargument name="qryPrices" 	type="query" required="true"  hint="the array of prices to base on"/>
@@ -715,13 +844,14 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 		local.aryHigh 	= ArrayNew(1);
 		local.aryLow 	= ArrayNew(1);
 		local.aryClose 	= ArrayNew(1);
-		
+		local.aryOutCandle 	= ArrayNew(1);
 		for (
 		 local.intRow = 1 ;
 		 local.intRow LTE qryPrices.RecordCount ;
 		 local.intRow = (local.intRow + 1) )
 		 {
 			local.aryOut[local.introw]	= 0;
+			local.aryOutCandle[local.introw]	= 0;
 			local.aryOpen[local.introw]	= arguments.qryPrices['open'][local.introw]; 
 			local.aryHigh[local.introw]	= arguments.qryPrices['high'][local.introw]; 
 			local.aryLow[local.introw]	= arguments.qryPrices['low'][local.introw];
@@ -732,6 +862,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 		local.aryClose 	= javacast("double[]",local.aryClose);
 		local.aryOut	= javacast("double[]",local.aryout);
 		local.aryOpen 	= javacast("double[]",local.aryOpen);
+		local.aryOutCandle = javacast("int[]",local.aryOutCandle);
 		</cfscript>
 		<cfreturn local />
 	</cffunction>
@@ -744,6 +875,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 	    arguments.argStruct.outBegIdx 		= javacast("int",arguments.argStruct.outBegIdx);
 	    arguments.argStruct.outNBElement 	= javacast("int",arguments.argStruct.outNBElement);
 	    arguments.argStruct.optInTimePeriod = javacast("int",arguments.argStruct.optInTimePeriod);
+		arguments.argStruct.optInPenetration = javacast("double",arguments.argStruct.optInPenetration);
 	    </cfscript>
 	</cffunction>
 
