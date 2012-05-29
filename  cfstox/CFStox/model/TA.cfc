@@ -809,12 +809,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 				<cfset local.result = variables.talib.cdlIdentical3Crows(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlIdentical3CrowsLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
-			
-			<cfcase value="Identical3Crows">
-				<cfset local.result = variables.talib.cdlIdentical3Crows(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
-				<!--- <cfset local.lookback = variables.talib.cdlIdentical3CrowsLookback(arguments.optInTimePeriod) /> --->
-			</cfcase>	
-			
+						
 			<cfcase value="InNeck">
 				<cfset local.result = variables.talib.cdlInNeck(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlInNeckLookback(arguments.optInTimePeriod) /> --->
