@@ -10,8 +10,10 @@
 		this.indicators = createObject("component","cfstox.model.indicators").init();
 		this.controller = createObject("component","cfstox.controllers.controller").init();
 		session.objects.DataDAO = createObject("component","cfstox.model.DataDao").init("CFStox");
+		application.amazon = "StockCloud";
 		</cfscript>
 	</cffunction>
+
 
 <!---  
 SetDates
@@ -53,6 +55,32 @@ GetStockDataGoogle
 		//debug(local.data);
 		</cfscript>
 	</cffunction>
+	
+	<cffunction name="testCheckRecordsExist" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data = this.DataService.CheckRecordsExist(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
+		debug(local.data);
+		debug(local.data.recordCount);
+		</cfscript>
+	</cffunction>		
+		
+	<cffunction name="testGetCurrentRecord" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data = this.DataService.GetCurrentRecord(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
+		debug(local.data);
+		</cfscript>
+	</cffunction>		
+	
+	CheckRecordDates
+	<cffunction name="testCheckRecordDates" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data = this.DataService.CheckRecordDates(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
+		debug(local.data);
+		</cfscript>
+	</cffunction>	
 			
 	<!--- <cffunction name="testGetStockDataGoogle" access="public" returntype="void">
 		<cfscript>

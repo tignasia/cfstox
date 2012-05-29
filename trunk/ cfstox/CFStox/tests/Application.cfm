@@ -4,10 +4,10 @@
 	sessionmanagement="Yes" 					
 	sessiontimeout="#CreateTimeSpan(0,0,30,0)#" 	
 	clientmanagement="Yes">
-<cfsetting
- requesttimeout="120000"
- showdebugoutput="true"
- />
+
+<cfsetting requesttimeout="12000" />
+<cfsetting  showdebugoutput="true" />
+<cfset application.amazon = "StockCloud">
 <!--- <cfparam name="url.appReload" type="string" default="false" />
 <cfif not structKeyExists( application, 'appInitialized' ) or url.appReload>
 <cfif FindNoCase(".xml.cfm", GetFileFromPath(GetBaseTemplatePath()))>

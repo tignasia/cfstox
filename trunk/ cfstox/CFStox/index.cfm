@@ -40,6 +40,23 @@
 </div>
 <br style="clear:both">
 
+<div>
+<form action="controllers/controller.cfm" method="post" id="form1">
+<fieldset title="historical data"><legend>Load SQL</legend>
+<input type="hidden" id="action" name="action" value="loadSQL">
+<input type="hidden" id="summary" name="summary" value="false" />
+<label for="StartDate" style="width=30%" >Start Date:</label>
+<input type="text" name="StartDate" id="StartDate" value="1/1/2010">
+<label for="EndDate" style="width=30%">End Date:</label>
+<cfoutput><input type="text" name="EndDate" id="EndDate" value="#dateformat(now(),"mm/dd/yyyy")#"></cfoutput>
+<label for="Symbol" style="width=30%">Symbol:</label>
+<input type="text" name="Symbol" id="Symbol" value="">
+</fieldset>
+<input type="submit" name="submit" id="submit" value="Run" />
+</form>
+</div>
+<br style="clear:both">
+
 <div style ="width:100%">
 <!--- this runs a historical backtest of the chosen system  --->
 <form action="controllers/controller.cfm" method="post" id="backtest_form">
@@ -48,7 +65,7 @@
 <label for="Symbol" style="width=30%">Symbol:</label>
 <input type="text" name="Symbol" id="Symbol" value="">
 <label for="StartDate" style="width=30%" >Start Date:</label>
-<input type="text" name="StartDate" id="StartDate" value="1/1/2010">
+<input type="text" name="StartDate" id="StartDate" value="1/1/2012">
 <label for="EndDate" style="width=30%">End Date:</label>
 <cfoutput><input type="text" name="EndDate" id="EndDate" value="#dateformat(now(),"mm/dd/yyyy")#"></cfoutput>
 <input type="submit" name="submit" id="submit" value="Submit" />

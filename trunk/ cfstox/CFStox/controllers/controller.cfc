@@ -29,6 +29,25 @@
 		</cfscript> 
 	</cffunction>
 	
+	<cffunction name="loadSQL" description="load the remote SQL table" access="public" displayname="" output="false" returntype="Struct">
+		<!--- I generate a hostorical listing of stock prices and indicator readings for a given stock --->
+		<cfargument name="symbol" required="true" />
+		<cfargument name="startdate" required="true" />
+		<cfargument name="enddate" required="true" />
+		<cfscript>
+		var local = structnew(); 
+		local.view = "viewSQL";
+		session.objects.DataService.GetStockData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") ; 
+		local.qryDataHA		= session.objects.DataService.GetHAStockData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") ; 
+		local.qryDataOriginal = session.objects.DataService.GetOriginalStockData();
+		structAppend(request,local); 
+		structAppend(request,arguments);
+		request.method = "loadSQL";
+		return local;
+		</cfscript> 
+	</cffunction>
+	
+	
 	<cffunction name="backtest" description="provide results using given system" access="public" displayname="" output="false" returntype="struct">
 		<!---- todo: add entry exit excel output ---->
 		<!--- <cfargument name="argumentData"> --->

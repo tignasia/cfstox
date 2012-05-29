@@ -17,7 +17,7 @@
 	</cffunction>	
 	
 	<cffunction name="SetDates" description="" access="public" displayname="" output="false" returntype="Any">
-		<cfargument name="startdate" required="false" default="01/01/2011" />
+		<cfargument name="startdate" required="false" default="01/01/2012" />
 		<cfargument name="enddate" required="false" default=now() />
 		<cfset var local = StructNew() />
 		<!--- 
@@ -71,7 +71,7 @@
 	
 	<cffunction name="GetRawData" description="I return a stock data query" access="public" displayname="GetRawStockData" output="false" returntype="Any">
 		<cfargument name="Symbol" 		required="true"  />
-		<cfargument name="startdate" 	required="false" default=#CreateDate(2010,1,1)# />
+		<cfargument name="startdate" 	required="false" default=#CreateDate(2012,1,1)# />
 		<cfargument name="enddate" 		required="false" default=#now()# />
 		<cfargument name="Source" required="false" default="Yahoo" />
 		<cfset var local = structnew() />
@@ -151,7 +151,7 @@
 		
 	<cffunction name="GetStockData" description="I return a stock data bean" access="public" displayname="GetStockData" output="false" returntype="Any">
 		<cfargument name="Symbol" 		required="true"  />
-		<cfargument name="startdate" 	required="false" default=#CreateDate(2010,1,1)# />
+		<cfargument name="startdate" 	required="false" default=#CreateDate(2012,1,1)# />
 		<cfargument name="enddate" 		required="false" default=#now()# />
 		<cfset var local = structnew() />
 		<cfset reset() />
@@ -258,8 +258,8 @@
 		
 	<cffunction name="GetHAStockDataGoogle" description="I return a HA data" access="public" displayname="" output="false" returntype="Any" >
 		<cfargument name="symbol" required="true" />
-		<cfargument name="startdate" required="false"  default="10/8/2010" />
-		<cfargument name="enddate" required="false" default="11/15/2010" />
+		<cfargument name="startdate" required="false"  default="1/1/2012" />
+		<cfargument name="enddate" required="false" default="#dateformat(now(),"mm/dd/yyyy")#" />
 		<cfscript>
 		// todo: I stopped here
 		local.data = session.objects.DataService.GetStockDataGoogle(symbol:"#arguments.symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#"); 
@@ -268,4 +268,98 @@
 		</cfscript>
 	</cffunction>
 
+	<cffunction name="CheckRecordsExist" description="I see if records for the stock exist in the Amazon data store" access="public" displayname="" output="false" returntype="Any" >
+		<cfargument name="symbol" required="true" />
+		<cfset var local = StructNew() />
+		<cfset local.records = false />
+		<!--- See if records exist  --->
+		<cfquery name="qryCheckRecords"  datasource="#application.amazon#" >
+		SELECT DATEONE FROM StockData where SYMBOL = '#arguments.symbol#'
+		</cfquery>
+		<cfif qryCheckRecords.recordcount>
+		<cfset local.records = true />
+		</cfif>
+		<cfreturn local.records />
+	</cffunction>
+
+	<cffunction name="GetCurrentRecord" description="I see if records are updated in the Amazon data store" access="public" displayname="" output="false" returntype="Any" >
+		<cfargument name="symbol" required="true" />
+		<cfset var local = StructNew() />
+		<cfset local.LatestDate = CreateDate(2000,1,1) />
+		<cfquery name="qryCheckRecordDates"  datasource="#application.amazon#" >
+		SELECT MAX(DateOne) LatestDate FROM StockData where SYMBOL = '#arguments.symbol#'
+		</cfquery>
+		<cfif qryCheckRecordDates.LatestDate NEQ "">
+			<cfset local.LatestDate = qryCheckRecordDates.LatestDate />
+		</cfif> 
+		<cfreturn local.LatestDate />
+	</cffunction>	
+	
+	<cffunction name="CheckRecordDates" description="I see if records are updated in the Amazon data store" access="public" displayname="" output="false" returntype="Any" >
+		<cfargument name="symbol" required="true" />
+		<cfset var local = StructNew() />
+		<cfset local.recordsUpdated = false />
+		<!--- See if records are up to date --->
+		<cfset local.currentRecordDate = GetCurrentRecord(symbol: arguments.symbol) />
+		<cfset local.SPYRecordDate = GetCurrentRecord(symbol: 'SPY') />
+		<cfif local.currentRecordDate EQ  local.SPYRecordDate >
+			<cfset local.recordsUpdated = true />
+		</cfif>
+		<cfreturn local.recordsUpdated />
+	</cffunction>	
+
+	<cffunction name="Records" description="I see if records for the stock exist in the Amazon data store" access="public" displayname="" output="false" returntype="Any" >
+		<cfargument name="symbol" required="true" />
+		<cfargument name="startdate" required="false"  default="1/1/2012" />
+		<cfargument name="enddate" required="false" default="#dateformat(now(),"mm/dd/yyyy")#" />
+		<cfset var local = StructNew() />
+		<cfset local.records 		= false />
+		<cfset local.CurrentRecords = false />
+		<!--- See if records exist  --->
+		<cfset local.Records = CheckRecordsExist(symbol:arguments.symbol) >
+		<cfif local.Records >
+			<cfset local.CurrentRecords = CheckRecordDates(symbol:arguments.symbol) />
+		</cfif>
+		<cfif NOT local.records>
+			<cfset UpdateRecords(action:"Create",symbol:arguments.symbol) />
+		</cfif>
+		<cfif NOT local.records OR NOT local.CurrentRecords>
+			<cfset UpdateRecords(action:"Update",symbol:arguments.symbol,startdate:arguments.startdate,enddate:arguments.enddate) />
+		</cfif>
+		<cfreturn />
+	</cffunction>
+	
+	<cffunction name="UpdateRecords" description="I see if records for the stock exist in the Amazon data store" access="public" displayname="" output="false" returntype="Any" >
+		<cfargument name="symbol" required="true" />
+		<cfargument name="startdate" required="false"  default="1/1/2012" />
+		<cfargument name="enddate" required="false" default="#dateformat(now(),"mm/dd/yyyy")#" />
+		<cfargument name="action" required="true" />
+		<cfset var local = StructNew() />
+		<cfset local.records 		= false />
+		<cfset local.CurrentRecords = false />
+		<!--- See if records exist  --->
+		<cfswitch expression="#arguments.action#">
+		<cfcase  value="Create">
+			<cfset local.Data = GetStockData(symbol:arguments.symbol,startdate:arguments.startdate,enddate:arguments.enddate) >
+			<cfset InsertRecords(query:local.data.qryDataOriginal) >		
+		</cfcase>
+		<cfcase  value="Update">
+			<!--- get most recent record in table --->
+			<cfset local.LastDate = GetCurrentRecord(symbol: arguments.symbol) />
+			<cfset local.Data = GetStockData(symbol:arguments.symbol,startdate:local.LastDate,enddate:arguments.enddate) >
+			<cfset InsertRecords(query:local.data.qryDataOriginal) >		
+		</cfcase>		
+		</cfswitch>
+		<cfset local.Records = CheckRecordsExist(symbol:arguments.symbol) >
+		<cfif local.Records >
+			<cfset local.CurrentRecords = CheckRecordDates(symbol:arguments.symbol) />
+		</cfif>
+		<cfif NOT local.records>
+			<cfset UpdateRecords(action:"Create",symbol:arguments.symbol) />
+		</cfif>
+		<cfif NOT local.records OR NOT local.CurrentRecords>
+			<cfset UpdateRecords(action:"Update",symbol:arguments.symbol,startdate:arguments.startdate,enddate:arguments.enddate) />
+		</cfif>
+		<cfreturn />
+	</cffunction>
 </cfcomponent>
