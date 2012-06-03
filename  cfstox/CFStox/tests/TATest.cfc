@@ -23,7 +23,7 @@
 		//this.data = this.DataService.GetStockData(symbol:"PBY",startdate:"04/01/2011",enddate:"05/04/2012");
 		//this.HaramiCross = this.data.OrgData;
 		// Engulfing - Bullish from stockfetcher
-		this.data = this.DataService.GetStockData(symbol:"AMZN",startdate:"12/01/2011",enddate:"05/04/2012");
+		this.data = this.DataService.GetStockData(symbol:"RVBD",startdate:"12/01/2011",enddate:"05/24/2012");
 		this.stockData = this.data.OrgData;
 		this.TA = createObject("component","cfstox.model.TA").init();
 		</cfscript>

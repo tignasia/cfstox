@@ -29,15 +29,18 @@
 			<cfcase value="HistoryReport">
 				<!--- <cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,RSI,LOCALHIGH,LOCALLOW,LINEARREG,LINEARREG10,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LINEARREGSLOPE10,LRSDELTA,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break">
 				 --->
-				 <cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,CCI5,RSI,LINEARREG,LINEARREG10,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LINEARREGSLOPE10,LRSDELTA,FASTSLOPE,SLOWSLOPE,LOCALHIGH,LOCALHIGHVALUE,LOCALLOW,LOCALLOWVALUE,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break">
+				 <cfset local.dspHeaders = "SYM,DATE,OPEN,HIGH,LOW,CLOSE,VOL,MO,ADX,CCI,CCI5,RSI,LR,LR10,LRANGLE,LRINTRCPT,LRSLOPE,LRGSLOPE10,LRSDELTA,FSLOPE,SSLOPE,LOHIGH,LOHIGHVAL,LOLOW,LOLOWVALUE,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,HaramiCross">
+				 <cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,CCI5,RSI,LINEARREG,LINEARREG10,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LINEARREGSLOPE10,LRSDELTA,FASTSLOPE,SLOWSLOPE,LOCALHIGH,LOCALHIGHVALUE,LOCALLOW,LOCALLOWVALUE,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,HaramiCross">
 				<!---  <cfset local.headers = arguments.data.columnlist> --->
 				<cfset local.dataArray = session.Objects.Utility.QryToArray(query:arguments.data,columnlist:local.headers) />
 			</cfcase>
 			<cfcase value="BreakoutReport">
+				<cfset local.dspHeaders = "DATEONE,OPEN,HIGH,LOW,CLOSE,LOCALHIGH,LOCALHIGHVALUE,LOCALLOW,LOCALLOWVALUE,PP,R1,R1BREAK,R2,R2BREAK,S1,S1BREAK,S2,S2BREAK" />
 				<cfset local.headers = "DATEONE,OPEN,HIGH,LOW,CLOSE,LOCALHIGH,LOCALHIGHVALUE,LOCALLOW,LOCALLOWVALUE,PP,R1,R1BREAK,R2,R2BREAK,S1,S1BREAK,S2,S2BREAK" />
 				<cfset local.dataArray = session.Objects.Utility.QryToArray(query:arguments.data,columnlist:local.headers) />
 			</cfcase>
 			<cfcase value="BacktestReport">
+				<cfset local.dspHeaders = "Date,Description,Entry_Exit,Price,Profit,NetProfit">
 				<cfset local.headers = "Date,Description,Entry_Exit,Price,Profit,NetProfit">
 				<cfset local.alen = arguments.data.size() />
 				<cfset local.dataArray = ArrayNew(2) />
@@ -126,7 +129,7 @@
 		<cfsavecontent variable="local.Reportdata">
 		<cfoutput>
 		<table>
-		<cfloop list="#local.headers#" index="local.i">
+		<cfloop list="#local.dspHeaders#" index="local.i">
 			<th>#local.i#</th>
 		</cfloop>
 		<cfloop from="1" to="#local.alen#" index="local.j">

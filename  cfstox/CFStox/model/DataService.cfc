@@ -237,6 +237,20 @@
 		<cfset queryAddColumn(arguments.query,"LocalLow","VarChar",local.LocalHighLows.LocalLows) />
 		<cfset queryAddColumn(arguments.query,"LocalHighValue","VarChar",local.LocalHighLows.LocalHighValue) />
 		<cfset queryAddColumn(arguments.query,"LocalLowValue","VarChar",local.LocalHighLows.LocalLowValue) />
+		<!--- Candles  --->
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"Hammer",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"Hammer",'Decimal',local.num.outdata) > 
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"HangingMan",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"HangingMan",'Decimal',local.num.outdata) > 
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"3Inside",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"ThreeInside",'Decimal',local.num.outdata) > 
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"3Outside",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"ThreeOutside",'Decimal',local.num.outdata) > 
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"3BlackCrows",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"ThreeBlackCrows",'Decimal',local.num.outdata) >
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"HaramiCross",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"HaramiCross",'Decimal',local.num.outdata) > 
+		
 		<cfreturn arguments.query />	
 	</cffunction>
 
