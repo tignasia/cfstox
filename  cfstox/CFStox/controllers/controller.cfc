@@ -21,6 +21,9 @@
 		local.xmldata 		= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.symbol#",qrydata:local.qryDataOriginal,startdate:"#arguments.startdate#", high:local.high, low:local.low);
 		local.xmldataha 	= session.objects.XMLGenerator.GenerateXML(name:"#arguments.Symbol#",symbol:"#arguments.Symbol#",qrydata:local.qryDataHA,startdate:"#arguments.startdate#", high:local.high, low:local.low);
 		session.objects.ReportService.ReportRunner(reportName:"HistoryReport",data:local.qryDataOriginal,symbol:arguments.symbol);
+		session.objects.ReportService.ReportRunner(reportName:"PivotReport",data:local.qryDataOriginal,symbol:arguments.symbol);
+		session.objects.ReportService.ReportRunner(reportName:"CandleReport",data:local.qryDataOriginal,symbol:arguments.symbol);
+		
 		//session.objects.ReportService.ReportRunner(reportName:"BreakoutReport",data:local.OriginalData,symbol:arguments.symbol);
 		structAppend(request,local); 
 		structAppend(request,arguments);

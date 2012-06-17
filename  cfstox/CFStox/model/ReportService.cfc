@@ -29,8 +29,24 @@
 			<cfcase value="HistoryReport">
 				<!--- <cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,RSI,LOCALHIGH,LOCALLOW,LINEARREG,LINEARREG10,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LINEARREGSLOPE10,LRSDELTA,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break">
 				 --->
-				 <cfset local.dspHeaders = "SYM,DATE,OPEN,HIGH,LOW,CLOSE,VOL,MO,ADX,CCI,CCI5,RSI,LR,LR10,LRANGLE,LRINTRCPT,LRSLOPE,LRGSLOPE10,LRSDELTA,FSLOPE,SSLOPE,LOHIGH,LOHIGHVAL,LOLOW,LOLOWVALUE,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,HaramiCross">
-				 <cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,CCI5,RSI,LINEARREG,LINEARREG10,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LINEARREGSLOPE10,LRSDELTA,FASTSLOPE,SLOWSLOPE,LOCALHIGH,LOCALHIGHVALUE,LOCALLOW,LOCALLOWVALUE,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,HaramiCross">
+				 <cfset local.dspHeaders = "SYM,DATE,OPEN,HIGH,LOW,CLOSE,VOL,MO,ADX,CCI,CCI5,RSI,LR,LR10,LRANG,LRINTR,LRSLP,LRSLP10,LRSDEL,FSLOPE,SSLOPE">
+				 <cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,CCI5,RSI,LINEARREG,LINEARREG10,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LINEARREGSLOPE10,LRSDELTA,FASTSLOPE,SLOWSLOPE">
+				<!---  <cfset local.headers = arguments.data.columnlist> --->
+				<cfset local.dataArray = session.Objects.Utility.QryToArray(query:arguments.data,columnlist:local.headers) />
+			</cfcase>
+			<cfcase value="PivotReport">
+				<!--- <cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,RSI,LOCALHIGH,LOCALLOW,LINEARREG,LINEARREG10,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LINEARREGSLOPE10,LRSDELTA,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break">
+				 --->
+				 <cfset local.dspHeaders = "SYM,DATE,OPEN,HIGH,LOW,CLOSE,VOL,LOHIGH,LHVAL,LOLOW,LLVAL,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break">
+				 <cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,LOCALHIGH,LOCALHIGHVALUE,LOCALLOW,LOCALLOWVALUE,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break">
+				<!---  <cfset local.headers = arguments.data.columnlist> --->
+				<cfset local.dataArray = session.Objects.Utility.QryToArray(query:arguments.data,columnlist:local.headers) />
+			</cfcase>
+			<cfcase value="CandleReport">
+				<!--- <cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,RSI,LOCALHIGH,LOCALLOW,LINEARREG,LINEARREG10,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LINEARREGSLOPE10,LRSDELTA,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break">
+				 --->
+				 <cfset local.dspHeaders = "SYM,DATE,OPEN,HIGH,LOW,CLOSE,VOL,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine">
+				 <cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine">
 				<!---  <cfset local.headers = arguments.data.columnlist> --->
 				<cfset local.dataArray = session.Objects.Utility.QryToArray(query:arguments.data,columnlist:local.headers) />
 			</cfcase>

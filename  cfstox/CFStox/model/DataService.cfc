@@ -248,9 +248,12 @@
 		<cfset queryAddColumn(arguments.query,"ThreeOutside",'Decimal',local.num.outdata) > 
 		<cfset local.num = session.objects.TA.GetCandle(Candle:"3BlackCrows",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"ThreeBlackCrows",'Decimal',local.num.outdata) >
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"Harami",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"Harami",'Decimal',local.num.outdata) />
 		<cfset local.num = session.objects.TA.GetCandle(Candle:"HaramiCross",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"HaramiCross",'Decimal',local.num.outdata) > 
-		
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"LongLine",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"LongLine",'Decimal',local.num.outdata) > 
 		<cfreturn arguments.query />	
 	</cffunction>
 
