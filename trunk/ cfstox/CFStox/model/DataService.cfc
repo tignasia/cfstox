@@ -238,6 +238,8 @@
 		<cfset queryAddColumn(arguments.query,"LocalHighValue","VarChar",local.LocalHighLows.LocalHighValue) />
 		<cfset queryAddColumn(arguments.query,"LocalLowValue","VarChar",local.LocalHighLows.LocalLowValue) />
 		<!--- Candles  --->
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"Engulfing",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"Engulfing",'Decimal',local.num.outdata) > 
 		<cfset local.num = session.objects.TA.GetCandle(Candle:"Hammer",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"Hammer",'Decimal',local.num.outdata) > 
 		<cfset local.num = session.objects.TA.GetCandle(Candle:"HangingMan",qryPrices:arguments.query) />

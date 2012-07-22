@@ -19,12 +19,53 @@
 		SMADown
 		--->
 	
+	<cffunction name="Template" description="called from system" access="public" displayname="Template for triggers" output="false" returntype="boolean">
+		<!--- this is an example trigger  --->
+		<cfargument name="Beans" required="true" />
+		<cfargument name="Overbought" required="false" default=80 />
+		<cfscript>
+		if (ListFind("08/01/2011,08/22/2011,09/12/2011",dateformat(arguments.beans.DataBeanToday.Get("Date"),"mm/dd/yyyy"))) 
+		{ return true;  }
+		else
+		{ return false; }
+		</cfscript>
+	</cffunction>
+	
 	<cffunction name="TestIndicator" description="test indicatior state" access="public" displayname="TestIndicator" output="false" returntype="Any">
 		<cfargument name="Beans" required="true" />
 		<cfargument name="Indicator" required="true" />
 		<cfinvoke method="#arguments.Indicator#"  argumentcollection="#arguments#"  returnvariable="State" /> 
 		<cfreturn State />
 	</cffunction>
+	
+	<cffunction name="BearishCandles" description="checks for bearish candles" access="public" displayname="BearishCandles" output="false" returntype="boolean">
+		<!--- low below previous low  --->
+		<cfargument name="Beans" required="true" />
+		<cfset var local = StructNew() />
+		<cfscript>
+		local.bearflag = false;
+		// Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine
+		if (not local.bearflag AND arguments.beans.DataBeanToday.get("Engulfing") EQ "-100" )
+		{local.bearflag = true;}
+		if (arguments.beans.DataBeanToday.get("Hammer") EQ "-100" )
+		{local.bearflag = true;}
+		if (arguments.beans.DataBeanToday.get("HangingMan") EQ "-100" )
+		{local.bearflag = true;}
+		if (arguments.beans.DataBeanToday.get("ThreeInside") EQ "-100" )
+		{local.bearflag = true;}
+		if (arguments.beans.DataBeanToday.get("ThreeOutside") EQ "-100" )
+		{local.bearflag = true;}
+		if (arguments.beans.DataBeanToday.get("ThreeBlackCrows") EQ "-100" )
+		{local.bearflag = true;}
+		if (arguments.beans.DataBeanToday.get("Harami") EQ "-100" )
+		{local.bearflag = true;}
+		if (arguments.beans.DataBeanToday.get("HaramiCross") EQ "-100" )
+		{local.bearflag = true;}
+		if (arguments.beans.DataBeanToday.get("LongLine") EQ "-100" )
+		{local.bearflag = true;}
+		</cfscript>
+	</cffunction>
+	
 	
 	<cffunction name="EntryLongDates" description="called from system" access="public" displayname="EntryLongDates" output="false" returntype="boolean">
 		<cfargument name="Beans" required="true" />
