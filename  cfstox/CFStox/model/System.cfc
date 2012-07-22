@@ -20,6 +20,94 @@
 		</cfscript>
 	</cffunction>
 	
+	<cffunction name="SetTrades" description="run the system" access="private" displayname="SetTrades" output="false" returntype="Any">
+		<cfargument name="Beans" required="true" />
+		<cfargument name="SystemName" required="true" />
+		<!--- 
+		arguments.beans.TrackingBean 
+		arguments.beans.TradeBean
+		arguments.beans.Databeans.DataBeanToday
+		arguments.beans.Databeans.DataBean1
+		--->
+		<cfset var local = StructNew() />
+		<cfscript>
+		local.HKdatabeantoday 	= arguments.beans.Databeans.HA_DataBeans.DataBeanToday;
+		local.HKbeans 			= arguments.beans.Databeans.HA_DataBeans;
+		local.databeantoday 	= arguments.beans.Databeans.original_databeans.DataBeanToday;
+		local.beans 			= arguments.beans.Databeans.original_databeans;
+		local.TrackingBean 		= arguments.beans.TrackingBean;
+		local.triggers 			= StructNew();
+		local.triggers.boolOpenShort 	= false;
+		local.triggers.boolCloseShort 	= false;
+		local.triggers.boolOpenLong 	= false;
+		local.triggers.boolCloseLong 	= false;
+		local.triggers.ShortEntryPoint 	= "";
+		local.triggers.ShortExitPoint 	= "";
+		local.triggers.LongEntryPoint 	= "";
+		local.triggers.LongExitPoint 	= "";		
+		</cfscript>
+		<cfinvoke method="#arguments.SystemName#"  argumentcollection="#local#"  returnvariable="triggers" />
+		<cfscript>
+		local.strStatus = StructNew();
+		local.strStatus.initialStatus = arguments.beans.TrackingBean.Get("Status");
+		SetEntryExit(beans:local.beans,triggers:local.triggers);			
+		if (arguments.beans.TrackingBean.Get("Status") EQ "Short" AND local.triggers.boolCloseShort)
+		{	// short exit
+			local.databeantoday.Set("TradeType","CloseShort");	
+			arguments.beans.TrackingBean.Set("Status","");
+			local.strStatus.Status1 = arguments.beans.TrackingBean.Get("Status");
+		}
+				
+		if (local.strStatus.initialStatus EQ "" AND NOT triggers.boolCloseShort AND local.triggers.boolOpenShort)
+		{ // short entry
+			local.databeantoday.Set("tradeType","OpenShort");	
+			arguments.beans.TrackingBean.Set("Status","Short");
+			local.strStatus.Status2 = arguments.beans.TrackingBean.Get("Status");
+		}
+		
+		if (arguments.beans.TrackingBean.Get("Status") EQ "Long" AND triggers.boolCloseLong)
+			{ //long exit
+			local.databeantoday.Set("TradeType","CloseLong");	
+			arguments.beans.TrackingBean.Set("Status","");
+			local.strStatus.Status3 = arguments.beans.TrackingBean.Get("Status");
+			}
+			
+		if (arguments.beans.TrackingBean.Get("Status") EQ "" AND NOT triggers.boolCloseLong AND triggers.boolOpenLong)
+			{
+			local.databeantoday.Set("TradeType","OpenLong");	
+			arguments.beans.TrackingBean.Set("Status","Long");
+			local.strStatus.Status4 = arguments.beans.TrackingBean.Get("Status");
+			}
+		
+		// check for close long and open short
+		if (triggers.boolOpenLong AND triggers.boolCloseShort AND arguments.beans.TrackingBean.Get("Status") NEQ "Long")
+		{
+		local.databeantoday.Set("TradeType","OpenLongCloseShort");	
+		arguments.beans.TrackingBean.Set("Status","Long");
+		local.strStatus.Status5 = arguments.beans.TrackingBean.Get("Status");
+		} 
+			// check for close long and open short 
+		if (triggers.boolOpenShort AND triggers.boolCloseLong AND arguments.beans.TrackingBean.Get("Status") NEQ "Short")
+		{
+		local.databeantoday.Set("TradeType","OpenShortCloseLong");	
+		arguments.beans.TrackingBean.Set("Status","Short");
+		local.strStatus.Status6 = arguments.beans.TrackingBean.Get("Status");
+		}
+		
+		if (local.strStatus.initialStatus EQ arguments.beans.TrackingBean.Get("Status"))
+		{
+			local.tradelength = arguments.beans.TrackingBean.Get("Tradelength");
+			arguments.beans.TrackingBean.Set("Tradelength",local.tradelength + 1);
+		}
+		else
+		{
+		arguments.beans.TrackingBean.Set("Tradelength",0);
+		}
+		local.databeantoday.Set("TBStatusChange",local.strStatus);			
+		</cfscript>
+		<cfreturn local.databeantoday />	
+	</cffunction>
+	
 	<cffunction name="ShortEntryRVBD" description="Max profit from riverbed drops" access="public" displayname="test" output="false" returntype="Any">
 		<!--- system description:  
 		high relative to mean
@@ -86,7 +174,6 @@
 		<cfscript>
 		// local.TestData = this.SystemService.SetupSystem(systemName:"TestSystemABX",qryData:this.data);
 		//	local.Results = this.SystemService.FindTrades(qryData:this.data,TestData:local.TestData	);
-		
 		local.databeantoday = arguments.beans.Databeans.original_databeans.DataBeanToday;
 		local.boolGoShort = false;
 		// <!--- entry filter:  ----->
@@ -95,7 +182,6 @@
 		{
 		local.databeantoday.Set("OpenShort",true);
 		}
-		
 		// <!--- open trade condition:  ----->
 		// <!--- stop loss condition:  ----->
 		// <!--- exit condition:  ----->
@@ -124,95 +210,7 @@
 		</cfscript> 
 	</cffunction>
 	
-	<cffunction name="SetTrades" description="run the system" access="private" displayname="SetTrades" output="false" returntype="Any">
-		<cfargument name="Beans" required="true" />
-		<cfargument name="SystemName" required="true" />
-		<!--- 
-		arguments.beans.TrackingBean 
-		arguments.beans.TradeBean
-		arguments.beans.Databeans.DataBeanToday
-		arguments.beans.Databeans.DataBean1
-		--->
-		<cfset var local = StructNew() />
-		<cfscript>
-		 	
-		local.HKdatabeantoday 	= arguments.beans.Databeans.HA_DataBeans.DataBeanToday;
-		local.HKbeans 			= arguments.beans.Databeans.HA_DataBeans;
-		local.databeantoday 	= arguments.beans.Databeans.original_databeans.DataBeanToday;
-		local.beans 			= arguments.beans.Databeans.original_databeans;
-		local.TrackingBean 		= arguments.beans.TrackingBean;
-		local.triggers 			= StructNew();
-		local.triggers.boolOpenShort 	= false;
-		local.triggers.boolCloseShort 	= false;
-		local.triggers.boolOpenLong 	= false;
-		local.triggers.boolCloseLong 	= false;
-		local.triggers.ShortEntryPoint 	= "";
-		local.triggers.ShortExitPoint 	= "";
-		local.triggers.LongEntryPoint 	= "";
-		local.triggers.LongExitPoint 	= "";		
-		</cfscript>
-		<cfinvoke method="#arguments.SystemName#"  argumentcollection="#local#"  returnvariable="triggers" />
-		<cfscript>
-		local.strStatus = StructNew();
-		local.strStatus.initialStatus = arguments.beans.TrackingBean.Get("Status");
-		SetEntryExit(beans:local.beans,triggers:local.triggers);			
-		if (arguments.beans.TrackingBean.Get("Status") EQ "Short" AND local.triggers.boolCloseShort)
-		{	// short exit
-			
-			local.databeantoday.Set("TradeType","CloseShort");	
-			arguments.beans.TrackingBean.Set("Status","");
-			local.strStatus.Status1 = arguments.beans.TrackingBean.Get("Status");
-		}
-				
-		if (local.strStatus.initialStatus EQ "" AND NOT triggers.boolCloseShort AND local.triggers.boolOpenShort)
-		{ // short entry
-			local.databeantoday.Set("tradeType","OpenShort");	
-			arguments.beans.TrackingBean.Set("Status","Short");
-			local.strStatus.Status2 = arguments.beans.TrackingBean.Get("Status");
-		}
-		
-		if (arguments.beans.TrackingBean.Get("Status") EQ "Long" AND triggers.boolCloseLong)
-			{ //long exit
-			local.databeantoday.Set("TradeType","CloseLong");	
-			arguments.beans.TrackingBean.Set("Status","");
-			local.strStatus.Status3 = arguments.beans.TrackingBean.Get("Status");
-			}
-			
-		if (arguments.beans.TrackingBean.Get("Status") EQ "" AND NOT triggers.boolCloseLong AND triggers.boolOpenLong)
-			{
-			local.databeantoday.Set("TradeType","OpenLong");	
-			arguments.beans.TrackingBean.Set("Status","Long");
-			local.strStatus.Status4 = arguments.beans.TrackingBean.Get("Status");
-			}
-		
-		// check for close long and open short
-		if (triggers.boolOpenLong AND triggers.boolCloseShort AND arguments.beans.TrackingBean.Get("Status") NEQ "Long")
-		{
-		local.databeantoday.Set("TradeType","OpenLongCloseShort");	
-		arguments.beans.TrackingBean.Set("Status","Long");
-		local.strStatus.Status5 = arguments.beans.TrackingBean.Get("Status");
-		} 
-			// check for close long and open short 
-		if (triggers.boolOpenShort AND triggers.boolCloseLong AND arguments.beans.TrackingBean.Get("Status") NEQ "Short")
-		{
-		local.databeantoday.Set("TradeType","OpenShortCloseLong");	
-		arguments.beans.TrackingBean.Set("Status","Short");
-		local.strStatus.Status6 = arguments.beans.TrackingBean.Get("Status");
-		}
-		
-		if (local.strStatus.initialStatus EQ arguments.beans.TrackingBean.Get("Status"))
-		{
-			local.tradelength = arguments.beans.TrackingBean.Get("Tradelength");
-			arguments.beans.TrackingBean.Set("Tradelength",local.tradelength + 1);
-		}
-		else
-		{
-		arguments.beans.TrackingBean.Set("Tradelength",0);
-		}
-		local.databeantoday.Set("TBStatusChange",local.strStatus);			
-		</cfscript>
-		<cfreturn local.databeantoday />	
-	</cffunction>
+	
 	
 	<cffunction name="HeikenAshiPivotSystem" description="System based on piviot points" access="private" displayname="PivotSystem" output="false" returntype="Any">
 		<!--- system description:  
