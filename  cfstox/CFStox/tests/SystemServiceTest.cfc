@@ -12,7 +12,7 @@
 			this.DataService 	= createObject("component","cfstox.model.DataService").init();
 			this.Utility 		= createObject("component","cfstox.model.Utility").init();
 			this.SystemService 	= createObject("component","cfstox.model.SystemService").init();
-			this.data = this.DataService.GetStockData(symbol:"FAS",startdate:"07/1/2011",enddate:"12/25/2011");
+			this.data = this.DataService.GetStockData(symbol:"UA",startdate:"01/01/2012",enddate:"07/20/2012");
 			//debug(data);
 			
 		</cfscript>
@@ -59,7 +59,7 @@
 		<cfscript>
 		var local = structNew();
 		makePublic(this.SystemService,"SetUpSystem");
-		local.TestData = this.SystemService.SetupSystem(systemName:"HeikenAshiPivotSystem",qryData:this.data);
+		local.TestData = this.SystemService.SetupSystem(systemName:"BearishCandles",qryData:this.data);
 		makePublic(this.SystemService,"FindTrades");
 		local.Results = this.SystemService.FindTrades(qryData:this.data,TestData:local.TestData	);
 		// trades are stored in the tradehistory

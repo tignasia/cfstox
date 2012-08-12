@@ -61,7 +61,7 @@
 		<cfargument name="symbol" required="true" />
 		<cfargument name="startdate" required="true" />
 		<cfargument name="enddate" required="true" />
-		<cfargument name="SystemName" required="false" default="HeikenAshiPivotSystem">
+		<cfargument name="SystemName" required="false" default="BearishCandles">
 		<cfscript>
 		var local = structnew(); 
 		local.view = "historical";

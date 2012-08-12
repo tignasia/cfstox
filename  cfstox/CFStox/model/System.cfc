@@ -138,6 +138,22 @@
 		</cfscript> 
 	</cffunction>
 	
+	<cffunction name="BearishCandles" description="Max profit from riverbed drops" access="public" displayname="test" output="false" returntype="Any">
+		<cfargument name="triggers" required="true" />
+		<cfargument name="beans" required="true" />
+		<cfscript>
+		var local = StructNew();
+		local.triggers 	=	arguments.triggers;
+		local.beans 	=	arguments.Beans;
+		local.triggers.boolOpenShort = session.objects.SystemTriggers.BearishCandles(beans:local.beans);	
+		local.triggers.boolCloseShort = session.objects.SystemTriggers.BullishCandles(beans:local.beans,PivotPoint:"R1");
+		//local.triggers.boolCloseLong = session.objects.SystemTriggers.BearishCandles(beans:local.beans);	
+		//local.triggers.boolOpenLong = session.objects.SystemTriggers.BullishCandles(beans:local.beans,PivotPoint:"R1");
+		
+		return local.triggers;
+		</cfscript> 
+	</cffunction>
+			
 	<cffunction name="PivotSystem" description="System based on piviot points" access="private" displayname="PivotSystem" output="false" returntype="Any">
 		<!--- system description:  
 		short entry:
@@ -209,8 +225,6 @@
 		return local.triggers;
 		</cfscript> 
 	</cffunction>
-	
-	
 	
 	<cffunction name="HeikenAshiPivotSystem" description="System based on piviot points" access="private" displayname="PivotSystem" output="false" returntype="Any">
 		<!--- system description:  

@@ -96,6 +96,7 @@
 		variables.trade.TradeDescription = "";
 		variables.trade.TradeEntryExitPoint = "";
 		variables.trade.TradePrice = "";
+		variables.trade.Price = "";
 		variables.tradeHistory = ArrayNew(1);
 		return this;
 		</cfscript>
@@ -133,30 +134,9 @@
 		
 		local.tracker1 = Duplicate(variables.tracker);
 		local.tracker1.date = arguments.DataBeanToday.get("Date");
-		local.tracker1.tbstatusChange = arguments.DataBeanToday.get("TBStatusChange");	
-		// open long alert places a long trade if condition is met
-		// the condition is part of the system
-		// process exisiting trades
-		//dump(arguments.DataBeanToday.GetMemento());
-		// the databean should ask the trackingbean for this info. This is part of the system and should not be in the tradebean
-		// the tradebean should only be resp for implementing the system calls
-		//
-		/* local.TradeType = DataBeanToday.get("TradeType")
-		switch(local.TradeType){
-			case "OpenLong":
-			local.OpenPattern = CandlePattern(local.arrData);
-			break;
-			case "OpenShort":
-			local.HighPattern = CandlePattern(local.arrData);
-			break;
-			case "CloseLong":
-			local.LowPattern = CandlePattern(local.arrData);
-			break;
-			case "CloseShort":
-			local.ClosePattern = CandlePattern(local.arrData);
-			break;
-			} */
-		
+		local.tracker1.tbstatusChange = arguments.DataBeanToday.get("TBStatusChange");
+		local.tracker1.Price = arguments.DataBeanToday.get("Close");		
+				
 		local.TradeType = DataBeanToday.get("TradeType");
 		switch(local.TradeType){
 			case "OpenLong":
@@ -193,12 +173,13 @@
 				
 		if(local.tradeType NEQ "")
 		{
-		local.trade1 = Duplicate(variables.trade);
-		local.trade1.date = arguments.DataBeanToday.get("Date");
+		local.trade1 		= Duplicate(variables.trade);
+		local.trade1.date 	= arguments.DataBeanToday.get("Date");
 		local.trade1.TradeDescription = local.tradeType;
 		local.trade1.TradePrice = arguments.DataBeanToday.get("TradePrice") ;
+		local.trade1.Price 	= arguments.DataBeanToday.get("Close") ;
 		local.nextindex = variables.tradeHistory.size();
-		variables.tradeHistory[local.nextindex+1] = local.trade1;
+		variables.tradeHistory[local.nextindex +1 ] = local.trade1;
 		}
 		
 		local.nextindex1 = variables.trackHistory.size();
