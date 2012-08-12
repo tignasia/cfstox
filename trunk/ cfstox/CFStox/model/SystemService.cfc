@@ -98,11 +98,11 @@ The triggers are granular conditions such as RSI above a certain amount
 		<cfargument name="TestData" required="true"  />
 		<cfscript>
 		var local = structnew();
-		local.systemName = arguments.TestData.TradeBean.Get("SystemName");
-		local.qryDataOriginal = arguments.qryData.qryDataOriginal ;
-		local.qryDataHA = arguments.qryData.qryDataHA ;
+		local.systemName 		= arguments.TestData.TradeBean.Get("SystemName");
+		local.qryDataOriginal 	= arguments.qryData.qryDataOriginal ;
+		local.qryDataHA 		= arguments.qryData.qryDataHA ;
 		local.Beans.TrackingBean = arguments.TestData.TrackingBean;
-		local.beans.TradeBean = arguments.TestData.TradeBean;
+		local.beans.TradeBean 	= arguments.TestData.TradeBean;
 		</cfscript>
 		<cfloop  query="local.qryDataOriginal" startrow="6">
 			<cfscript>

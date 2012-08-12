@@ -42,27 +42,92 @@
 		<!--- low below previous low  --->
 		<cfargument name="Beans" required="true" />
 		<cfset var local = StructNew() />
+		<!--- todo: this should be a while loop  --->
 		<cfscript>
 		local.bearflag = false;
 		// Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine
-		if (not local.bearflag AND arguments.beans.DataBeanToday.get("Engulfing") EQ "-100" )
-		{local.bearflag = true;}
-		if (arguments.beans.DataBeanToday.get("Hammer") EQ "-100" )
-		{local.bearflag = true;}
-		if (arguments.beans.DataBeanToday.get("HangingMan") EQ "-100" )
-		{local.bearflag = true;}
-		if (arguments.beans.DataBeanToday.get("ThreeInside") EQ "-100" )
-		{local.bearflag = true;}
-		if (arguments.beans.DataBeanToday.get("ThreeOutside") EQ "-100" )
-		{local.bearflag = true;}
-		if (arguments.beans.DataBeanToday.get("ThreeBlackCrows") EQ "-100" )
-		{local.bearflag = true;}
-		if (arguments.beans.DataBeanToday.get("Harami") EQ "-100" )
-		{local.bearflag = true;}
-		if (arguments.beans.DataBeanToday.get("HaramiCross") EQ "-100" )
-		{local.bearflag = true;}
-		if (arguments.beans.DataBeanToday.get("LongLine") EQ "-100" )
-		{local.bearflag = true;}
+		if (  arguments.beans.DataBeanToday.get("Engulfing") EQ -100 )
+		{local.bearflag = true;
+		local.flagtype = "Engulfing";
+		}
+		if (  arguments.beans.DataBeanToday.get("Hammer") EQ -100 )
+		{local.bearflag = true;
+		local.flagtype = "Hammer";
+		}
+		if (  arguments.beans.DataBeanToday.get("HangingMan") EQ -100 )
+		{local.bearflag = true;
+		local.flagtype = "HangingMan";
+		}
+		if (  arguments.beans.DataBeanToday.get("ThreeInside") EQ -100 )
+		{local.bearflag = true;
+		local.flagtype = "ThreeInside";
+		}
+		if (  arguments.beans.DataBeanToday.get("ThreeOutside") EQ -100 )
+		{local.bearflag = true;
+		local.flagtype = "ThreeOutside";
+		}
+		if (  arguments.beans.DataBeanToday.get("ThreeBlackCrows") EQ -100 )
+		{local.bearflag = true;
+		local.flagtype = "ThreeBlackCrows";}
+		
+		if ( arguments.beans.DataBeanToday.get("Harami") EQ "-100" )
+		{local.bearflag = true;
+		local.flagtype = "Harami";}
+		
+		if (  arguments.beans.DataBeanToday.get("HaramiCross") EQ "-100" )
+		{local.bearflag = true;
+		local.flagtype = "HaramiCross";}
+		
+		if (  arguments.beans.DataBeanToday.get("LongLine") EQ "-100" )
+		{local.bearflag = true;
+		local.flagtype = "LongLine";}
+		
+		return local.bearflag ;
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="BullishCandles" description="checks for bearish candles" access="public" displayname="BearishCandles" output="false" returntype="boolean">
+		<!--- low below previous low  --->
+		<cfargument name="Beans" required="true" />
+		<cfset var local = StructNew() />
+		<!--- todo: this should be a while loop  --->
+		<cfscript>
+		local.bearflag = false;
+		// Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine
+		if (  arguments.beans.DataBeanToday.get("Engulfing") EQ 100 )
+		{local.bearflag = true;
+		local.flagtype = "Engulfing";
+		}
+		if (  arguments.beans.DataBeanToday.get("Hammer") EQ 100 )
+		{local.bearflag = true;
+		local.flagtype = "Hammer";
+		}
+		if (  arguments.beans.DataBeanToday.get("HangingMan") EQ 100 )
+		{local.bearflag = true;
+		local.flagtype = "HangingMan";
+		}
+		if (  arguments.beans.DataBeanToday.get("ThreeInside") EQ 100 )
+		{local.bearflag = true;
+		local.flagtype = "ThreeInside";
+		}
+		if (  arguments.beans.DataBeanToday.get("ThreeOutside") EQ 100 )
+		{local.bearflag = true;
+		local.flagtype = "ThreeOutside";
+		}
+				
+		if ( arguments.beans.DataBeanToday.get("Harami") EQ "100" )
+		{local.bearflag = true;
+		local.flagtype = "Harami";}
+		
+		if (  arguments.beans.DataBeanToday.get("HaramiCross") EQ "100" )
+		{local.bearflag = true;
+		local.flagtype = "HaramiCross";}
+		
+		if (  arguments.beans.DataBeanToday.get("LongLine") EQ "100" )
+		{local.bearflag = true;
+		local.flagtype = "LongLine";}
+		
+		return local.bearflag ;
 		</cfscript>
 	</cffunction>
 	

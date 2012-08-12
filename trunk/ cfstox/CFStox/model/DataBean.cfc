@@ -94,15 +94,15 @@
 		Set("TBStatusChange","");
 		Set("TradeType","");
 		// candle patterns
-		Set("Engulfing","strData.Engulfing");
-		Set("Hammer","strData.Hammer");
-		Set("HangingMan","strData.HangingMan");
-		Set("ThreeInside","strData.ThreeInside");
-		Set("ThreeOutside","strData.ThreeOutside");
-		Set("ThreeBlackCrows","strData.ThreeBlackCrows");
-		Set("Harami","strData.Harami");
-		Set("HaramiCross","strData.HaramiCross");
-		Set("LongLine","strData.LongLine");
+		Set("Engulfing",strData.Engulfing);
+		Set("Hammer",strData.Hammer);
+		Set("HangingMan",strData.HangingMan);
+		Set("ThreeInside",strData.ThreeInside);
+		Set("ThreeOutside",strData.ThreeOutside);
+		Set("ThreeBlackCrows",strData.ThreeBlackCrows);
+		Set("Harami",strData.Harami);
+		Set("HaramiCross",strData.HaramiCross);
+		Set("LongLine",strData.LongLine);
 		return this;
 		</cfscript>
 	</cffunction>

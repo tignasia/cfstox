@@ -5,16 +5,19 @@
 	</cffunction>
 
 	<cffunction name="ReportRunner" description="I generate reports" access="public" displayname="" output="false" returntype="void">
-		<cfargument name="ReportName" required="true">
-		<cfargument name="data" required="true">
+		<cfargument name="ReportName" required="true" />
+		<cfargument name="data" required="true" />
 		<cfargument name="symbol" required="true" />
+		<cfargument name="format" required="false"  default="Excel"/>
 		<!--- <cfdump var="#arguments.data#">
 		<cfabort> --->
 		<cfscript>
 		var local = StructNew() ;
 		local.ReportResults = ReportSetup(reportName:arguments.reportName,Data:arguments.Data);
-		//OutputReport(content:local.reportResults,symbol:arguments.symbol,filetype:"PDF",ReportName:"#arguments.ReportName#");
-		OutputReport(content:local.reportResults,symbol:arguments.symbol,filetype:"excel",ReportName:"#arguments.ReportName#");  
+		if(arguments.format EQ "excel")
+		OutputReport(content:local.reportResults,symbol:arguments.symbol,filetype:"excel",ReportName:"#arguments.ReportName#");
+		else
+		OutputReport(content:local.reportResults,symbol:arguments.symbol,filetype:"PDF",ReportName:"#arguments.ReportName#");  
 		</cfscript> 
 		<cfreturn />
 	</cffunction>
@@ -76,7 +79,7 @@
 					<cfset local.DataArray[local.j][1] = arguments.data[local.j].date />
 					<cfset local.DataArray[local.j][2] = arguments.data[local.j].TradeDescription />
 					<cfset local.DataArray[local.j][3] = arguments.data[local.j].TradeEntryExitPoint />
-					<cfset local.DataArray[local.j][4] = arguments.data[local.j].TradePrice />
+					<cfset local.DataArray[local.j][4] = arguments.data[local.j].Price />
 					<cfset local.DataArray[local.j][5] = local.Profit />
 					<cfset local.DataArray[local.j][6] = local.NetProfit />
 				</cfloop>
@@ -186,7 +189,6 @@
 		<cfreturn />
 	</cffunction>
 	<!---- these reports loop over i --->
-	
 	<!--- Fields 
 	ADX	CCI	CLOSE	DATEONE	HIGH	LINEARREG	LINEARREG10	LINEARREGANGLE	LINEARREGINTERCEPT	
 	LINEARREGSLOPE	LINEARREGSLOPE10	LOCALHIGH	LOCALLOW	LOW	LRSDELTA	
@@ -224,37 +226,7 @@
 		</cfsavecontent>
 		<cfreturn />
 	</cffunction>
-	
-	<cffunction name="BacktestReport" description="I output a report" access="public" displayname="" output="false" returntype="void">
-		<cfargument name="TradeBean" required="true">
-		<cfargument name="Symbol" required="true">
-		<cfset var local = structNew() />
-		<cfset local.i = 1 />
-		<cfset local.j = 1 />
-		<cfset local.alen = arguments.tradebean.size() />
-		<cfset local.Excelfilename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "#arguments.symbol#_trades" & ".xls"/>
-		<cfset local.columns = "Date,Description,Entry_Exit,Price">
-		<cfsavecontent variable="local.Stockdata">
-		<cfoutput>
-		<table>
-		<cfloop list="#local.columns#" index="local.i">
-		<th>#local.i#</th>
-		</cfloop>
-		<cfloop from="1" to="#local.alen#" index="local.j">
-		<tr>
-			<td>#arguments.tradebean[local.j].date#</td>
-			<td>#arguments.tradebean[local.j].TradeDescription#</td>
-			<td>#arguments.tradebean[local.j].TradeEntryExitPoint#</td>
-			<td>#arguments.tradebean[local.j].TradePrice#</td>
-		</tr>
-		</cfloop>
-		</table>
-		</cfoutput>
-		</cfsavecontent>
-		<cffile action="write" file="#local.Excelfilename#" output="#local.stockdata#"   />
-		<cfreturn />
-	</cffunction>
-	
+		
 	<cffunction name="ProfitReport" description="I output a PDF of the best trades" access="public" displayname="" output="false" returntype="void">
 		<cfargument name="data" required="true">
 		<cfset var local = structNew() />
