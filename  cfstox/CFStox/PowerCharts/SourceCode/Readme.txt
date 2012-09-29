@@ -1,1 +1,0 @@
-Source code is not available in this license. Only Enteprise Plus license contains full source code of FusionCharts.
