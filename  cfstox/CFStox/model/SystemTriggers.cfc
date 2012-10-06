@@ -39,7 +39,6 @@
 	</cffunction>
 	
 	<cffunction name="BearishCandles" description="checks for bearish candles" access="public" displayname="BearishCandles" output="false" returntype="boolean">
-		<!--- low below previous low  --->
 		<cfargument name="Beans" required="true" />
 		<cfset var local = StructNew() />
 		<!--- todo: this should be a while loop  --->
@@ -82,11 +81,11 @@
 		{local.bearflag = true;
 		local.flagtype = "LongLine";}
 		
-		return local.bearflag ;
+		return local ;
 		</cfscript>
 	</cffunction>
 	
-	<cffunction name="BullishCandles" description="checks for bearish candles" access="public" displayname="BearishCandles" output="false" returntype="boolean">
+	<cffunction name="BullishCandles" description="checks for bullish candles" access="public" displayname="BearishCandles" output="false" returntype="boolean">
 		<!--- low below previous low  --->
 		<cfargument name="Beans" required="true" />
 		<cfset var local = StructNew() />
@@ -130,7 +129,6 @@
 		return local.bearflag ;
 		</cfscript>
 	</cffunction>
-	
 	
 	<cffunction name="EntryLongDates" description="called from system" access="public" displayname="EntryLongDates" output="false" returntype="boolean">
 		<cfargument name="Beans" required="true" />

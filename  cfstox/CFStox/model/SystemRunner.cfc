@@ -1,5 +1,10 @@
 <cfcomponent  displayname="systemRunner" hint="I test systems using given data" output="false">
-
+<!--- 
+SystemService sets up data and calls SystemRunner 
+SytemRunner Calls System, which contains system definitions
+The system definitions consists of sets of triggers defined in systemTriggers
+The triggers are granular conditions such as RSI above a certain amount
+--->
 	<cffunction name="init" description="init method" access="public" displayname="init" output="false" returntype="systemRunner">
 		<!--- persistent variable to store trades and results --->
 		<cfset variables.trackHighLows = StructNew() />

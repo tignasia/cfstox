@@ -5,18 +5,24 @@
 	</cffunction>
 	
 	<cffunction name="GenerateXML"  hint="I generate XML data for FusionCharts" access="public" output="false" returntype="xml">
-		<cfargument name="name" required="true" />
-		<cfargument name="symbol" required="true" />
-		<cfargument name="qrydata" required="true" />
-		<cfargument name="high" required="false" />
-		<cfargument name="low" required="false" />
-		<cfset var local = structNew() />
+		<cfargument name="dataType" required="false" default="Original" />
+		<cfset var 	local = structNew() />
+		<cfset name 	=	"chart"  />
+		<cfset symbol 	=	session.objects.DataStorage.GetData("symbol") />
+		<cfif arguments.dataType EQ "Original">
+			<cfset qrydata 	=	session.objects.DataStorage.GetData("qryDataOriginal") />
+		<cfelse>
+			<cfset qrydata 	=	session.objects.DataStorage.GetData("qryDataHA") />
+		</cfif>	
+		<cfset high =	session.objects.DataStorage.GetData("High") />
+		<cfset low 	=	session.objects.DataStorage.GetData("low") />
+		
 		<cfscript>
 		local.strXML = ""; 
 		//local.strXML = "<chart showToolTip='1'>";
-		local.strXML = local.strXML & "<chart showToolTip='1' caption='#arguments.name# #arguments.symbol#' yAxisMinValue='#arguments.low#' yAxisMaxValue='#arguments.high#' canvasBorderColor='DAE1E8' canvasBgColor='FFFFFF' bgColor='EEF2FB' numDivLines='9' divLineColor='DAE1E8' decimalPrecision='2' numberPrefix='$' showNames='1' bearBorderColor='E33C3C' bearFillColor='B00F1F' bullBorderColor='1F3165' baseFontColor='444C60' outCnvBaseFontColor='444C60' hoverCapBorderColor='DAE1E8' hoverCapBgColor='FFFFFF' rotateNames='0' showExportDataMenuItem='1'>";
+		local.strXML = local.strXML & "<chart showToolTip='1' caption='#name# #symbol#' yAxisMinValue='0' yAxisMaxValue='#high#' canvasBorderColor='DAE1E8' canvasBgColor='FFFFFF' bgColor='EEF2FB' numDivLines='9' divLineColor='DAE1E8' decimalPrecision='2' numberPrefix='$' showNames='1' bearBorderColor='E33C3C' bearFillColor='B00F1F' bullBorderColor='1F3165' baseFontColor='444C60' outCnvBaseFontColor='444C60' hoverCapBorderColor='DAE1E8' hoverCapBgColor='FFFFFF' rotateNames='0' showExportDataMenuItem='1'>";
 		local.strxml = local.strXML & "<dataset>";
-		local.qryrows = arguments.qrydata.recordcount;
+		local.qryrows = qrydata.recordcount;
 		//Convert data to XML and append
        	for(i=1;i<=local.qryrows;i++){
        		local.date = qrydata['DateOne'][i];

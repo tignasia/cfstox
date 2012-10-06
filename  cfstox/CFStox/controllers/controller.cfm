@@ -1,10 +1,9 @@
 <!--- unload everything - do a reload if requested --->
-<cfset init() />
 <!--- load the controller object if not already loaded and set the controller flag  --->
 <cfset session.objects.controller = createObject("component","controller").init() />
 <cfset session.controllerLoaded = True />
-<cfinvoke component="#session.objects.controller#" method="#form.action#"  argumentcollection="#form#"  returnvariable="resultData" />
-<cfinclude template="../views/#resultdata.view#.cfm" >
+<cfinvoke component="#session.objects.controller#" method="#form.actionitem#"  argumentcollection="#form#"  returnvariable="resultData" />
+<cfinclude template="../views/#request.view#.cfm" >
 
 <cffunction name="init" description="init" returntype="void">
 		<!--- <cfif NOT StructKeyExists("session.controllerLoaded") OR session.controllerLoaded IS FALSE >

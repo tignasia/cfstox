@@ -12,11 +12,19 @@
 		</cfscript>
 	</cffunction>
 
-	<cffunction name="testWatchList" access="public" returntype="void">
+	<cffunction name="testGetData" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
-		local.data = this.Controller.watchList();
-		debug(local.data);
+		local.data = this.Controller.getData(symbol:"f",startdate:"06/01/2012",enddate:"10/01/2012");
+		debug(session.objects.DataStorage.GetMemento() );
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testAnalyseData" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data = this.Controller.AnalyseData(symbol:"f",startdate:"06/01/2012",enddate:"10/01/2012");
+		debug(local.data );
 		</cfscript>
 	</cffunction>
 

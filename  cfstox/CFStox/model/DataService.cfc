@@ -78,7 +78,7 @@
 		<cfset reset() />
 		<!-- todo: seperate out returning the raw data as a query; open,high low close volume -->
 		<cftry> 
-		<cfset results = session.objects.http.getHTTPData(source:arguments.source, symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") />
+		<cfset local.results = session.objects.http.getHTTPData(source:arguments.source, symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") />
 		<cfcatch>
 			<cfoutput> HTTP request failed</cfoutput>
 			<cfdump var="#arguments.symbol#">
@@ -87,103 +87,41 @@
 			<cfabort>
 		</cfcatch>
 		</cftry>
-		
-		<cfset local.results = results />
-		<!--- <cfset local.txtdata = results.Filecontent.toString() />
-		<cfset local.debugging.txtdata = local.txtdata />	
-		<cfset local.qrydata = session.objects.Utility.CSVtoQuery(local.txtdata) /> --->
-		<!---
-		for Google: 
-		strip headers from first row of query  
-		rename query columns
-		--->
-		<!--- <cfset local.debugging.qryData = local.qryData />
-		<cfset local.dateArray = ArrayNew(1) /> --->
-		<!--- <cfset local.openArray = ArrayNew(1) />
-		<cfset local.highArray = ArrayNew(1) />
-		<cfset local.lowArray = ArrayNew(1) />
-		<cfset local.closeArray = ArrayNew(1) />
-		<cfset local.volumeArray = ArrayNew(1) />
-		<cfset local.dummyArray = ArrayNew(1) /> --->
-		
-		<!--- <cfset local.GoogleData = QueryNew( "" ) /> --->
-		<!--- <cfloop from="2" to="#local.qryData.recordcount#" index="i">
-			<!--- <cfif local.qryData.column_6[i] NEQ 0> --->
-			<cfset local.dateArray[i-1] = DateFormat(local.qryData.column_1[i], "yyyy-mm-dd") />
-			<!--- <cfset local.openArray[i-1] = local.qryData.column_2[i] />
-			<cfset local.highArray[i-1] = local.qryData.column_3[i] />
-			<cfset local.lowArray[i-1] = local.qryData.column_4[i] />
-			<cfset local.closeArray[i-1] = local.qryData.column_5[i] />
-			<cfset local.volumeArray[i-1] = local.qryData.column_6[i] />
-			</cfif> --->
-		</cfloop>
-		
-		<cfset queryAddColumn(local.qryData,"DateOne",'VarChar',local.dateArray) >  --->
-			 
-		<!--- <cfset local.dummyArray[3] = "placeholder" />
-		<cfset ArrayDeleteAt(local.dummyArray,3) />
-		<cfset local.dateArray.removeAll(local.dummyArray) />
-		<cfset local.openArray.removeAll(local.dummyArray) />
-		<cfset local.highArray.removeAll(local.dummyArray) />
-		<cfset local.lowArray.removeAll(local.dummyArray) />
-		<cfset local.closeArray.removeAll(local.dummyArray) />
-		<cfset local.volumeArray.removeAll(local.dummyArray) />
-		
-		<cfloop from="1" to="#local.dateArray.size()#" index="i">
-			<cfif local.dateArray[i] EQ "">
-				<cfset ArrayDeleteAt(local.dateArray,i) />
-				<cfset ArrayDeleteAt(local.openArray,i) />
-				<cfset ArrayDeleteAt(local.highArray,i) />
-				<cfset ArrayDeleteAt(local.lowArray,i) />
-				<cfset ArrayDeleteAt(local.closeArray,i) />
-				<cfset ArrayDeleteAt(local.volumeArray,i) />
-			</cfif>
-		</cfloop> 
-	
-		<cfset queryAddColumn(local.GoogleData,"DateOne",'VarChar',local.dateArray) > 
-		<cfset queryAddColumn(local.GoogleData,"Open",'VarChar',local.openArray) > 
-		<cfset queryAddColumn(local.GoogleData,"High",'VarChar',local.highArray) > 
-		<cfset queryAddColumn(local.GoogleData,"Low",'VarChar',local.lowArray) > 
-		<cfset queryAddColumn(local.GoogleData,"Close",'VarChar',local.closeArray) > 
-		<cfset queryAddColumn(local.GoogleData,"Volume",'VarChar',local.volumeArray) >  --->
 		<cfreturn local.results />
-		</cffunction>
+	</cffunction>
 		
-	<cffunction name="GetStockData" description="I return a stock data bean" access="public" displayname="GetStockData" output="false" returntype="Any">
+	<cffunction name="GetStockData" description="I return stock data" access="public" displayname="GetStockData" output="false" returntype="Any">
 		<cfargument name="Symbol" 		required="true"  />
 		<cfargument name="startdate" 	required="false" default=#CreateDate(2012,1,1)# />
 		<cfargument name="enddate" 		required="false" default=#now()# />
 		<cfset var local = structnew() />
-		<cfset reset() />
-		<cfset results = GetRawData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") />
-		
-		<cfquery   dbtype="query"  name="resorted" >
-			select * from results order by DateOne asc
+		<cfset local.returnResults = StructNew() />
+		<cfset local.results = GetRawData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") />
+		<cfquery   dbtype="query"  name="local.resorted" >
+			select * from [local].results order by DateOne asc
 		</cfquery>
 		<!--- used to display chart  --->
-		<cfquery   dbtype="query"  name="high1" >
-			select max(high) AS high from results 
+		<cfquery   dbtype="query"  name="local.high1" >
+			select max(high) AS high1 from [local].results 
 		</cfquery>
-		<cfquery   dbtype="query"  name="low1" >
-			select min(low) As low from results 
+		<cfquery   dbtype="query"  name="local.low1" >
+			select min(low) As low1 from [local].results 
 		</cfquery>
-		<cfset variables.high = high1.high />
-		<cfset variables.low = low1.low />	
+		<cfset variables.high = local.high1.high1 />
+		<cfset variables.low = local.low1.low1 />	
 		<!--- raw data  --->
-		<cfset local.OrgData = resorted />
+		<cfset local.OrgData = local.resorted />
 		<!--- HAData --->
-		<cfset local.HKData = session.objects.TA.convertHK(qrydata:resorted) />
+		<cfset local.HKData = session.objects.TA.convertHK(qrydata:local.resorted) />
 		<cfset local.symbolArray = ArrayNew(1) >
 		<cfloop from="1" to="#local.HKData.recordcount#" index="i">
 			<cfset local.symbolArray[i] = arguments.symbol>
 		</cfloop>
 		<cfset queryAddColumn(local.HKData,"Symbol",'VarChar',local.symbolArray) > 
 		<cfset queryAddColumn(local.OrgData,"Symbol",'VarChar',local.symbolArray) > 
-		<cfset variables.qryDataOriginal = GetTechnicalIndicators(query:local.OrgData)  />
-		<cfset variables.qryDataHA = GetTechnicalIndicators(query:local.HKData)  />
-		<cfset variables.OrgData = local.OrgData />
-		<cfset variables.HKData  = local.HKData />
-		<cfreturn variables />
+		<cfset local.returnResults.qryDataOriginal 	= GetTechnicalIndicators(query:local.OrgData)  />
+		<cfset local.returnResults.qryDataHA 		= GetTechnicalIndicators(query:local.HKData)  />
+		<cfreturn local.returnresults />
 	</cffunction>
 		
 	<cffunction name="GetTechnicalIndicators" description="I populate a query with technical data" access="public" displayname="GetTechnicalData" output="false" returntype="Any">
@@ -381,4 +319,5 @@
 		</cfif>
 		<cfreturn />
 	</cffunction>
+	
 </cfcomponent>

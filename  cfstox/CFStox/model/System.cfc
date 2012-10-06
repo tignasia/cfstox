@@ -1,5 +1,10 @@
-<cfcomponent  displayname="systemconditions" hint="I store the actual systems" output="false">
-
+<cfcomponent  displayname="system" hint="I store the actual systems" output="false">
+<!--- 
+SystemService sets up data and calls SystemRunner 
+SytemRunner Calls System, which contains system definitions (rules)
+systemTriggers contains the triggers for system definitions 
+The triggers are granular conditions such as RSI above a certain amount
+--->
 	<cffunction name="init" description="init method" access="public" displayname="init" output="false" returntype="system">
 		<!--- persistent variable to store trades and results --->
 		<cfreturn this/>
