@@ -20,7 +20,8 @@
 	local.arguments.dayStruct.Date	= local.qryDataOriginal['DateOne'][local.i];;
 	local.arguments.Counter 	= local.i;
 	local.arguments.Indicator 	= "CandlePattern";
-	CandlePattern(argumentcollection:local.arguments);	 
+	CandlePattern(argumentcollection:local.arguments);
+	CCI(argumentcollection:local.arguments);	 	 
 	local.reportArray[local.i] 	= local.arguments.DayStruct;
 	}
 	return local.ReportArray;
@@ -29,19 +30,58 @@
 
 <cffunction name="CandlePattern" description="" access="private" displayname="" output="false" returntype="void">
 <!--- 
-<cfset local.dspHeaders = "SYM,DATE,OPEN,HIGH,LOW,CLOSE,VOL,Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine">
-<cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine">
+<cfset local.dspHeaders = "Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine">
+<cfset local.headers = "Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine">
  --->
-	<cfset arguments.dayStruct["#arguments.indicator#"] = StructNew() />
-	<cfif arguments.qryDataOriginal.Engulfing[arguments.Counter] EQ 100>
-		<cfset arguments.dayStruct["#arguments.indicator#"].value = "Bullish Engulfing ">
-		<cfset arguments.dayStruct["#arguments.indicator#"].comment = "Strong Bullish Candle">		
-	</cfif>
-	<cfif arguments.qryDataOriginal.Engulfing[arguments.Counter] EQ -100>
-		<cfset arguments.dayStruct["#arguments.indicator#"].value = "Bearish Engulfing ">
-		<cfset arguments.dayStruct["#arguments.indicator#"].comment = "Strong Bearish Candle">		
-	</cfif>
-	<cfreturn />
+<cfscript>
+	local.LowCandleList = "Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine" ;
+	local.MediumCandleList = "Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine" ;
+	local.HighCandleList = "Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine" ;
+	
+	arguments.dayStruct["#arguments.indicator#"] = StructNew();
+	arguments.dayStruct["#arguments.indicator#"].value = "";
+	arguments.dayStruct["#arguments.indicator#"].comment = "";
+	local.candlelen = listlen(local.candleList);
+	for(i=1;i<=local.candlelen;i++){
+		local.CandleName = listGetAt(local.CandleList,i);
+		if(arguments.qryDataOriginal[#local.CandleName#][arguments.Counter] EQ 100) {
+		arguments.dayStruct["#arguments.indicator#"].value = "Bullish #local.candleName# ";
+		arguments.dayStruct["#arguments.indicator#"].comment = "Strong Bullish Candle";		
+		}	
+		if(arguments.qryDataOriginal[#local.CandleName#][arguments.Counter] EQ -100) {
+			arguments.dayStruct["#arguments.indicator#"].value = "Bearish #local.CandleName# ";
+			arguments.dayStruct["#arguments.indicator#"].comment = "Strong Bearish Candle";		
+		}
+	}
+	return;
+	</cfscript>
+</cffunction>
+
+<cffunction name="CCI" description="" access="private" displayname="" output="false" returntype="void">
+	<cfscript>
+	arguments.dayStruct["CCI"] = StructNew();
+	arguments.dayStruct["CCI"].value = "";
+	arguments.dayStruct["CCI"].comment = "";
+	 
+	if(arguments.counter > 20 ) {
+		arguments.dayStruct["CCI"].value = "#arguments.qryDataOriginal.CCI[arguments.Counter]#" ;
+		if(arguments.qryDataOriginal.CCI[arguments.Counter] GT arguments.qryDataOriginal.CCI[arguments.Counter-1]) {
+		arguments.dayStruct["CCI"].comment = "CCI value is rising" ;
+		}
+		if(arguments.qryDataOriginal.CCI[arguments.Counter] LT arguments.qryDataOriginal.CCI[arguments.Counter-1]) {
+		arguments.dayStruct["CCI"].comment = "CCI value is falling" ;	
+		}
+	}
+	/* if(arguments.qryDataOriginal.CCI[arguments.Counter] LTE 30) {
+	arguments.dayStruct["CCI"].value = "CCI below 30" ;
+	arguments.dayStruct["CCI"].comment = "CCI is bearish" ;		
+	}
+	if(arguments.qryDataOriginal.CCI[arguments.Counter] GTE 70) {
+		arguments.dayStruct["CCI"].value = "CCI above 70";
+		arguments.dayStruct["CCI"].comment = "CCI is Bullish";
+	} */
+	return;
+	</cfscript>
 </cffunction>
 
 <cffunction name="Dump" description="utility" access="public" displayname="test" output="false" returntype="Any">
