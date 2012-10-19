@@ -173,16 +173,40 @@
 		<cfset queryAddColumn(arguments.query,"LocalHighValue","VarChar",local.LocalHighLows.LocalHighValue) />
 		<cfset queryAddColumn(arguments.query,"LocalLowValue","VarChar",local.LocalHighLows.LocalLowValue) />
 		<!--- Candles  --->
+		<!--- high reliable bullish --->
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"Piercing",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"Piercing",'Decimal',local.num.outdata) >
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"Kicking",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"Kicking",'Decimal',local.num.outdata) >
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"AbandonedBaby",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"AbandonedBaby",'Decimal',local.num.outdata) >    
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"MorningDojiStar",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"MorningDojiStar",'Decimal',local.num.outdata) >    
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"MorningStar",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"MorningStar",'Decimal',local.num.outdata) >    
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"3Inside",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"ThreeInside",'Decimal',local.num.outdata) >    
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"3Outside",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"ThreeOutside",'Decimal',local.num.outdata) >    
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"3WhiteSoldiers",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"ThreeWhiteSoldiers",'Decimal',local.num.outdata) >    
+		
+		<!---- medium reliable bullish --->
+		<!--- DragonflyDoji
+		LongLeggedDoji
+		Engulfing
+		GravestoneDoji
+		DojiStar
+		HaramiCross
+		HomingPigeon
+		MatchingLow
+		 --->
 		<cfset local.num = session.objects.TA.GetCandle(Candle:"Engulfing",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"Engulfing",'Decimal',local.num.outdata) > 
 		<cfset local.num = session.objects.TA.GetCandle(Candle:"Hammer",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"Hammer",'Decimal',local.num.outdata) > 
 		<cfset local.num = session.objects.TA.GetCandle(Candle:"HangingMan",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"HangingMan",'Decimal',local.num.outdata) > 
-		<cfset local.num = session.objects.TA.GetCandle(Candle:"3Inside",qryPrices:arguments.query) />
-		<cfset queryAddColumn(arguments.query,"ThreeInside",'Decimal',local.num.outdata) > 
-		<cfset local.num = session.objects.TA.GetCandle(Candle:"3Outside",qryPrices:arguments.query) />
-		<cfset queryAddColumn(arguments.query,"ThreeOutside",'Decimal',local.num.outdata) > 
 		<cfset local.num = session.objects.TA.GetCandle(Candle:"3BlackCrows",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"ThreeBlackCrows",'Decimal',local.num.outdata) >
 		<cfset local.num = session.objects.TA.GetCandle(Candle:"Harami",qryPrices:arguments.query) />

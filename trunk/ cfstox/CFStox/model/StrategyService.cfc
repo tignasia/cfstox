@@ -16,10 +16,10 @@
 	local.arguments.qryDataHA 		= local.qryDataHA;
 	for (local.i = 1; local.i lte local.recordcount; local.i = local.i + 1) 
 	{
-	local.arguments.dayStruct 	= StructNew();
+	local.arguments.dayStruct 		= StructNew();
 	local.arguments.dayStruct.Date	= local.qryDataOriginal['DateOne'][local.i];;
-	local.arguments.Counter 	= local.i;
-	local.arguments.Indicator 	= "CandlePattern";
+	local.arguments.Counter 		= local.i;
+	OHLC(argumentcollection:local.arguments);
 	CandlePattern(argumentcollection:local.arguments);
 	CCI(argumentcollection:local.arguments);	 	 
 	local.reportArray[local.i] 	= local.arguments.DayStruct;
@@ -36,14 +36,14 @@
 <cfscript>
 	local.LowCandleList = "Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine" ;
 	local.MediumCandleList = "Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine" ;
-	local.HighCandleList = "Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine" ;
-	
+	local.HighCandleBullList = "Piercing,Kicking,AbandonedBaby,MorningDojiStar,MorningStar,ThreeInside,ThreeOutside,ThreeWhiteSoldiers" ;
+	arguments.Indicator 	= "CandlePattern";
 	arguments.dayStruct["#arguments.indicator#"] = StructNew();
 	arguments.dayStruct["#arguments.indicator#"].value = "";
 	arguments.dayStruct["#arguments.indicator#"].comment = "";
-	local.candlelen = listlen(local.candleList);
+	local.candlelen = listlen(local.HighCandleBullList);
 	for(i=1;i<=local.candlelen;i++){
-		local.CandleName = listGetAt(local.CandleList,i);
+		local.CandleName = listGetAt(local.HighCandleBullList,i);
 		if(arguments.qryDataOriginal[#local.CandleName#][arguments.Counter] EQ 100) {
 		arguments.dayStruct["#arguments.indicator#"].value = "Bullish #local.candleName# ";
 		arguments.dayStruct["#arguments.indicator#"].comment = "Strong Bullish Candle";		
@@ -80,6 +80,28 @@
 		arguments.dayStruct["CCI"].value = "CCI above 70";
 		arguments.dayStruct["CCI"].comment = "CCI is Bullish";
 	} */
+	return;
+	</cfscript>
+</cffunction>
+
+<cffunction name="OHLC" description="" access="private" displayname="" output="false" returntype="void">
+<cfargument name="counter" required="true" />
+<!--- 
+<cfset local.dspHeaders = "Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine">
+<cfset local.headers = "Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine">
+ --->
+<cfscript>
+	arguments.dayStruct.Open 	= arguments.qryDataOriginal.Open[arguments.Counter];
+	arguments.dayStruct.High 	= arguments.qryDataOriginal.High[arguments.Counter];
+	arguments.dayStruct.Low 	= arguments.qryDataOriginal.Low[arguments.Counter];
+	arguments.dayStruct.Close 	= arguments.qryDataOriginal.Close[arguments.Counter];
+	arguments.dayStruct.Volume	= arguments.qryDataOriginal.Volume[arguments.Counter];
+	arguments.dayStruct.Change	= "";
+	arguments.dayStruct.VolumeChange	= "";
+	if(arguments.counter > 1 ) {
+	arguments.dayStruct.Change			= arguments.qryDataOriginal.Close[arguments.Counter] - arguments.qryDataOriginal.Close[arguments.Counter-1];
+	arguments.dayStruct.VolumeChange	= arguments.qryDataOriginal.Volume[arguments.Counter] - arguments.qryDataOriginal.Volume[arguments.Counter-1];
+	}
 	return;
 	</cfscript>
 </cffunction>
