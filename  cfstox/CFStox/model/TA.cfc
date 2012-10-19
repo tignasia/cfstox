@@ -29,7 +29,6 @@ Pivot Points - coldfusion
 		<cfset RetCode 		= server.loader.create("com.tictactec.ta.lib.RetCode") />
 		<cfreturn this />
 	</cffunction>
-
 <!--- 
 int outBegIdx;
 int outNbElement;
@@ -98,7 +97,6 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
       return RetCode.Success ;
    }
 --->
-
 	<cffunction  name="sma" hint="simple moving average - array of prices you want to average ie high, low, close">
 		<!--- 
 			int outBegIdx;
@@ -723,12 +721,12 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="cdlBreakaway">
+			<cfcase value="Breakaway">
 				<cfset local.result = variables.talib.cdlBreakaway(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="cdlClosingMarubozu">
+			<cfcase value="ClosingMarubozu">
 				<cfset local.result = variables.talib.cdlClosingMarubozu(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	

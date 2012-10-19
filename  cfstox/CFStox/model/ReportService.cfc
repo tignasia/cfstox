@@ -34,13 +34,20 @@
 		
 		<cfloop from="1" to="#arguments.data.size()#" index="i">
 			<cfset local.dayStruct = arguments.data[i] />
-			<tr><td>Symbol: #arguments.symbol#		Date: #local.dayStruct["Date"]#	</td></tr>
-			<tr><td>Candle Pattern:  </td></tr>
-			<tr><td>#local.dayStruct["CandlePattern"].value# </td></tr>
-			<tr><td>#local.dayStruct["CandlePattern"].comment# </td></tr>
-			<tr><td>CCI : </td></tr>
-			<tr><td>#local.dayStruct["CCI"].value# </td></tr>
-			<tr><td>#local.dayStruct["CCI"].comment# </td></tr>
+			<tr><td>Symbol: #arguments.symbol#		Date: #local.dayStruct.Date#	</td></tr>
+			<tr><td>
+				Open:   #local.dayStruct.Open# 
+				High:   #local.dayStruct.High# 
+				Low:    #local.dayStruct.Low#
+				Close:  #local.dayStruct.Close# 
+				Change: #local.dayStruct.Change#
+				Volume: #local.dayStruct.Volume#
+				Volume Change: 	#local.dayStruct.VolumeChange#
+			</td></tr>
+			<tr><td>Candle Pattern:  #local.dayStruct.CandlePattern.value# </td></tr>
+			<tr><td>#local.dayStruct.CandlePattern.comment# </td></tr>
+			<tr><td>CCI : #local.dayStruct.CCI.value# </td></tr>
+			<tr><td>#local.dayStruct.CCI.comment# </td></tr>
 			<tr><td>----------------------------- </td></tr>
 		</cfloop>
 		</table>
