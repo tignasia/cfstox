@@ -46,7 +46,13 @@
 		request.symbol = "#arguments.symbol#";
 		request.method = "Historical";
 		GetData(argumentcollection:arguments);
-		local.ReportArray = session.objects.StrategyService.Analyse();
+		request.qryDataOriginal = session.objects.DataStorage.GetData("qryDataOriginal");
+		request.qryDataHA 		= session.objects.DataStorage.GetData("qryDataHA");
+		request.xmldata 		= session.objects.DataStorage.GetData("XMLDataOriginal");
+		request.xmldataHA 		= session.objects.DataStorage.GetData("XMLDataHA");
+ 		local.ReportArray = session.objects.StrategyService.Analyse();
+		session.objects.ReportService.AnalyseDataReport(symbol:arguments.symbol,data:local.reportArray);
+		// for unit testing 
 		return local.ReportArray;
 		</cfscript> 
 	</cffunction>	

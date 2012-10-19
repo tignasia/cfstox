@@ -39,6 +39,31 @@
 </form>
 </div>
 <br style="clear:both">
+<div>
+<form action="controllers/controller.cfm" method="post" id="form1">
+<fieldset title="Analyse Data"><legend>Analyse Data</legend>
+<input type="hidden" id="actionitem" name="actionitem" value="AnalyseData">
+<input type="hidden" id="summary" name="summary" value="false" />
+<label for="StartDate" style="width=30%" >Start Date:</label>
+<input type="text" name="StartDate" id="StartDate" value="1/1/2010">
+<label for="EndDate" style="width=30%">End Date:</label>
+<cfoutput><input type="text" name="EndDate" id="EndDate" value="#dateformat(now(),"mm/dd/yyyy")#"></cfoutput>
+<label for="Symbol" style="width=30%">Symbol:</label>
+<input type="text" name="Symbol" id="Symbol" value="">
+</fieldset>
+<!---
+<fieldset>
+<label for="input1" style="width=30%">PlLaceholder:</label>
+<input type="text" name="input1" id="input1" value="">
+<label for="input2" style="width=30%">Placeholder:</label>
+<input type="text" name="input2" id="input2" value="">
+</fieldset>
+---->
+<input type="submit" name="submit" id="submit" value="Submit" />
+
+</form>
+</div>
+<br style="clear:both">
 
 <div>
 <form action="controllers/controller.cfm" method="post" id="form1">

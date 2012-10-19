@@ -22,6 +22,35 @@
 		<cfreturn />
 	</cffunction>
 	
+	<cffunction name="AnalyseDataReport" description="I generate the analysedata report" access="public" displayname="" output="false" returntype="void">
+		<cfargument name="data" required="true" />
+		<cfargument name="symbol" required="true" />
+		<cfset var local = StructNew() />
+		<cfset local.crlf = chr(1) & chr(13) />
+		<cfoutput>
+		<cfsavecontent variable="local.reportResults">
+		<table>
+		<tr><td>Analysis for #arguments.symbol# </br> </td></tr>
+		
+		<cfloop from="1" to="#arguments.data.size()#" index="i">
+			<cfset local.dayStruct = arguments.data[i] />
+			<tr><td>Symbol: #arguments.symbol#		Date: #local.dayStruct["Date"]#	</td></tr>
+			<tr><td>Candle Pattern:  </td></tr>
+			<tr><td>#local.dayStruct["CandlePattern"].value# </td></tr>
+			<tr><td>#local.dayStruct["CandlePattern"].comment# </td></tr>
+			<tr><td>CCI : </td></tr>
+			<tr><td>#local.dayStruct["CCI"].value# </td></tr>
+			<tr><td>#local.dayStruct["CCI"].comment# </td></tr>
+			<tr><td>----------------------------- </td></tr>
+		</cfloop>
+		</table>
+		</cfsavecontent>
+		</cfoutput>
+		<cfset OutputReport(content:local.reportResults,symbol:arguments.symbol,filetype:"PDF",ReportName:"testAnalysis") />
+		
+		<cfreturn />
+	</cffunction>
+	
 	<cffunction name="ReportSetUp" description="I define a report" access="private" displayname="" output="false" returntype="Any">
 		<!---- regardless of the report, the final output should be a list of headers and an array --->
 		<cfargument name="reportName" required="true" />
@@ -54,6 +83,11 @@
 				<cfset local.dataArray = session.Objects.Utility.QryToArray(query:arguments.data,columnlist:local.headers) />
 			</cfcase>
 			<cfcase value="BreakoutReport">
+				<cfset local.dspHeaders = "DATEONE,OPEN,HIGH,LOW,CLOSE,LOCALHIGH,LOCALHIGHVALUE,LOCALLOW,LOCALLOWVALUE,PP,R1,R1BREAK,R2,R2BREAK,S1,S1BREAK,S2,S2BREAK" />
+				<cfset local.headers = "DATEONE,OPEN,HIGH,LOW,CLOSE,LOCALHIGH,LOCALHIGHVALUE,LOCALLOW,LOCALLOWVALUE,PP,R1,R1BREAK,R2,R2BREAK,S1,S1BREAK,S2,S2BREAK" />
+				<cfset local.dataArray = session.Objects.Utility.QryToArray(query:arguments.data,columnlist:local.headers) />
+			</cfcase>
+			<cfcase value="AnalyseData">
 				<cfset local.dspHeaders = "DATEONE,OPEN,HIGH,LOW,CLOSE,LOCALHIGH,LOCALHIGHVALUE,LOCALLOW,LOCALLOWVALUE,PP,R1,R1BREAK,R2,R2BREAK,S1,S1BREAK,S2,S2BREAK" />
 				<cfset local.headers = "DATEONE,OPEN,HIGH,LOW,CLOSE,LOCALHIGH,LOCALHIGHVALUE,LOCALLOW,LOCALLOWVALUE,PP,R1,R1BREAK,R2,R2BREAK,S1,S1BREAK,S2,S2BREAK" />
 				<cfset local.dataArray = session.Objects.Utility.QryToArray(query:arguments.data,columnlist:local.headers) />

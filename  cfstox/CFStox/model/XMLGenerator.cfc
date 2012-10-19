@@ -20,7 +20,7 @@
 		<cfscript>
 		local.strXML = ""; 
 		//local.strXML = "<chart showToolTip='1'>";
-		local.strXML = local.strXML & "<chart showToolTip='1' caption='#name# #symbol#' yAxisMinValue='0' yAxisMaxValue='#high#' canvasBorderColor='DAE1E8' canvasBgColor='FFFFFF' bgColor='EEF2FB' numDivLines='9' divLineColor='DAE1E8' decimalPrecision='2' numberPrefix='$' showNames='1' bearBorderColor='E33C3C' bearFillColor='B00F1F' bullBorderColor='1F3165' baseFontColor='444C60' outCnvBaseFontColor='444C60' hoverCapBorderColor='DAE1E8' hoverCapBgColor='FFFFFF' rotateNames='0' showExportDataMenuItem='1'>";
+		local.strXML = local.strXML & "<chart showToolTip='1' caption='#name# #symbol#' yAxisMinValue='#low#' yAxisMaxValue='#high#' xAxisMinValue='#low#' xAxisMaxValue='#high#' setAdaptiveYMin='1' canvasBorderColor='DAE1E8' canvasBgColor='FFFFFF' bgColor='EEF2FB' numDivLines='9' divLineColor='DAE1E8' decimalPrecision='2' numberPrefix='$' showNames='1' bearBorderColor='E33C3C' bearFillColor='B00F1F' bullBorderColor='1F3165' baseFontColor='444C60' outCnvBaseFontColor='444C60' hoverCapBorderColor='DAE1E8' hoverCapBgColor='FFFFFF' rotateNames='0' showExportDataMenuItem='1'>";
 		local.strxml = local.strXML & "<dataset>";
 		local.qryrows = qrydata.recordcount;
 		//Convert data to XML and append
