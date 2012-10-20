@@ -751,6 +751,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>		
 			
+			<!--- medium bullish --->
 			<cfcase value="DragonflyDoji">
 				<cfset local.result = variables.talib.cdlDragonflyDoji(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
@@ -834,12 +835,12 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 				<cfset local.result = variables.talib.cdlKickingByLength(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlKickingByLengthLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
-			
+			<!--- medium bullish --->
 			<cfcase value="LadderBottom">
 				<cfset local.result = variables.talib.cdlLadderBottom(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlLadderBottomLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
-			
+			<!--- medium bullish --->
 			<cfcase value="LongLeggedDoji">
 				<cfset local.result = variables.talib.cdlLongLeggedDoji(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlLongLeggedDojiLookback(arguments.optInTimePeriod) /> --->
