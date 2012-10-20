@@ -34,9 +34,9 @@
 <cfset local.headers = "Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine">
  --->
 <cfscript>
-	local.LowCandleList = "Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine" ;
-	local.MediumCandleList = "Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine" ;
-	local.HighCandleBullList = "Piercing,Kicking,AbandonedBaby,MorningDojiStar,MorningStar,ThreeInside,ThreeOutside,ThreeWhiteSoldiers" ;
+	local.LowCandleList = "" ;
+	local.MediumCandleList = "" ;
+	local.HighCandleBullList = "Piercing,Kicking,AbandonedBaby,MorningDojiStar,MorningStar,ThreeInside,ThreeOutside,ThreeWhiteSoldiers,ConcealBabySwallow" ;
 	arguments.Indicator 	= "CandlePattern";
 	arguments.dayStruct["#arguments.indicator#"] = StructNew();
 	arguments.dayStruct["#arguments.indicator#"].value = "";
