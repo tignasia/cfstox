@@ -144,6 +144,8 @@
 		<cfset queryAddColumn(arguments.query,"Momentum",'Decimal',local.num) >
 		<cfset local.num = session.objects.TA.GetIndicator(Indicator:"AroonOsc",qryPrices:arguments.query,optInTimePeriod:5) />
 		<cfset queryAddColumn(arguments.query,"AroonOsc5",'Decimal',local.num) >
+		<!--- <cfset local.num = session.objects.TA.GetIndicator(Indicator:"Bollinger",qryPrices:arguments.query,optInTimePeriod:5) />
+		<cfset queryAddColumn(arguments.query,"Bollinger",'Decimal',local.num) > --->
 		<cfset local.FastSlope = session.objects.TA.Slope(qryPrices:arguments.query,length:5,value:"High") />
 		<cfset queryAddColumn(arguments.query,"FastSlope",'Decimal',local.FastSlope) >
 		<cfset local.SlowSlope = session.objects.TA.Slope(qryPrices:arguments.query,length:14,value:"High") />
@@ -338,7 +340,7 @@
 		<cfset queryAddColumn(arguments.query,"Identical3Crows",'Decimal',local.num.outdata) >
 		<cfset local.num = session.objects.TA.GetCandle(Candle:"RickshawMan",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"RickshawMan",'Decimal',local.num.outdata) >
-			<cfset local.num = session.objects.TA.GetCandle(Candle:"ShortLine",qryPrices:arguments.query) />
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"ShortLine",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"ShortLine",'Decimal',local.num.outdata) >  	 
 		<cfset local.num = session.objects.TA.GetCandle(Candle:"SpinningTop",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"SpinningTop",'Decimal',local.num.outdata) >  	 

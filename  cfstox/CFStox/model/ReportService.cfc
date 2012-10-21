@@ -47,6 +47,7 @@
 			<tr><td>Candle Pattern:  #local.dayStruct.CandlePattern.value# </td></tr>
 			<tr><td>#local.dayStruct.CandlePattern.comment# </td></tr>
 			<tr><td>CCI : #local.dayStruct.CCI.value# #local.dayStruct.CCI.comment#</td></tr>
+			<tr><td>AroonOsc : #local.dayStruct.AroonOsc.value# #local.dayStruct.AroonOsc.comment#</td></tr>
 			<tr><td>----------------------------- </td></tr>
 		</cfloop>
 		</table>
@@ -83,8 +84,8 @@
 			<cfcase value="CandleReport">
 				<!--- <cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,MOMENTUM,ADX,CCI,RSI,LOCALHIGH,LOCALLOW,LINEARREG,LINEARREG10,LINEARREGANGLE,LINEARREGINTERCEPT,LINEARREGSLOPE,LINEARREGSLOPE10,LRSDELTA,PP,R1,R2,S1,S2,R1Break,R2Break,S1Break,S2Break">
 				 --->
-				 <cfset local.dspHeaders = "SYM,DATE,OPEN,HIGH,LOW,CLOSE,VOL,Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine">
-				 <cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine">
+				 <cfset local.dspHeaders = "SYM,DATE,OPEN,HIGH,LOW,CLOSE,VOL,Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine,DarkCloudCover">
+				 <cfset local.headers = "SYMBOL,DATEONE,OPEN,HIGH,LOW,CLOSE,VOLUME,Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine,DarkCloudCover">
 				<!---  <cfset local.headers = arguments.data.columnlist> --->
 				<cfset local.dataArray = session.Objects.Utility.QryToArray(query:arguments.data,columnlist:local.headers) />
 			</cfcase>

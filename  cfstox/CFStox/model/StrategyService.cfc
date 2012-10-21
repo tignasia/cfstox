@@ -21,7 +21,8 @@
 	local.arguments.Counter 		= local.i;
 	OHLC(argumentcollection:local.arguments);
 	CandlePattern(argumentcollection:local.arguments);
-	CCI(argumentcollection:local.arguments);	 	 
+	CCI(argumentcollection:local.arguments);
+	AroonOsc(argumentcollection:local.arguments);	 	 
 	local.reportArray[local.i] 	= local.arguments.DayStruct;
 	}
 	return local.ReportArray;
@@ -41,7 +42,7 @@
 	
 	local.candles[1][1]	= "RisingThreeMethods,UpsideGap3Methods,TasukiGap,ThreeLineStrike,LongLine,Marubozu,ClosingMarubozu" ;
 	local.candles[1][2] = "Unknown Reliablity";
-	local.candles[2][1]	= "DarkCloudCover,EveningStar,EveningDojiStar,ThreeBlackCrows,UpsideGap2Crows,HaramiCross,AdvanceBlock,TwoCrows,HangingMan,ShootingStar,InNeck,OnNeck,Thrusting" ;
+	local.candles[2][1]	= "EveningStar,EveningDojiStar,ThreeBlackCrows,UpsideGap2Crows,AdvanceBlock,TwoCrows,HangingMan,ShootingStar,InNeck,OnNeck,Thrusting" ;
 	local.candles[2][2] = "Unknown Reliablity";
 	local.candles[3][1]	= "CounterAttack,Doji,GapSideSideWhite,HighWave,Hikkake,Identical3Crows,RickshawMan,ShortLine,SpinningTop,StalledPattern,Takuri" ;
 	local.candles[3][2] = "Unknown Reliablity";
@@ -49,7 +50,7 @@
 	local.candles[4][2] = "Low Reliablity";
 	local.candles[5][1]	= "DragonflyDoji,LongLeggedDoji,Engulfing,GravestoneDoji,DojiStar,HaramiCross,HomingPigeon,MatchingLow,StickSandwich,ThreeStarsInSouth,TriStar,Unique3River,Breakaway,LadderBottom" ;
 	local.candles[5][2] = "Medium Reliablity";
-	local.candles[6][1]	= "MatHold,Piercing,Kicking,AbandonedBaby,MorningDojiStar,MorningStar,ThreeInside,ThreeOutside,ThreeWhiteSoldiers,ConcealBabySwallow" ;
+	local.candles[6][1]	= "DarkCloudCover,MatHold,Piercing,Kicking,AbandonedBaby,MorningDojiStar,MorningStar,ThreeInside,ThreeOutside,ThreeWhiteSoldiers,ConcealBabySwallow" ;
 	local.candles[6][2] = "High Reliablity";
 	
 	arguments.dayStruct["CandlePattern"] = StructNew();
@@ -73,6 +74,8 @@
 	</cfscript>
 </cffunction>
 
+AroonOsc5
+
 <cffunction name="CCI" description="" access="private" displayname="" output="false" returntype="void">
 	<cfscript>
 	arguments.dayStruct["CCI"] = StructNew();
@@ -86,6 +89,33 @@
 		}
 		if(arguments.qryDataOriginal.CCI[arguments.Counter] LT arguments.qryDataOriginal.CCI[arguments.Counter-1]) {
 		arguments.dayStruct["CCI"].comment = "CCI value is falling" ;	
+		}
+	}
+	/* if(arguments.qryDataOriginal.CCI[arguments.Counter] LTE 30) {
+	arguments.dayStruct["CCI"].value = "CCI below 30" ;
+	arguments.dayStruct["CCI"].comment = "CCI is bearish" ;		
+	}
+	if(arguments.qryDataOriginal.CCI[arguments.Counter] GTE 70) {
+		arguments.dayStruct["CCI"].value = "CCI above 70";
+		arguments.dayStruct["CCI"].comment = "CCI is Bullish";
+	} */
+	return;
+	</cfscript>
+</cffunction>
+
+<cffunction name="AroonOsc" description="" access="private" displayname="" output="false" returntype="void">
+	<cfscript>
+	arguments.dayStruct["AroonOsc"] = StructNew();
+	arguments.dayStruct["AroonOsc"].value = "";
+	arguments.dayStruct["AroonOsc"].comment = "";
+	 
+	if(arguments.counter > 5 ) {
+		arguments.dayStruct["AroonOsc"].value = "#arguments.qryDataOriginal.AroonOsc5[arguments.Counter]#" ;
+		if(arguments.qryDataOriginal.AroonOsc5[arguments.Counter] GT arguments.qryDataOriginal.AroonOsc5[arguments.Counter-1]) {
+		arguments.dayStruct["AroonOsc"].comment = "AroonOsc value is rising" ;
+		}
+		if(arguments.qryDataOriginal.AroonOsc5[arguments.Counter] LT arguments.qryDataOriginal.AroonOsc5[arguments.Counter-1]) {
+		arguments.dayStruct["AroonOsc"].comment = "AroonOsc value is falling" ;	
 		}
 	}
 	/* if(arguments.qryDataOriginal.CCI[arguments.Counter] LTE 30) {
