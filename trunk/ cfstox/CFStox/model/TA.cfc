@@ -425,6 +425,25 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 				<cfset local.lookback = variables.talib.adxrLookback(arguments.optInTimePeriod) />
 			</cfcase>
 			
+			<cfcase value="AroonOsc">
+			<cfset local.lookback = variables.talib.AroonLookback(arguments.optInTimePeriod) />
+			<!--- aroonOsc(int startIdx, int endIdx, double[] inHigh, double[] inLow, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal) 
+            --->
+			<cfset local.result = variables.talib.aroonOsc(arguments.startIdx,arguments.endIdx,local.srtArrays.aryHigh,local.srtArrays.aryLow, arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+			</cfcase>
+			
+			<cfcase value="Bollinger">
+				<cfset local.dummy = 3 />
+				<cfset local.optInNbDevUp 	= javacast("double",local.dummy) />
+				<cfset local.optInNbDevDn 	= javacast("double",local.dummy) />
+				<cfset local.optInMAType 	=  "Sma" /> 
+				<cfset local.aryUpper 		=  local.srtArrays.aryOut /> 
+				<cfset local.aryMiddle 		=  local.srtArrays.aryOut />
+				<cfset local.aryLower 		=  local.srtArrays.aryOut />  
+				<!--- bbands(int startIdx, int endIdx, double[] inReal, int optInTimePeriod, double optInNbDevUp, double optInNbDevDn, MAType optInMAType, MInteger outBegIdx, MInteger outNBElement, double[] outRealUpperBand, double[] outRealMiddleBand, double[] outRealLowerBand) ---> 
+				<cfset local.result =  variables.talib.bbands(arguments.startIdx,arguments.endIdx,local.srtArrays.aryclose,arguments.optInTimePeriod,local.optInNbDevUp,local.optInNbDevDn,local.optInMAType,Minteger1,Minteger2,local.aryUpper,local.aryMiddle,local.aryLower) />
+			</cfcase>
+			
 			<cfcase value="CCI">
 				<!--- cci(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)   --->
 				<cfset local.result =  variables.talib.CCI(arguments.startIdx, arguments.endIdx, local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
@@ -476,14 +495,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 				MInteger outNBElement, double[] outReal)  --->
 				<cfset local.result = variables.talib.sar(arguments.startIdx,arguments.endIdx,local.srtArrays.aryHigh,local.srtArrays.aryLow,local.acceration,local.optInMaximum,Minteger1,Minteger2,local.srtArrays.aryOut) />
 			</cfcase>
-			
-			<cfcase value="AroonOsc">
-				<cfset local.lookback = variables.talib.AroonLookback(arguments.optInTimePeriod) />
-				<!--- aroonOsc(int startIdx, int endIdx, double[] inHigh, double[] inLow, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal) 
-            	--->
-				<cfset local.result = variables.talib.aroonOsc(arguments.startIdx,arguments.endIdx,local.srtArrays.aryHigh,local.srtArrays.aryLow, arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
-			</cfcase>
-			
+						
 			<cfcase value="Stoch">
 			<cfset	local.aryOutSlowK	= javacast("double[]",arrayNew(1) ) />
 			<cfset	local.aryOutSlowD 	= javacast("double[]",arrayNew(1) ) />
@@ -506,7 +518,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 			<cfset returndata.SlowD = local.aryOutSlowD />
 			</cfcase>
 			
-			<cfcase value="BBANDS">
+			<!--- <cfcase value="BBANDS">
 				<!--- bbands(
 				int startIdx, int endIdx, double[] inReal, 
 				int optInTimePeriod, double optInNbDevUp, 
@@ -516,7 +528,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 				<cfset local.result = variables.talib.BBANDS(arguments.startIdx,arguments.endIdx,
 						local.srtArrays.aryHigh,local.srtArrays.aryLow,local.acceration,local.optInMaximum,
 						Minteger1,Minteger2,local.srtArrays.aryOut) />
-			</cfcase>
+			</cfcase> --->
 			
 			<cfdefaultcase>
 				<cfthrow type="Application" message="Invalid indicator type">
@@ -556,7 +568,7 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 		<cfargument name="optInTimePeriod" type="Numeric"  default="14" required="false" hint="length of MA" />
 		<cfargument name="outBegIdx" 	type="Numeric"  default="1" required="false" />
 		<cfargument name="outNBElement" type="Numeric"  default="1" required="false" />
-		<cfargument name="optInPenetration" type="Numeric"  default="1" required="false" />
+		<cfargument name="optInPenetration" type="Numeric"  default="0.5" required="false" />
 		
 		<cfscript>
 		var local = structNew();
