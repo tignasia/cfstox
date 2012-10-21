@@ -629,46 +629,64 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 
 		---->
 		
-		<!----- ----->
+		<!----- UNKNOWN 
+		MatHold
+		3LineStrike
+		CounterAttack
+		Doji
+		GapInsideWhite
+		HighWave
+		Hikkake
+		Identical3Crows
+		LongLine
+		MatchingLow
+		RickshawMan
+		SeperatingLines
+		ShortLine
+		SpinningTop
+		StalledPattern
+		Takuri
+		TasukiGap
+		----->
 		<cfswitch expression="#arguments.Candle#">
 			<!--- take optInPenetration argument  --->
-			<cfcase value="AbandonedBaby">
+			<cfcase value="AbandonedBaby"> <!--- HIGH RELIABILITY --->
 				<!---- optInPenetration:(From 0 to TA_REAL_MAX) *    Percentage of penetration of a candle within another candle ----> 
 				<!---- cdlAbandonedBaby(int startIdx, int endIdx, double[] inOpen, double[] inHigh, double[] inLow, double[] inClose, double optInPenetration, MInteger outBegIdx, MInteger outNBElement, int[] outInteger) --->
 				<cfset local.result = variables.talib.cdlAbandonedBaby(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInPenetration,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>
-			<cfcase value="DarkCloudCover">
+			<cfcase value="DarkCloudCover"> <!--- HIGH RELIABILITY --->
 				<!---- optInPenetration:(From 0 to TA_REAL_MAX) *    Percentage of penetration of a candle within another candle ----> 
 				<!---- cdlAbandonedBaby(int startIdx, int endIdx, double[] inOpen, double[] inHigh, double[] inLow, double[] inClose, double optInPenetration, MInteger outBegIdx, MInteger outNBElement, int[] outInteger) --->
 				<cfset local.result = variables.talib.cdlDarkCloudCover(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInPenetration,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>
-			<cfcase value="EveningDojiStar">
+			<cfcase value="EveningDojiStar"> <!--- HIGH RELIABILITY --->
 				<!---- optInPenetration:(From 0 to TA_REAL_MAX) *    Percentage of penetration of a candle within another candle ----> 
 				<!---- cdlAbandonedBaby(int startIdx, int endIdx, double[] inOpen, double[] inHigh, double[] inLow, double[] inClose, double optInPenetration, MInteger outBegIdx, MInteger outNBElement, int[] outInteger) --->
 				<cfset local.result = variables.talib.cdlEveningDojiStar(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInPenetration,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>
-			<cfcase value="EveningStar">
+			<cfcase value="EveningStar"> <!--- HIGH RELIABILITY --->
 				<!---- optInPenetration:(From 0 to TA_REAL_MAX) *    Percentage of penetration of a candle within another candle ----> 
 				<!---- cdlAbandonedBaby(int startIdx, int endIdx, double[] inOpen, double[] inHigh, double[] inLow, double[] inClose, double optInPenetration, MInteger outBegIdx, MInteger outNBElement, int[] outInteger) --->
 				<cfset local.result = variables.talib.cdlEveningStar(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInPenetration,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>
-			<cfcase value="MatHold">
+			<cfcase value="MatHold"> <!--- HIGH RELIABILITY --->
 				<!---- optInPenetration:(From 0 to TA_REAL_MAX) *    Percentage of penetration of a candle within another candle ----> 
 				<!---- cdlAbandonedBaby(int startIdx, int endIdx, double[] inOpen, double[] inHigh, double[] inLow, double[] inClose, double optInPenetration, MInteger outBegIdx, MInteger outNBElement, int[] outInteger) --->
 				<cfset local.result = variables.talib.cdlMatHold(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInPenetration,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>
-			<cfcase value="MorningDojiStar">
+			<cfcase value="MorningDojiStar"> <!--- HIGH RELIABILITY --->
 				<!---- optInPenetration:(From 0 to TA_REAL_MAX) *    Percentage of penetration of a candle within another candle ----> 
 				<!---- cdlAbandonedBaby(int startIdx, int endIdx, double[] inOpen, double[] inHigh, double[] inLow, double[] inClose, double optInPenetration, MInteger outBegIdx, MInteger outNBElement, int[] outInteger) --->
 				<cfset local.result = variables.talib.cdlMorningDojiStar(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInPenetration,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>
-			<cfcase value="MorningStar">
+			<cfcase value="MorningStar"> <!--- HIGH RELIABILITY --->
 				<!---- optInPenetration:(From 0 to TA_REAL_MAX) *    Percentage of penetration of a candle within another candle ----> 
 				<!---- cdlAbandonedBaby(int startIdx, int endIdx, double[] inOpen, double[] inHigh, double[] inLow, double[] inClose, double optInPenetration, MInteger outBegIdx, MInteger outNBElement, int[] outInteger) --->
 				<cfset local.result = variables.talib.cdlMorningStar(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInPenetration,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
@@ -676,128 +694,127 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 			</cfcase>
 						
 			<!--- no optInPenetration ---->
-			<cfcase value="2Crows">
+			<cfcase value="2Crows"> <!--- MEDIUM RELIABILITY --->
 				<cfset local.result = variables.talib.cdl2Crows(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="3BlackCrows">
+			<cfcase value="3BlackCrows"> <!--- HIGH RELIABILITY --->
 				<cfset local.result = variables.talib.cdl3BlackCrows(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="3Inside">
+			<cfcase value="3Inside"> <!--- HIGH RELIABILITY --->
 				<cfset local.result = variables.talib.cdl3Inside(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="3LineStrike">
+			<cfcase value="3LineStrike"> <!--- LOW RELIABILITY --->
 				<cfset local.result = variables.talib.cdl3LineStrike(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="3Outside">
+			<cfcase value="3Outside"> <!--- HIGH RELIABILITY --->
 				<cfset local.result = variables.talib.cdl3Outside(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>
 			
-			<cfcase value="3StarsInSouth">
+			<cfcase value="3StarsInSouth"> <!--- MEDIUM RELIABILITY --->
 				<cfset local.result = variables.talib.cdl3StarsInSouth(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="3WhiteSoldiers">
+			<cfcase value="3WhiteSoldiers"> <!--- HIGH RELIABILITY --->
 				<cfset local.result = variables.talib.cdl3WhiteSoldiers(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="AdvanceBlock">
+			<cfcase value="AdvanceBlock"> <!--- MEDIUM RELIABILITY --->
 				<cfset local.result = variables.talib.cdlAdvanceBlock(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="BeltHold">
+			<cfcase value="BeltHold"> <!--- LOW RELIABILITY --->
 				<cfset local.result = variables.talib.cdlBeltHold(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="Breakaway">
+			<cfcase value="Breakaway"> <!--- MEDIUM RELIABILITY --->
 				<cfset local.result = variables.talib.cdlBreakaway(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="ClosingMarubozu">
+			<cfcase value="ClosingMarubozu"> <!--- LOW RELIABILITY --->
 				<cfset local.result = variables.talib.cdlClosingMarubozu(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="ConcealBabySwallow">
+			<cfcase value="ConcealBabySwallow"> <!--- HIGH RELIABILITY --->
 				<cfset local.result = variables.talib.cdlConcealBabysWall(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="CounterAttack">
+			<cfcase value="CounterAttack"> <!--- UNKNOWN --->
 				<cfset local.result = variables.talib.cdlCounterAttack(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="Doji">
+			<cfcase value="Doji"> <!--- UNKNOWN --->
 				<cfset local.result = variables.talib.cdlDoji(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>		
 			
-			<cfcase value="DojiStar">
+			<cfcase value="DojiStar"> <!--- MEDIUM RELIABILITY --->
 				<cfset local.result = variables.talib.cdlDojiStar(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>		
-			
-			<!--- medium bullish --->
-			<cfcase value="DragonflyDoji">
+						
+			<cfcase value="DragonflyDoji"> <!--- MEDIUM RELIABILITY --->
 				<cfset local.result = variables.talib.cdlDragonflyDoji(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>		
 			
-			<cfcase value="Engulfing">
+			<cfcase value="Engulfing"> <!--- MEDIUM RELIABILITY --->
 				<cfset local.result = variables.talib.cdlEngulfing(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>		
 			
-			<cfcase value="GapInsideWhite">
+			<cfcase value="GapSideSideWhite"> <!--- UNKNOWN --->
 				<cfset local.result = variables.talib.cdlGapSideSideWhite(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>		
 			
-			<cfcase value="GravestoneDoji">
+			<cfcase value="GravestoneDoji"> <!--- MEDIUM RELIABILITY --->
 				<cfset local.result = variables.talib.cdlGravestoneDoji(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>		
 			
-			<cfcase value="Hammer">
+			<cfcase value="Hammer"> <!--- LOW RELIABILITY --->
 				<cfset local.result = variables.talib.cdlHammer(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>		
 			
-			<cfcase value="HangingMan">
+			<cfcase value="HangingMan"> <!--- LOW RELIABILITY --->
 				<cfset local.result = variables.talib.cdlHangingMan(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>		
 			
-			<cfcase value="Harami">
+			<cfcase value="Harami"> <!--- LOW RELIABILITY --->
 				<cfset local.result = variables.talib.cdlHarami(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>		
 			
-			<cfcase value="HaramiCross">
+			<cfcase value="HaramiCross"> <!--- MEDIUM RELIABILITY --->
 				<cfset local.result = variables.talib.cdlHaramiCross(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="HighWave">
+			<cfcase value="HighWave"> <!--- UNKNOWN --->
 				<cfset local.result = variables.talib.cdlHignWave(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlHignWaveLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>		
 			
-			<cfcase value="Hikkake">
+			<cfcase value="Hikkake"> <!--- UNKNOWN --->
 				<cfset local.result = variables.talib.cdlHikkake(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlHikkakeLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>		
@@ -806,27 +823,27 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 				<cfset local.result = variables.talib.cdlHikkakeMod(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlHikkakeModLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>		
-			<cfcase value="HomingPigeon">
+			<cfcase value="HomingPigeon"> <!--- MEDIUM RELIABILITY --->
 				<cfset local.result = variables.talib.cdlHomingPigeon(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlHomingPigeonLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="Identical3Crows">
+			<cfcase value="Identical3Crows"> <!--- UNKNOWN --->
 				<cfset local.result = variables.talib.cdlIdentical3Crows(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlIdentical3CrowsLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 						
-			<cfcase value="InNeck">
+			<cfcase value="InNeck"> <!--- MEDIUM RELIABILITY --->
 				<cfset local.result = variables.talib.cdlInNeck(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlInNeckLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="InvertedHammer">
+			<cfcase value="InvertedHammer"> <!--- LOW RELIABILITY --->
 				<cfset local.result = variables.talib.cdlInvertedHammer(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlInvertedHammerLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="Kicking">
+			<cfcase value="Kicking"> <!--- HIGH RELIABILITY --->
 				<cfset local.result = variables.talib.cdlKicking(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlKickingLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
@@ -835,108 +852,109 @@ TA.Lib.Core.SMA(0, inputClose.Length - 1, inputClose, count, out outBegIdx, out 
 				<cfset local.result = variables.talib.cdlKickingByLength(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlKickingByLengthLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
-			<!--- medium bullish --->
-			<cfcase value="LadderBottom">
+			
+			
+			<cfcase value="LadderBottom"> <!--- MEDIUM RELIABILITY --->
 				<cfset local.result = variables.talib.cdlLadderBottom(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlLadderBottomLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
-			<!--- medium bullish --->
-			<cfcase value="LongLeggedDoji">
+			
+			<cfcase value="LongLeggedDoji"> <!--- MEDIUM RELIABILITY --->
 				<cfset local.result = variables.talib.cdlLongLeggedDoji(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlLongLeggedDojiLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="LongLine">
+			<cfcase value="LongLine"> <!--- UNKNOWN --->
 				<cfset local.result = variables.talib.cdlIdentical3Crows(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlIdentical3CrowsLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="Marubozu">
+			<cfcase value="Marubozu"> <!--- LOW RELIABILITY --->
 				<cfset local.result = variables.talib.cdlMarubozu(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlMarubozuLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="MatchingLow">
+			<cfcase value="MatchingLow"> <!--- MEDIUM RELIABILITY --->
 				<cfset local.result = variables.talib.cdlMatchingLow(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlMatchingLowLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="OnNeck">
+			<cfcase value="OnNeck"> <!--- MEDIUM RELIABILITY --->
 				<cfset local.result = variables.talib.cdlOnNeck(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlOnNeckLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="Piercing">
+			<cfcase value="Piercing"> <!--- HIGH RELIABILITY --->
 				<cfset local.result = variables.talib.cdlPiercing(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlPiercingLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="RickshawMan">
+			<cfcase value="RickshawMan"> <!--- UNKNOWN --->
 				<cfset local.result = variables.talib.cdlRickshawMan(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlIdentical3CrowsLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="RiseFall3Methods">
+			<cfcase value="RiseFall3Methods"> <!--- HIGH RELIABILITY --->
 				<cfset local.result = variables.talib.cdlRiseFall3Methods(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlRiseFall3MethodsLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="SeperatingLines">
+			<cfcase value="SeperatingLines"> <!--- LOW RELIABILITY --->
 				<cfset local.result = variables.talib.cdlSeperatingLines(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlSeperatingLinesLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="ShootingStar">
+			<cfcase value="ShootingStar"> <!--- LOW RELIABILITY --->
 				<cfset local.result = variables.talib.cdlShootingStar(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlShootingStarLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="ShortLine">
+			<cfcase value="ShortLine"> <!--- UNKNOWN --->
 				<cfset local.result = variables.talib.cdlShortLine(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlShortLineLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="SpinningTop">
+			<cfcase value="SpinningTop"> <!--- UNKNOWN --->
 				<cfset local.result = variables.talib.cdlSpinningTop(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlSpinningTopLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="StalledPattern">
+			<cfcase value="StalledPattern"> <!--- UNKNOWN --->
 				<cfset local.result = variables.talib.cdlStalledPattern(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlStalledPatternLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="StickSandwich">
+			<cfcase value="StickSandwich"> <!--- MEDIUM RELIABILITY --->
 				<cfset local.result = variables.talib.cdlStickSandwhich(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlStickSandwhichLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="Takuri">
+			<cfcase value="Takuri"> <!--- UNKNOWN --->
 				<cfset local.result = variables.talib.cdlTakuri(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlTakuriLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="TasukiGap">
+			<cfcase value="TasukiGap"> <!--- MEDIUM RELIABILITY --->
 				<cfset local.result = variables.talib.cdlTasukiGap(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlTasukiGapLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="Thrusting">
+			<cfcase value="Thrusting"> <!--- LOW RELIABILITY --->
 				<cfset local.result = variables.talib.cdlThrusting(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlThrustingLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="Tristar">
+			<cfcase value="Tristar"> <!--- MEDIUM RELIABILITY --->
 				<cfset local.result = variables.talib.cdlTristar(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlTristar(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="Unique3River">
+			<cfcase value="Unique3River"> <!--- MEDIUM RELIABILITY --->
 				<cfset local.result = variables.talib.cdlUnique3River(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlUnique3RiverLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
-			<cfcase value="UpsideGap2Crows">
+			<cfcase value="UpsideGap2Crows"> <!--- HIGH RELIABILITY --->
 				<cfset local.result = variables.talib.cdlUpsideGap2Crows(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
 				<!--- <cfset local.lookback = variables.talib.cdlUpsideGap2CrowsLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	

@@ -34,23 +34,39 @@
 <cfset local.headers = "Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine">
  --->
 <cfscript>
-	local.LowCandleList = "" ;
-	local.MediumCandleList = "" ;
-	local.HighCandleBullList = "Piercing,Kicking,AbandonedBaby,MorningDojiStar,MorningStar,ThreeInside,ThreeOutside,ThreeWhiteSoldiers,ConcealBabySwallow" ;
-	arguments.Indicator 	= "CandlePattern";
-	arguments.dayStruct["#arguments.indicator#"] = StructNew();
-	arguments.dayStruct["#arguments.indicator#"].value = "";
-	arguments.dayStruct["#arguments.indicator#"].comment = "";
-	local.candlelen = listlen(local.HighCandleBullList);
-	for(i=1;i<=local.candlelen;i++){
-		local.CandleName = listGetAt(local.HighCandleBullList,i);
-		if(arguments.qryDataOriginal[#local.CandleName#][arguments.Counter] EQ 100) {
-		arguments.dayStruct["#arguments.indicator#"].value = "Bullish #local.candleName# ";
-		arguments.dayStruct["#arguments.indicator#"].comment = "Strong Bullish Candle";		
-		}	
-		if(arguments.qryDataOriginal[#local.CandleName#][arguments.Counter] EQ -100) {
-			arguments.dayStruct["#arguments.indicator#"].value = "Bearish #local.CandleName# ";
-			arguments.dayStruct["#arguments.indicator#"].comment = "Strong Bearish Candle";		
+	local.candles = ArrayNew(2); 
+	//local.LowCandleBullList 		= "BeltHold,Hammer,InvertedHammer,Harami" ;
+	//local.MediumCandleBullList 	= "DragonflyDoji,LongLeggedDoji,Engulfing,GravestoneDoji,DojiStar,HaramiCross,HomingPigeon,MatchingLow,StickSandwich,ThreeStarsInSouth,TriStar,Unique3River,Breakaway,LadderBottom" ;
+	//local.HighCandleBullList 		= "Piercing,Kicking,AbandonedBaby,MorningDojiStar,MorningStar,ThreeInside,ThreeOutside,ThreeWhiteSoldiers,ConcealBabySwallow" ;
+	
+	local.candles[1][1]	= "RisingThreeMethods,UpsideGap3Methods,TasukiGap,ThreeLineStrike,LongLine,Marubozu,ClosingMarubozu" ;
+	local.candles[1][2] = "Unknown Reliablity";
+	local.candles[2][1]	= "DarkCloudCover,EveningStar,EveningDojiStar,ThreeBlackCrows,UpsideGap2Crows,HaramiCross,AdvanceBlock,TwoCrows,HangingMan,ShootingStar,InNeck,OnNeck,Thrusting" ;
+	local.candles[2][2] = "Unknown Reliablity";
+	local.candles[3][1]	= "CounterAttack,Doji,GapSideSideWhite,HighWave,Hikkake,Identical3Crows,RickshawMan,ShortLine,SpinningTop,StalledPattern,Takuri" ;
+	local.candles[3][2] = "Unknown Reliablity";
+	local.candles[4][1]	= "BeltHold,Hammer,InvertedHammer,Harami,ThreeLineStrike,LongLine,SeperatingLines" ;
+	local.candles[4][2] = "Low Reliablity";
+	local.candles[5][1]	= "DragonflyDoji,LongLeggedDoji,Engulfing,GravestoneDoji,DojiStar,HaramiCross,HomingPigeon,MatchingLow,StickSandwich,ThreeStarsInSouth,TriStar,Unique3River,Breakaway,LadderBottom" ;
+	local.candles[5][2] = "Medium Reliablity";
+	local.candles[6][1]	= "MatHold,Piercing,Kicking,AbandonedBaby,MorningDojiStar,MorningStar,ThreeInside,ThreeOutside,ThreeWhiteSoldiers,ConcealBabySwallow" ;
+	local.candles[6][2] = "High Reliablity";
+	
+	arguments.dayStruct["CandlePattern"] = StructNew();
+	arguments.dayStruct["CandlePattern"].value = "";
+	arguments.dayStruct["CandlePattern"].comment = "";
+	for(h=1;h<=6;h++){
+		local.candlelen = listlen(local.Candles[h][1]);
+		for(i=1;i<=local.candlelen;i++){
+			local.CandleName = listGetAt(local.Candles[h][1],i);
+			if(arguments.qryDataOriginal[#local.CandleName#][arguments.Counter] EQ 100) {
+			arguments.dayStruct["CandlePattern"].value = arguments.dayStruct["CandlePattern"].value & " | " & "Bullish #local.candleName# ";
+			arguments.dayStruct["CandlePattern"].comment = arguments.dayStruct["CandlePattern"].comment & " " & "#local.Candles[h][2]#";		
+			}	
+			if(arguments.qryDataOriginal[#local.CandleName#][arguments.Counter] EQ -100) {
+			arguments.dayStruct["CandlePattern"].value = arguments.dayStruct["CandlePattern"].value & " | " & "Bearish #local.CandleName# ";
+			arguments.dayStruct["CandlePattern"].comment = arguments.dayStruct["CandlePattern"].comment & " " &  "#local.Candles[h][2]#";	
+			}
 		}
 	}
 	return;

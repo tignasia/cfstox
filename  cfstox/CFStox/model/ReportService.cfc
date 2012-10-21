@@ -46,8 +46,7 @@
 			</td></tr>
 			<tr><td>Candle Pattern:  #local.dayStruct.CandlePattern.value# </td></tr>
 			<tr><td>#local.dayStruct.CandlePattern.comment# </td></tr>
-			<tr><td>CCI : #local.dayStruct.CCI.value# </td></tr>
-			<tr><td>#local.dayStruct.CCI.comment# </td></tr>
+			<tr><td>CCI : #local.dayStruct.CCI.value# #local.dayStruct.CCI.comment#</td></tr>
 			<tr><td>----------------------------- </td></tr>
 		</cfloop>
 		</table>
