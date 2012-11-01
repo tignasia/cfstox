@@ -48,6 +48,8 @@
 			<tr><td>#local.dayStruct.CandlePattern.comment# </td></tr>
 			<tr><td>CCI : #local.dayStruct.CCI.value# #local.dayStruct.CCI.comment#</td></tr>
 			<tr><td>AroonOsc : #local.dayStruct.AroonOsc.value# #local.dayStruct.AroonOsc.comment#</td></tr>
+			<tr><td>Buy Flag : #local.dayStruct.Buyflag#</td></tr>
+			<tr><td>Sell Flag : #local.dayStruct.Sellflag#</td></tr>
 			<tr><td>----------------------------- </td></tr>
 		</cfloop>
 		</table>
@@ -685,4 +687,11 @@
 		</cfif>
 	</cffunction>
 
+	<cffunction name="TrimNum" description="utility" access="public" displayname="test" output="false" returntype="Any">
+		<cfargument name="TheNumber" required="true" />
+		<cfset RoundedNumber = arguments.TheNumber * 100>
+		<cfset RoundedNumber = Round(RoundedNumber )>
+		<cfset RoundedNumber = RoundedNumber / 100>
+		<cfreturn RoundedNumber />
+	</cffunction>
 </cfcomponent>

@@ -24,13 +24,13 @@
 		request.method = "Historical";
 		
 		GetData(argumentcollection:arguments);
-		//session.objects.ReportService.ReportRunner(reportName:"HistoryReport",dataType:"Original");
-		//session.objects.ReportService.ReportRunner(reportName:"PivotReport",datatype:"Original");
-		//session.objects.ReportService.ReportRunner(reportName:"CandleReport",datatype:"Original");
 		request.qryDataOriginal = session.objects.DataStorage.GetData("qryDataOriginal");
 		request.qryDataHA 		= session.objects.DataStorage.GetData("qryDataHA");
 		request.xmldata 		= session.objects.DataStorage.GetData("XMLDataOriginal");
 		request.xmldataHA 		= session.objects.DataStorage.GetData("XMLDataHA");
+		session.objects.ReportService.ReportRunner(reportName:"HistoryReport",data:request.qryDataOriginal,symbol:arguments.symbol);
+		session.objects.ReportService.ReportRunner(reportName:"PivotReport",data:request.qryDataOriginal,symbol:arguments.symbol);
+		session.objects.ReportService.ReportRunner(reportName:"CandleReport",data:request.qryDataOriginal,symbol:arguments.symbol);
 		return ;
 		</cfscript> 
 	</cffunction>
@@ -56,6 +56,7 @@
 		return local.ReportArray;
 		</cfscript> 
 	</cffunction>	
+
 	<cffunction name="loadSQL" description="load the remote SQL table" access="public" displayname="" output="false" returntype="Struct">
 		<!--- I generate a hostorical listing of stock prices and indicator readings for a given stock --->
 		<cfargument name="symbol" required="true" />
@@ -161,6 +162,7 @@
 		return;
 		</cfscript> 
 	</cffunction>
+
 	<cffunction name="LoadXMLData" description="set up XML Data for Charting" access="private" displayname="" output="false" returntype="any">
 		<!--- I generate a hostorical listing of stock prices and indicator readings for a given stock --->
 		<cfargument name="symbol" required="true" />

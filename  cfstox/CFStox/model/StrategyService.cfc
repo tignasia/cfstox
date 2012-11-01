@@ -18,12 +18,18 @@
 	{
 	local.arguments.dayStruct 		= StructNew();
 	local.arguments.dayStruct.Date	= local.qryDataOriginal['DateOne'][local.i];;
+	local.arguments.dayStruct.BuyFlag = false;
+	local.arguments.dayStruct.SellFlag = false;
 	local.arguments.Counter 		= local.i;
 	OHLC(argumentcollection:local.arguments);
 	CandlePattern(argumentcollection:local.arguments);
 	CCI(argumentcollection:local.arguments);
-	AroonOsc(argumentcollection:local.arguments);	 	 
+	AroonOsc(argumentcollection:local.arguments);
+	CheckPivots(argumentcollection:local.arguments);	 	 
 	local.reportArray[local.i] 	= local.arguments.DayStruct;
+		if (local.i GT 1){
+		CheckIndicators(daystructs:local.reportArray,counter:local.i);
+		}
 	}
 	return local.ReportArray;
 	</cfscript>
@@ -54,27 +60,33 @@
 	local.candles[6][2] = "High Reliablity";
 	
 	arguments.dayStruct["CandlePattern"] = StructNew();
-	arguments.dayStruct["CandlePattern"].value = "";
-	arguments.dayStruct["CandlePattern"].comment = "";
+	arguments.dayStruct["CandlePattern"].value 		= "";
+	arguments.dayStruct["CandlePattern"].comment 	= "";
+	arguments.dayStruct["CandlePattern"].BearFlag  	= false;
+	arguments.dayStruct["CandlePattern"].BullFlag  	= false;
 	for(h=1;h<=6;h++){
 		local.candlelen = listlen(local.Candles[h][1]);
 		for(i=1;i<=local.candlelen;i++){
 			local.CandleName = listGetAt(local.Candles[h][1],i);
+			
 			if(arguments.qryDataOriginal[#local.CandleName#][arguments.Counter] EQ 100) {
 			arguments.dayStruct["CandlePattern"].value = arguments.dayStruct["CandlePattern"].value & " | " & "Bullish #local.candleName# ";
 			arguments.dayStruct["CandlePattern"].comment = arguments.dayStruct["CandlePattern"].comment & " " & "#local.Candles[h][2]#";		
-			}	
+			if(h EQ 5 OR h EQ 6)
+			{arguments.dayStruct["CandlePattern"].BullFlag = true;}
+			}
+			
 			if(arguments.qryDataOriginal[#local.CandleName#][arguments.Counter] EQ -100) {
 			arguments.dayStruct["CandlePattern"].value = arguments.dayStruct["CandlePattern"].value & " | " & "Bearish #local.CandleName# ";
 			arguments.dayStruct["CandlePattern"].comment = arguments.dayStruct["CandlePattern"].comment & " " &  "#local.Candles[h][2]#";	
+				if(h EQ 5 OR h EQ 6)
+				{arguments.dayStruct["CandlePattern"].BearFlag = true;}
 			}
 		}
 	}
 	return;
 	</cfscript>
 </cffunction>
-
-AroonOsc5
 
 <cffunction name="CCI" description="" access="private" displayname="" output="false" returntype="void">
 	<cfscript>
@@ -91,14 +103,13 @@ AroonOsc5
 		arguments.dayStruct["CCI"].comment = "CCI value is falling" ;	
 		}
 	}
-	/* if(arguments.qryDataOriginal.CCI[arguments.Counter] LTE 30) {
-	arguments.dayStruct["CCI"].value = "CCI below 30" ;
-	arguments.dayStruct["CCI"].comment = "CCI is bearish" ;		
+	
+	if(arguments.qryDataOriginal.CCI[arguments.Counter] GTE 100) {
+	arguments.dayStruct["CCI"].comment = arguments.dayStruct["CCI"].comment & " - CCI is overbought";		
 	}
-	if(arguments.qryDataOriginal.CCI[arguments.Counter] GTE 70) {
-		arguments.dayStruct["CCI"].value = "CCI above 70";
-		arguments.dayStruct["CCI"].comment = "CCI is Bullish";
-	} */
+	if(arguments.qryDataOriginal.CCI[arguments.Counter] LTE -100) {
+	arguments.dayStruct["CCI"].comment = arguments.dayStruct["CCI"].comment & " - CCI is oversold";
+	} 
 	return;
 	</cfscript>
 </cffunction>
@@ -118,18 +129,51 @@ AroonOsc5
 		arguments.dayStruct["AroonOsc"].comment = "AroonOsc value is falling" ;	
 		}
 	}
-	/* if(arguments.qryDataOriginal.CCI[arguments.Counter] LTE 30) {
-	arguments.dayStruct["CCI"].value = "CCI below 30" ;
-	arguments.dayStruct["CCI"].comment = "CCI is bearish" ;		
-	}
-	if(arguments.qryDataOriginal.CCI[arguments.Counter] GTE 70) {
-		arguments.dayStruct["CCI"].value = "CCI above 70";
-		arguments.dayStruct["CCI"].comment = "CCI is Bullish";
-	} */
 	return;
 	</cfscript>
 </cffunction>
 
+<cffunction name="CheckPivots" description="" access="private" displayname="" output="false" returntype="void">
+	<cfscript>
+	arguments.dayStruct["Pivots"] = StructNew();
+	arguments.dayStruct["Pivots"].S1Break = false;
+	arguments.dayStruct["Pivots"].S2Break = false;
+	arguments.dayStruct["Pivots"].R1Break = false;
+	arguments.dayStruct["Pivots"].R2Break = false;
+	arguments.dayStruct["Pivots"].HAS1Break = false;
+	arguments.dayStruct["Pivots"].HAS2Break = false;
+	arguments.dayStruct["Pivots"].HAR1Break = false;
+	arguments.dayStruct["Pivots"].HAR2Break = false;  
+	if(arguments.counter > 1 ) {
+		if(arguments.qryDataOriginal.S1Break[arguments.Counter])  {
+		arguments.dayStruct["Pivots"].S1Break = true ;
+		}
+		if(arguments.qryDataOriginal.S2Break[arguments.Counter])  {
+		arguments.dayStruct["Pivots"].S2Break = true ;
+		}
+		if(arguments.qryDataOriginal.R1Break[arguments.Counter])  {
+		arguments.dayStruct["Pivots"].R1Break = true ;
+		}
+		if(arguments.qryDataOriginal.R2Break[arguments.Counter])  {
+		arguments.dayStruct["Pivots"].R2Break = true ;
+		}
+		// HK 
+		if(arguments.qryDataHA.S1Break[arguments.Counter])  {
+		arguments.dayStruct["Pivots"].HAS1Break = true ;
+		}
+		if(arguments.qryDataHA.S2Break[arguments.Counter])  {
+		arguments.dayStruct["Pivots"].HAS2Break = true ;
+		}
+		if(arguments.qryDataHA.R1Break[arguments.Counter])  {
+		arguments.dayStruct["Pivots"].HAR1Break = true ;
+		}
+		if(arguments.qryDataHA.R2Break[arguments.Counter])  {
+		arguments.dayStruct["Pivots"].HAR2Break = true ;
+		}
+	}
+	return;
+	</cfscript>
+</cffunction>
 <cffunction name="OHLC" description="" access="private" displayname="" output="false" returntype="void">
 <cfargument name="counter" required="true" />
 <!--- 
@@ -152,13 +196,29 @@ AroonOsc5
 	</cfscript>
 </cffunction>
 
+<cffunction name="CheckIndicators" description="buy/sell" access="public" displayname="test" output="false" returntype="Any">
+	<cfargument name="daystructs" required="true" />
+	<cfargument name="counter" required="true"  />
+	<cfscript>
+	var local = structNew(); 
+	local.prevDayStruct 	= arguments.daystructs[arguments.counter -1];
+	local.CurrentDayStruct 	= arguments.daystructs[arguments.counter];
+	arguments.daystructs[arguments.counter]["BuyFlag"] = "";
+	arguments.daystructs[arguments.counter]["SellFlag"] = ""; 
+	if (local.prevDayStruct["Candlepattern"].Bullflag AND local.prevDayStruct["Pivots"].R1Break)
+	{arguments.daystructs[arguments.counter]["BuyFlag"] = "Buy initiated"; }
+	if (local.prevDayStruct["Candlepattern"].Bearflag)  
+	{arguments.daystructs[arguments.counter]["SellFlag"] = "Sell initiated";} 
+	</cfscript>
+</cffunction> 
+
 <cffunction name="Dump" description="utility" access="public" displayname="test" output="false" returntype="Any">
-		<cfargument name="object" required="true" />
-		<cfargument name="abort" required="false"  default="true"/>
-		<cfdump label="bean:" var="#arguments.object#">
-		<cfif arguments.abort>
-			<cfabort>
-		</cfif>
-	</cffunction>
+	<cfargument name="object" required="true" />
+	<cfargument name="abort" required="false"  default="true"/>
+	<cfdump label="bean:" var="#arguments.object#">
+	<cfif arguments.abort>
+		<cfabort>
+	</cfif>
+</cffunction>
 
 </cfcomponent>
