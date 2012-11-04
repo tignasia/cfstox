@@ -32,7 +32,7 @@
 		<table>
 		<tr><td>Analysis for #arguments.symbol# </br> </td></tr>
 		
-		<cfloop from="1" to="#arguments.data.size()#" index="i">
+		<cfloop from="2" to="#arguments.data.size()#" index="i">
 			<cfset local.dayStruct = arguments.data[i] />
 			<tr><td>Symbol: #arguments.symbol#		Date: #local.dayStruct.Date#	</td></tr>
 			<tr><td>
@@ -44,12 +44,18 @@
 				Volume: #local.dayStruct.Volume#
 				Volume Change: 	#local.dayStruct.VolumeChange#
 			</td></tr>
+			<tr><td>S1Break: #local.dayStruct.Pivots.S1Break#</td><td>HAS1Break: #local.dayStruct.Pivots.HAS1Break#</td></tr>
+			<tr><td>S2Break: #local.dayStruct.Pivots.S2Break#</td><td>HAS2Break: #local.dayStruct.Pivots.HAS2Break#</td></tr> 
+			<tr><td>R1Break: #local.dayStruct.Pivots.R1Break#</td><td>HAR1Break: #local.dayStruct.Pivots.HAR1Break#</td></tr> 
+			<tr><td>R2Break: #local.dayStruct.Pivots.R2Break#</td><td>HAR2Break: #local.dayStruct.Pivots.HAR2Break#</td></tr> 
 			<tr><td>Candle Pattern:  #local.dayStruct.CandlePattern.value# </td></tr>
 			<tr><td>#local.dayStruct.CandlePattern.comment# </td></tr>
-			<tr><td>CCI : #local.dayStruct.CCI.value# #local.dayStruct.CCI.comment#</td></tr>
+			<tr><td>CCI : #Round(local.dayStruct.CCI.value*100)/100# #local.dayStruct.CCI.comment#</td></tr>
 			<tr><td>AroonOsc : #local.dayStruct.AroonOsc.value# #local.dayStruct.AroonOsc.comment#</td></tr>
-			<tr><td>Buy Flag : #local.dayStruct.Buyflag#</td></tr>
-			<tr><td>Sell Flag : #local.dayStruct.Sellflag#</td></tr>
+			<tr><td>Candle Buy Flag : #local.dayStruct.CandleBuyflag#</td></tr>
+			<tr><td>Candle Sell Flag : #local.dayStruct.CandleSellflag#</td></tr>
+			<tr><td>ZigZag Buy Flag : #local.dayStruct.ZigZagBuyflag#</td></tr>
+			<tr><td>ZigZag Sell Flag : #local.dayStruct.ZigZagSellflag#</td></tr>
 			<tr><td>----------------------------- </td></tr>
 		</cfloop>
 		</table>

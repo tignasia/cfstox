@@ -26,6 +26,7 @@
 	CCI(argumentcollection:local.arguments);
 	AroonOsc(argumentcollection:local.arguments);
 	CheckPivots(argumentcollection:local.arguments);	 	 
+	ZigZag(argumentcollection:local.arguments);	 	 
 	local.reportArray[local.i] 	= local.arguments.DayStruct;
 		if (local.i GT 1){
 		CheckIndicators(daystructs:local.reportArray,counter:local.i);
@@ -91,7 +92,7 @@
 <cffunction name="CCI" description="" access="private" displayname="" output="false" returntype="void">
 	<cfscript>
 	arguments.dayStruct["CCI"] = StructNew();
-	arguments.dayStruct["CCI"].value = "";
+	arguments.dayStruct["CCI"].value = "0.0";
 	arguments.dayStruct["CCI"].comment = "";
 	 
 	if(arguments.counter > 20 ) {
@@ -110,6 +111,28 @@
 	if(arguments.qryDataOriginal.CCI[arguments.Counter] LTE -100) {
 	arguments.dayStruct["CCI"].comment = arguments.dayStruct["CCI"].comment & " - CCI is oversold";
 	} 
+	return;
+	</cfscript>
+</cffunction>
+
+<cffunction name="ZigZag" description="" access="private" displayname="" output="false" returntype="void">
+	<cfscript>
+	arguments.dayStruct["ZigZag"] = StructNew();
+	arguments.dayStruct["ZigZag"].value = "";
+	arguments.dayStruct["ZigZag"].comment = "";
+	arguments.dayStruct["ZigZag"].BearFlag  	= false;
+	arguments.dayStruct["ZigZag"].BullFlag  	= false;
+	 
+	if(arguments.counter > 3 ) {
+		if(arguments.qryDataOriginal.LocalHigh[arguments.Counter-1] ) {
+		arguments.dayStruct["ZigZag"].comment = "Yesterday was local high" ;
+		arguments.dayStruct["ZigZag"].BearFlag  	= true;
+		}
+		if(arguments.qryDataOriginal.LocalLow[arguments.Counter-1])  {
+		arguments.dayStruct["ZigZag"].comment = "Yesterday was local low" ;
+		arguments.dayStruct["ZigZag"].BullFlag  	= true;	
+		}
+	}
 	return;
 	</cfscript>
 </cffunction>
@@ -174,6 +197,7 @@
 	return;
 	</cfscript>
 </cffunction>
+
 <cffunction name="OHLC" description="" access="private" displayname="" output="false" returntype="void">
 <cfargument name="counter" required="true" />
 <!--- 
@@ -203,12 +227,22 @@
 	var local = structNew(); 
 	local.prevDayStruct 	= arguments.daystructs[arguments.counter -1];
 	local.CurrentDayStruct 	= arguments.daystructs[arguments.counter];
-	arguments.daystructs[arguments.counter]["BuyFlag"] = "";
-	arguments.daystructs[arguments.counter]["SellFlag"] = ""; 
-	if (local.prevDayStruct["Candlepattern"].Bullflag AND local.prevDayStruct["Pivots"].R1Break)
-	{arguments.daystructs[arguments.counter]["BuyFlag"] = "Buy initiated"; }
-	if (local.prevDayStruct["Candlepattern"].Bearflag)  
-	{arguments.daystructs[arguments.counter]["SellFlag"] = "Sell initiated";} 
+	arguments.daystructs[arguments.counter]["CandleBuyFlag"] = "";
+	arguments.daystructs[arguments.counter]["CandleSellFlag"] = "";
+	arguments.daystructs[arguments.counter]["AroonBuyFlag"] = "";
+	arguments.daystructs[arguments.counter]["AroonSellFlag"] = ""; 
+	arguments.daystructs[arguments.counter]["ZigZagBuyFlag"] = "";
+	arguments.daystructs[arguments.counter]["ZigZagSellFlag"] = ""; 
+	 
+	if (local.prevDayStruct["Candlepattern"].Bullflag)
+	{arguments.daystructs[arguments.counter]["CandleBuyFlag"] = "Buy initiated"; }
+	if (local.CurrentDayStruct["Candlepattern"].Bearflag)  
+	{arguments.daystructs[arguments.counter]["CandleSellFlag"] = "Sell initiated";} 
+	
+	if (local.CurrentDayStruct["ZigZag"].Bullflag)
+	{arguments.daystructs[arguments.counter]["ZigZagBuyFlag"] = "Buy initiated"; }
+	if (local.CurrentDayStruct["ZigZag"].Bearflag)  
+	{arguments.daystructs[arguments.counter]["ZigZagSellFlag"] = "Sell initiated";} 
 	</cfscript>
 </cffunction> 
 
