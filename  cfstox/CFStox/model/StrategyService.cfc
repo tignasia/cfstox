@@ -22,6 +22,9 @@
 	local.arguments.dayStruct.SellFlag = false;
 	local.arguments.Counter 		= local.i;
 	OHLC(argumentcollection:local.arguments);
+	local.arguments.CandleType = "CandlePattern";
+	CandlePattern(argumentcollection:local.arguments);
+	local.arguments.CandleType = "HACandlePattern";
 	CandlePattern(argumentcollection:local.arguments);
 	CCI(argumentcollection:local.arguments);
 	AroonOsc(argumentcollection:local.arguments);
@@ -37,6 +40,7 @@
 </cffunction>
 
 <cffunction name="CandlePattern" description="" access="private" displayname="" output="false" returntype="void">
+<cfargument name="CandleType" required="true" />
 <!--- 
 <cfset local.dspHeaders = "Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine">
 <cfset local.headers = "Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine">
@@ -46,7 +50,7 @@
 	//local.LowCandleBullList 		= "BeltHold,Hammer,InvertedHammer,Harami" ;
 	//local.MediumCandleBullList 	= "DragonflyDoji,LongLeggedDoji,Engulfing,GravestoneDoji,DojiStar,HaramiCross,HomingPigeon,MatchingLow,StickSandwich,ThreeStarsInSouth,TriStar,Unique3River,Breakaway,LadderBottom" ;
 	//local.HighCandleBullList 		= "Piercing,Kicking,AbandonedBaby,MorningDojiStar,MorningStar,ThreeInside,ThreeOutside,ThreeWhiteSoldiers,ConcealBabySwallow" ;
-	
+	// CandlePattern, HACandlePattern
 	local.candles[1][1]	= "RisingThreeMethods,UpsideGap3Methods,TasukiGap,ThreeLineStrike,LongLine,Marubozu,ClosingMarubozu" ;
 	local.candles[1][2] = "Unknown Reliablity";
 	local.candles[2][1]	= "EveningStar,EveningDojiStar,ThreeBlackCrows,UpsideGap2Crows,AdvanceBlock,TwoCrows,HangingMan,ShootingStar,InNeck,OnNeck,Thrusting" ;
@@ -60,28 +64,36 @@
 	local.candles[6][1]	= "DarkCloudCover,MatHold,Piercing,Kicking,AbandonedBaby,MorningDojiStar,MorningStar,ThreeInside,ThreeOutside,ThreeWhiteSoldiers,ConcealBabySwallow" ;
 	local.candles[6][2] = "High Reliablity";
 	
-	arguments.dayStruct["CandlePattern"] = StructNew();
-	arguments.dayStruct["CandlePattern"].value 		= "";
-	arguments.dayStruct["CandlePattern"].comment 	= "";
-	arguments.dayStruct["CandlePattern"].BearFlag  	= false;
-	arguments.dayStruct["CandlePattern"].BullFlag  	= false;
+	if(arguments.CandleType EQ "CandlePattern")
+	{ local.CandleData = arguments.qryDataOriginal; }
+	
+	if(arguments.CandleType EQ "HACandlePattern")
+	{ local.CandleData = arguments.qryDataHA; }
+	
+	local.Ctype = arguments.CandleType;
+	
+	arguments.dayStruct["#local.Ctype#"] = StructNew();
+	arguments.dayStruct["#local.Ctype#"].value 		= "";
+	arguments.dayStruct["#local.Ctype#"].comment 	= "";
+	arguments.dayStruct["#local.Ctype#"].BearFlag  	= false;
+	arguments.dayStruct["#local.Ctype#"].BullFlag  	= false;
 	for(h=1;h<=6;h++){
 		local.candlelen = listlen(local.Candles[h][1]);
 		for(i=1;i<=local.candlelen;i++){
 			local.CandleName = listGetAt(local.Candles[h][1],i);
 			
-			if(arguments.qryDataOriginal[#local.CandleName#][arguments.Counter] EQ 100) {
-			arguments.dayStruct["CandlePattern"].value = arguments.dayStruct["CandlePattern"].value & " | " & "Bullish #local.candleName# ";
-			arguments.dayStruct["CandlePattern"].comment = arguments.dayStruct["CandlePattern"].comment & " " & "#local.Candles[h][2]#";		
+			if(local.CandleData[#local.CandleName#][arguments.Counter] EQ 100) {
+			arguments.dayStruct["#local.Ctype#"].value = arguments.dayStruct["#local.Ctype#"].value & " | " & "Bullish #local.candleName# ";
+			arguments.dayStruct["#local.Ctype#"].comment = arguments.dayStruct["#local.Ctype#"].comment & " " & "#local.Candles[h][2]#";		
 			if(h EQ 5 OR h EQ 6)
-			{arguments.dayStruct["CandlePattern"].BullFlag = true;}
+			{arguments.dayStruct["#local.Ctype#"].BullFlag = true;}
 			}
 			
-			if(arguments.qryDataOriginal[#local.CandleName#][arguments.Counter] EQ -100) {
-			arguments.dayStruct["CandlePattern"].value = arguments.dayStruct["CandlePattern"].value & " | " & "Bearish #local.CandleName# ";
-			arguments.dayStruct["CandlePattern"].comment = arguments.dayStruct["CandlePattern"].comment & " " &  "#local.Candles[h][2]#";	
+			if(local.CandleData[#local.CandleName#][arguments.Counter] EQ -100) {
+			arguments.dayStruct["#local.Ctype#"].value = arguments.dayStruct["#local.Ctype#"].value & " | " & "Bearish #local.CandleName# ";
+			arguments.dayStruct["#local.Ctype#"].comment = arguments.dayStruct["#local.Ctype#"].comment & " " &  "#local.Candles[h][2]#";	
 				if(h EQ 5 OR h EQ 6)
-				{arguments.dayStruct["CandlePattern"].BearFlag = true;}
+				{arguments.dayStruct["#local.Ctype#"].BearFlag = true;}
 			}
 		}
 	}
@@ -125,11 +137,13 @@
 	 
 	if(arguments.counter > 3 ) {
 		if(arguments.qryDataOriginal.LocalHigh[arguments.Counter-1] ) {
+		arguments.dayStruct["ZigZag"].value = "Prev Local Low = " &  arguments.qryDataOriginal.LocalLowValue[arguments.Counter];
 		arguments.dayStruct["ZigZag"].comment = "Yesterday was local high" ;
 		arguments.dayStruct["ZigZag"].BearFlag  	= true;
 		}
 		if(arguments.qryDataOriginal.LocalLow[arguments.Counter-1])  {
-		arguments.dayStruct["ZigZag"].comment = "Yesterday was local low" ;
+		arguments.dayStruct["ZigZag"].value = "Prev Local High = " &  arguments.qryDataOriginal.LocalHighValue[arguments.Counter];
+		arguments.dayStruct["ZigZag"].comment = "Yesterday was local high" ;
 		arguments.dayStruct["ZigZag"].BullFlag  	= true;	
 		}
 	}
@@ -229,15 +243,22 @@
 	local.CurrentDayStruct 	= arguments.daystructs[arguments.counter];
 	arguments.daystructs[arguments.counter]["CandleBuyFlag"] = "";
 	arguments.daystructs[arguments.counter]["CandleSellFlag"] = "";
+	arguments.daystructs[arguments.counter]["HACandleBuyFlag"] = "";
+	arguments.daystructs[arguments.counter]["HACandleSellFlag"] = "";
 	arguments.daystructs[arguments.counter]["AroonBuyFlag"] = "";
 	arguments.daystructs[arguments.counter]["AroonSellFlag"] = ""; 
 	arguments.daystructs[arguments.counter]["ZigZagBuyFlag"] = "";
 	arguments.daystructs[arguments.counter]["ZigZagSellFlag"] = ""; 
 	 
-	if (local.prevDayStruct["Candlepattern"].Bullflag)
+	if (local.prevDayStruct["Candlepattern"].Bullflag AND local.CurrentDayStruct["Pivots"].R1Break  )
 	{arguments.daystructs[arguments.counter]["CandleBuyFlag"] = "Buy initiated"; }
-	if (local.CurrentDayStruct["Candlepattern"].Bearflag)  
+	if (local.CurrentDayStruct["Candlepattern"].Bearflag AND local.CurrentDayStruct["Pivots"].S1Break  )  
 	{arguments.daystructs[arguments.counter]["CandleSellFlag"] = "Sell initiated";} 
+	
+	if (local.prevDayStruct["HACandlepattern"].Bullflag AND local.CurrentDayStruct["Pivots"].HAR1Break)
+	{arguments.daystructs[arguments.counter]["HACandleBuyFlag"] = "Buy initiated"; }
+	if (local.CurrentDayStruct["HACandlepattern"].Bearflag AND local.CurrentDayStruct["Pivots"].HAS1Break )  
+	{arguments.daystructs[arguments.counter]["HACandleSellFlag"] = "Sell initiated";} 
 	
 	if (local.CurrentDayStruct["ZigZag"].Bullflag)
 	{arguments.daystructs[arguments.counter]["ZigZagBuyFlag"] = "Buy initiated"; }
