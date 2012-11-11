@@ -29,11 +29,20 @@
 		<cfset local.crlf = chr(1) & chr(13) />
 		<cfoutput>
 		<cfsavecontent variable="local.reportResults">
-		<table>
-		<tr><td>Analysis for #arguments.symbol# </br> </td></tr>
+		<!DOCTYPE html>
+		<html>
+		<head>
+		<style type="text/css">
+		##txts {width:125px;float:left;}
+		##clearer {clear:both;height:0;}
+		</style>
+		</head>
+
+		Analysis for #arguments.symbol# </br> 
 		
 		<cfloop from="2" to="#arguments.data.size()#" index="i">
 			<cfset local.dayStruct = arguments.data[i] />
+			<table>
 			<tr><td>Symbol: #arguments.symbol#		Date: #local.dayStruct.Date#	</td></tr>
 			<tr><td>
 				Open:   #local.dayStruct.Open# 
@@ -44,25 +53,39 @@
 				Volume: #local.dayStruct.Volume#
 				Volume Change: 	#local.dayStruct.VolumeChange#
 			</td></tr>
-			<tr><td>S1Break: #local.dayStruct.Pivots.S1Break#</td><td>HAS1Break: #local.dayStruct.Pivots.HAS1Break#</td></tr>
-			<tr><td>S2Break: #local.dayStruct.Pivots.S2Break#</td><td>HAS2Break: #local.dayStruct.Pivots.HAS2Break#</td></tr> 
-			<tr><td>R1Break: #local.dayStruct.Pivots.R1Break#</td><td>HAR1Break: #local.dayStruct.Pivots.HAR1Break#</td></tr> 
-			<tr><td>R2Break: #local.dayStruct.Pivots.R2Break#</td><td>HAR2Break: #local.dayStruct.Pivots.HAR2Break#</td></tr> 
-			<tr><td>Candle Pattern:  #local.dayStruct.CandlePattern.value# </td></tr>
+			</table>
+			
+			<div id="container" style="width:500px">
+			<div id="txts">Resistance: R1Break: #local.dayStruct.Pivots.R1Break#</div><div id="txts">R2Break: #local.dayStruct.Pivots.R2Break#</div>
+			<div id="txts">Resistance: HAR1Break: #local.dayStruct.Pivots.HAR1Break#</div><div id="txts">HAR2Break: #local.dayStruct.Pivots.HAR2Break#</div>
+			</div>
+			<div id="container" style="width:500px">		
+			<div id="txts">Support: S1Break: #local.dayStruct.Pivots.S1Break#</div><div id="txts">S2Break: #local.dayStruct.Pivots.S2Break#</div>
+			<div id="txts">Support: HAS1Break: #local.dayStruct.Pivots.HAS1Break#</div><div id="txts">HAS2Break: #local.dayStruct.Pivots.HAS2Break#</div>
+			</div>
+			<div id="clearer" style="width:500px">
+			</div>
+			<table> 
+			<tr><td style="width:100%">Candle Pattern:  #local.dayStruct.CandlePattern.value# </td></tr>
 			<tr><td>#local.dayStruct.CandlePattern.comment# </td></tr>
+			<tr><td>HA Candle Pattern:  #local.dayStruct.HACandlePattern.value# </td></tr>
+			<tr><td>#local.dayStruct.HACandlePattern.comment# </td></tr>
 			<tr><td>CCI : #Round(local.dayStruct.CCI.value*100)/100# #local.dayStruct.CCI.comment#</td></tr>
 			<tr><td>AroonOsc : #local.dayStruct.AroonOsc.value# #local.dayStruct.AroonOsc.comment#</td></tr>
-			<tr><td>Candle Buy Flag : #local.dayStruct.CandleBuyflag#</td></tr>
-			<tr><td>Candle Sell Flag : #local.dayStruct.CandleSellflag#</td></tr>
-			<tr><td>ZigZag Buy Flag : #local.dayStruct.ZigZagBuyflag#</td></tr>
-			<tr><td>ZigZag Sell Flag : #local.dayStruct.ZigZagSellflag#</td></tr>
+			</table>
+			<table>  
+			<tr><td style="width:25%;">Candle Buy Flag : #local.dayStruct.CandleBuyflag#</td><td style="width:25%;">Candle Sell Flag : #local.dayStruct.CandleSellflag#</td></tr>
+			<tr><td style="width:25%;">HA Candle Buy Flag : #local.dayStruct.HACandleBuyflag#</td><td style="width:25%;">HA Candle Sell Flag : #local.dayStruct.HACandleSellflag#</td></tr>
+			<tr><td style="width:25%;">ZigZag: #local.dayStruct.ZigZag.value#</td><td style="width:25%;"></td></tr>
+			<tr><td style="width:25%;">ZigZag Buy Flag : #local.dayStruct.ZigZagBuyflag#</td><td style="width:25%;">ZigZag Sell Flag : #local.dayStruct.ZigZagSellflag#</td></tr>
 			<tr><td>----------------------------- </td></tr>
+			</table>
 		</cfloop>
-		</table>
+		
 		</cfsavecontent>
 		</cfoutput>
 		<cfset OutputReport(content:local.reportResults,symbol:arguments.symbol,filetype:"PDF",ReportName:"testAnalysis") />
-		
+		<cfset OutputReport(content:local.reportResults,symbol:arguments.symbol,filetype:"HTML",ReportName:"testAnalysis") />
 		<cfreturn />
 	</cffunction>
 	
@@ -226,13 +249,17 @@
 		<cfset local.rootpath = session.objects.utility.getdirectorypath() />
 		<cfset local.PDFfilename = "#local.rootpath#..\Data\" & "#arguments.symbol#" & "#arguments.reportName#" & ".pdf"/>
 		<cfset local.Excelfilename = "#local.rootpath#..\Data\" & "#arguments.symbol#" & "#arguments.reportName#" & ".xls"/>
+		<cfset local.HTMLfilename = "#local.rootpath#..\Data\" & "#arguments.symbol#" & "#arguments.reportName#" & ".html"/>
 		<cfif arguments.filetype EQ "PDF">
 			<cfdocument  format="PDF" filename="#local.PDFfilename#" overwrite="true" orientation = "landscape">
 			<cfoutput>#arguments.content#</cfoutput>
 			</cfdocument>
 		<cfelseif arguments.filetype EQ "excel">
 			<cffile action="write" file="#local.Excelfilename#" output="#arguments.content#"   />
+		<cfelseif arguments.filetype EQ "html">
+			<cffile action="write" file="#local.HTMLfilename#" output="#arguments.content#"   />
 		</cfif>
+		
 		<!--- for excel --->
 		<!--- <cffile action="write" file="#local.Excelfilename#" output="#local.stockdata#"   /> --->
 		<cfreturn />
