@@ -10,7 +10,7 @@
 		this.controller = createObject("component","cfstox.controllers.controller").init();
 		this.symbol 	= "RVBD";
 		this.startDate	= "02/01/2012";
-		this.enddate	= "03/01/2012"
+		this.enddate	= "03/01/2012";
 		</cfscript>
 	</cffunction>
 
