@@ -11,28 +11,37 @@
 	 <!---  <cfset super.TestCase(this) /> --->
 	  <!--- Place additional setUp and initialization code here --->
 		<cfscript>
-		createObject("component","cfstox.controllers.Controller").init();
-		this.DataService 	= createObject("component","cfstox.model.DataService").init();
-		this.Utility 		= createObject("component","cfstox.model.Utility").init();
-		this.SystemService 	= createObject("component","cfstox.model.SystemService").init();
-		// abandoned baby from stockfetcher
-		//this.data = this.DataService.GetStockData(symbol:"CELL",startdate:"04/01/2011",enddate:"05/04/2012");
-		//this.stockdata = this.data.OrgData;
-		//this.abandoned_baby = this.data.OrgData;
-		// Harami Cross from stockfetcher
-		//this.data = this.DataService.GetStockData(symbol:"PBY",startdate:"04/01/2011",enddate:"05/04/2012");
-		//this.HaramiCross = this.data.OrgData;
-		// Engulfing - Bullish from stockfetcher
-		this.data = this.DataService.GetStockData(symbol:"RVBD",startdate:"12/01/2011",enddate:"05/24/2012");
-		this.stockData = this.data.OrgData;
-		this.TA = createObject("component","cfstox.model.TA").init();
+		// need to load objects
+		//this.DataService 	= createObject("component","cfstox.model.DataService").init();
+		this.controller = createObject("component","cfstox.controllers.controller").init();
+		//this.TA 		= createObject("component","cfstox.model.ta").init();
+		this.symbol 	= "HD";
+		this.startDate	= "10/01/2012";
+		this.enddate	= "11/16/2012";
 		</cfscript>
-		<!--- <cfdump var="#this.TA#">
-		<cfabort> --->
+		</cffunction>
+<!---  
+todo: construct a fake query for indicator testing purposes
+note: candles are offset by two days  
+--->
+	<cffunction name="testGetSMA" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data 		= session.Objects.DataService.GetStockData(symbol:#this.symbol#,startdate:#this.startdate#,enddate:#this.enddate#);
+		local.results 	= session.Objects.TA.GetIndicator(Indicator:"SMA",qryPrices:local.data.orgdata,optInTimePeriod:2); 
+		debug(local.results);
+		</cfscript>
 	</cffunction>
-
+	
+	<cffunction name="testGetCandle" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data 		= session.Objects.DataService.GetStockData(symbol:#this.symbol#,startdate:#this.startdate#,enddate:#this.enddate#);
+		local.results 	= session.Objects.TA.GetCandle(Candle:"Engulfing",qryPrices:local.data.orgdata); 
+		debug(local.results);
+		</cfscript>
+	</cffunction>
 	<!--- <cffunction name="testGetIndicator" access="public" returntype="void">
-		
 		<cfscript>
 		var local = structNew();
 		local.num = this.TA.GetIndicator(Indicator:"SMA",qryPrices:this.stockdata); 
@@ -47,49 +56,8 @@
 		//debug(local.num);
 		</cfscript>
 	</cffunction> --->
-	
-	<cffunction name="testGetData" access="public" returntype="void">
-		<cfscript>
-		//debug(this.StockData);
-		</cfscript>
-	</cffunction>
-	
-	<!--- 
-	Dark Cloud Cover 		DarkCloudCover	none
-	Kicking 				Kicking			none	
-	Abandoned Baby			AbandonedBaby	none
-	Evening Star			EveningStar		none
-	Evening Doji Star 		EveningDojiStar none
-	Three Black Crows 		3BlackCrows		none
-	Three Inside Down 		3Inside			3
-	Three Outside Down		3Outside		2
-	Upside Gap Two Crows 	UpsideGap2Crows none
 		
-	MEDIUM RELIABILITY
-	Dragonfly Doji 		DragonflyDoji
-	Long Legged Doji 	LongLeggedDoji
-	Engulfing 			Engulfing
-	Gravestone Doji 	GravestoneDoji
-	Doji Star			DojiStar
-	Harami Cross 		HaramiCross			3
-	Meeting Lines 	
-	Advance Block 		AdvanceBlock
-	Deliberation 	
-	Tri Star			Tristar
-	Two Crows 			
-	Breakaway 			cdlBreakaway
-	
-	OTHER 
-	Doji
-	HighWave
-	Hikkake
-	Marubozu
-	Thrusting
-	Hammer				one
-	HangingMan			Three
-		--->
-	
-	<cffunction name="testGetCandle" access="public" returntype="void">
+	<!--- <cffunction name="testGetCandle" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
 		/* local.num = this.TA.GetCandle(Candle:"DarkCloudCover",qryPrices:this.stockdata); 
@@ -117,10 +85,9 @@
 		local.num = this.TA.GetCandle(Candle:"HaramiCross",qryPrices:this.stockdata); 
 		debug(local.num); 
 		</cfscript>
-	</cffunction>
+	</cffunction> --->
 	
 	<!--- End Specific Test Cases --->
-
 	<cffunction name="tearDown" access="public" returntype="void">
 	 <!--- Place tearDown/clean up code here --->
 	</cffunction>
