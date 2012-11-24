@@ -33,7 +33,7 @@
 		<html>
 		<head>
 		<style type="text/css">
-		##txts {width:125px;float:left;}
+		##txts {width:250px;float:left;}
 		##clearer {clear:both;height:0;}
 		</style>
 		</head>
@@ -56,12 +56,18 @@
 			</table>
 			
 			<div id="container" style="width:500px">
-			<div id="txts">Resistance: R1Break: #local.dayStruct.Pivots.R1Break#</div><div id="txts">R2Break: #local.dayStruct.Pivots.R2Break#</div>
-			<div id="txts">Resistance: HAR1Break: #local.dayStruct.Pivots.HAR1Break#</div><div id="txts">HAR2Break: #local.dayStruct.Pivots.HAR2Break#</div>
+			<div id="txts">Resistance: R1Break: #local.dayStruct.Pivots.R1Break#</div>
+			<div id="txts">Resistance: R2Break: #local.dayStruct.Pivots.R2Break#</div>
+			</div>
+			<div id="container" style="width:500px">
+			<div id="txts">Resistance: HAR1Break: #local.dayStruct.Pivots.HAR1Break#</div>
+			<div id="txts">Resistance: HAR2Break: #local.dayStruct.Pivots.HAR2Break#</div>
 			</div>
 			<div id="container" style="width:500px">		
-			<div id="txts">Support: S1Break: #local.dayStruct.Pivots.S1Break#</div><div id="txts">S2Break: #local.dayStruct.Pivots.S2Break#</div>
-			<div id="txts">Support: HAS1Break: #local.dayStruct.Pivots.HAS1Break#</div><div id="txts">HAS2Break: #local.dayStruct.Pivots.HAS2Break#</div>
+			<div id="txts">Support: S1Break: #local.dayStruct.Pivots.S1Break#</div>
+			<div id="txts">Support: S2Break: #local.dayStruct.Pivots.S2Break#</div>
+			<div id="txts">Support: HAS1Break: #local.dayStruct.Pivots.HAS1Break#</div>
+			<div id="txts">Support: HAS2Break: #local.dayStruct.Pivots.HAS2Break#</div>
 			</div>
 			<div id="clearer" style="width:500px">
 			</div>

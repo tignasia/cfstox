@@ -13,6 +13,7 @@
 		<cfscript>
 		// need to load objects
 		//this.DataService 	= createObject("component","cfstox.model.DataService").init();
+				
 		this.controller = createObject("component","cfstox.controllers.controller").init();
 		//this.TA 		= createObject("component","cfstox.model.ta").init();
 		this.symbol 	= "HD";
@@ -24,11 +25,43 @@
 todo: construct a fake query for indicator testing purposes
 note: candles are offset by two days  
 --->
+	
+	<cffunction name="testGetMAType" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.MAObject 	= session.Objects.TA.GetMAType(); 
+		debug(local.MAObject);
+		//local.results = local.MAObject.Ema;
+		//debug(local.results);
+		local.results = local.MAObject.values();
+		debug(ArraytoList(local.results));
+		</cfscript>
+	</cffunction>
+	
 	<cffunction name="testGetSMA" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
 		local.data 		= session.Objects.DataService.GetStockData(symbol:#this.symbol#,startdate:#this.startdate#,enddate:#this.enddate#);
-		local.results 	= session.Objects.TA.GetIndicator(Indicator:"SMA",qryPrices:local.data.orgdata,optInTimePeriod:2); 
+		local.MAObject 	= session.Objects.TA.GetIndicator(Indicator:"SMA",qryPrices:local.data.orgdata,optInTimePeriod:2); 
+		debug(local.MAObject);
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testGetBollinger" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data 		= session.Objects.DataService.GetStockData(symbol:#this.symbol#,startdate:#this.startdate#,enddate:#this.enddate#);
+		local.results 	= session.Objects.TA.GetIndicator(Indicator:"Bollinger",qryPrices:local.data.orgdata,optInTimePeriod:2); 
+		debug(local.results);
+		</cfscript>
+	</cffunction>
+	
+	
+	<cffunction name="testGetStoch" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data 		= session.Objects.DataService.GetStockData(symbol:#this.symbol#,startdate:#this.startdate#,enddate:#this.enddate#);
+		local.results 	= session.Objects.TA.GetIndicator(Indicator:"Stoch",qryPrices:local.data.orgdata,optInTimePeriod:2); 
 		debug(local.results);
 		</cfscript>
 	</cffunction>
