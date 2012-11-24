@@ -133,7 +133,7 @@ Pivot Points - coldfusion
 		<cfreturn local />
 	</cffunction>
 
- <cffunction  name="PivotBreak" hint="Support/resistance">
+ 	<cffunction  name="PivotBreak" hint="Support/resistance">
 		<cfargument name="qryData" required="true" />
 		<cfscript>
 		var local = structNew();
@@ -180,11 +180,15 @@ Pivot Points - coldfusion
 		<cfscript>
 		var local = structNew();
 		local.returndata = Structnew();
+		// ta-lib returned data is not padded with zeros in front like you would expect
+		// so if you want it aligned with your data you have to pad it in front
+		local.fixArrays = true;
 		local.srtArrays = ProcessArrays(qryPrices: arguments.qryPrices);
 		/* arguments is a struct so it's passed by reference */
 		DoJavaCast(arguments);
-	    Minteger1  = server.loader.create("com.tictactec.ta.lib.MInteger"); 
-		Minteger2  = server.loader.create("com.tictactec.ta.lib.MInteger"); 
+	    Minteger1  	= server.loader.create("com.tictactec.ta.lib.MInteger"); 
+		Minteger2  	= server.loader.create("com.tictactec.ta.lib.MInteger"); 
+		MaType  	= server.loader.create("com.tictactec.ta.lib.MAType");  
 		Minteger1.value = 0;
 		Minteger2.value = 0;
 		</cfscript>
@@ -227,21 +231,8 @@ Pivot Points - coldfusion
 				<cfset local.lookback = variables.talib.AroonLookback(arguments.optInTimePeriod) />
 				<cfset local.returndata.results = local.srtArrays.aryOut />
 			</cfcase>
+						
 			
-			<cfcase value="Bollinger">
-				<cfset local.dummy = 3 />
-				<cfset local.optInNbDevUp 	= javacast("double",local.dummy) />
-				<cfset local.optInNbDevDn 	= javacast("double",local.dummy) />
-				<cfset local.optInMAType 	=  "Sma" /> 
-				<cfset local.aryUpper 		=  local.srtArrays.aryOut /> 
-				<cfset local.aryMiddle 		=  local.srtArrays.aryOut />
-				<cfset local.aryLower 		=  local.srtArrays.aryOut />  
-				<!--- bbands(int startIdx, int endIdx, double[] inReal, int optInTimePeriod, double optInNbDevUp, double optInNbDevDn, MAType optInMAType, MInteger outBegIdx, MInteger outNBElement, double[] outRealUpperBand, double[] outRealMiddleBand, double[] outRealLowerBand) ---> 
-				<cfset variables.talib.bbands(arguments.startIdx,arguments.endIdx,local.srtArrays.aryclose,arguments.optInTimePeriod,local.optInNbDevUp,local.optInNbDevDn,local.optInMAType,Minteger1,Minteger2,local.aryUpper,local.aryMiddle,local.aryLower) />
-				<cfset local.returndata.aryUpper 	= local.aryUpper />
-				<cfset local.returndata.aryMiddle 	= local.aryMiddle />
-				<cfset local.returndata.aryLower 	= local.aryLower />
-			</cfcase>
 			
 			<cfcase value="CCI">
 				<!--- cci(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)   --->
@@ -302,23 +293,40 @@ Pivot Points - coldfusion
 			</cfcase>
 			
 			<cfcase value="SAR">
-				<cfset local.acceleration = 0.02 />
-				<cfset local.optInMaximum = 0.2 />
+				<cfset local.acceleration = jDouble(0.02) />
+				<cfset local.optInMaximum = jDouble(0.2) />
 				<!--- (int startIdx, int endIdx, double[] inHigh, double[] inLow, double optInAcceleration, double optInMaximum, MInteger outBegIdx, 
 				MInteger outNBElement, double[] outReal)  --->
 				<cfset variables.talib.sar(arguments.startIdx,arguments.endIdx,local.srtArrays.aryHigh,local.srtArrays.aryLow,local.acceration,local.optInMaximum,Minteger1,
 				Minteger2,local.srtArrays.aryOut) />
 				<cfset local.returndata.results = local.srtArrays.aryOut />
 			</cfcase>
-						
+			
+			<cfcase value="Bollinger">
+				<cfset local.fixArrays = false />
+				<cfset local.cfAryObj = structNew() />
+				<cfset local.optInNbDevUp 	= jDouble(3) />
+				<cfset local.optInNbDevDn 	= jDouble(3) />
+				<cfset local.optInMAType 	=  MAType /> <!---- MAType.valueOf("Sma") = 0 ---->
+				<cfset local.aryUpper 		=  local.srtArrays.aryHigh /> 
+				<cfset local.aryMiddle 		=  local.srtArrays.aryLow />
+				<cfset local.aryLower 		=  local.srtArrays.aryOpen />  
+				<!--- bbands(int startIdx, int endIdx, double[] inReal, int optInTimePeriod, double optInNbDevUp, double optInNbDevDn, MAType optInMAType, MInteger outBegIdx, MInteger outNBElement, double[] outRealUpperBand, double[] outRealMiddleBand, double[] outRealLowerBand) ---> 
+				<cfset variables.talib.bbands(arguments.startIdx,arguments.endIdx,local.srtArrays.aryClose,arguments.optInTimePeriod,local.optInNbDevUp,local.optInNbDevDn,local.optInMAType.Sma,Minteger1,Minteger2,local.aryUpper,local.aryMiddle,local.aryLower) />
+				<cfset local.cfAryObj.aryUpper 	= FixTAArray(javaArray:local.aryUpper,outBegIdx:MInteger1.value) />
+				<cfset local.cfAryObj.aryMiddle	= FixTAArray(javaArray:local.aryMiddle,outBegIdx:MInteger1.value) />
+				<cfset local.cfAryObj.aryLower 	= FixTAArray(javaArray:local.aryLower,outBegIdx:MInteger1.value) />
+			</cfcase>			
 			<cfcase value="Stoch">
-			<cfset local.aryOutSlowK = javacast("double[]",arrayNew(1) ) />
-			<cfset local.aryOutSlowD = javacast("double[]",arrayNew(1) ) />
-			<cfset local.optInFastK_Period = 2 />
-			<cfset local.optInSlowK_Period = 15 />	
-			<cfset local.optInSlowK_MAType = 1 />
+			<cfset local.fixArrays = false />
+			<cfset local.cfAryObj = structNew() />
+			<cfset local.aryOutSlowK = duplicate(local.srtArrays.aryOut)  />
+			<cfset local.aryOutSlowD = duplicate(local.srtArrays.aryOut)  />
+			<cfset local.optInFastK_Period = 2  />
+			<cfset local.optInSlowK_Period = 5 />	
+			<cfset local.optInSlowK_MAType = MAType.Sma />
 			<cfset local.optInSlowD_Period = 5 />
-			<cfset local.optInSlowD_MAType = 1 />	
+			<cfset local.optInSlowD_MAType = MAType.Sma />	
 			<!--- stoch(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInFastK_Period, int optInSlowK_Period, 
 			MAType optInSlowK_MAType, int optInSlowD_Period, MAType optInSlowD_MAType, MInteger outBegIdx, MInteger outNBElement, double[] outSlowK, 
 			double[] outSlowD) 
@@ -327,38 +335,56 @@ Pivot Points - coldfusion
 			local.srtArrays.aryLow,local.srtArrays.aryClose,local.optInFastK_Period,local.optInSlowK_Period, 
 			local.optInSlowK_MAType, local.optInSlowD_Period, local.optInSlowD_MAType, Minteger1, Minteger2,
 			local.aryOutSlowK, local.aryOutSlowD ) />
-			<cfset local.returndata.SlowK = local.aryOutSlowK />
-			<cfset local.returndata.SlowD = local.aryOutSlowD />
+			<cfset local.cfAryObj.SlowK 	= FixTAArray(javaArray:local.aryOutSlowK,outBegIdx:MInteger1.value) />
+			<cfset local.cfAryObj.SlowD		= FixTAArray(javaArray:local.aryOutSlowD,outBegIdx:MInteger1.value) />
 			</cfcase>
+			
 			<cfdefaultcase>
 				<cfthrow type="Application" message="Invalid indicator type">
 			</cfdefaultcase>
 		</cfswitch>
 		<cfcatch type="application">
-		   <h3>Invalid indicator type passed to GetIndicator</h3>
+		   <cfoutput>
+		   <h3>Invalid indicator type passed to GetIndicator, or something else went wrong</h3>
+		   <strong>REASON:</strong><br/>
+			#cfcatch.message#<br/>
+			<br /><strong>DETAIL:</strong>
+			<br/>#cfcatch.detail#<br/>
+			</cfoutput>
 		</cfcatch>
 		</cftry>
-		<cfset returndata.outBegIdx = MInteger1.value />
-		<cfset returndata.outNBElement = MInteger2.value />
-		<cfset foobar = duplicate(local.srtArrays.aryOut) />
-		<cfset bar = ArraytoList(foobar) >
-		<cfset foo = ListToArray(bar, ",", true) >
-		<!--- 'for loop' should stop prior to outNbElement, not dataLen --->
-		<!--- outNBElement is the number of the last cell containing data --->
-		<!--- outBegIndex is the number of starting rows to pad with zeros --->
-		
-		<cfloop from="1" to="#returndata.outBegIdx#" index="i">
-			<cfset ArrayPrepend(foo,"0")>
-		</cfloop>  
-	 	<cfloop from="1" to="#returndata.outBegIdx#" index="i">
-			<cfset ArrayDeleteAt(foo,foo.size() )>
-		</cfloop> 
-		
-		<cfset returndata.outData = foo />
-		<cfset returndata.dataType = arguments.Indicator />
-		<cfreturn  foo />
+		<cfif local.fixArrays >
+			<cfset local.cfAryObj = FixTAArray(javaArray:local.srtArrays.aryOut,outBegIdx:MInteger1.value) />
+		</cfif>
+		<cfreturn  local.cfAryObj />
+	</cffunction>
+	
+	<cffunction name="FixTAArray" description="" access="private" displayname="" output="false" returntype="Array">
+		<cfargument name="javaArray" required="true" />
+		<cfargument name="outBegIdx" required="true" />
+		<!---- convert the java object back to a CF object so we can use it --->
+			<cfset local.aryCopy = duplicate(arguments.javaArray) />
+			<cfset local.cfListObj = ArraytoList(local.aryCopy) >
+			<cfset local.cfAryObj  = ListToArray(local.cfListObj, ",", true) >
+			<!--- 'for loop' should stop prior to outNbElement, not dataLen --->
+			<!--- outNBElement is the number of the last cell containing data --->
+			<!--- outBegIndex is the number of starting rows to pad with zeros --->
+			<cfloop from="1" to="#arguments.outBegIdx#" index="i">
+				<cfset ArrayPrepend(local.cfAryObj,"0")>
+			</cfloop>  
+		 	<cfloop from="1" to="#arguments.outBegIdx#" index="i">
+				<cfset ArrayDeleteAt(local.cfAryObj,local.cfAryObj.size() )>
+			</cfloop> 
+		<cfreturn local.cfAryObj />
 	</cffunction>
 
+	<cffunction name="jDouble" description="" access="private" displayname="" output="false" returntype="Any">
+		<cfargument name="intValue" required="true" />
+		<cfset var newValue = arguments.intValue />
+		<cfset var dValue  = javacast("double",newValue) />
+		<cfreturn dValue />
+	</cffunction>
+	
 	<cffunction  name="GetCandle">
 		<!--- data should be passed into the function oldest first 
 		http://www.tadoc.org/forum/index.php?topic=342.0
@@ -473,7 +499,6 @@ Pivot Points - coldfusion
 				<!---- optInPenetration:(From 0 to TA_REAL_MAX) *    Percentage of penetration of a candle within another candle ----> 
 				<!---- cdlAbandonedBaby(int startIdx, int endIdx, double[] inOpen, double[] inHigh, double[] inLow, double[] inClose, double optInPenetration, MInteger outBegIdx, MInteger outNBElement, int[] outInteger) --->
 				<cfset variables.talib.cdlAbandonedBaby(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInPenetration,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
-				<cfreturn local.srtArrays.aryOutCandle />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>
 			<cfcase value="DarkCloudCover"> <!--- HIGH RELIABILITY --->
@@ -596,11 +621,6 @@ Pivot Points - coldfusion
 			
 			<cfcase value="Engulfing"> <!--- MEDIUM RELIABILITY --->
 				<cfset variables.talib.cdlEngulfing(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
-				<cfset local.returndata.lookback 		= variables.talib.cdlEngulfing(arguments.optInTimePeriod) />
-				<cfset local.returndata.outBegIdx		= Minteger1.value />
-				<cfset local.returndata.outNBElement 	= Minteger2.value />
-				<cfset local.returndata.results 		= local.srtArrays />
-				<cfreturn local.returndata />
 				<!--- <cfset local.lookback = variables.talib.cdlAbandonedBabyLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>		
 			
@@ -696,8 +716,6 @@ Pivot Points - coldfusion
 			
 			<cfcase value="Marubozu"> <!--- LOW RELIABILITY --->
 				<cfset variables.talib.cdlMarubozu(arguments.startIdx,arguments.endIdx,local.srtArrays.aryOpen,local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,Minteger1,Minteger2,local.srtArrays.aryOutCandle) />
-				<cfreturn local.srtArrays />
-
 				<!--- <cfset local.lookback = variables.talib.cdlMarubozuLookback(arguments.optInTimePeriod) /> --->
 			</cfcase>	
 			
@@ -802,24 +820,7 @@ Pivot Points - coldfusion
 		<!--- 
 		process candle data  
 		--->
-		<cfset local.returndata.outBegIdx 		= MInteger1.value />
-		<cfset local.returndata.outNBElement 	= MInteger2.value />
-		<cfset local.aryCandles 	= duplicate(local.srtArrays.aryOutCandle) />
-		<cfset local.listCandles 	= ArraytoList(local.aryCandles) >
-		<cfset local.aryCandles		= ListToArray(local.listCandles, ",", true) >
-		<!--- 'for loop' should stop at outNbElement, not dataLen --->
-		<!--- outNBElement is the number of the last cell containing valid data, should be less than the length --->
-		<!--- outBegIndex is the number of starting output array elements to insert and pad with zeros so they align with input--->
-		
-		<!--- pad the top of the returned array so it matches the dates  --->
-		<cfloop from="1" to="#local.returndata.outBegIdx#" index="i">
-			<cfset ArrayPrepend(local.AryCandles,"0")>
-		</cfloop>  
-		<!--- trim off the extra cells from the bottom of the array  --->
-	 	<cfloop from="1" to="#local.returndata.outBegIdx#" index="i">
-			<cfset ArrayDeleteAt(local.AryCandles,local.AryCandles.size() )>
-		</cfloop> 
-		<cfset local.returndata.outData = local.AryCandles />
+		<cfset local.returndata.outData = AdjustArray(outputArray:local.srtArrays.aryOutCandle,outBegIdx:MInteger1.value) />
 		<cfset local.returndata.dataType = arguments.Candle />
 		<cfreturn  local.returndata />
 	</cffunction>
@@ -827,15 +828,18 @@ Pivot Points - coldfusion
 	<cffunction name="AdjustArray" description="" access="private" displayname="" output="false" returntype="Array">
 		<cfargument name="outputArray" required="true" />
 		<cfargument name="outBegIdx" required="true"  />
+		<!--- data type conversion  --->
+		<cfset cfList 	= ArraytoList(arguments.outputArray) >
+		<cfset cfArray 	= ListToArray(cfList, ",", true) >
 		<!--- pad the top of the returned array so it matches the dates  --->
 		<cfloop from="1" to="#arguments.outBegIdx#" index="i">
-			<cfset ArrayPrepend(arguments.outputArray,"0")>
+			<cfset ArrayPrepend(cfArray,"0")>
 		</cfloop>
 		<!--- trim off the extra cells from the bottom of the array  --->
 	 	<cfloop from="1" to="#arguments.outBegIdx#" index="i">
-			<cfset ArrayDeleteAt(arguments.outputArray,arguments.outputArray.size() )>
+			<cfset ArrayDeleteAt(cfArray,cfArray.size() )>
 		</cfloop>   
-		<cfreturn arguments.outputArray />
+		<cfreturn cfArray />
 	</cffunction>
 
 	<cffunction name="LRSDelta" description="get change in LRSlope" access="public" displayname="" output="false" returntype="Array">
@@ -964,13 +968,22 @@ Pivot Points - coldfusion
 		local.aryHigh 	= javacast("double[]",local.aryHigh);
 		local.aryLow 	= javacast("double[]",local.aryLow);
 		local.aryClose 	= javacast("double[]",local.aryClose);
-		local.aryOut	= javacast("double[]",local.aryout);
+		local.aryOut	= javacast("double[]",local.aryOut);
 		local.aryOpen 	= javacast("double[]",local.aryOpen);
 		local.aryOutCandle = javacast("int[]",local.aryOutCandle);
 		</cfscript>
 		<cfreturn local />
 	</cffunction>
 
+	<cffunction name="GetMAType" description="" access="public" displayname="" output="false" returntype="Any">
+	<cfscript>
+	var TypeString = "Sma";	
+	var instance = server.loader.create("com.tictactec.ta.lib.MAType");  
+	//var MAinstance = createObject("java","com.tictactec.ta.lib.MAType");
+	return instance;
+	</cfscript>
+	<cfreturn />
+	</cffunction>
 	<cffunction  name="DoJavaCast">
 		<cfargument name="argStruct" 	type="Struct" required="true"  hint="the array of prices to base on"/>
 		<cfscript>

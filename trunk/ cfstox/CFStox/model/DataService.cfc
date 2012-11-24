@@ -184,8 +184,8 @@
 		<cfset queryAddColumn(arguments.query,"Piercing",'Decimal',local.num.outdata) >
 		<cfset local.num = session.objects.TA.GetCandle(Candle:"Kicking",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"Kicking",'Decimal',local.num.outdata) >
-		<!--- <cfset local.num = session.objects.TA.GetCandle(Candle:"AbandonedBaby",qryPrices:arguments.query) />
-		<cfset queryAddColumn(arguments.query,"AbandonedBaby",'Decimal',local.num.outdata) >     --->
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"AbandonedBaby",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"AbandonedBaby",'Decimal',local.num.outdata) >
 		<cfset local.num = session.objects.TA.GetCandle(Candle:"MorningDojiStar",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"MorningDojiStar",'Decimal',local.num.outdata) >    
 		<cfset local.num = session.objects.TA.GetCandle(Candle:"MorningStar",qryPrices:arguments.query) />
@@ -206,8 +206,8 @@
 		<cfset queryAddColumn(arguments.query,"DragonflyDoji",'Decimal',local.num.outdata) > 
 		<cfset local.num = session.objects.TA.GetCandle(Candle:"LongLeggedDoji",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"LongLeggedDoji",'Decimal',local.num.outdata) > 
-		<!--- <cfset local.num = session.objects.TA.GetCandle(Candle:"Engulfing",qryPrices:arguments.query) />
-		<cfset queryAddColumn(arguments.query,"Engulfing",'Decimal',local.num.outdata) >  --->
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"Engulfing",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"Engulfing",'Decimal',local.num.outdata) >
 		<cfset local.num = session.objects.TA.GetCandle(Candle:"GravestoneDoji",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"GravestoneDoji",'Decimal',local.num.outdata) > 
 		<cfset local.num = session.objects.TA.GetCandle(Candle:"DojiStar",qryPrices:arguments.query) />
@@ -267,8 +267,8 @@
 		Long White Candlestick 	White Marubozu 	White Closing Marubozu 	*White Opening Marubozu --->
 		<cfset local.num = session.objects.TA.GetCandle(Candle:"LongLine",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"LongLine",'Decimal',local.num.outdata) > 
-		<!--- <cfset local.num = session.objects.TA.GetCandle(Candle:"Marubozu",qryPrices:arguments.query) />
-		<cfset queryAddColumn(arguments.query,"Marubozu",'Decimal',local.num.outdata) > --->
+		<cfset local.num = session.objects.TA.GetCandle(Candle:"Marubozu",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"Marubozu",'Decimal',local.num.outdata) >
 		<cfset local.num = session.objects.TA.GetCandle(Candle:"ClosingMarubozu",qryPrices:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"ClosingMarubozu",'Decimal',local.num.outdata) >
 								
