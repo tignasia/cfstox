@@ -16,11 +16,11 @@
 	local.arguments.qryDataHA 		= local.qryDataHA;
 	for (local.i = 1; local.i lte local.recordcount; local.i = local.i + 1) 
 	{
-	local.arguments.dayStruct 		= StructNew();
-	local.arguments.dayStruct.Date	= local.qryDataOriginal['DateOne'][local.i];;
-	local.arguments.dayStruct.BuyFlag = false;
-	local.arguments.dayStruct.SellFlag = false;
-	local.arguments.Counter 		= local.i;
+	local.arguments.dayStruct 			= StructNew();
+	local.arguments.dayStruct.Date		= local.qryDataOriginal['DateOne'][local.i];;
+	local.arguments.dayStruct.BuyFlag 	= false;
+	local.arguments.dayStruct.SellFlag 	= false;
+	local.arguments.Counter 			= local.i;
 	OHLC(argumentcollection:local.arguments);
 	local.arguments.CandleType = "CandlePattern";
 	CandlePattern(argumentcollection:local.arguments);
@@ -29,7 +29,9 @@
 	CCI(argumentcollection:local.arguments);
 	AroonOsc(argumentcollection:local.arguments);
 	CheckPivots(argumentcollection:local.arguments);	 	 
-	ZigZag(argumentcollection:local.arguments);	 	 
+	ZigZag(argumentcollection:local.arguments);
+	CalcZigZag(argumentcollection:local.arguments);
+	HAChange(argumentcollection:local.arguments);	 	 
 	local.reportArray[local.i] 	= local.arguments.DayStruct;
 		if (local.i GT 1){
 		CheckIndicators(daystructs:local.reportArray,counter:local.i);
@@ -151,6 +153,62 @@
 	</cfscript>
 </cffunction>
 
+<cffunction name="CalcZigZag" description="" access="private" displayname="" output="false" returntype="void">
+	<!--- 
+	Count back to see how many day ago was the previous high/low (true/false)
+	get the % of stock price of the change 
+	 --->
+	<cfscript>
+	var local = structNew();
+	arguments.dayStruct["ZigZagLen"] = StructNew();
+	arguments.dayStruct["ZigZagLen"].Duration 	= 0;
+	arguments.dayStruct["ZigZagLen"].Value 		= 0;
+	arguments.dayStruct["ZigZagLen"].Percent 	= 0;
+	
+	local.prevFlag 	= true; 
+	local.PrevHighRN 	= arguments.qryDataOriginal.PrevHighRecNo[arguments.Counter-1];
+	local.PrevLowRN 	= arguments.qryDataOriginal.PrevLowRecNo[arguments.Counter-1];
+	if(arguments.counter > 20 ) {
+		if(arguments.qryDataOriginal.LocalHigh[arguments.Counter-1] ) 
+		{
+		arguments.dayStruct["ZigZagLen"].Duration 	= arguments.counter - local.PrevLowRN;		
+		arguments.dayStruct["ZigZagLen"].Value 		= arguments.qryDataOriginal.High[arguments.Counter-1] - arguments.qryDataOriginal.Low[local.PrevLowRN];
+		arguments.dayStruct["ZigZagLen"].Percent 	= (arguments.qryDataOriginal.High[arguments.Counter-1] - arguments.qryDataOriginal.Low[local.PrevLowRN] )/arguments.qryDataOriginal.close[local.PrevLowRN];
+		}
+				
+		if(arguments.qryDataOriginal.LocalLow[arguments.Counter-1])  
+		{arguments.dayStruct["ZigZagLen"].Duration 	= arguments.counter - local.PrevHighRN;		
+		arguments.dayStruct["ZigZagLen"].Value 		= arguments.qryDataOriginal.High[local.PrevHighRN] - arguments.qryDataOriginal.Low[arguments.Counter-1];
+		arguments.dayStruct["ZigZagLen"].Percent 	= (arguments.qryDataOriginal.High[local.PrevHighRN] - arguments.qryDataOriginal.Low[arguments.Counter-1] )/arguments.qryDataOriginal.close[local.PrevHighRN];
+		}
+	}
+	return;
+	</cfscript>
+</cffunction>
+
+<cffunction name="HAChange" description="" access="private" displayname="" output="false" returntype="void">
+	<cfscript>
+	arguments.dayStruct["HAChange"] = StructNew();
+	arguments.dayStruct["HAChange"].comment = "";
+	arguments.dayStruct["HAChange"].BearFlag  	= false;
+	arguments.dayStruct["HAChange"].BullFlag  	= false;
+	 //todo: check for hollow red / solid green
+	if(arguments.counter > 3 ) {
+		if(arguments.qryDataHA.close[arguments.Counter-1] > arguments.qryDataHA.Open[arguments.Counter-1] 
+		AND arguments.qryDataHA.close[arguments.Counter] < arguments.qryDataHA.open[arguments.Counter]) {
+		arguments.dayStruct["HAChange"].comment = "HA Candle Bearish change - turned black - down" ;
+		arguments.dayStruct["HAChange"].BearFlag  	= true;
+		}
+		if(arguments.qryDataHA.close[arguments.Counter-1] < arguments.qryDataHA.Open[arguments.Counter-1] 
+		AND arguments.qryDataHA.close[arguments.Counter] > arguments.qryDataHA.open[arguments.Counter]) {
+		arguments.dayStruct["HAChange"].comment = "HA Candle Bullish change - turned white - up"  ;
+		arguments.dayStruct["HAChange"].BullFlag  	= true;	
+		}
+	}
+	return;
+	</cfscript>
+</cffunction>
+
 <cffunction name="AroonOsc" description="" access="private" displayname="" output="false" returntype="void">
 	<cfscript>
 	arguments.dayStruct["AroonOsc"] = StructNew();
@@ -241,14 +299,16 @@
 	var local = structNew(); 
 	local.prevDayStruct 	= arguments.daystructs[arguments.counter -1];
 	local.CurrentDayStruct 	= arguments.daystructs[arguments.counter];
-	arguments.daystructs[arguments.counter]["CandleBuyFlag"] = "";
-	arguments.daystructs[arguments.counter]["CandleSellFlag"] = "";
-	arguments.daystructs[arguments.counter]["HACandleBuyFlag"] = "";
+	arguments.daystructs[arguments.counter]["CandleBuyFlag"] 	= "";
+	arguments.daystructs[arguments.counter]["CandleSellFlag"] 	= "";
+	arguments.daystructs[arguments.counter]["HACandleBuyFlag"] 	= "";
 	arguments.daystructs[arguments.counter]["HACandleSellFlag"] = "";
-	arguments.daystructs[arguments.counter]["AroonBuyFlag"] = "";
-	arguments.daystructs[arguments.counter]["AroonSellFlag"] = ""; 
-	arguments.daystructs[arguments.counter]["ZigZagBuyFlag"] = "";
-	arguments.daystructs[arguments.counter]["ZigZagSellFlag"] = ""; 
+	arguments.daystructs[arguments.counter]["AroonBuyFlag"] 	= "";
+	arguments.daystructs[arguments.counter]["AroonSellFlag"] 	= ""; 
+	arguments.daystructs[arguments.counter]["ZigZagBuyFlag"] 	= "";
+	arguments.daystructs[arguments.counter]["ZigZagSellFlag"] 	= "";
+	arguments.daystructs[arguments.counter]["HABullChange"] 	= "";
+	arguments.daystructs[arguments.counter]["HABearChange"] 	= "";  
 	 
 	if (local.prevDayStruct["Candlepattern"].Bullflag AND local.CurrentDayStruct["Pivots"].R1Break  )
 	{arguments.daystructs[arguments.counter]["CandleBuyFlag"] = "Buy initiated"; }
@@ -264,6 +324,11 @@
 	{arguments.daystructs[arguments.counter]["ZigZagBuyFlag"] = "Buy initiated"; }
 	if (local.CurrentDayStruct["ZigZag"].Bearflag)  
 	{arguments.daystructs[arguments.counter]["ZigZagSellFlag"] = "Sell initiated";} 
+	
+	if (local.CurrentDayStruct["HAChange"].Bullflag)
+	{arguments.daystructs[arguments.counter]["HAChangeBuyFlag"] = "Buy initiated"; }
+	if (local.CurrentDayStruct["HAChange"].Bearflag)  
+	{arguments.daystructs[arguments.counter]["HAChangeSellFlag"] = "Sell initiated";} 
 	</cfscript>
 </cffunction> 
 

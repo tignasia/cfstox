@@ -175,6 +175,8 @@
 		<cfset queryAddColumn(arguments.query,"LocalLow","VarChar",local.LocalHighLows.LocalLows) />
 		<cfset queryAddColumn(arguments.query,"LocalHighValue","VarChar",local.LocalHighLows.LocalHighValue) />
 		<cfset queryAddColumn(arguments.query,"LocalLowValue","VarChar",local.LocalHighLows.LocalLowValue) />
+		<cfset queryAddColumn(arguments.query,"PrevHighRecNo","VarChar",local.LocalHighLows.PrevHighRecNo) />
+		<cfset queryAddColumn(arguments.query,"PrevLowRecNo" ,"VarChar",local.LocalHighLows.PrevLowRecNo) />
 		<!--- Candles  --->
 		<!--- high reliable bullish 
 		Piercing Line 	Kicking 	Abandoned Baby 	Morning Doji Star 	Morning Star

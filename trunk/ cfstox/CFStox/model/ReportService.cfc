@@ -35,12 +35,14 @@
 		<style type="text/css">
 		##txts {width:250px;float:left;}
 		##clearer {clear:both;height:0;}
+		##pgbr {page-break-before:always}}
 		</style>
 		</head>
-
 		Analysis for #arguments.symbol# </br> 
-		
 		<cfloop from="2" to="#arguments.data.size()#" index="i">
+			<cfif i GT 1 AND i MOD 2 >
+			<div id="pgbr"></div>
+			</cfif>
 			<cfset local.dayStruct = arguments.data[i] />
 			<table>
 			<tr><td>Symbol: #arguments.symbol#		Date: #local.dayStruct.Date#	</td></tr>
@@ -80,10 +82,18 @@
 			<tr><td>AroonOsc : #local.dayStruct.AroonOsc.value# #local.dayStruct.AroonOsc.comment#</td></tr>
 			</table>
 			<table>  
-			<tr><td style="width:25%;">Candle Buy Flag : #local.dayStruct.CandleBuyflag#</td><td style="width:25%;">Candle Sell Flag : #local.dayStruct.CandleSellflag#</td></tr>
+			<tr>
+			<td style="width:25%;">Candle Buy Flag : #local.dayStruct.CandleBuyflag#</td>
+			<td style="width:25%;">Candle Sell Flag : #local.dayStruct.CandleSellflag#</td></tr>
 			<tr><td style="width:25%;">HA Candle Buy Flag : #local.dayStruct.HACandleBuyflag#</td><td style="width:25%;">HA Candle Sell Flag : #local.dayStruct.HACandleSellflag#</td></tr>
 			<tr><td style="width:25%;">ZigZag: #local.dayStruct.ZigZag.value#</td><td style="width:25%;"></td></tr>
-			<tr><td style="width:25%;">ZigZag Buy Flag : #local.dayStruct.ZigZagBuyflag#</td><td style="width:25%;">ZigZag Sell Flag : #local.dayStruct.ZigZagSellflag#</td></tr>
+			<tr>
+			<td style="width:20%;">ZigZag Buy Flag : #local.dayStruct.ZigZagBuyflag#</td>
+			<td style="width:20%;">ZigZag Sell Flag : #local.dayStruct.ZigZagSellflag#</td>
+			<td style="width:20%;">ZigZag Length: #local.dayStruct.ZigZagLen.Duration#</td>
+			<td style="width:20%;">ZigZag Percent: #local.dayStruct.ZigZagLen.Percent#</td>
+			<td style="width:20%;">ZigZag Value: #local.dayStruct.ZigZagLen.Value#</td>
+			</tr>
 			<tr><td>----------------------------- </td></tr>
 			</table>
 		</cfloop>
@@ -257,7 +267,7 @@
 		<cfset local.Excelfilename = "#local.rootpath#..\Data\" & "#arguments.symbol#" & "#arguments.reportName#" & ".xls"/>
 		<cfset local.HTMLfilename = "#local.rootpath#..\Data\" & "#arguments.symbol#" & "#arguments.reportName#" & ".html"/>
 		<cfif arguments.filetype EQ "PDF">
-			<cfdocument  format="PDF" filename="#local.PDFfilename#" overwrite="true" orientation = "landscape">
+			<cfdocument  format="PDF" filename="#local.PDFfilename#" overwrite="true" orientation = "portrait">
 			<cfoutput>#arguments.content#</cfoutput>
 			</cfdocument>
 		<cfelseif arguments.filetype EQ "excel">

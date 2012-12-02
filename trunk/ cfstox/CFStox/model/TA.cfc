@@ -110,24 +110,37 @@ Pivot Points - coldfusion
 		local.LocalLows = arraynew(1);
 		local.LocalHighValue = arrayNew(1);
 		local.LocalLowValue = arraynew(1);
+		// added 12/01/2012
+		local.PrevHighRecNo = arrayNew(1);
+		local.PrevLowRecNo 	= arraynew(1);
+		local.HighRecNo = 0;
+		local.LowRecNo  = 0;
+		//stop adding 
 		local.LocalHigh = 0;
 		local.LocalLow = 0;
 		for(i=1;i<=local.qryrows;i++){
-		local.LocalHighs[i] = FALSE;
-		local.LocalLows[i] = FALSE;
+		local.LocalHighs[i]	= FALSE;
+		local.LocalLows[i] 	= FALSE;
+		local.PrevHighRecNo[i] 	= 0;
+		local.PrevLowRecNo[i]	= 0;
 		} 
 		for(i=3;i<=local.qryrows;i++){ 
 		    if(arguments.qryData.high[i-2] LT arguments.qryData.high[i-1] AND arguments.qryData.high[i] LT arguments.qryData.high[i-1] ) {
+		    // save the record number 
+		    local.HighRecNo = i-1;
+		    local.LocalHigh = arguments.qryData.High[i-1];
 		    local.LocalHighs[i-1] = TRUE;
-		    local.LocalHigh = arguments.qryData.high[i-1];
 		    }
-		    local.LocalHighValue[i-1] = local.LocalHigh;
+		    local.PrevHighRecNo[i] = local.HighRecNo;
+		    local.LocalHighValue[i] = local.LocalHigh;
 		    
 		    if(arguments.qryData.low[i-2] GT arguments.qryData.low[i-1] AND arguments.qryData.low[i] GT arguments.qryData.low[i-1]) {
+		    local.LowRecNo = i-1;
+		    local.LocalLow = arguments.qryData.Low[i-1];
 		    local.LocalLows[i-1] = TRUE;
-		    local.LocalLow = arguments.qryData.low[i-1]; 
 		    }
-		    local.LocalLowValue[i-1] = local.LocalLow;
+		    local.PrevLowRecNo[i] = local.LowRecNo;
+		    local.LocalLowValue[i] = local.LocalLow;
 	    }
 		</cfscript>
 		<cfreturn local />
@@ -232,8 +245,6 @@ Pivot Points - coldfusion
 				<cfset local.returndata.results = local.srtArrays.aryOut />
 			</cfcase>
 						
-			
-			
 			<cfcase value="CCI">
 				<!--- cci(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)   --->
 				<cfset variables.talib.CCI(arguments.startIdx, arguments.endIdx, local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
@@ -317,6 +328,7 @@ Pivot Points - coldfusion
 				<cfset local.cfAryObj.aryMiddle	= FixTAArray(javaArray:local.aryMiddle,outBegIdx:MInteger1.value) />
 				<cfset local.cfAryObj.aryLower 	= FixTAArray(javaArray:local.aryLower,outBegIdx:MInteger1.value) />
 			</cfcase>			
+			
 			<cfcase value="Stoch">
 			<cfset local.fixArrays = false />
 			<cfset local.cfAryObj = structNew() />
