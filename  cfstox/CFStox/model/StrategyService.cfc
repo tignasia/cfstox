@@ -86,14 +86,14 @@
 			
 			if(local.CandleData[#local.CandleName#][arguments.Counter] EQ 100) {
 			arguments.dayStruct["#local.Ctype#"].value = arguments.dayStruct["#local.Ctype#"].value & " | " & "Bullish #local.candleName# ";
-			arguments.dayStruct["#local.Ctype#"].comment = arguments.dayStruct["#local.Ctype#"].comment & " " & "#local.Candles[h][2]#";		
+			arguments.dayStruct["#local.Ctype#"].comment = arguments.dayStruct["#local.Ctype#"].comment & " | " & "#local.Candles[h][2]#";		
 			if(h EQ 5 OR h EQ 6)
 			{arguments.dayStruct["#local.Ctype#"].BullFlag = true;}
 			}
 			
 			if(local.CandleData[#local.CandleName#][arguments.Counter] EQ -100) {
 			arguments.dayStruct["#local.Ctype#"].value = arguments.dayStruct["#local.Ctype#"].value & " | " & "Bearish #local.CandleName# ";
-			arguments.dayStruct["#local.Ctype#"].comment = arguments.dayStruct["#local.Ctype#"].comment & " " &  "#local.Candles[h][2]#";	
+			arguments.dayStruct["#local.Ctype#"].comment = arguments.dayStruct["#local.Ctype#"].comment & " | " &  "#local.Candles[h][2]#";	
 				if(h EQ 5 OR h EQ 6)
 				{arguments.dayStruct["#local.Ctype#"].BearFlag = true;}
 			}

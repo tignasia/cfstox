@@ -45,7 +45,7 @@
 <input type="hidden" id="actionitem" name="actionitem" value="AnalyseData">
 <input type="hidden" id="summary" name="summary" value="false" />
 <label for="StartDate" style="width=30%" >Start Date:</label>
-<input type="text" name="StartDate" id="StartDate" value="1/1/2010">
+<input type="text" name="StartDate" id="StartDate" value="9/1/2012">
 <label for="EndDate" style="width=30%">End Date:</label>
 <cfoutput><input type="text" name="EndDate" id="EndDate" value="#dateformat(now(),"mm/dd/yyyy")#"></cfoutput>
 <label for="Symbol" style="width=30%">Symbol:</label>
@@ -68,7 +68,7 @@
 <div>
 <form action="controllers/controller.cfm" method="post" id="form1">
 <fieldset title="historical data"><legend>Load SQL</legend>
-<input type="hidden" id="action" name="action" value="loadSQL">
+<input type="hidden" id="actionitem" name="actionitem" value="loadSQL">
 <input type="hidden" id="summary" name="summary" value="false" />
 <label for="StartDate" style="width=30%" >Start Date:</label>
 <input type="text" name="StartDate" id="StartDate" value="1/1/2010">
@@ -86,7 +86,7 @@
 <!--- this runs a historical backtest of the chosen system  --->
 <form action="controllers/controller.cfm" method="post" id="backtest_form">
 <fieldset title="Backtest">Backtest
-<input type="hidden" id="action" name="action" value="backtest">
+<input type="hidden" id="actionitem" name="actionitem" value="backtest">
 <label for="Symbol" style="width=30%">Symbol:</label>
 <input type="text" name="Symbol" id="Symbol" value="">
 <label for="StartDate" style="width=30%" >Start Date:</label>
@@ -100,33 +100,8 @@
 <!--- this runs a summary of trading actions and analysis against the watchlist --->
 <form action="controllers/controller.cfm" method="post" id="watchlist_form1">
 <fieldset title="Watchlist">Watchlist One
-<input type="hidden" id="action" name="action" value="watchlist">
+<input type="hidden" id="actionitem" name="actionitem" value="watchlist">
 <input type="hidden" id="watchlist" name="watchlist" value="1">
 <input type="submit" name="submit" id="submit" value="Run watchlist analysis" />
 </fieldset>
 </form>
-
-<form action="controllers/controller.cfm" method="post" id="watchlist_form2">
-<fieldset title="Watchlist">Watchlist Two
-<input type="hidden" id="action" name="action" value="watchlist">
-<input type="hidden" id="watchlist" name="watchlist" value="2">
-<input type="submit" name="submit" id="submit" value="Run watchlist analysis" />
-</fieldset>
-</form>
-
-<form action="controllers/controller.cfm" method="post" id="watchlist_form3">
-<fieldset title="Watchlist">Watchlist Three
-<input type="hidden" id="action" name="action" value="watchlist">
-<input type="hidden" id="watchlist" name="watchlist" value="3">
-<input type="submit" name="submit" id="submit" value="Run watchlist analysis" />
-</fieldset>
-</form>
-
-<form action="controllers/controller.cfm" method="post" id="watchlist_form4">
-<fieldset title="Watchlist">Watchlist Four
-<input type="hidden" id="action" name="action" value="watchlist">
-<input type="hidden" id="watchlist" name="watchlist" value="4">
-<input type="submit" name="submit" id="submit" value="Run watchlist analysis" />
-</fieldset>
-</form>
-
