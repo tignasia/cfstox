@@ -36,13 +36,14 @@
 	</cffunction>
 	
 	<cffunction name="AnalyseData" description="Generate historical data reports" access="public" displayname="" output="false" returntype="any">
-		<!--- I generate a hostorical listing of stock prices and indicator readings for a given stock --->
+		<!--- I generate a historical listing of stock prices and indicator readings for a given stock --->
 		<cfargument name="symbol" required="true" />
 		<cfargument name="startdate" required="true" />
 		<cfargument name="enddate" required="true" />
+		<cfargument name="summaryOnly" required="false" default="false" />
 		<cfscript>
 		var local = structnew(); 
-		request.view = "historical";
+		request.view = "chart";
 		request.symbol = "#arguments.symbol#";
 		request.method = "Historical";
 		GetData(argumentcollection:arguments);
@@ -50,8 +51,8 @@
 		request.qryDataHA 		= session.objects.DataStorage.GetData("qryDataHA");
 		request.xmldata 		= session.objects.DataStorage.GetData("XMLDataOriginal");
 		request.xmldataHA 		= session.objects.DataStorage.GetData("XMLDataHA");
- 		local.ReportArray = session.objects.StrategyService.Analyse();
-		session.objects.ReportService.AnalyseDataReport(symbol:arguments.symbol,data:local.reportArray);
+ 		local.ReportArray 		= session.objects.StrategyService.Analyse();
+		session.objects.ReportService.AnalyseDataReport(symbol:arguments.symbol,data:local.reportArray,summaryOnly:arguments.summaryOnly);
 		// for unit testing 
 		return local.ReportArray;
 		</cfscript> 
@@ -118,18 +119,24 @@
 	</cffunction>
 	
 	<cffunction name="watchlist" description="run systems against watchlist" access="public" displayname="" output="false" returntype="struct">
+		<cfargument name="SummaryOnly" required="false" default="true" />
 		<cfset var local = structnew() />
 		<cfset local.view = "watchlist">
 		<!--- <cfset local.theList = 
-"A,ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH"
-> --->
-<cfset local.theList = 
-"A,ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM"
->
-	<!--- SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF --->
-		<cfset local.startDate = dateformat(now()-30,"mm/dd/yyyy") />
+		"A,ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH"
+		> --->
+		<cfset local.theList = 
+		"AAPL,AMZN,DIA,BIDU,SOHU,TLT,F,CSCO,X"
+		>
+		<cfset local.HTMLfilename = "#application.rootpath#\Data\" & "MySummary" & ".html"/>
+		<cffile action="delete" file="#local.htmlfilename#">
+		<!--- SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF --->
+		<cfset local.startDate = dateformat(now()-60,"mm/dd/yyyy") />
 		<cfset local.endDate = dateformat(now(),"mm/dd/yyyy") />
-		<cfset request.data = session.objects.systemservice.RunWatchList(SystemToRun:"test",watchlist:arguments.watchlist) />
+		<cfloop list="#local.theList#" index="local.i">
+			<cfset request.symbol=#local.i#>
+			<cfset AnalyseData(symbol:local.i,startDate:local.startDate,endDate:local.enddate,summaryOnly:arguments.summaryOnly) />
+		</cfloop>
 		<cfreturn local />
 	</cffunction>
 

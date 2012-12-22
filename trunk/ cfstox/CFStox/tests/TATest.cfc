@@ -56,7 +56,6 @@ note: candles are offset by two days
 		</cfscript>
 	</cffunction>
 	
-	
 	<cffunction name="testGetStoch" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();

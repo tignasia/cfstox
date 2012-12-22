@@ -25,10 +25,17 @@
 	<cffunction name="AnalyseDataReport" description="I generate the analysedata report" access="public" displayname="" output="false" returntype="void">
 		<cfargument name="data" required="true" />
 		<cfargument name="symbol" required="true" />
+		<cfargument name="summaryOnly" required="false" default="false" />
 		<cfset var local = StructNew() />
-		<cfset local.crlf = chr(1) & chr(13) />
+		<cfset local.crlf 			= chr(10) & chr(13) />
+		<cfset local.dataSize 		= arguments.data.size() />
+		<cfset local.SummaryData 	= "" />
+		<cfset local.daysData		= "" />
+		<cfset local.myReport		= "" />
+		<cfset local.reportHeader	= "" />
+		<cfset local.summaryValue 	= local.datasize - 5 />
 		<cfoutput>
-		<cfsavecontent variable="local.reportResults">
+		<cfsavecontent variable="local.reportHeader">
 		<!DOCTYPE html>
 		<html>
 		<head>
@@ -38,11 +45,23 @@
 		##pgbr {page-break-before:always}}
 		</style>
 		</head>
-		Analysis for #arguments.symbol# </br> 
-		<cfloop from="2" to="#arguments.data.size()#" index="i">
-			<cfif i GT 1 AND i MOD 2 >
-			<div id="pgbr"></div>
-			</cfif>
+		<div id="pgbr"></div>
+		Analysis for #arguments.symbol# </br>
+		<!--- <img src="http://chart.finance.yahoo.com/z?s=#arguments.symbol#&t=3m&q=c&l=on&z=m&a=v&p=s&lang=en-US&region=US"> --->
+		<!--- <img src="http://stockcharts.com/c-sc/sc?s=#arguments.symbol#&p=D&yr=0&mn=3&dy=0&i=t18228844816&a=112245579&r=1356206789710"> --->
+		<img src="http://stockcharts.com/c-sc/sc?s=#arguments.symbol#&p=D&b=5&g=0&i=t78514312373&r=1356207101202">
+		<img src="http://stockcharts.com/c-sc/sc?s=#arguments.symbol#&p=D&b=5&g=0&i=t98154542103&r=1356207134143" >
+		<!--- 
+		Partition into chunks and save as required <cfsavecontent>	
+		generate html
+		generate pdf 
+		generate summary pdf and html
+		send an email
+		--->
+		</cfsavecontent>
+		<cfset local.SummaryData 	= local.reportheader />
+		<cfloop from="2" to="#local.datasize#" index="i">
+			<cfsavecontent variable="local.daysData">
 			<cfset local.dayStruct = arguments.data[i] />
 			<table>
 			<tr><td>Symbol: #arguments.symbol#		Date: #local.dayStruct.Date#	</td></tr>
@@ -57,51 +76,103 @@
 			</td></tr>
 			</table>
 			
-			<div id="container" style="width:500px">
-			<div id="txts">Resistance: R1Break: #local.dayStruct.Pivots.R1Break#</div>
-			<div id="txts">Resistance: R2Break: #local.dayStruct.Pivots.R2Break#</div>
-			</div>
-			<div id="container" style="width:500px">
-			<div id="txts">Resistance: HAR1Break: #local.dayStruct.Pivots.HAR1Break#</div>
-			<div id="txts">Resistance: HAR2Break: #local.dayStruct.Pivots.HAR2Break#</div>
-			</div>
-			<div id="container" style="width:500px">		
-			<div id="txts">Support: S1Break: #local.dayStruct.Pivots.S1Break#</div>
-			<div id="txts">Support: S2Break: #local.dayStruct.Pivots.S2Break#</div>
-			<div id="txts">Support: HAS1Break: #local.dayStruct.Pivots.HAS1Break#</div>
-			<div id="txts">Support: HAS2Break: #local.dayStruct.Pivots.HAS2Break#</div>
+			<div id="container" style="width:1000px">
+			<div id="txts" style="width:100px">Resistance:</div>
+			<div id="txts" style="width:100px">R1Break:</div>
+			<div id="txts" style="width:50px">#local.dayStruct.Pivots.R1Break#</div>
+			<div id="txts" style="width:100px">R2Break:</div>
+			<div id="txts" style="width:50px">#local.dayStruct.Pivots.R2Break#</div>
+			<div id="txts" style="width:100px">HAR1Break:</div>
+			<div id="txts" style="width:50px">#local.dayStruct.Pivots.HAR1Break#</div>
+			<div id="txts" style="width:100px">HAR2Break:</div>
+			<div id="txts" style="width:50px">#local.dayStruct.Pivots.HAR2Break#</div>
+			<br style="clear:both">		
+			<div id="txts" style="width:100px">Support:</div>
+			<div id="txts" style="width:100px">S1Break:</div> 
+			<div id="txts" style="width:50px">#local.dayStruct.Pivots.S1Break#</div>
+			<div id="txts" style="width:100px">S2Break:</div> 
+			<div id="txts" style="width:50px">#local.dayStruct.Pivots.S2Break#</div>
+			<div id="txts" style="width:100px">HAS1Break:</div> 
+			<div id="txts" style="width:50px">#local.dayStruct.Pivots.HAS1Break#</div>
+			<div id="txts" style="width:100px">HAS2Break:</div>
+			<div id="txts" style="width:50px">#local.dayStruct.Pivots.HAS2Break#</div>
 			</div>
 			<div id="clearer" style="width:500px">
 			</div>
-			<table> 
-			<tr><td style="width:100%">Candle Pattern:  #local.dayStruct.CandlePattern.value# </td></tr>
-			<tr><td>#local.dayStruct.CandlePattern.comment# </td></tr>
-			<tr><td>HA Candle Pattern:  #local.dayStruct.HACandlePattern.value# </td></tr>
-			<tr><td>#local.dayStruct.HACandlePattern.comment# </td></tr>
-			<tr><td>CCI : #Round(local.dayStruct.CCI.value*100)/100# #local.dayStruct.CCI.comment#</td></tr>
-			<tr><td>AroonOsc : #local.dayStruct.AroonOsc.value# #local.dayStruct.AroonOsc.comment#</td></tr>
-			</table>
-			<table>  
-			<tr>
-			<td style="width:25%;">Candle Buy Flag : #local.dayStruct.CandleBuyflag#</td>
-			<td style="width:25%;">Candle Sell Flag : #local.dayStruct.CandleSellflag#</td></tr>
-			<tr><td style="width:25%;">HA Candle Buy Flag : #local.dayStruct.HACandleBuyflag#</td><td style="width:25%;">HA Candle Sell Flag : #local.dayStruct.HACandleSellflag#</td></tr>
-			<tr><td style="width:25%;">ZigZag: #local.dayStruct.ZigZag.value#</td><td style="width:25%;"></td></tr>
-			<tr>
-			<td style="width:20%;">ZigZag Buy Flag : #local.dayStruct.ZigZagBuyflag#</td>
-			<td style="width:20%;">ZigZag Sell Flag : #local.dayStruct.ZigZagSellflag#</td>
-			<td style="width:20%;">ZigZag Length: #local.dayStruct.ZigZagLen.Duration#</td>
-			<td style="width:20%;">ZigZag Percent: #local.dayStruct.ZigZagLen.Percent#</td>
-			<td style="width:20%;">ZigZag Value: #local.dayStruct.ZigZagLen.Value#</td>
-			</tr>
-			<tr><td>----------------------------- </td></tr>
-			</table>
-		</cfloop>
-		
+			<br style="clear:both">	
+			<div id="txts" style="width:200px">Candle Pattern:</div>
+			<br style="clear:both">
+			<div id="txts" style="width:1000px">#local.dayStruct.CandlePattern.value#</div>
+			<br style="clear:both">
+			<div id="txts" style="width:1000px">#local.dayStruct.CandlePattern.comment#</div>
+			<br style="clear:both">
+			</br>
+			<div id="txts" style="width:200px">HA Candle Pattern:</div>
+			<br style="clear:both">
+			<div id="txts" style="width:1000px">#local.dayStruct.HACandlePattern.value#</div>
+			<br style="clear:both">
+			<div id="txts" style="width:1000px">#local.dayStruct.HACandlePattern.comment#</div>
+			<br style="clear:both">
+			</br>
+			<div id="txts" style="width:50px">CCI:</div>
+			<div id="txts" style="width:100px">#Round(local.dayStruct.CCI.value*100)/100#</div> 
+			<div id="txts" style="width:250px">#local.dayStruct.CCI.comment#</div>
+			<div id="txts" style="width:50px">AroonOsc: </div>
+			<div id="txts" style="width:100px">#local.dayStruct.AroonOsc.value#</div>
+			<div id="txts" style="width:250px">#local.dayStruct.AroonOsc.comment#</div>
+			<br style="clear:both">
+			</br>
+			<div id="txts" style="width:200px">Candle Buy Flag:</div>
+			<div id="txts" style="width:200px">#local.dayStruct.CandleBuyflag#</div>
+			<div id="txts" style="width:200px">Candle Sell Flag:</div> 
+			<div id="txts" style="width:200px">#local.dayStruct.CandleSellflag#</div>
+			<br style="clear:both">
+			<div id="txts" style="width:200px">HA Candle Buy Flag:</div> 
+			<div id="txts" style="width:200px">#local.dayStruct.HACandleBuyflag#</div>
+			<div id="txts" style="width:200px">HA Candle Sell Flag:</div> 
+			<div id="txts" style="width:200px">#local.dayStruct.HACandleSellflag#</div>
+			<br style="clear:both">
+			</br>
+			<div id="txts" style="width:100px">ZigZag:</div> 
+			<div id="txts" style="width:200px">#local.dayStruct.ZigZag.value#</div>
+			<br style="clear:both">
+			<div id="txts" style="width:200px">ZigZag Buy Flag:</div> 
+			<div id="txts" style="width:100px">#local.dayStruct.ZigZagBuyflag#</div>
+			<div id="txts" style="width:200px">ZigZag Sell Flag:</div>
+			<div id="txts" style="width:100px">#local.dayStruct.ZigZagSellflag#</div>
+			<br style="clear:both">
+			<div id="txts" style="width:200px">ZigZag Length:</div>
+			<div id="txts" style="width:100px">#local.dayStruct.ZigZagLen.Duration#</div>
+			<div id="txts" style="width:200px">ZigZag Percent:</div>
+			<div id="txts" style="width:100px">#Round(local.dayStruct.ZigZagLen.Percent*100)#</div>
+			<div id="txts" style="width:200px">ZigZag Value:</div>
+			<div id="txts" style="width:100px">#local.dayStruct.ZigZagLen.Value#</div>
+			<br style="clear:both">
+			----------------------------- 
+			<br style="clear:both">
 		</cfsavecontent>
+		<cfset local.myReport = local.myReport & local.daysData />
+		<cfif i GTE local.dataSize - 4>
+			<cfset local.summaryData = local.summaryData & local.daysData />
+		</cfif>
+		</cfloop>
 		</cfoutput>
-		<cfset OutputReport(content:local.reportResults,symbol:arguments.symbol,filetype:"PDF",ReportName:"testAnalysis") />
-		<cfset OutputReport(content:local.reportResults,symbol:arguments.symbol,filetype:"HTML",ReportName:"testAnalysis") />
+		<cfset local.reportResults =  local.reportHeader & local.myReport />
+		<cfdocument name="local.summary" format="pdf">
+		<cfoutput>#local.summaryData#</cfoutput>
+		</cfdocument>
+		<!--- <cfdump label="ReportService.cfc" var="#local#">
+		<cfabort> --->
+		<cfif NOT arguments.summaryOnly>
+			<cfset OutputReport(content:local.ReportResults,symbol:arguments.symbol,filetype:"PDF",ReportName:"testAnalysis") />
+			<cfset OutputReport(content:local.ReportResults,symbol:arguments.symbol,filetype:"HTML",ReportName:"testAnalysis") />
+		</cfif>
+		<cftry>
+		<cfset OutputReport(content:local.summaryData,symbol:"",filetype:"HTML",ReportName:"MySummary",overwrite:"no") />
+		<cfcatch>
+		</cfcatch>
+		</cftry>
+		<!--- <cfpdf action="merge" source="local.summary" destination="#application.rootpath#\Data\Mysummary.pdf" overwrite="yes" /> --->
 		<cfreturn />
 	</cffunction>
 	
@@ -258,22 +329,23 @@
 		<cfargument name="symbol" required="true">
 		<cfargument name="filetype" required="true">
 		<cfargument name="reportName" required="true">
+		<cfargument name="overwrite" required="false" default="yes">
 		<!--- fix for google requiring "NYSE" for IOC and others.  --->
 		<cfif left(arguments.symbol,4) EQ "NYSE" >
 			<cfset arguments.symbol = right(arguments.symbol,3) >
 		</cfif>
-		<cfset local.rootpath = session.objects.utility.getdirectorypath() />
-		<cfset local.PDFfilename = "#local.rootpath#..\Data\" & "#arguments.symbol#" & "#arguments.reportName#" & ".pdf"/>
-		<cfset local.Excelfilename = "#local.rootpath#..\Data\" & "#arguments.symbol#" & "#arguments.reportName#" & ".xls"/>
-		<cfset local.HTMLfilename = "#local.rootpath#..\Data\" & "#arguments.symbol#" & "#arguments.reportName#" & ".html"/>
+		
+		<cfset local.PDFfilename = "#application.rootpath#\Data\" & "#arguments.symbol#" & "#arguments.reportName#" & ".pdf"/>
+		<cfset local.Excelfilename = "#application.rootpath#\Data\" & "#arguments.symbol#" & "#arguments.reportName#" & ".xls"/>
+		<cfset local.HTMLfilename = "#application.rootpath#\Data\" & "#arguments.symbol#" & "#arguments.reportName#" & ".html"/>
 		<cfif arguments.filetype EQ "PDF">
-			<cfdocument  format="PDF" filename="#local.PDFfilename#" overwrite="true" orientation = "portrait">
+			<cfdocument  format="PDF" filename="#local.PDFfilename#" overwrite="#arguments.overwrite#" orientation="portrait" backgroundvisible="no"  >
 			<cfoutput>#arguments.content#</cfoutput>
 			</cfdocument>
 		<cfelseif arguments.filetype EQ "excel">
 			<cffile action="write" file="#local.Excelfilename#" output="#arguments.content#"   />
 		<cfelseif arguments.filetype EQ "html">
-			<cffile action="write" file="#local.HTMLfilename#" output="#arguments.content#"   />
+			<cffile action="append" file="#local.HTMLfilename#" output="#arguments.content#"   />
 		</cfif>
 		
 		<!--- for excel --->

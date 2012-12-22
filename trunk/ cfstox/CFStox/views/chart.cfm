@@ -1,0 +1,1 @@
+<img src="http://chart.finance.yahoo.com/z?s=#request.symbol#&t=3m&q=c&l=on&z=m&a=v&p=s&lang=en-US&region=US">
