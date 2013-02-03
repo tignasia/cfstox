@@ -73,7 +73,7 @@
 		<cfargument name="Symbol" 		required="true"  />
 		<cfargument name="startdate" 	required="false" default=#CreateDate(2012,1,1)# />
 		<cfargument name="enddate" 		required="false" default=#now()# />
-		<cfargument name="Source" required="false" default="Yahoo" />
+		<cfargument name="Source" 		required="false" default="Yahoo" />
 		<cfset var local = structnew() />
 		<cfset reset() />
 		<!-- todo: seperate out returning the raw data as a query; open,high low close volume -->
@@ -94,9 +94,13 @@
 		<cfargument name="Symbol" 		required="true"  />
 		<cfargument name="startdate" 	required="false" default=#CreateDate(2012,1,1)# />
 		<cfargument name="enddate" 		required="false" default=#now()# />
+		<cfargument name="SourceOne" 	required="false" default="Yahoo" />
+		<cfargument name="SourceTwo" 	required="false" default="Google" />
 		<cfset var local = structnew() />
 		<cfset local.returnResults = StructNew() />
-		<cfset local.results = GetRawData(symbol:"#arguments.Symbol#",startdate:"#arguments.startdate#",enddate:"#arguments.enddate#") />
+		<cfset local.resultsOne = GetRawData(symbol:arguments.Symbol,startdate:arguments.startdate,enddate:arguments.enddate-1,source:arguments.sourceOne) />
+		<cfset local.resultsTwo = GetRawData(symbol:arguments.Symbol,startdate:arguments.enddate,enddate:arguments.enddate,source:arguments.sourceTwo) />
+		<cfset local.results 	= MergeResults(QueryOne:local.resultsOne,QueryTwo:local.resultsTwo) />
 		<cfquery   dbtype="query"  name="local.resorted" >
 			select * from [local].results order by DateOne asc
 		</cfquery>
@@ -370,6 +374,33 @@
 	<cffunction name="GetLow" description="" access="public" displayname="" output="false" returntype="Any">
 	<cfreturn variables.low />
 	</cffunction>
+	
+<cffunction name="MergeResults" access="public" returntype="query" output="false"
+hint="This takes two queries and appends the second one to the first one. This actually updates the first query and does not return anything.">
+<!--- Define arguments. --->
+<cfargument name="QueryOne" type="any" required="true" />
+<cfargument name="QueryTwo" type="any" required="true" />
+<!--- Define the local scope. --->
+<cfset var LOCAL = StructNew() />
+<cfif arguments.QueryTwo.recordcount>
+	<!--- Get the column list (as an array for faster access. --->
+	<cfset LOCAL.Columns = ListToArray( ARGUMENTS.QueryTwo.ColumnList ) />
+	<!--- Loop over the second query. --->
+	<cfloop query="ARGUMENTS.QueryTwo">
+		<!--- Add a row to the first query. --->
+		<cfset QueryAddRow(ARGUMENTS.QueryOne) />
+		<!--- Loop over the columns. --->
+		<cfloop index="LOCAL.Column" from="1" to="#ArrayLen(LOCAL.Columns)#" step="1">
+		<!--- Get the column name for easy access. --->
+		<cfset LOCAL.ColumnName = LOCAL.Columns[ LOCAL.Column ] />
+		<!--- Set the column value in the newly created row. --->
+		<cfset ARGUMENTS.QueryOne[ LOCAL.ColumnName ][ ARGUMENTS.QueryOne.RecordCount ] = ARGUMENTS.QueryTwo[ LOCAL.ColumnName ][ ARGUMENTS.QueryTwo.CurrentRow ] />
+		</cfloop>
+	</cfloop>
+</cfif>
+<!--- Return out. --->
+<cfreturn arguments.QueryOne />
+</cffunction>
 		
 	<cffunction name="GetHAStockDataGoogle" description="I return a HA data" access="public" displayname="" output="false" returntype="Any" >
 		<cfargument name="symbol" required="true" />

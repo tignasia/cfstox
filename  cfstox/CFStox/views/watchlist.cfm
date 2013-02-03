@@ -6,7 +6,8 @@
 </head>
 <body>
 <cfset local = structNew() />
-		<cfset local.filename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "Watchlist"  & ".pdf"/>
+		<cfset local.filename = ExpandPath("../Data/") & "Watchlist"  & ".pdf"/>
+		<cfdump var="#local.filename#">
 		<cfset local.ReportHeaders1 	= "Symbol,Trade,Entry Price,Date">
 		
 		<cfoutput>

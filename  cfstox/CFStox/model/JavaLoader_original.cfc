@@ -19,7 +19,7 @@ Mark Mandel		08/05/2006		Created
 Mark Mandel		22/06/2006		Added verification that the path exists
 
 ------------------------------------------------------------------------------->
-<cfcomponent name="JavaLoader" hint="Loads External Java Classes, while providing access to ColdFusion classes" output="false">
+<cfcomponent name="JavaLoader" hint="Loads External Java Classes, while providing access to ColdFusion classes">
 
 <cfscript>
 	instance = StructNew();
@@ -28,7 +28,7 @@ Mark Mandel		22/06/2006		Added verification that the path exists
 
 <!------------------------------------------- PUBLIC ------------------------------------------->
 
-<cffunction name="init" hint="Constructor" access="public" returntype="JavaLoader" output="true">
+<cffunction name="init" hint="Constructor" access="public" returntype="JavaLoader" output="false">
 	<cfargument name="loadPaths" hint="An array of directories of classes, or paths to .jar files to load" type="array" default="#ArrayNew(1)#" required="no">
 	<cfargument name="loadColdFusionClassPath" hint="Loads the ColdFusion libraries" type="boolean" required="No" default="false">
 	<cfargument name="parentClassLoader" hint="(Expert use only) The parent java.lang.ClassLoader to set when creating the URLClassLoader" type="any" default="" required="false">
@@ -70,19 +70,11 @@ Mark Mandel		22/06/2006		Added verification that the path exists
 		}
 
 		while(iterator.hasNext())
-		{		
-			target = iterator.next();
-			//target= ExpandPath("../model/ta-lib.jar");
-			//mytarget = "some string";
-			//writedump(target);
-			//writedump(mytarget);
-			file = createObject("java", "java.io.File").init(target);
-			//writedump(file);
-			//writedump(file.exists());
-			//abort;
+		{
+			file = createObject("java", "java.io.File").init(iterator.next());
 			if(NOT file.exists())
 			{
-			throw("PathNotFoundException", "The path you have specified could not be found", file.getAbsolutePath() & " does not exist");
+				throw("PathNotFoundException", "The path you have specified could not be found", file.getAbsolutePath() & " does not exist");
 			}
 
 			classLoader.addUrl(file.toURL());

@@ -16,9 +16,9 @@
 				
 		this.controller = createObject("component","cfstox.controllers.controller").init();
 		//this.TA 		= createObject("component","cfstox.model.ta").init();
-		this.symbol 	= "HD";
-		this.startDate	= "10/01/2012";
-		this.enddate	= "11/16/2012";
+		this.symbol 	= "SPY";
+		this.startDate	= "11/01/2012";
+		this.enddate	= "01/03/2013";
 		</cfscript>
 		</cffunction>
 <!---  
@@ -64,6 +64,18 @@ note: candles are offset by two days
 		debug(local.results);
 		</cfscript>
 	</cffunction>
+	
+	<cffunction name="testGetDonchianChannel" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data 		= session.Objects.DataService.GetStockData(symbol:#this.symbol#,startdate:#this.startdate#,enddate:#this.enddate#);
+		local.results 	= session.Objects.TA.DonchianChannel(qryPrices:local.data.orgdata,optInTimePeriod:5); 
+		debug(local.results);
+		</cfscript>
+	</cffunction>
+	
+	
+	
 	
 	<cffunction name="testGetCandle" access="public" returntype="void">
 		<cfscript>

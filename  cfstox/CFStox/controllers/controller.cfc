@@ -13,12 +13,14 @@
 	</cffunction>
 	
 	<cffunction name="Historical" description="Generate historical data reports" access="public" displayname="" output="false" returntype="any">
-		<!--- I generate a hostorical listing of stock prices and indicator readings for a given stock --->
+		<!--- I generate a historical listing of stock prices and indicator readings for a given stock --->
 		<cfargument name="symbol" required="true" />
 		<cfargument name="startdate" required="true" />
 		<cfargument name="enddate" required="true" />
 		<cfscript>
 		var local = structnew(); 
+		//local.mypath =  ExpandPath("../model/ta-lib.jar");
+		//dump(local.mypath,"Path to jar file:");
 		request.view = "historical";
 		request.symbol = "#arguments.symbol#";
 		request.method = "Historical";
@@ -28,6 +30,8 @@
 		request.qryDataHA 		= session.objects.DataStorage.GetData("qryDataHA");
 		request.xmldata 		= session.objects.DataStorage.GetData("XMLDataOriginal");
 		request.xmldataHA 		= session.objects.DataStorage.GetData("XMLDataHA");
+		//dump(request);
+		dump(request);
 		session.objects.ReportService.ReportRunner(reportName:"HistoryReport",data:request.qryDataOriginal,symbol:arguments.symbol);
 		session.objects.ReportService.ReportRunner(reportName:"PivotReport",data:request.qryDataOriginal,symbol:arguments.symbol);
 		session.objects.ReportService.ReportRunner(reportName:"CandleReport",data:request.qryDataOriginal,symbol:arguments.symbol);
@@ -126,10 +130,12 @@
 		"A,ABX,ADBE,AEM,AKAM,APA,ATI,AXP,BIIB,BK,BP,CAT,CHK,CMED,CRM,CSCO,CSX,DE,DIA,DIG,DIS,DNDN,EEM,EWZ,FAS,FCX,FFIV,FSLR,FWLT,GLD,GMCR,GME,GS,HD,HK,HON,HOT,HPQ,HSY,IOC,IWM,JOYG,LVS,M,MDY,MEE,MMM,MOS,MS,NFLX,NKE,NSC,NUE,ORCL,PG,POT,QLD,QQQQ,RIG,RIMM,RMBS,RTH"
 		> --->
 		<cfset local.theList = 
-		"AAPL,AMZN,DIA,BIDU,SOHU,TLT,F,CSCO,X"
+		"AAPL,AMZN,DIA,BIDU,SOHU,TLT,F,CSCO,X,SBUX"
 		>
-		<cfset local.HTMLfilename = "#application.rootpath#\Data\" & "MySummary" & ".html"/>
-		<cffile action="delete" file="#local.htmlfilename#">
+		<cfset local.HTMLfilename = "#application.rootpath#Data/" & "MySummary" & ".html"/>
+		<cfif FileExists(local.htmlfilename) >
+			<cffile action="delete" file="#local.htmlfilename#">
+		</cfif>
 		<!--- SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF --->
 		<cfset local.startDate = dateformat(now()-60,"mm/dd/yyyy") />
 		<cfset local.endDate = dateformat(now(),"mm/dd/yyyy") />
@@ -137,6 +143,8 @@
 			<cfset request.symbol=#local.i#>
 			<cfset AnalyseData(symbol:local.i,startDate:local.startDate,endDate:local.enddate,summaryOnly:arguments.summaryOnly) />
 		</cfloop>
+		<cfinclude template="../Data/MySummary.html" >
+		<cfabort>
 		<cfreturn local />
 	</cffunction>
 
@@ -158,7 +166,8 @@
 		var local = structnew(); 
 		session.objects.DataStorage.SetData(DataSet:"Symbol",theData:arguments.symbol);
 		session.objects.DataStorage.SetData(DataSet:"startDate",theData:arguments.startDate); 
-		session.objects.DataStorage.SetData(DataSet:"endDate",theData:arguments.endDate);  		
+		session.objects.DataStorage.SetData(DataSet:"endDate",theData:arguments.endDate);
+				
 		local.stockdata = session.objects.DataService.GetStockData(argumentcollection:arguments);
 		session.objects.DataStorage.SetData(DataSet:"qryDataOriginal", theData:local.stockData.qryDataOriginal ); 
 		session.objects.DataStorage.SetData(DataSet:"qryDataHA", theData:local.stockData.qryDataHA );
@@ -191,10 +200,12 @@
 
 	<cffunction name="loadObjects" description="I load objects" access="private" displayname="" output="false" returntype="void">
 	<!--- load the objects that we might need if not already loaded and set the loaded flag in session --->
+	<cfset mypath = ExpandPath("../model/ta-lib.jar") />
+	<cfdump var="#mypath#">
 	<cfset session.objects.XMLGenerator 	= createobject("component","cfstox.model.XMLGenerator").init() />
 	<cfset session.objects.Indicators 		= createobject("component","cfstox.model.Indicators").init() />
 	<cfset session.objects.Utility 			= createobject("component","cfstox.model.Utility").init() />
-	<cfset session.objects.ta 				= createObject("component","cfstox.model.ta").init() />
+	<cfset session.objects.ta 				= createObject("component","cfstox.model.ta").init(mypath) /> 
 	<cfset session.objects.http 			= createObject("component","cfstox.model.http").init() />
 	<cfset session.objects.System 			= createObject("component","cfstox.model.system").init() />
 	<cfset session.objects.DataService 		= createObject("component","cfstox.model.Dataservice").init() />

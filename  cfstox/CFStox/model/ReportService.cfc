@@ -47,10 +47,25 @@
 		</head>
 		<div id="pgbr"></div>
 		Analysis for #arguments.symbol# </br>
+		<!-- TradingView Widget BEGIN -->
+		<script type="text/javascript" src="https://s3.amazonaws.com/tradingview/tv.js"></script>
+		<script type="text/javascript">
+		new TradingView.widget({
+		"width": 500,
+	  	"height": 250,
+  		"symbol": "#arguments.symbol#",
+  		"interval": "D",
+  		"toolbar_bg": "##E4E8EB",
+  		"hide_top_toolbar": true,
+  		"save_image": false
+		});
+</script>
+<!-- TradingView Widget END -->
+
 		<!--- <img src="http://chart.finance.yahoo.com/z?s=#arguments.symbol#&t=3m&q=c&l=on&z=m&a=v&p=s&lang=en-US&region=US"> --->
 		<!--- <img src="http://stockcharts.com/c-sc/sc?s=#arguments.symbol#&p=D&yr=0&mn=3&dy=0&i=t18228844816&a=112245579&r=1356206789710"> --->
-		<img src="http://stockcharts.com/c-sc/sc?s=#arguments.symbol#&p=D&b=5&g=0&i=t78514312373&r=1356207101202">
-		<img src="http://stockcharts.com/c-sc/sc?s=#arguments.symbol#&p=D&b=5&g=0&i=t98154542103&r=1356207134143" >
+		<!--- <img src="http://stockcharts.com/c-sc/sc?s=#arguments.symbol#&p=D&b=5&g=0&i=t78514312373&r=1356207101202">
+		 ---><!--- <img src="http://stockcharts.com/c-sc/sc?s=#arguments.symbol#&p=D&b=5&g=0&i=t98154542103&r=1356207134143" > --->
 		<!--- 
 		Partition into chunks and save as required <cfsavecontent>	
 		generate html
@@ -116,10 +131,10 @@
 			</br>
 			<div id="txts" style="width:50px">CCI:</div>
 			<div id="txts" style="width:100px">#Round(local.dayStruct.CCI.value*100)/100#</div> 
-			<div id="txts" style="width:250px">#local.dayStruct.CCI.comment#</div>
-			<div id="txts" style="width:50px">AroonOsc: </div>
+			<div id="txts" style="width:200px">#local.dayStruct.CCI.comment#</div>
+			<div id="txts" style="width:100px">AroonOsc: </div>
 			<div id="txts" style="width:100px">#local.dayStruct.AroonOsc.value#</div>
-			<div id="txts" style="width:250px">#local.dayStruct.AroonOsc.comment#</div>
+			<div id="txts" style="width:200px">#local.dayStruct.AroonOsc.comment#</div>
 			<br style="clear:both">
 			</br>
 			<div id="txts" style="width:200px">Candle Buy Flag:</div>
@@ -135,18 +150,26 @@
 			</br>
 			<div id="txts" style="width:100px">ZigZag:</div> 
 			<div id="txts" style="width:200px">#local.dayStruct.ZigZag.value#</div>
+			<cfif local.dayStruct.ZigZagBreak.HighBreak>
+			<div id="txts" style="width:150px">ZigZag High Broken:</div> 
+			<div id="txts" style="width:100x">#local.dayStruct.ZigZagBreak.HighValue#</div>
+			</cfif>
+			<cfif local.dayStruct.ZigZagBreak.LowBreak>
+			<div id="txts" style="width:150px">ZigZag Low Broken:</div> 
+			<div id="txts" style="width:100px">#local.dayStruct.ZigZagBreak.LowValue#</div>
+			</cfif>
 			<br style="clear:both">
-			<div id="txts" style="width:200px">ZigZag Buy Flag:</div> 
-			<div id="txts" style="width:100px">#local.dayStruct.ZigZagBuyflag#</div>
-			<div id="txts" style="width:200px">ZigZag Sell Flag:</div>
-			<div id="txts" style="width:100px">#local.dayStruct.ZigZagSellflag#</div>
+			<div id="txts" style="width:125px">ZigZag Buy Flag:</div> 
+			<div id="txts" style="width:200px">#local.dayStruct.ZigZagBuyflag#</div>
+			<div id="txts" style="width:125px">ZigZag Sell Flag:</div>
+			<div id="txts" style="width:200px">#local.dayStruct.ZigZagSellflag#</div>
 			<br style="clear:both">
-			<div id="txts" style="width:200px">ZigZag Length:</div>
-			<div id="txts" style="width:100px">#local.dayStruct.ZigZagLen.Duration#</div>
-			<div id="txts" style="width:200px">ZigZag Percent:</div>
-			<div id="txts" style="width:100px">#Round(local.dayStruct.ZigZagLen.Percent*100)#</div>
-			<div id="txts" style="width:200px">ZigZag Value:</div>
-			<div id="txts" style="width:100px">#local.dayStruct.ZigZagLen.Value#</div>
+			<div id="txts" style="width:125px">ZigZag Length:</div>
+			<div id="txts" style="width:50px">#local.dayStruct.ZigZagLen.Duration#</div>
+			<div id="txts" style="width:125px">ZigZag Percent:</div>
+			<div id="txts" style="width:50px">#Round(local.dayStruct.ZigZagLen.Percent*100)#</div>
+			<div id="txts" style="width:125px">ZigZag Value:</div>
+			<div id="txts" style="width:50px">#local.dayStruct.ZigZagLen.Value#</div>
 			<br style="clear:both">
 			----------------------------- 
 			<br style="clear:both">
@@ -394,7 +417,7 @@
 	<cffunction name="ProfitReport" description="I output a PDF of the best trades" access="public" displayname="" output="false" returntype="void">
 		<cfargument name="data" required="true">
 		<cfset var local = structNew() />
-		<cfset local.filename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "#arguments.data.results.symbol#" & "trades" & ".pdf"/>
+		<cfset local.filename = ExpandPath("../Data") & "#arguments.data.results.symbol#" & "trades" & ".pdf"/>
 		<cfdocument  format="PDF" filename="#local.filename#" overwrite="true">
 		<cfoutput>
 		<table>
@@ -418,7 +441,7 @@
 	<cffunction name="TradeReport" description="I output a PDF of the trades" access="public" displayname="" output="false" returntype="void">
 		<cfargument name="data" required="true">
 		<cfset var local = structNew() />
-		<cfset local.filename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "#arguments.data.results.symbol#" & "trades" & ".pdf"/>
+		<cfset local.filename = ExpandPath("../Data") & "#arguments.data.results.symbol#" & "trades" & ".pdf"/>
 		<cfset local.longpostion = false />
 		<cfset local.longEntryPrice = 0 />
 		<cfdocument  format="PDF" filename="#local.filename#" overwrite="true" >
@@ -453,7 +476,7 @@
 	<cffunction name="TradeReportPDF" description="I output a PDF of the trades" access="public" displayname="" output="false" returntype="void">
 		<cfargument name="BeanArray" required="true">
 		<cfset var local = structNew() />
-		<cfset local.filename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "#arguments.symbol#" & "trades" & ".pdf"/>
+		<cfset local.filename = ExpandPath("../Data") & "#arguments.symbol#" & "trades" & ".pdf"/>
 		<cfset local.ReportHeaders1 	= "Trade,Entry,Entry,Profit,Net Profit">
 		<cfset local.ReportHeaders2 	= "Type,/Exit Price,/Exit Date,/Loss,/Loss">
 		<cfdocument  format="PDF" filename="#local.filename#" overwrite="true" >
@@ -534,7 +557,7 @@
 		<cfargument name="BeanArray" required="true">
 		<cfargument name="watchlist" required="false" default="1" />
 		<cfset var local = structNew() />
-		<cfset local.filename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "Watchlist" & "#arguments.watchlist#" & ".pdf"/>
+		<cfset local.filename = ExpandPath("../Data") & "Watchlist" & "#arguments.watchlist#" & ".pdf"/>
 		<cfset local.ReportHeaders1 	= "Symbol,Trade,Entry Price,Date">
 		<cfdocument  format="PDF" filename="#local.filename#" overwrite="true" >
 		<cfoutput>
@@ -659,7 +682,7 @@
 	<cffunction name="HiLoReport" description="I output a PDF of the highs and lows" access="public" displayname="" output="false" returntype="void">
 		<cfargument name="data" required="true">
 		<cfset var local = structNew() />
-		<cfset local.filename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "#arguments.data.results.symbol#" & "HiLo" & ".pdf"/>
+		<cfset local.filename = ExpandPath("../Data") & "#arguments.data.results.symbol#" & "HiLo" & ".pdf"/>
 		<cfdocument  format="PDF" filename="#local.filename#" overwrite="true">
 		<cfoutput>
 		<table width="90%">
@@ -685,7 +708,7 @@
 	<cffunction name="WatchListReport" description="I output a PDF of the bean status" access="public" displayname="" output="false" returntype="void">
 		<cfargument name="data" required="true">
 		<cfset var local = structNew() />
-		<cfset local.filename = "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\Data\" & "WatchList" & ".pdf"/>
+		<cfset local.filename = ExpandPath("../Data") & "WatchList" & ".pdf"/>
 		<cfdocument  format="PDF" filename="#local.filename#" overwrite="true">
 		<cfoutput>
 		Watchlist Report <br/>
