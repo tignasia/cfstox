@@ -1,4 +1,4 @@
-<cfcomponent output="false">
+<cfcomponent output="true">
 <!--- 
 Supported indicators:
 SMA - Smple moving average 
@@ -21,8 +21,12 @@ Bar Counter - coldfusion
 Pivot Points - coldfusion
  --->
 	<cffunction  name="init">
-		<cfset paths[1] =  "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\model\ta-lib.jar">
-		<cfset server.loader = createObject("component", "cfstox.model.JavaLoader").init(paths) />
+		<!--- <cfset paths[1] =  "C:\JRun4\servers\cfusion\cfusion-ear\cfusion-war\CFStox\model\ta-lib.jar" /> --->
+		<cfargument name="mypath" required="false">
+		<cfset paths =  arraynew(1) />
+		<cfset paths[1] = arguments.mypath />
+		<cfdump var="#paths#">
+		<cfset server.loader = createObject("component", "JavaLoader").init(paths) />
 		<cfset talib  		= server.loader.create("com.tictactec.ta.lib.Core") />
 		<cfset Minteger1  	= server.loader.create("com.tictactec.ta.lib.MInteger") />
 		<cfset Minteger2  	= server.loader.create("com.tictactec.ta.lib.MInteger") />
@@ -953,6 +957,46 @@ Pivot Points - coldfusion
 		<cfreturn local.hkquery />
 	</cffunction>
 
+	<cffunction name="DonchianChannel" description="" access="public" displayname="" output="false" returntype="Struct">
+		<cfargument name="qryPrices"  required="true">
+		<cfargument name="optInTimePeriod"  required="false" default="5">
+		<cfscript> 
+		var local = structNew(); 
+		local.TempDArrayHigh 	= ArrayNew(1); 
+		local.TempDArrayLow 	= ArrayNew(1);
+		local.DArray.ArrayHigh 	= ArrayNew(1); 
+		local.DArray.ArrayLow 	= ArrayNew(1);  
+		// highest high, lowest low last x days 
+		// careful with date offset of one otherwise the high will never break through itself 
+		local.qryrows 	= arguments.qryPrices.recordcount;
+		local.TempDArrayHigh[1]	= arguments.qryPrices['high'][1]; 
+		local.TempDArrayLow[1] 	= arguments.qryPrices['low'][1]; 
+		
+		for(i=2;i<=arguments.optInTimePeriod;i++){ 
+       	local.TempDArrayHigh[i]	= arguments.qryPrices['high'][i-1]; 
+		local.TempDArrayLow[i] 	= arguments.qryPrices['low'][i-1]; 
+       	local.max = ArrayMax(local.TempDArrayHigh);
+       	local.min = ArrayMin(local.TempDArrayLow);
+       	}
+			
+		for(i=1;i<=arguments.optInTimePeriod;i++){ 
+       	local.DArray.ArrayHigh[i]	= local.max; 
+		local.DArray.ArrayLow[i] 	= local.min;  
+		}
+				
+       	for(i=arguments.optInTimePeriod + 1;i<=local.qryrows;i++)
+       	{ 
+       	ArrayDeleteAt(local.tempDArrayHigh,1);
+   		ArrayDeleteAt(local.tempDArrayLow,1);		
+   		ArrayAppend(local.tempDArrayHigh,arguments.qryPrices['high'][i-1]);
+   		ArrayAppend(local.tempDArrayLow,arguments.qryPrices['low'][i-1]);
+   		local.DArray.ArrayHigh[i]	= ArrayMax(local.TempDArrayHigh); 
+		local.DArray.ArrayLow[i] 	= ArrayMin(local.TempDArrayLow);
+		}
+		return local.DArray; 
+		</cfscript>
+	</cffunction>
+
 	<cffunction  name="ProcessArrays">
 		<cfargument name="qryPrices" 	type="query" required="true"  hint="the array of prices to base on"/>
 		<cfscript>
@@ -996,6 +1040,7 @@ Pivot Points - coldfusion
 	</cfscript>
 	<cfreturn />
 	</cffunction>
+
 	<cffunction  name="DoJavaCast">
 		<cfargument name="argStruct" 	type="Struct" required="true"  hint="the array of prices to base on"/>
 		<cfscript>

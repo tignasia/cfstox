@@ -6,7 +6,7 @@
 
 	<cffunction name="getHTTPData" output="false"  access="public" returntype="Any">
 		<cfargument name="symbol" required="true" type="String" displayname="sym" hint="the symbol to be returned">
-		<cfargument name="startDate" required="false"  default=#CreateDate(2009,1,1)# />
+		<cfargument name="startDate" required="false"  default=#CreateDate(2013,1,1)# />
 		<cfargument name="endDate" required="true" />  <!--- default="#now()#" --->
 		<cfargument name="Source" required="true" />  <!--- Yahoo, Google --->
 		<cfset var local = structNew() />	
@@ -16,24 +16,43 @@
 		<cfset local.endmonth 	= month(arguments.enddate) -1 />
 		<cfset local.endday 	= day(arguments.enddate) />
 		<cfset local.endyear 	= year(arguments.enddate) />
-		<cfset local.url = 	GetURL(source:arguments.source,symbol:arguments.symbol,startdate:arguments.startdate,enddate:arguments.enddate) />
+		<cfset local.url 		= GetURL(source:arguments.source,symbol:arguments.symbol,startdate:arguments.startdate,enddate:arguments.enddate) />
+		<cfset local.HistoricalData = "" />
 		<cfswitch expression="#arguments.Source#">
 			<cfcase  value="Yahoo">
+				<cftry> 
 				<cfhttp
 				columns="DateOne,Open,High,Low,Close,Volume,Adj_Close"		   
 				url="#local.url#" 
 				useragent="Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; FDM)"
-				method="get" firstrowasheaders="Yes" result="stockdata" name="HistoricalData" />
+				method="get" firstrowasheaders="Yes" result="stockdata" name="HistoricalDataYahoo" />
+				<cfset local.HistoricalData = HistoricalDataYahoo />
+				<cfcatch>
+				<cfoutput> HTTP request failed</cfoutput>
+				<cfdump var="#arguments.symbol#">
+				<cfdump var="#variables#">
+				<cfdump var="#arguments#">
+				</cfcatch>
+				</cftry>
 			</cfcase>
 			<cfcase  value="Google">
+				<cftry> 
 				<cfhttp
 				columns="DateOne,Open,High,Low,Close,Volume"		   
 				url="#local.url#" 
 				useragent="Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; FDM)"
-				method="get" firstrowasheaders="Yes" result="stockdata" name="HistoricalData" />
+				method="get" firstrowasheaders="Yes" result="stockdata" name="HistoricalDataGoogle" />
+				<cfset local.HistoricalData = HistoricalDataGoogle />
+				<cfcatch>
+				<cfoutput> HTTP request failed</cfoutput>
+				<cfdump var="#arguments.symbol#">
+				<cfdump var="#variables#">
+				<cfdump var="#arguments#">
+				</cfcatch>
+				</cftry>
 			</cfcase>
 			</cfswitch>	
-		<cfreturn HistoricalData />
+		<cfreturn local.HistoricalData />
 	</cffunction>
 
 	<cffunction name="getURL" output="false"  returntype="Any" access="public">
