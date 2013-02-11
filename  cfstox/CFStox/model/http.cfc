@@ -103,4 +103,61 @@
 		<cfreturn local.url />
 	</cffunction>
 	
+	<cffunction name="getJSONData" output="false"  access="public" returntype="Any">
+		<cfargument name="symbolList" required="true" type="String" displayname="sym" hint="the symbol to be returned">
+		<cfset var local = StructNew() />
+		<!---  
+		I found this list of data items:
+
+  avvo    = Average volume (float with multiplier, like '3.54M')
+  beta    = Beta (float)
+  c       = Amount of change while open (float)
+  ccol    = (unknown) (chars)
+  cl      = Last perc. change
+  cp      = Change perc. while open (float)
+  e       = Exchange (text, like 'NASDAQ')
+  ec      = After hours last change from close (float)
+  eccol   = (unknown) (chars)
+  ecp     = After hours last chage perc. from close (float)
+  el      = After. hours last quote (float)
+  el_cur  = (unknown) (float)
+  elt     = After hours last quote time (unknown)
+  eo      = Exchange Open (0 or 1)
+  eps     = Earnings per share (float)
+  fwpe    = Forward PE ratio (float)
+  hi      = Price high (float)
+  hi52    = 52 weeks high (float)
+  id      = Company id (identifying number)
+  l       = Last value while open (float)
+  l_cur   = Last value at close (like 'l')
+  lo      = Price low (float)
+  lo52    = 52 weeks low (float)
+  lt      = Last value date/time
+  ltt     = Last trade time (Same as "lt" without the data)
+  mc      = Market cap. (float with multiplier, like '123.45B')
+  name    = Company name (text)
+  op      = Open price (float)
+  pe      = PE ratio (float)
+  t       = Ticker (text)
+  type    = Type (i.e. 'Company')
+  vo      = Volume (float with multiplier, like '3.54M')
+		
+		--->
+		
+		<cftry>
+		<cfhttp
+		url="http://www.google.com/finance/info?infotype=infoquoteall&q=#arguments.symbolList#" 
+		useragent="Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; FDM)"
+		method="get" >
+		<cfcatch>
+		<cfoutput> HTTP request failed</cfoutput>
+		<cfdump var="#arguments.symbolList#">
+		<cfdump var="#variables#">
+		<cfdump var="#arguments#">
+		</cfcatch>
+		</cftry>
+		<cfreturn cfhttp.filecontent />
+	</cffunction>
+
+	http://www.google.com/finance/info?infotype=infoquoteall&q=BIDU,SINA
 </cfcomponent>

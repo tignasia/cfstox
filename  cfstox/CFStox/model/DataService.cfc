@@ -89,18 +89,71 @@
 		</cftry>
 		<cfreturn local.results />
 	</cffunction>
-		
+	
+	<cffunction name="GetCurrentRawData" description="I return realtime stock data" access="public" displayname="GetRawStockData" output="false" returntype="Any">
+		<cfargument name="SymbolList" 	required="true"  />
+		<cfset var local = structnew() />
+		<cftry> 
+		<cfset local.results 	= session.objects.http.getJSONData(symbolList:"#arguments.SymbolList#") />
+		<cfset local.strlen 	= local.results.length() />
+		<cfset local.dailyData 	= DeSerializeJSON(local.results.substring(4,local.strlen )) />
+		<cfcatch>
+			<cfoutput> HTTP request failed</cfoutput>
+			<cfdump var="#arguments.symbolList#">
+			<cfdump var="#variables#">
+			<cfdump var="#arguments#">
+			<cfabort>
+		</cfcatch>
+		</cftry>
+		<cfreturn local.dailyData />
+	</cffunction>
+	
+	<cffunction name="GetCurrentData" description="I return realtime stock data" access="public" displayname="GetStockData" output="false" returntype="Any">
+		<cfargument name="SymbolList" 		required="true"  />
+		<cfset var local = structnew() />
+		<cfset local.year = DatePart("yyyy",now()) />
+		<cfset local.year = local.year - "1970" />
+		<cfset local.formatter = createObject("java","java.text.SimpleDateFormat") /> 
+		<cfset local.formatter.init("MMM dd,hh:mmaa zzz") /> 
+		<cfset local.results = GetCurrentRawData(symbolList:arguments.SymbolList) />
+		<cfset local.qryCurrentData = QueryNew("DateOne,Symbol,Open,High,Low,Close,Volume") />
+		<cfloop from="1" to="#local.results.size()#"  index="ii">
+			<cfset local.Symbol 	= local.results[ii].t />
+			<!--- this needs modification --->
+		 	<cfset local.date = local.formatter.Parse(local.results[ii]["lt"]) />
+			<cfset local.DateOne = DateAdd("yyyy",local.year,local.date ) />
+		 	<cfset local.Open 		= local.results[ii].op />
+			<cfset local.High 		= local.results[ii].hi />
+			<cfset local.Low 		= local.results[ii].lo />
+			<cfset local.Close 		= local.results[ii].l />
+			<!--- this needs modification --->
+			<!--- <cfset local.Volume 	= local.results{i].vo /> --->
+			<cfset local.Volume 	= "1000000" />
+			<cfset queryAddRow(local.qryCurrentData) />
+			<cfset querySetCell(local.qryCurrentData,"DateOne",local.dateOne) />
+			<cfset querySetCell(local.qryCurrentData,"Symbol",local.Symbol) />
+			<cfset querySetCell(local.qryCurrentData,"Open",local.Open) />
+			<cfset querySetCell(local.qryCurrentData,"High",local.High) />
+			<cfset querySetCell(local.qryCurrentData,"Low",local.Low) />
+			<cfset querySetCell(local.qryCurrentData,"Close",local.Close) />
+			<cfset querySetCell(local.qryCurrentData,"Volume",local.Volume) />
+		</cfloop>
+		<cfreturn local.qryCurrentData />
+	</cffunction>
+	
 	<cffunction name="GetStockData" description="I return stock data" access="public" displayname="GetStockData" output="false" returntype="Any">
 		<cfargument name="Symbol" 		required="true"  />
-		<cfargument name="startdate" 	required="false" default=#CreateDate(2012,1,1)# />
+		<cfargument name="startdate" 	required="false" default=#CreateDate(2013,1,1)# />
 		<cfargument name="enddate" 		required="false" default=#now()# />
-		<cfargument name="SourceOne" 	required="false" default="Yahoo" />
-		<cfargument name="SourceTwo" 	required="false" default="Google" />
+		<cfargument name="Source" 		required="false" default="Yahoo" />
+		
 		<cfset var local = structnew() />
 		<cfset local.returnResults = StructNew() />
-		<cfset local.resultsOne = GetRawData(symbol:arguments.Symbol,startdate:arguments.startdate,enddate:arguments.enddate-1,source:arguments.sourceOne) />
-		<cfset local.resultsTwo = GetRawData(symbol:arguments.Symbol,startdate:arguments.enddate,enddate:arguments.enddate,source:arguments.sourceTwo) />
-		<cfset local.results 	= MergeResults(QueryOne:local.resultsOne,QueryTwo:local.resultsTwo) />
+		<cfset local.results = GetRawData(symbol:arguments.Symbol,startdate:arguments.startdate,enddate:arguments.enddate,source:arguments.source) />
+		<cfif StructKeyExists(request,"CurrentData")>
+			<cfset local.results = MergeData(Symbol:arguments.Symbol,Historical:local.results,Current:request.currentData) >
+		</cfif> 
+				
 		<cfquery   dbtype="query"  name="local.resorted" >
 			select * from [local].results order by DateOne asc
 		</cfquery>
@@ -117,6 +170,7 @@
 		<cfset local.OrgData = local.resorted />
 		<!--- HAData --->
 		<cfset local.HKData = session.objects.TA.convertHK(qrydata:local.resorted) />
+		<!--- todo: there's a better way to do this using Java --->
 		<cfset local.symbolArray = ArrayNew(1) >
 		<cfloop from="1" to="#local.HKData.recordcount#" index="i">
 			<cfset local.symbolArray[i] = arguments.symbol>
@@ -128,7 +182,7 @@
 		<cfset local.returnResults.qryDataHA 		= GetTechnicalIndicators(query:local.HKData)  />
 		<cfreturn local.returnresults />
 	</cffunction>
-		
+				
 	<cffunction name="GetTechnicalIndicators" description="I populate a query with technical data" access="public" displayname="GetTechnicalData" output="false" returntype="Any">
 		<cfargument name="query" required="true" />
 		<cfset local.num = session.objects.TA.GetIndicator(Indicator:"linearReg",qryPrices:arguments.query) />
@@ -375,34 +429,35 @@
 	<cfreturn variables.low />
 	</cffunction>
 	
-<cffunction name="MergeResults" access="public" returntype="query" output="false"
-hint="This takes two queries and appends the second one to the first one. This actually updates the first query and does not return anything.">
-<!--- Define arguments. --->
-<cfargument name="QueryOne" type="any" required="true" />
-<cfargument name="QueryTwo" type="any" required="true" />
-<!--- Define the local scope. --->
-<cfset var LOCAL = StructNew() />
-<cfif arguments.QueryTwo.recordcount>
-	<!--- Get the column list (as an array for faster access. --->
-	<cfset LOCAL.Columns = ListToArray( ARGUMENTS.QueryTwo.ColumnList ) />
-	<!--- Loop over the second query. --->
-	<cfloop query="ARGUMENTS.QueryTwo">
-		<!--- Add a row to the first query. --->
-		<cfset QueryAddRow(ARGUMENTS.QueryOne) />
-		<!--- Loop over the columns. --->
-		<cfloop index="LOCAL.Column" from="1" to="#ArrayLen(LOCAL.Columns)#" step="1">
-		<!--- Get the column name for easy access. --->
-		<cfset LOCAL.ColumnName = LOCAL.Columns[ LOCAL.Column ] />
-		<!--- Set the column value in the newly created row. --->
-		<cfset ARGUMENTS.QueryOne[ LOCAL.ColumnName ][ ARGUMENTS.QueryOne.RecordCount ] = ARGUMENTS.QueryTwo[ LOCAL.ColumnName ][ ARGUMENTS.QueryTwo.CurrentRow ] />
-		</cfloop>
-	</cfloop>
-</cfif>
-<!--- Return out. --->
-<cfreturn arguments.QueryOne />
-</cffunction>
+	<cffunction name="MergeData" access="public" returntype="any" output="false"
+	hint="This takes two queries and appends the second one to the first one.">
+	<cfargument name="Symbol" 	type="any" required="true" />
+	<cfargument name="Historical" 	type="any" required="true" />
+	<cfargument name="Current" 		type="any" required="true" />
+	<cfset var LOCAL = StructNew() />
+	
+	<cfset qryFoo = arguments.current>
+	<cfset qryHistorical = arguments.Historical>
+	<cfquery dbtype="query" name="qryAppend">
+	SELECT *
+	<!--->DateOne,Open,High,Low,Close,Volume,SYMBOL--->
+	FROM qryFoo
+	WHERE qryFoo.Symbol = '#arguments.symbol#'
+	</cfquery>
+	<cfif DateFormat(qryAppend.dateOne,"yyyy-mm-dd") NEQ qryHistorical.DateOne[1]>
+	<cfset QueryAddRow(qryHistorical) />
+	<!--- Set the column value in the newly created row. --->
+	<cfset qryHistorical["DateOne"][qryHistorical.RecordCount] = DateFormat(qryFoo.dateOne,"yyyy-mm-dd") />
+	<cfset qryHistorical["Open"][qryHistorical.RecordCount] = qryFoo["Open"][1] />
+	<cfset qryHistorical["High"][qryHistorical.RecordCount] = qryFoo["High"][1] />
+	<cfset qryHistorical["Low"][qryHistorical.RecordCount] = qryFoo["Low"][1] />
+	<cfset qryHistorical["Close"][qryHistorical.RecordCount] = qryFoo["Close"][1] />
+	<cfset qryHistorical["Volume"][qryHistorical.RecordCount] = qryFoo["Volume"][1] />
+	</cfif>
+	<cfreturn qryHistorical />
+	</cffunction>
 		
-	<cffunction name="GetHAStockDataGoogle" description="I return a HA data" access="public" displayname="" output="false" returntype="Any" >
+	<cffunction name="GetHAStockDataGoogle" description="I return Heiken Ashi data" access="public" displayname="" output="false" returntype="Any" >
 		<cfargument name="symbol" required="true" />
 		<cfargument name="startdate" required="false"  default="1/1/2012" />
 		<cfargument name="enddate" required="false" default="#dateformat(now(),"mm/dd/yyyy")#" />

@@ -31,6 +31,14 @@
 		</cfscript>	
 	</cffunction>
 	
+	<cffunction name="testGetJSONDataGoogle" returntype="void" access="public">
+		<cfargument name="SymbolList" 		required="false" default="AMZN,NFLX,BIDU"  />
+		<cfscript>
+		GoogleResults = this.httpService.getJSONData(symbolList:Arguments.SymbolList);
+		debug(GoogleResults);
+		</cfscript>	
+	</cffunction>
+	
 	<cffunction name="testGetURLGoogle" returntype="void" access="public">
 		<cfargument name="Symbol" 		required="false" default="AMZN"  />
 		<cfargument name="startdate" 	required="false" default= #now()#  />
