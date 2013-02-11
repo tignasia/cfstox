@@ -47,7 +47,8 @@
 		</head>
 		<div id="pgbr"></div>
 		Analysis for #arguments.symbol# </br>
-		<!-- TradingView Widget BEGIN -->
+		<!--- 
+<!-- TradingView Widget BEGIN -->
 		<script type="text/javascript" src="https://s3.amazonaws.com/tradingview/tv.js"></script>
 		<script type="text/javascript">
 		new TradingView.widget({
@@ -59,9 +60,10 @@
   		"hide_top_toolbar": true,
   		"save_image": false
 		});
-</script>
+		</script>
 <!-- TradingView Widget END -->
-
+ --->
+		<img src="http://finviz.com/chart.ashx?t=#arguments.symbol#&p=d&s=m"> 
 		<!--- <img src="http://chart.finance.yahoo.com/z?s=#arguments.symbol#&t=3m&q=c&l=on&z=m&a=v&p=s&lang=en-US&region=US"> --->
 		<!--- <img src="http://stockcharts.com/c-sc/sc?s=#arguments.symbol#&p=D&yr=0&mn=3&dy=0&i=t18228844816&a=112245579&r=1356206789710"> --->
 		<!--- <img src="http://stockcharts.com/c-sc/sc?s=#arguments.symbol#&p=D&b=5&g=0&i=t78514312373&r=1356207101202">
@@ -75,7 +77,7 @@
 		--->
 		</cfsavecontent>
 		<cfset local.SummaryData 	= local.reportheader />
-		<cfloop from="2" to="#local.datasize#" index="i">
+		<cfloop from="#local.datasize#" to="2" index="i" step="-1">
 			<cfsavecontent variable="local.daysData">
 			<cfset local.dayStruct = arguments.data[i] />
 			<table>

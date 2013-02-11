@@ -8,9 +8,9 @@
 		this.http 		= createObject("component","cfstox.model.http").init();
 		this.indicators = createObject("component","cfstox.model.indicators").init();
 		this.controller = createObject("component","cfstox.controllers.controller").init();
-		this.symbol 	= "RVBD";
-		this.startDate	= "02/01/2012";
-		this.enddate	= "03/01/2012";
+		this.symbol 	= "ABX";
+		this.startDate	= "01/01/2013";
+		this.enddate	= "02/06/2013" ;
 		</cfscript>
 	</cffunction>
 
@@ -38,13 +38,14 @@
 		</cfscript>
 	</cffunction>
 	
-	<cffunction name="testGetStockData" access="public" returntype="void">
+	<cffunction name="testGetStockData" access="public" returntype="any">
 		<cfscript>
 		var local = structNew();
 		local.data = this.DataService.GetStockData(symbol:#this.symbol#,startdate:#this.startdate#,enddate:#this.enddate#);
 		debug(local.data);
 		//local.data = this.DataService.GetHAStockData();
 		//debug(local.data);
+		return local.data;
 		</cfscript>
 	</cffunction>
 				
@@ -56,9 +57,71 @@
 		</cfscript>
 	</cffunction>
 		
+	<cffunction name="testGetCurrentData" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.theList = "ABX,X,SBUX,PBMD";
+		local.data = this.DataService.GetCurrentData(SymbolList:local.theList);
+		debug(local.data);
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testGetCurrentRawData" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.theList = "ABX,X,SBUX,PBMD";
+		local.data = this.DataService.GetCurrentRawData(SymbolList:local.theList);
+		/* local.year = DatePart("yyyy",now());
+		local.year = local.year - "1970";
+		local.formatter = createObject("java","java.text.SimpleDateFormat"); 
+		local.formatter.init("MMM dd,hh:mmaa zzz"); 
+		local.date = local.formatter.Parse(local.data[1]["lt"]);
+		local.date = DateAdd("yyyy",local.year,local.date ); 
+		debug(local.date); */
+		debug(local.data);
+		debug(local.data[1]);
+		debug(local.data[1].t);
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testMergeData" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.theList = "ABX,X,SBUX,PBMD";
+		local.Currentdata = this.DataService.GetCurrentData(SymbolList:local.theList);
+		//debug(local.Currentdata);
+		local.results = this.DataService.GetRawData(symbol:"ABX",startdate:#this.startdate#,enddate:#this.enddate#);
+		//debug(local.results);
+		local.results = this.DataService.MergeData(Symbol:"ABX",Historical:local.results,Current:local.currentData);
+		debug(local.results);
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testCompareDates" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.theList = "ABX,X,SBUX,PBMD";
+		local.Currdata = this.DataService.GetCurrentData(SymbolList:local.theList);
+		debug(local.data);
+		local.Data = this.DataService.GetStockData(symbol:#this.symbol#,startdate:#this.startdate#,enddate:#this.enddate#);
+		debug(local.data);
+		local.DateOne =DateFormat(local.data.orgData.dateOne[local.hdata.orgdata.recordcount],"mm-dd-yyyy");
+		local.DateTwo =DateFormat(local.Currdata.dateOne,"mm-dd-yyyy");  
+		debug(local.dateone);
+		debug(local.datetwo);
+		if (local.dateOne EQ local.DateTwo) {
+		local.txtresult = "match!";
+		}
+		else{
+		local.txtResult = "Different!";
+		}
+		debug(local.txtresult);
+		</cfscript>
+	</cffunction>
+	
 	<!--- End Specific Test Cases --->
 	<cffunction name="tearDown" access="public" returntype="void">
 	 <!--- Place tearDown/clean up code here --->
 	</cffunction>
-
+	
 </cfcomponent>

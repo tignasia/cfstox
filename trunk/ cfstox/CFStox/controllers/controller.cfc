@@ -139,6 +139,9 @@
 		<!--- SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF --->
 		<cfset local.startDate = dateformat(now()-60,"mm/dd/yyyy") />
 		<cfset local.endDate = dateformat(now(),"mm/dd/yyyy") />
+		<!--- get the current data for all the quotes  --->
+		<!--- this will change the behavor of the Dataservice component --->
+		<cfset request.CurrentData = session.objects.DataService.GetCurrentData(SymbolList:local.theList) />
 		<cfloop list="#local.theList#" index="local.i">
 			<cfset request.symbol=#local.i#>
 			<cfset AnalyseData(symbol:local.i,startDate:local.startDate,endDate:local.enddate,summaryOnly:arguments.summaryOnly) />
@@ -200,7 +203,7 @@
 
 	<cffunction name="loadObjects" description="I load objects" access="private" displayname="" output="false" returntype="void">
 	<!--- load the objects that we might need if not already loaded and set the loaded flag in session --->
-	<cfset mypath = ExpandPath("../model/ta-lib.jar") />
+	<cfset mypath = ExpandPath("/cfstox/model/ta-lib.jar") />
 	<cfdump var="#mypath#">
 	<cfset session.objects.XMLGenerator 	= createobject("component","cfstox.model.XMLGenerator").init() />
 	<cfset session.objects.Indicators 		= createobject("component","cfstox.model.Indicators").init() />
@@ -215,6 +218,7 @@
 	<cfset session.objects.ReportService	= createObject("component","cfstox.model.ReportService").init() />
 	<cfset session.objects.DataStorage 		= createObject("component","cfstox.model.DataStorage").init() />
 	<cfset session.objects.StrategyService	= createObject("component","cfstox.model.StrategyService").init() />
+	<cfset session.objects.Mail				= createObject("component","cfstox.model.Mail").init() />
 	<cfreturn />
 	</cffunction>	
 
