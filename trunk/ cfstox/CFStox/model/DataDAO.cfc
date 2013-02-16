@@ -100,6 +100,74 @@
 		<cfreturn local.qRead />
 	</cffunction>
 
+	<cffunction name="GetAlerts" access="public" output="false" returntype="any">
+		<cfset var local = StructNew() />
+		<cfset local.qryGetAlerts = "" />
+		<cfset local.strReturn = structNew() />
+		<cftry>
+			<cfquery name="local.qryGetAlerts" datasource="#application.dsn#">
+			SELECT
+			SYMBOL
+			,VALUE
+			,ACTION
+			,ALERTED
+			FROM	ALERTS
+			WHERE	1=1
+			</cfquery>
+			<cfcatch type="database">
+			<cfthrow type="dbError"
+			message="Error occurred while connecting to the database:" detail="<br/>
+			<strong>REASON:</strong><br/>
+			#cfcatch.message#<br />
+			<br /><strong>DETAIL:</strong>
+			<br/>#cfcatch.detail#<br />
+			<br /><strong>T-SQL EXECUTED:</strong>
+			<br/>#cfcatch.sql# 
+			<br/>: 
+			<br/>:
+			"
+			/>
+			<cfset return_value = false  />	
+			</cfcatch>
+		</cftry>
+		<cfreturn local.qryGetAlerts />
+	</cffunction>
+
+	<cffunction name="AddAlerts" access="public" output="false" returntype="any">
+		<cfset var local = StructNew() />
+		<cfset local.qAddAlerts = "" />
+		<cfset local.strReturn = structNew() />
+		<cftry>
+			<cfquery name="local.qryAddAlerts" datasource="#application.dsn#">
+			INSERT INTO ALERTS 
+			(SYMBOL
+			,VALUE
+			,ACTION
+			,ALERTED) 
+			VALUES(
+			'ABX'
+			,31,
+			'EMAIL ALERT FOR ABX'
+			,'FALSE');
+			</cfquery>
+			<cfcatch type="database">
+			<cfthrow type="dbError"
+			message="Error occurred while connecting to the database:" detail="<br/>
+			<strong>REASON:</strong><br/>
+			#cfcatch.message#<br />
+			<br /><strong>DETAIL:</strong>
+			<br/>#cfcatch.detail#<br />
+			<br /><strong>T-SQL EXECUTED:</strong>
+			<br/>#cfcatch.sql# 
+			<br/>: 
+			<br/>:
+			"
+			/>
+			<cfset return_value = false  />	
+			</cfcatch>
+		</cftry>
+		<cfreturn local.qryGetAlerts />
+	</cffunction>
 	<cffunction name="update" access="public" output="false" returntype="boolean">
 		<cfargument name="qryData" type="qryData" required="true" />
 		<cfset var local = StructNew() />

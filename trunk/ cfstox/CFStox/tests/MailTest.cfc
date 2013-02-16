@@ -7,7 +7,8 @@
 	</cffunction>
 
 	<cffunction name="testSendMail" returntype="void" access="public">
-		<cfset this.MailService.sendMail() />
+		<cfset var subject = "test email" />
+		<cfset this.MailService.sendMail(subject:subject) />
 	</cffunction>
 
 	<cffunction name="getGoogleJSON" returntype="void" access="public">

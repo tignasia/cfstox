@@ -4,23 +4,26 @@
 	 <!---  <cfset super.TestCase(this) /> --->
 	  <!--- Place additional setUp and initialization code here --->
 		<cfscript>
+		application.dsn = "cfstoxcloud";
 		this.DataService 	= createObject("component","cfstox.model.DataService").init();
+		this.DataDAO 		= createObject("component","cfstox.model.DataDao").init();
+		this.AlertService	= createObject("component","cfstox.model.AlertService").init();
 		this.http 		= createObject("component","cfstox.model.http").init();
 		this.indicators = createObject("component","cfstox.model.indicators").init();
 		this.controller = createObject("component","cfstox.controllers.controller").init();
 		this.symbol 	= "ABX";
 		this.startDate	= "01/01/2013";
-		this.enddate	= "02/06/2013" ;
+		this.enddate	= dateformat(now()-1,"mm/dd/yyyy");
 		</cfscript>
 	</cffunction>
 
-	<cffunction name="testSetDates" access="public" returntype="void">
+	<!--- <cffunction name="testSetDates" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
 		local.data = this.DataService.SetDates(startdate:"2/1/2010",enddate:"6/10/2010");
 		debug(local.data);
 		</cfscript>
-	</cffunction>
+	</cffunction> --->
 
 	<cffunction name="testGetRawDataGoogle" access="public" returntype="void">
 		<cfscript>
@@ -48,21 +51,62 @@
 		return local.data;
 		</cfscript>
 	</cffunction>
-				
-	<cffunction name="testGetStockDataGoogle" access="public" returntype="void">
-		<cfscript>
-		var local = structNew();
-		local.data = this.DataService.GetStockDataGoogle(symbol:"ABX",startdate:"2/1/2010",enddate:"6/10/2010");
-		debug(local.data);
-		</cfscript>
-	</cffunction>
-		
+			
 	<cffunction name="testGetCurrentData" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
 		local.theList = "ABX,X,SBUX,PBMD";
 		local.data = this.DataService.GetCurrentData(SymbolList:local.theList);
 		debug(local.data);
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testGetAlerts" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.data = this.AlertService.GetAlerts();
+		debug(local.data);
+		</cfscript>
+	</cffunction>
+		
+	<cffunction name="testGetCurrentDataForSymbol" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		testGetCurrentData();
+		local.data = this.DataService.GetCurrentDataForSymbol("ABX");
+		debug(local.data);
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testCheckAlert" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		testGetCurrentData();
+		local.qryCurrData = this.DataService.GetCurrentDataForSymbol("ABX");
+		local.qryAlerts = this.AlertService.GetAlerts();
+		debug(local.qryCurrData);
+		debug(local.qryAlerts);
+		local.AlertTrigger = this.AlertService.checkAlert(QryCurrData:local.qryCurrdata,qryAlert:local.qryAlerts);
+		debug(local.AlertTrigger);
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testSendAlert" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		local.AlertTrigger = this.AlertService.SendAlert(
+		Symbol:"ABX"
+		,Alert:"Stock has risen above resistance"
+		,AlertPrice:"31"
+		,currprice:"32"
+		);
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testGetSession" access="public" returntype="void">
+		<cfscript>
+		var local = structNew();
+		debug(session);
 		</cfscript>
 	</cffunction>
 	
@@ -102,7 +146,7 @@
 		var local = structNew();
 		local.theList = "ABX,X,SBUX,PBMD";
 		local.Currdata = this.DataService.GetCurrentData(SymbolList:local.theList);
-		debug(local.data);
+		debug(local.Currdata);
 		local.Data = this.DataService.GetStockData(symbol:#this.symbol#,startdate:#this.startdate#,enddate:#this.enddate#);
 		debug(local.data);
 		local.DateOne =DateFormat(local.data.orgData.dateOne[local.hdata.orgdata.recordcount],"mm-dd-yyyy");
