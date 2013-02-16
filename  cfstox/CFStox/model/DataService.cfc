@@ -116,12 +116,13 @@
 		<cfset local.formatter = createObject("java","java.text.SimpleDateFormat") /> 
 		<cfset local.formatter.init("MMM dd,hh:mmaa zzz") /> 
 		<cfset local.results = GetCurrentRawData(symbolList:arguments.SymbolList) />
-		<cfset local.qryCurrentData = QueryNew("DateOne,Symbol,Open,High,Low,Close,Volume") />
+		<cfset variables.qryCurrentData = QueryNew("DateOne,Symbol,Open,High,Low,Close,Volume") />
 		<cfloop from="1" to="#local.results.size()#"  index="ii">
 			<cfset local.Symbol 	= local.results[ii].t />
 			<!--- this needs modification --->
 		 	<cfset local.date = local.formatter.Parse(local.results[ii]["lt"]) />
 			<cfset local.DateOne = DateAdd("yyyy",local.year,local.date ) />
+		 	<cfset local.DateOne = DateFormat(local.DateOne,"yyyy-mm-dd") />
 		 	<cfset local.Open 		= local.results[ii].op />
 			<cfset local.High 		= local.results[ii].hi />
 			<cfset local.Low 		= local.results[ii].lo />
@@ -129,16 +130,16 @@
 			<!--- this needs modification --->
 			<!--- <cfset local.Volume 	= local.results{i].vo /> --->
 			<cfset local.Volume 	= "1000000" />
-			<cfset queryAddRow(local.qryCurrentData) />
-			<cfset querySetCell(local.qryCurrentData,"DateOne",local.dateOne) />
-			<cfset querySetCell(local.qryCurrentData,"Symbol",local.Symbol) />
-			<cfset querySetCell(local.qryCurrentData,"Open",local.Open) />
-			<cfset querySetCell(local.qryCurrentData,"High",local.High) />
-			<cfset querySetCell(local.qryCurrentData,"Low",local.Low) />
-			<cfset querySetCell(local.qryCurrentData,"Close",local.Close) />
-			<cfset querySetCell(local.qryCurrentData,"Volume",local.Volume) />
+			<cfset queryAddRow(variables.qryCurrentData) />
+			<cfset querySetCell(variables.qryCurrentData,"DateOne",local.DateOne) />
+			<cfset querySetCell(variables.qryCurrentData,"Symbol",local.Symbol) />
+			<cfset querySetCell(variables.qryCurrentData,"Open",local.Open) />
+			<cfset querySetCell(variables.qryCurrentData,"High",local.High) />
+			<cfset querySetCell(variables.qryCurrentData,"Low",local.Low) />
+			<cfset querySetCell(variables.qryCurrentData,"Close",local.Close) />
+			<cfset querySetCell(variables.qryCurrentData,"Volume",local.Volume) />
 		</cfloop>
-		<cfreturn local.qryCurrentData />
+		<cfreturn variables.qryCurrentData />
 	</cffunction>
 	
 	<cffunction name="GetStockData" description="I return stock data" access="public" displayname="GetStockData" output="false" returntype="Any">
@@ -435,7 +436,6 @@
 	<cfargument name="Historical" 	type="any" required="true" />
 	<cfargument name="Current" 		type="any" required="true" />
 	<cfset var LOCAL = StructNew() />
-	
 	<cfset qryFoo = arguments.current>
 	<cfset qryHistorical = arguments.Historical>
 	<cfquery dbtype="query" name="qryAppend">
@@ -447,14 +447,28 @@
 	<cfif DateFormat(qryAppend.dateOne,"yyyy-mm-dd") NEQ qryHistorical.DateOne[1]>
 	<cfset QueryAddRow(qryHistorical) />
 	<!--- Set the column value in the newly created row. --->
-	<cfset qryHistorical["DateOne"][qryHistorical.RecordCount] = DateFormat(qryFoo.dateOne,"yyyy-mm-dd") />
-	<cfset qryHistorical["Open"][qryHistorical.RecordCount] = qryFoo["Open"][1] />
-	<cfset qryHistorical["High"][qryHistorical.RecordCount] = qryFoo["High"][1] />
-	<cfset qryHistorical["Low"][qryHistorical.RecordCount] = qryFoo["Low"][1] />
-	<cfset qryHistorical["Close"][qryHistorical.RecordCount] = qryFoo["Close"][1] />
-	<cfset qryHistorical["Volume"][qryHistorical.RecordCount] = qryFoo["Volume"][1] />
+	<cfset qryHistorical["DateOne"][qryHistorical.RecordCount] 	= qryAppend["DateOne"] />
+	<cfset qryHistorical["Open"][qryHistorical.RecordCount] 	= qryAppend["Open"] />
+	<cfset qryHistorical["High"][qryHistorical.RecordCount] 	= qryAppend["High"] />
+	<cfset qryHistorical["Low"][qryHistorical.RecordCount] 		= qryAppend["Low"] />
+	<cfset qryHistorical["Close"][qryHistorical.RecordCount] 	= qryAppend["Close"] />
+	<cfset qryHistorical["Volume"][qryHistorical.RecordCount] 	= qryAppend["Volume"] />
 	</cfif>
 	<cfreturn qryHistorical />
+	</cffunction>
+	
+	
+	<cffunction name="GetCurrentDataForSymbol" access="public" returntype="any" output="false"
+	hint="This gets the current alerts.">
+	<cfargument name="Symbol" 	type="any" required="true" />
+	<cfset var LOCAL = StructNew() />
+	<cfquery dbtype="query" name="qryCurrSymData">
+	SELECT *
+	<!--->DateOne,Open,High,Low,Close,Volume,SYMBOL--->
+	FROM variables.qryCurrentData
+	WHERE Symbol = '#arguments.symbol#'
+	</cfquery>
+	<cfreturn qryCurrSymData />
 	</cffunction>
 		
 	<cffunction name="GetHAStockDataGoogle" description="I return Heiken Ashi data" access="public" displayname="" output="false" returntype="Any" >

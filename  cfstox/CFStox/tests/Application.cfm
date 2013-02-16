@@ -1,10 +1,10 @@
 <cfsilent>
 <cfapplication 
-	name="cfstox" 
+	name="cfstoxtest" 
 	sessionmanagement="Yes" 					
 	sessiontimeout="#CreateTimeSpan(0,0,30,0)#" 	
 	clientmanagement="Yes">
-
+<cfset application.dsn = "cfstoxcloud" />
 <cfsetting requesttimeout="12000" />
 <cfsetting  showdebugoutput="true" />
 <cfset application.amazon = "StockCloud">

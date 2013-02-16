@@ -8,6 +8,7 @@
 <cfsetting requesttimeout="12000" />
 <cfsetting  showdebugoutput="true" />
 <cfset application.amazon = "StockCloud">
+<cfset application.dsn = "cfstoxcloud" />
 <cfset application.rootpath = GetDirectoryFromPath(GetCurrentTemplatePath()) />
 <cfset session.rootpath = GetDirectoryFromPath(GetCurrentTemplatePath()) />
 <!--- <cfparam name="url.appReload" type="string" default="false" />
