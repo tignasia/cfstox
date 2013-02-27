@@ -8,8 +8,11 @@
 
 <cfinvoke component="#session.objects.controller#" method="#form.actionitem#"  argumentcollection="#form#"  returnvariable="resultData" />
 
-<cfinclude template="../views/#request.view#.cfm" >
-
+<cfif request.view EQ "home">
+	<cflocation url="../index.cfm">
+<cfelse>
+	<cfinclude template="../views/#request.view#.cfm" >
+</cfif>
 <cffunction name="init" description="init" returntype="void">
 		<!--- <cfif NOT StructKeyExists("session.controllerLoaded") OR session.controllerLoaded IS FALSE >
 		</cfif>

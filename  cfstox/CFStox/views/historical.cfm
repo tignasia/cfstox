@@ -12,8 +12,10 @@
 
 Heiken-Ashi Data
 <cfif request.method EQ "historical">
-<a href="../Data/#request.symbol#.pdf" target="_blank">View PDF</a>
-<a href="../Data/#request.symbol#.xls" target="_blank">View Excel</a>
+<a href="../Data/#request.symbol#CandleReport.xls" target="_blank">View Candle Report (Excel)</a>
+<a href="../Data/#request.symbol#PivotReport.xls" target="_blank">View Pivot Report (Excel)</a>
+<a href="../Data/#request.symbol#HistoryReport.xls" target="_blank">View History Report (Excel)</a>
+
 </cfif>
 <cfif request.method EQ "backtest">
 <cfset tradesurl = "../Data/#request.symbol#"&"trades"&".pdf">	

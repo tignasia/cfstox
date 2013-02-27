@@ -7,7 +7,6 @@
 	
 	<cffunction name="RunEvent" description="" access="public" displayname="" output="false" returntype="void">
 		<cfscript>
-		
 		</cfscript>
 		<cfreturn />
 	</cffunction>
@@ -31,7 +30,6 @@
 		request.xmldata 		= session.objects.DataStorage.GetData("XMLDataOriginal");
 		request.xmldataHA 		= session.objects.DataStorage.GetData("XMLDataHA");
 		//dump(request);
-		dump(request);
 		session.objects.ReportService.ReportRunner(reportName:"HistoryReport",data:request.qryDataOriginal,symbol:arguments.symbol);
 		session.objects.ReportService.ReportRunner(reportName:"PivotReport",data:request.qryDataOriginal,symbol:arguments.symbol);
 		session.objects.ReportService.ReportRunner(reportName:"CandleReport",data:request.qryDataOriginal,symbol:arguments.symbol);
@@ -94,8 +92,14 @@
 		<cfscript>
 		var local = structnew(); 
 		local.view = "historical";
+		GetData(argumentcollection:arguments);
+		request.qryDataOriginal = session.objects.DataStorage.GetData("qryDataOriginal");
+		request.qryDataHA 		= session.objects.DataStorage.GetData("qryDataHA");
+		request.xmldata 		= session.objects.DataStorage.GetData("XMLDataOriginal");
+		request.xmldataHA 		= session.objects.DataStorage.GetData("XMLDataHA");
+ 		local.ReportArray 		= session.objects.StrategyService.Analyse();
 		local.data = historical(symbol:arguments.symbol,startdate:arguments.startdate,enddate:arguments.enddate);
-		local.result = session.objects.SystemService.RunSystem(SystemName:arguments.SystemName,qryData:local.data);
+		local.result = session.objects.SystemService.RunSystem(SystemName:arguments.SystemName,qryData:request);
 		session.objects.ReportService.ReportRunner(reportName:"BacktestReport",data:local.result.get("tradeHistory"),symbol:arguments.symbol);
 		request.method = "backtest";  
 		return local;
@@ -136,7 +140,6 @@
 		<cfif FileExists(local.htmlfilename) >
 			<cffile action="delete" file="#local.htmlfilename#">
 		</cfif>
-		<!--- SNDK,SPG,SPY,SQNM,UNP,USO,WYNN,XL,XLF --->
 		<cfset local.startDate = dateformat(now()-60,"mm/dd/yyyy") />
 		<cfset local.endDate = dateformat(now(),"mm/dd/yyyy") />
 		<!--- get the current data for all the quotes  --->
@@ -150,6 +153,38 @@
 		<cfabort>
 		<cfreturn local />
 	</cffunction>
+
+	<cffunction name="endofday" description="run systems against watchlist" access="public" displayname="" output="false" returntype="struct">
+		<cfscript>
+		var local 			= structnew();
+		local.view 			= "watchlist";
+		local.theList 		= session.objects.dataService.GetWatchList();
+		local.HTMLfilename 	= "#application.rootpath#Data/" & "DailySummary.html";
+		local.startDate 	= dateformat(now()-60,"mm/dd/yyyy");
+		local.endDate 		= dateformat(now(),"mm/dd/yyyy");
+		request.CurrentData = session.objects.DataService.GetCurrentData(SymbolList:local.theList);
+		</cfscript>
+		<cfloop list="#local.theList#" index="local.i">
+			<cfset request.symbol=#local.i#>
+			<cfset AnalyseData(symbol:local.i,startDate:local.startDate,endDate:local.enddate) />
+		</cfloop>
+		<cfreturn local />
+	</cffunction>
+
+	<cffunction name="CheckAlerts" description="check alerts and send email" access="public" displayname="" output="false" returntype="struct">
+		<cfscript>
+		var local 			= structnew();
+		local.view 			= "home";
+		local.theList 		= session.objects.dataService.GetAlerts();
+		request.CurrentData = session.objects.DataService.GetCurrentData(SymbolList:local.theList);
+		</cfscript>
+		<cfloop query="#local.qryAlerts#" >
+			<cfset request.symbol =#local.qryAlerts.Symbol# >
+			<cfset session.objects.CheckAlerts(symbol:local.i,CurrentData:request.CurrentData) />
+		</cfloop>
+		<cfreturn local />
+	</cffunction>
+
 
 	<cffunction name="PopulateData" description="populate the database with stock data" access="public" displayname="" output="false" returntype="struct">
 		<cfargument name="symbol" required="true" />

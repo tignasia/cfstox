@@ -38,7 +38,7 @@
 		<cfreturn State />
 	</cffunction>
 	
-	<cffunction name="BearishCandles" description="checks for bearish candles" access="public" displayname="BearishCandles" output="false" returntype="boolean">
+	<cffunction name="BearishCandles" description="checks for bearish candles" access="public" displayname="BearishCandles" output="false" returntype="any">
 		<cfargument name="Beans" required="true" />
 		<cfset var local = StructNew() />
 		<!--- todo: this should be a while loop  --->

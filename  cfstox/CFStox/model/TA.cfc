@@ -185,15 +185,19 @@ Pivot Points - coldfusion
 
 	<cffunction  name="GetIndicator">
 		<!--- data should be passed into the function oldest first --->
-		<cfargument name="Indicator" 	type="String"  required="true" />
-		<cfargument name="startIdx" 	type="Numeric"  default="0" required="false"  hint="where to start calculating"/> 
-		<cfargument name="qryPrices" 	type="query" required="true"  hint="the array of prices to base on"/>
-		<cfargument name="endIdx" 		type="Numeric"  default="#arguments.qryprices.recordcount-1#" required="false" />
-		<cfargument name="optInTimePeriod" type="Numeric"  default="14" required="false" hint="length of MA" />
-		<cfargument name="outBegIdx" 	type="Numeric"  default="1" required="false"  hint="where the data starts"/>
-		<cfargument name="outNBElement" type="Numeric"  default="1" required="false"  hint="last element with data"/>
+		<cfargument name="Indicator" 		type="String"  	required="true" />
+		<cfargument name="startIdx" 		type="Numeric"  default="0" required="false"  hint="where to start calculating"/> 
+		<cfargument name="qryPrices" 		type="query" 	required="true"  hint="the array of prices to base on"/>
+		<cfargument name="endIdx" 			type="Numeric"  default="#arguments.qryprices.recordcount-1#" required="false" />
+		<cfargument name="optInTimePeriod" 	type="Numeric"  default="14" required="false" hint="length of MA" />
+		<cfargument name="TimePeriodCCI" 	type="Numeric"  default="20" required="false" hint="length of MA" />
+		<cfargument name="outBegIdx" 		type="Numeric"  default="1" required="false"  hint="where the data starts"/>
+		<cfargument name="outNBElement" 	type="Numeric"  default="1" required="false"  hint="last element with data"/>
 		<cfargument name="optInPenetration" type="Numeric"  default="1" required="false" />
-		<cfargument name="lookback" type="Numeric"  default="1" required="false"  hint="normally called indicator length"/>
+		<cfargument name="lookback" 		type="Numeric"  default="1" required="false"  hint="normally called indicator length"/>
+		<cfargument name="optInFastPeriod" 	type="Numeric"  default="3" required="false" />
+		<cfargument name="optInSlowPeriod" 	type="Numeric"  default="6" required="false" />
+		<!--- MAType optInMAType Sma, Ema, --->
 		<cfscript>
 		var local = structNew();
 		local.returndata = Structnew();
@@ -251,7 +255,7 @@ Pivot Points - coldfusion
 						
 			<cfcase value="CCI">
 				<!--- cci(int startIdx, int endIdx, double[] inHigh, double[] inLow, double[] inClose, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)   --->
-				<cfset variables.talib.CCI(arguments.startIdx, arguments.endIdx, local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+				<cfset variables.talib.CCI(arguments.startIdx, arguments.endIdx, local.srtArrays.aryHigh, local.srtArrays.aryLow, local.srtArrays.aryClose,arguments.TimePeriodCCI,Minteger1,Minteger2,local.srtArrays.aryOut) />
 				<cfset local.lookback = variables.talib.cciLookback(arguments.optInTimePeriod) />
 				<cfset local.returndata.results = local.srtArrays.aryOut />
 			</cfcase>
@@ -289,14 +293,15 @@ Pivot Points - coldfusion
 			</cfcase>
 			
 			<cfcase value="Momentum">
-				<!--- mom(int startIdx, int endIdx, double[] inReal, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)  --->
+									<!--- mom(int startIdx, int endIdx, double[] inReal, int optInTimePeriod, MInteger outBegIdx, MInteger outNBElement, double[] outReal)  --->
 				<cfset variables.talib.mom(arguments.startIdx,arguments.endIdx, local.srtArrays.aryClose, arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
 				<cfset local.returndata.results = local.srtArrays.aryOut />
 			</cfcase>
 
 			<cfcase value="PPO">
+				<cfset local.optInMAType 	=  MAType />
 				<!--- ppo(int startIdx, int endIdx, double[] inReal, int optInFastPeriod, int optInSlowPeriod, MAType optInMAType, MInteger outBegIdx, MInteger outNBElement, double[] outReal)			 --->
-				<cfset variables.talib.ppo(arguments.startIdx,arguments.endIdx,local.srtArrays.aryClose, arguments.optInTimePeriod,Minteger1,Minteger2,local.srtArrays.aryOut) />
+				<cfset variables.talib.ppo(arguments.startIdx,arguments.endIdx,local.srtArrays.aryClose,arguments.optInFastPeriod,arguments.optInSlowPeriod,local.optInMAType.Ema, Minteger1,Minteger2,local.srtArrays.aryOut) />
 				<cfset local.returndata.results = local.srtArrays.aryOut />
 			</cfcase>
 						

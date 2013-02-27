@@ -19,17 +19,15 @@ eventually add trade table in database to trake trades, profit/loss
 	<cfreturn this />
 </cffunction>	
 
-<cffunction name="CheckAlerts" description="" access="public" displayname="" output="false" returntype="any">
+	<cffunction name="CheckAlerts" description="" access="public" displayname="" output="false" returntype="any">
 	<cfset var local = structNew() />
 	<!--- get alerts --->
-	<cfset local.qryAlerts = GetAlerts() />
+	<cfset local.qryAlerts 		= GetAlerts() />
+	<cfset local.qryCurrdata 	= session.objects.dataService.getCurrentData() />
 	<!--- loop over alerts  --->
 	<cfloop query="local.qryAlerts" >
 		<!--- for each element in alerts, find matching symbol in current data  --->
-		<cfset local.AlertSymbol 	= local.qryAlerts.Symbol />
-		<cfset local.AlertMessage 	= local.qryAlerts.Action />
-		<cfset local.AlertPrice 	= local.qryAlerts.Value />
-		<cfset local.qryCurrdata 		= session.objects.dataService.getCurrentDataForSymbol(local.AlertSymbol) />
+		
 		<!--- check if alert triggered --->
 		<cfset local.AlertTriggered = checkAlert(QryCurrData:local.qryCurrdata,qryAlert:local.qryAlerts) />
 		<!--- if alert triggered --->
@@ -43,7 +41,7 @@ eventually add trade table in database to trake trades, profit/loss
 	<!--- end loop over alerts --->
 	</cfloop>
 	<cfreturn this />
-</cffunction>	
+	</cffunction>	
 
 	<cffunction name="GetAlerts" access="public" returntype="any" output="false"
 		hint="This gets the current alerts.">
@@ -56,7 +54,23 @@ eventually add trade table in database to trake trades, profit/loss
 	<cfargument name="qryCurrData" 	required="true"  />
 	<cfargument name="qryAlert" 	required="true"  />
 	<cfset var LOCAL = StructNew() />
-	<cfset local.result = false />
+	<cfset local.AlertSymbol 	= local.qryAlert.Symbol />
+	<cfset local.AlertAction 	= local.qryAlert.Action />
+	<cfset local.AlertPrice 	= local.qryAlert.Price />
+	<cfset local.AlertAlerted 	= local.qryAlert.Alerted />
+	<cfset local.result 		= false />
+	<cfquery dbtype="query" name="qryAlerts">
+	SELECT DateOne,Open,High,Low,Close,Volume,SYMBOL
+	<!--->DateOne,Open,High,Low,Close,Volume,SYMBOL--->
+	FROM arguments.qryCurrentData
+	WHERE arguments.qryCurrentData.Symbol = '#arguments.qryAlert.symbol#'
+	</cfquery>
+	
+	<cfif local.AlertAction EQ "<" >
+	</cfif>
+	<cfif local.AlertAction EQ ">" >
+	</cfif>
+	
 	<cfif arguments.qryCurrData.close GT arguments.qryAlert.Value>
 		<cfset local.result = true />
 	</cfif>

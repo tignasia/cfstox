@@ -63,21 +63,21 @@ The triggers are granular conditions such as RSI above a certain amount
 			local.strStatus.Status1 = arguments.beans.TrackingBean.Get("Status");
 		}
 				
-		if (local.strStatus.initialStatus EQ "" AND NOT triggers.boolCloseShort AND local.triggers.boolOpenShort)
+		if (local.strStatus.initialStatus EQ "" AND NOT local.triggers.boolCloseShort AND local.triggers.boolOpenShort)
 		{ // short entry
 			local.databeantoday.Set("tradeType","OpenShort");	
 			arguments.beans.TrackingBean.Set("Status","Short");
 			local.strStatus.Status2 = arguments.beans.TrackingBean.Get("Status");
 		}
 		
-		if (arguments.beans.TrackingBean.Get("Status") EQ "Long" AND triggers.boolCloseLong)
+		if (arguments.beans.TrackingBean.Get("Status") EQ "Long" AND local.triggers.boolCloseLong)
 			{ //long exit
 			local.databeantoday.Set("TradeType","CloseLong");	
 			arguments.beans.TrackingBean.Set("Status","");
 			local.strStatus.Status3 = arguments.beans.TrackingBean.Get("Status");
 			}
 			
-		if (arguments.beans.TrackingBean.Get("Status") EQ "" AND NOT triggers.boolCloseLong AND triggers.boolOpenLong)
+		if (arguments.beans.TrackingBean.Get("Status") EQ "" AND NOT local.triggers.boolCloseLong AND local.triggers.boolOpenLong)
 			{
 			local.databeantoday.Set("TradeType","OpenLong");	
 			arguments.beans.TrackingBean.Set("Status","Long");
@@ -85,14 +85,14 @@ The triggers are granular conditions such as RSI above a certain amount
 			}
 		
 		// check for close long and open short
-		if (triggers.boolOpenLong AND triggers.boolCloseShort AND arguments.beans.TrackingBean.Get("Status") NEQ "Long")
+		if (local.triggers.boolOpenLong AND local.triggers.boolCloseShort AND arguments.beans.TrackingBean.Get("Status") NEQ "Long")
 		{
 		local.databeantoday.Set("TradeType","OpenLongCloseShort");	
 		arguments.beans.TrackingBean.Set("Status","Long");
 		local.strStatus.Status5 = arguments.beans.TrackingBean.Get("Status");
 		} 
 			// check for close long and open short 
-		if (triggers.boolOpenShort AND triggers.boolCloseLong AND arguments.beans.TrackingBean.Get("Status") NEQ "Short")
+		if (local.triggers.boolOpenShort AND local.triggers.boolCloseLong AND arguments.beans.TrackingBean.Get("Status") NEQ "Short")
 		{
 		local.databeantoday.Set("TradeType","OpenShortCloseLong");	
 		arguments.beans.TrackingBean.Set("Status","Short");

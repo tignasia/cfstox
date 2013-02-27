@@ -218,6 +218,9 @@
 		<cfset queryAddColumn(arguments.query,"CCI",'Decimal',local.num) >
 		<cfset local.num = session.objects.TA.GetIndicator(Indicator:"CCI",qryPrices:arguments.query,optInTimePeriod:5) />
 		<cfset queryAddColumn(arguments.query,"CCI5",'Decimal',local.num) >
+		<cfset local.num = session.objects.TA.GetIndicator(Indicator:"PPO",qryPrices:arguments.query) />
+		<cfset queryAddColumn(arguments.query,"PPO",'Decimal',local.num) >
+		
 		<cfset local.Pivots = session.objects.TA.PivotPoints(qryData:arguments.query) />
 		<cfset queryAddColumn(arguments.query,"PP",'Decimal',local.pivots.pp) >
 		<cfset queryAddColumn(arguments.query,"R1",'Decimal',local.pivots.r1) >
@@ -428,6 +431,10 @@
 	
 	<cffunction name="GetLow" description="" access="public" displayname="" output="false" returntype="Any">
 	<cfreturn variables.low />
+	</cffunction>
+	
+	<cffunction name="GetCurrent" description="" access="public" displayname="" output="false" returntype="Any">
+	<cfreturn variables.CurrentData />
 	</cffunction>
 	
 	<cffunction name="MergeData" access="public" returntype="any" output="false"
