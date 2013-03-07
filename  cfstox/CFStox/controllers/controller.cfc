@@ -255,6 +255,7 @@
 	<cfset session.objects.StrategyService	= createObject("component","cfstox.model.StrategyService").init() />
 	<cfset session.objects.MailService		= createObject("component","cfstox.model.MailService").init() />
 	<cfset session.objects.DataDAO			= createObject("component","cfstox.model.DataDAO").init() />
+	<cfset session.objects.AlertDAO			= createObject("component","cfstox.model.AlertDAO").init() />
 	<cfset session.objects.AlertService		= createObject("component","cfstox.model.AlertService").init() />
 	<cfreturn />
 	</cffunction>	

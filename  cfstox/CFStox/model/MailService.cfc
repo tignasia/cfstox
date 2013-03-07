@@ -14,7 +14,7 @@
 	>
 	#arguments.emailbody#
 	</cfmail>
-	<cfreturn>
+	<cfreturn arguments.emailbody>
 </cffunction>
 
 </cfcomponent>

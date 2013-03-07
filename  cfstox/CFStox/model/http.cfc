@@ -156,7 +156,7 @@
 		<cfdump var="#arguments#">
 		</cfcatch>
 		</cftry>
-		<cfreturn cfhttp.filecontent />
+		<cfreturn replace(cfhttp.filecontent,"\x26","&") />
 	</cffunction>
 
 	http://www.google.com/finance/info?infotype=infoquoteall&q=BIDU,SINA
