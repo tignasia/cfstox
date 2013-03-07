@@ -147,22 +147,20 @@
 		<cfargument name="startdate" 	required="false" default=#CreateDate(2013,1,1)# />
 		<cfargument name="enddate" 		required="false" default=#now()# />
 		<cfargument name="Source" 		required="false" default="Yahoo" />
-		
 		<cfset var local = structnew() />
 		<cfset local.returnResults = StructNew() />
 		<cfset local.results = GetRawData(symbol:arguments.Symbol,startdate:arguments.startdate,enddate:arguments.enddate,source:arguments.source) />
 		<cfif StructKeyExists(request,"CurrentData")>
 			<cfset local.results = MergeData(Symbol:arguments.Symbol,Historical:local.results,Current:request.currentData) >
 		</cfif> 
-				
-		<cfquery   dbtype="query"  name="local.resorted" >
+		<cfquery dbtype="query"  name="local.resorted" >
 			select * from [local].results order by DateOne asc
 		</cfquery>
 		<!--- used to display chart  --->
-		<cfquery   dbtype="query"  name="local.high1" >
+		<cfquery dbtype="query"  name="local.high1" >
 			select max(high) AS high1 from [local].results 
 		</cfquery>
-		<cfquery   dbtype="query"  name="local.low1" >
+		<cfquery dbtype="query"  name="local.low1" >
 			select min(low) As low1 from [local].results 
 		</cfquery>
 		<cfset variables.high = local.high1.high1 />
@@ -463,7 +461,6 @@
 	</cfif>
 	<cfreturn qryHistorical />
 	</cffunction>
-	
 	
 	<cffunction name="GetCurrentDataForSymbol" access="public" returntype="any" output="false"
 	hint="This gets the current alerts.">

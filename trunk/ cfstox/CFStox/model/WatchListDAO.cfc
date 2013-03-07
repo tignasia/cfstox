@@ -1,13 +1,13 @@
 <cfcomponent output="false">
 
-<cffunction name="AddWatchList" access="public" output="false" returntype="any">
+	<cffunction name="AddWatchList" access="public" output="false" returntype="any">
 		<cfargument name="symbol" required="true" />
 		<cfset var local = StructNew() />
 		<cfset local.qAddWatchlist = "" />
 		<cfset local.strReturn = structNew() />
 		<cftry>
 			<cfquery name="local.qryAddWatchList" datasource="#application.dsn#">
-			INSERT INTO Wathclist 
+			INSERT INTO Watchlist 
 			(SYMBOL) 
 			VALUES(
 			 <cfqueryparam value="#arguments.Symbol#" CFSQLType="cf_sql_varchar"  />
@@ -29,9 +29,7 @@
 			<cfset return_value = false  />	
 			</cfcatch>
 		</cftry>
-		<cfreturn local.qryGetAlerts />
+		<cfreturn local.qryAddWatchList />
 	</cffunction>
-INSERT INTO WATCHLIST ([SYMBOL])
-VALUES (symbol);
 
 </cfcomponent>

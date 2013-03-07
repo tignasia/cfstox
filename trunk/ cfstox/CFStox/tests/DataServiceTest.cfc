@@ -113,7 +113,7 @@
 	<cffunction name="testGetCurrentRawData" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
-		local.theList = "ABX,X,SBUX,PBMD";
+		local.theList = "ABX,X,SPY";
 		local.data = this.DataService.GetCurrentRawData(SymbolList:local.theList);
 		/* local.year = DatePart("yyyy",now());
 		local.year = local.year - "1970";

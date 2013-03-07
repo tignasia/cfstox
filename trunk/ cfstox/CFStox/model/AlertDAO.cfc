@@ -1,106 +1,13 @@
+<cfcomponent displayname="AlertDAO" hint="table ID column = ">
 
-<cfcomponent displayname="DataDAO" hint="table ID column = ">
-
-	<cffunction name="init" access="public" output="false" returntype="DataDAO">
+	<cffunction name="init" access="public" output="false" returntype="AlertDAO">
 		<cfargument name="dsn" type="string" required="false" default="CFStox">
 		<cfset variables.dsn = arguments.dsn>
 		<cfreturn this>
 	</cffunction>
 	
-	<cffunction name="create" access="public" output="false" returntype="boolean">
-		<cfargument name="qryData" type="Struct" required="true" />
-		<cfset var local = StructNew() />
-		<cfset local.qCreate = "" />
-		<cftry>
-			<cfquery name="local.qCreate" datasource="#variables.dsn#">
-				INSERT INTO History
-					([Dateone]
-					,[Symbol]
-					,[Open]
-					,[High]
-					,[Low]
-					,[Close]
-					,[Volume]
-					)
-				VALUES
-					(
-					<cfqueryparam value="#arguments.qryData.DateOne#"  />,
-					<cfqueryparam value="#arguments.qryData.Symbol#"  />,
-					<cfqueryparam value="#arguments.qryData.Open#"  />,
-					<cfqueryparam value="#arguments.qryData.High#"  />,
-					<cfqueryparam value="#arguments.qryData.Low#"  />,
-					<cfqueryparam value="#arguments.qryData.Close#"  />,
-					<cfqueryparam value="#arguments.qryData.Volume#"  />
-					)
-			</cfquery>
-			<cfcatch type="database">
-				
-				<cfthrow type="dbError"
-			message="Error occurred while connecting to the database:" detail="<br/>
-			<strong>REASON:</strong><br/>
-			#cfcatch.message#<br />
-			<br /><strong>DETAIL:</strong>
-			<br/>#cfcatch.detail#<br />
-			<br /><strong>T-SQL EXECUTED:</strong>
-			<br/>#cfcatch.sql# 
-			<br/>: 
-			<br/>:
-			"
-			/>
-			<cfset return_value = false  />	
-			</cfcatch>
-		</cftry>
-		<cfreturn true />
-	</cffunction>
-
-	<cffunction name="read" access="public" output="false" returntype="any">
-		<cfargument name="Symbol" required="true" />
-		<cfargument name="date" required="false"  />
-		<cfset var local = StructNew() />
-		<cfset local.qRead = "" />
-		<cfset local.strReturn = structNew() />
-		<cftry>
-			<cfquery name="local.qRead" datasource="#variables.dsn#">
-				SELECT
-					Dateone
-					,Symbol
-					,[Open]
-					,[High]
-					,[Low]
-					,[Close]
-					,[Volume]
-				FROM	History h
-				WHERE	1=1
-				AND h.Symbol = '#arguments.Symbol#'
-				<cfif StructKeyExists(arguments,"date") >
-				AND h.DateOne = <cfqueryparam  value="#arguments.date#" cfsqltype="cf_sql_date">
-				</cfif>
-			</cfquery>
-			<cfcatch type="database">
-				
-				<cfthrow type="dbError"
-			message="Error occurred while connecting to the database:" detail="<br/>
-			<strong>REASON:</strong><br/>
-			#cfcatch.message#<br />
-			<br /><strong>DETAIL:</strong>
-			<br/>#cfcatch.detail#<br />
-			<br /><strong>T-SQL EXECUTED:</strong>
-			<br/>#cfcatch.sql# 
-			<br/>: 
-			<br/>:
-			"
-			/>
-			<cfset return_value = false  />	
-			</cfcatch>
-		</cftry>
-		<!--- <cfif qRead.recordCount>
-			<cfset strReturn = queryRowToStruct(qRead)>
-			<cfset arguments.qryData.init(argumentCollection=strReturn)>
-		</cfif> --->
-		<cfreturn local.qRead />
-	</cffunction>
-
 	<cffunction name="GetAlerts" access="public" output="false" returntype="any">
+		<cfargument name="symbol" required="false" default="">
 		<cfset var local = StructNew() />
 		<cfset local.qryGetAlerts = "" />
 		<cfset local.strReturn = structNew() />
@@ -114,6 +21,9 @@
 			,MESSAGE
 			FROM	ALERTS
 			WHERE	1=1
+			<cfif arguments.symbol NEQ "">
+			AND SYMBOL = '#arguments.symbol#'
+			</cfif>
 			</cfquery>
 			<cfcatch type="database">
 			<cfthrow type="dbError"
@@ -134,9 +44,38 @@
 		<cfreturn local.qryGetAlerts />
 	</cffunction>
 
+	<cffunction name="GetAlertSymbols" access="public" output="false" returntype="any">
+		<cfset var local = StructNew() />
+		<cfset local.qryGetSymbols = "" />
+			<cftry>
+			<cfquery name="local.qryGetSymbols" datasource="#application.dsn#">
+			SELECT DISTINCT 
+			SYMBOL
+			FROM	ALERTS
+			WHERE	1=1
+			</cfquery>
+			<cfcatch type="database">
+			<cfthrow type="dbError"
+			message="Error occurred while connecting to the database:" detail="<br/>
+			<strong>REASON:</strong><br/>
+			#cfcatch.message#<br />
+			<br /><strong>DETAIL:</strong>
+			<br/>#cfcatch.detail#<br />
+			<br /><strong>T-SQL EXECUTED:</strong>
+			<br/>#cfcatch.sql# 
+			<br/>: 
+			<br/>:
+			"
+			/>
+			<cfset return_value = false  />	
+			</cfcatch>
+		</cftry>
+		<cfreturn local.qryGetSymbols />
+	</cffunction>
+
 	<cffunction name="GetWatchList" access="public" output="false" returntype="any">
 		<cfset var local = StructNew() />
-		<cfset local.qryGetAlerts = "" />
+		<cfset local.qryGetWatchList = "" />
 		<cfset local.strReturn = structNew() />
 		<cftry>
 			<cfquery name="local.qryGetWatchList" datasource="#application.dsn#">
@@ -161,10 +100,52 @@
 			<cfset return_value = false  />	
 			</cfcatch>
 		</cftry>
-		<cfreturn local.qryGetAlerts />
+		<cfreturn local.qryGetWatchlist />
 	</cffunction>
 
-	<cffunction name="AddAlerts" access="public" output="false" returntype="any">
+	<cffunction name="AddAlert" access="public" output="false" returntype="any">
+		<cfargument name="alertBean" required="true" />
+		<cfset var local = StructNew() />
+		<cfset local.return_value = "" />
+		<cfset local.qryAddAlerts = "" />
+		<cfset local.strReturn = structNew() />
+		<cftry>
+			<cfquery name="local.qryAddAlerts" datasource="#application.dsn#">
+			INSERT INTO ALERTS 
+			(SYMBOL
+			,VALUE
+			,ACTION
+			,ALERTED
+			,MESSAGE) 
+			VALUES(
+			 <cfqueryparam value="#arguments.alertBean.GetSymbol()#" CFSQLType="cf_sql_varchar"  />
+			,<cfqueryparam value="#arguments.alertBean.GetValue()#" CFSQLType="cf_sql_varchar"  />
+			,<cfqueryparam value="#arguments.alertBean.GetAction()#" CFSQLType="cf_sql_varchar"  />
+			,<cfqueryparam value="#arguments.alertBean.GetAlerted()#" CFSQLType="cf_sql_varchar"  />
+			,<cfqueryparam value="#arguments.alertBean.GetMessage()#" CFSQLType="cf_sql_varchar"  />
+			);
+			</cfquery>
+			<cfset local.return_value = "true" />
+			<cfcatch type="database">
+			<cfthrow type="dbError"
+			message="Error occurred while connecting to the database:" detail="<br/>
+			<strong>REASON:</strong><br/>
+			#cfcatch.message#<br />
+			<br /><strong>DETAIL:</strong>
+			<br/>#cfcatch.detail#<br />
+			<br /><strong>T-SQL EXECUTED:</strong>
+			<br/>#cfcatch.sql# 
+			<br/>: 
+			<br/>:
+			"
+			/>
+			<cfset local.return_value = cfcatch  />	
+			</cfcatch>
+		</cftry>
+		<cfreturn local.return_value />
+	</cffunction>
+		
+	<cffunction name="AddWatchlist" access="public" output="false" returntype="any">
 		<cfargument name="alertBean" required="true" />
 		<cfset var local = StructNew() />
 		<cfset local.qAddAlerts = "" />
@@ -173,7 +154,7 @@
 			<cfquery name="local.qryAddAlerts" datasource="#application.dsn#">
 			INSERT INTO ALERTS 
 			(SYMBOL
-			,PRICE
+			,VALUE
 			,ACTION
 			,ALERTED
 			,MESSAGE) 
@@ -204,36 +185,12 @@
 		<cfreturn local.qryGetAlerts />
 	</cffunction>
 	
-	<cffunction name="update" access="public" output="false" returntype="boolean">
-		<cfargument name="qryData" type="qryData" required="true" />
-		<cfset var local = StructNew() />
-		<cfset local.qUpdate = "" />
-		<cftry>
-			<cfquery name="local.qUpdate" datasource="#variables.dsn#">
-				UPDATE	Stocks
-				SET
-					Date = <cfqueryparam value="#arguments.qryData.Date#" CFSQLType="cf_sql_timestamp" null="#not len(arguments.qryData.Date)#" />
-					,Symbol = <cfqueryparam value="#arguments.qryData.Symbol#" CFSQLType="cf_sql_char" null="#not len(arguments.qryData.Symbol)#" />
-					,Open = <cfqueryparam value="#arguments.qryData.Open#" CFSQLType="cf_sql_decimal" null="#not len(arguments.qryData.Open)#" />
-					,High = <cfqueryparam value="#arguments.qryData.High#" CFSQLType="cf_sql_decimal" null="#not len(arguments.qryData.High)#" />
-					,Low = <cfqueryparam value="#arguments.qryData.Low#" CFSQLType="cf_sql_decimal" null="#not len(arguments.qryData.Low)#" />
-					,Close = <cfqueryparam value="#arguments.qryData.Close#" CFSQLType="cf_sql_decimal" null="#not len(arguments.qryData.Close)#" />
-					,Volume = <cfqueryparam value="#arguments.qryData.Volume#" CFSQLType="cf_sql_integer" null="#not len(arguments.qryData.Volume)#" />
-				WHERE	
-			</cfquery>
-			<cfcatch type="database">
-				<cfreturn false />
-			</cfcatch>
-		</cftry>
-		<cfreturn true />
-	</cffunction>
-
-	<cffunction name="delete" access="public" output="false" returntype="boolean">
+	<cffunction name="deleteAlert" access="public" output="false" returntype="boolean">
 		<cfargument name="Symbol" type="string" required="true" />
-		<cfset var qDelete = "">
+		<cfset var qryDeleteAlert = "">
 		<cftry>
-			<cfquery name="qDelete" datasource="#variables.dsn#">
-				DELETE FROM	History 
+			<cfquery name="qryDeleteAlert" datasource="#variables.dsn#">
+				DELETE FROM	ALERTS 
 				WHERE	1=1
 				AND Symbol = '#arguments.symbol#'
 			</cfquery>
@@ -244,6 +201,72 @@
 		<cfreturn true />
 	</cffunction>
 
+	<cffunction name="deleteWatchlist" access="public" output="false" returntype="boolean">
+		<cfargument name="Symbol" type="string" required="true" />
+		<cfset var qryDeleteWatchlist = "">
+		<cftry>
+			<cfquery name="qryDeleteWatchlist" datasource="#variables.dsn#">
+				DELETE FROM	WATCHLIST 
+				WHERE	1=1
+				AND Symbol = '#arguments.symbol#'
+			</cfquery>
+			<cfcatch type="database">
+				<cfreturn false />
+			</cfcatch>
+		</cftry>
+		<cfreturn true />
+	</cffunction>
+	
+	<cffunction name="updateAlert" access="public" output="false" returntype="boolean">
+		<cfargument name="AlertBean" required="true" />
+		<cfset var local = StructNew() />
+		<cfset qryUpdateAlerts = "" />
+		<cftry>
+			<cfquery name="local.qryUpdateAlerts" datasource="#variables.dsn#">
+			UPDATE "ALERTS"
+			SET
+			[VALUE] 	= <cfqueryparam value="#arguments.alertBean.GetValue()#" CFSQLType="cf_sql_varchar"  />
+			<!--- ,ACTION = <cfqueryparam value="#arguments.alertBean.GetAction()#" CFSQLType="cf_sql_varchar"  />
+			,ALERTED = <cfqueryparam value="#arguments.alertBean.GetAlerted()#" CFSQLType="cf_sql_varchar"  />
+			,MESSAGE = <cfqueryparam value="#arguments.alertBean.GetMessage()#" CFSQLType="cf_sql_varchar"  />
+			 --->
+			 WHERE	1=1
+			AND SYMBOL = <cfqueryparam value="#arguments.alertBean.GetSymbol()#" CFSQLType="cf_sql_varchar"  />
+			 --->
+			
+			</cfquery>
+			<cfcatch type="database">
+			<cfthrow type="dbError"
+			message="Error occurred while connecting to the database:" detail="<br/>
+			<strong>REASON:</strong><br/>
+			#cfcatch.message#<br />
+			<br /><strong>DETAIL:</strong>
+			<br/>#cfcatch.detail#<br />
+			<br /><strong>T-SQL EXECUTED:</strong>
+			<br/>#cfcatch.sql# 
+			<br/>: 
+			<br/>:
+			"
+			/>
+			<cfset local.return_value = cfcatch  />	
+			</cfcatch>
+		</cftry>
+		<cfreturn true />
+	</cffunction>
+	
+	<cffunction name="Create">
+	<cfquery name="qrycreate" datasource="variables.dsn">
+	CREATE TABLE [Alerts] (
+    [Symbol] VARCHAR(4),
+    [Value] VARCHAR(8),
+    [Action] VARCHAR(200),
+    [ALERTED] VARCHAR(5),
+    [MESSAGE] VARCHAR(500)
+	);
+	</cfquery>
+	
+	
+	</cffunction>
 	<cffunction name="exists" access="public" output="false" returntype="boolean">
 		<cfargument name="qryData" type="qryData" required="true" />
 		<cfset var qExists = "">
@@ -258,18 +281,7 @@
 			<cfreturn false />
 		</cfif>
 	</cffunction>
-
-	<cffunction name="save" access="public" output="false" returntype="boolean">
-		<cfargument name="qryData" type="qryData" required="true" />
-		<cfset var success = false />
-		<cfif exists(arguments.qryData)>
-			<cfset success = update(arguments.qryData) />
-		<cfelse>
-			<cfset success = create(arguments.qryData) />
-		</cfif>
-		<cfreturn success />
-	</cffunction>
-
+	
 	<cffunction name="queryRowToStruct" access="private" output="false" returntype="struct">
 		<cfargument name="qry" type="query" required="true">
 		<cfscript>
