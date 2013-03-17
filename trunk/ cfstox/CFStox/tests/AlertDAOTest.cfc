@@ -55,14 +55,30 @@
 	<cffunction name="testUpdateAlert" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
-		debug(session);
+		local.Alert = structNew();
+		local.Alert.SYMBOL = "ABX";
+		local.Alert.VALUE = "29";
+		local.Alert.ACTION = ">";
+		local.Alert.ALERTED = "False";
+		local.Alert.MESSAGE = "Test for ABX";
+		local.AlertBean = this.AlertService.GetAlertBean(beanData:local.Alert);
+		local.qryUpdateAlert = this.AlertDAO.UpdateAlert(AlertBean:local.AlertBean);
+		debug(local.qryUpdateAlert);
 		</cfscript>
 	</cffunction>
 	
 	<cffunction name="testDeleteAlert" access="public" returntype="void">
 		<cfscript>
 		var local = structNew();
-		debug(session);
+		local.Alert = structNew();
+		local.Alert.SYMBOL = "ABX";
+		local.Alert.VALUE = "29";
+		local.Alert.ACTION = ">";
+		local.Alert.ALERTED = "False";
+		local.Alert.MESSAGE = "Test for ABX";
+		local.AlertBean = this.AlertService.GetAlertBean(beanData:local.Alert);
+		local.qryDeleteAlert = this.AlertDAO.DeleteAlert(AlertBean:local.AlertBean);
+		debug(local.qryDeleteAlert);
 		</cfscript>
 	</cffunction>
 	

@@ -30,7 +30,7 @@ eventually add trade table in database to trake trades, profit/loss
 	<cfloop array=#local.AlertList#  index="i" >
 			<cfif i.AlertTriggered>
 			<cfset SendAlert(Symbol:i.Symbol,Alert:i.Message,AlertPrice:i.value,CurrPrice:i.Currprice) />
-			<cfset local.AlertBean = GetAlertBean(Symbol:i.symbol) /> --->
+			<cfset local.AlertBean = GetAlertBean(Symbol:i.symbol) /> 
 			<cfset local.AlertBean.SetAlerted("True") />
 			<cfset UpdateAlert(local.AlertBean) />
 		 </cfif>
@@ -81,8 +81,18 @@ eventually add trade table in database to trake trades, profit/loss
 		<cfargument name="AlertBean" 	required="true"  />
 		<cfargument name="alertStatus" required="false" default="true">
 		<cfset var LOCAL = StructNew() />
-		<cfset arguments.AlertBean.SetAlerted("arguments.AlertStatus")>
+		<cfset arguments.AlertBean.SetAlerted(arguments.AlertStatus)>
 		<cfset local.qryAlerts = session.objects.AlertDAO.UpdateAlert(alertBean:arguments.AlertBean) />
+		<cfreturn arguments.alertBean />
+	</cffunction>
+	
+	<cffunction name="SetAlert" access="public" returntype="any" output="false"
+		hint="This updates the current alerts.">
+		<cfargument name="AlertBean" 	required="true"  />
+		<cfargument name="alertStatus" required="false" default="false">
+		<cfset var LOCAL = StructNew() />
+		<cfset arguments.AlertBean.SetAlerted(arguments.AlertStatus)>
+		<cfset local.qryAlerts = session.objects.AlertDAO.AddAlert(alertBean:arguments.AlertBean) />
 		<cfreturn arguments.alertBean />
 	</cffunction>
 	
@@ -118,11 +128,13 @@ eventually add trade table in database to trake trades, profit/loss
 	<cfargument name="Symbol" 	required="true"  />
 	<cfargument name="Alert" 	required="true"  />
 	<cfargument name="AlertPrice" 	required="true"  />
-	<cfargument name="CurrPrice" 	required="true"  />		
-	<cfset local.AlertMessage = "An alert has been triggered for #arguments.symbol#." />
-	<cfset local.AlertMessage = Local.AlertMessage & "The alert is: #arguments.Alert#" />
-	<cfset local.AlertMessage = Local.AlertMessage & "Alert Price: #arguments.AlertPrice#" >
-	<cfset local.AlertMessage = Local.AlertMessage & "Current Price: #arguments.Currprice#" >
+	<cfargument name="CurrPrice" 	required="true"  />	
+	<cfset CrLf = Chr(13) & Chr(10)> 	
+	<cfset local.AlertMessage = "An alert has been triggered for #arguments.symbol#. " />
+	<cfset local.AlertMessage &= "The alert is: #arguments.Alert# #Crlf#" />
+	<cfset local.AlertMessage &= "Alert Price: #arguments.AlertPrice# " />
+	<cfset local.AlertMessage &= "Current Price: #arguments.Currprice# #CrLf#" >
+	<cfset local.AlertMessage &= "Link: http://stockcharts.com/h-sc/ui?s=#arguments.symbol# " >
 	<cfset local.sendMail = session.objects.MailService.SendMail(subject:"Alert Triggered: #arguments.symbol#",emailBody:local.AlertMessage) >
 	<cfreturn  />
 	</cffunction>	
@@ -151,6 +163,8 @@ eventually add trade table in database to trake trades, profit/loss
 	</cfif>
 	<cfif structKeyExists(arguments,"beanData")>
 		<cfset local.AlertBean = createObject("component","cfstox.model.AlertBean").init(argumentcollection:arguments.beanData) />
+	<cfelse>
+		<cfset local.AlertBean = createObject("component","cfstox.model.AlertBean").init() />
 	</cfif>
 	<cfreturn  local.AlertBean />
 	</cffunction>
