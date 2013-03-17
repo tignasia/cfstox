@@ -5,6 +5,7 @@
 <cfproperty name="Action" type="string" default="" />
 <cfproperty name="ALERTED" type="string" default="" />
 <cfproperty name="MESSAGE" type="string" default="" />
+<cfproperty name="Strategy" type="string" default="" />
 		
 	<!---
 	PROPERTIES
@@ -20,14 +21,14 @@
 		<cfargument name="Action" type="string" required="false" default="" />
 		<cfargument name="ALERTED" type="string" required="false" default="" />
 		<cfargument name="MESSAGE" type="string" required="false" default="" />
-		
+		<cfargument name="STRATEGY" type="string" required="false" default="" />
 		<!--- run setters --->
 		<cfset setSymbol(arguments.Symbol) />
 		<cfset setValue(arguments.Value) />
 		<cfset setAction(arguments.Action) />
 		<cfset setALERTED(arguments.ALERTED) />
 		<cfset setMESSAGE(arguments.MESSAGE) />
-		
+		<cfset setSTRATEGY(arguments.STRATEGY) />
 		<cfreturn this />
  	</cffunction>
 
@@ -181,7 +182,13 @@
 		<cfreturn variables.instance.MESSAGE />
 	</cffunction>
 
-
+	<cffunction name="setStrategy" access="public" returntype="void" output="false">
+		<cfargument name="Strategy" type="string" required="true" />
+		<cfset variables.instance.Strategy = arguments.Strategy />
+	</cffunction>
+	<cffunction name="getStrategy" access="public" returntype="string" output="false">
+		<cfreturn variables.instance.Strategy />
+	</cffunction>
 	<!---
 	DUMP
 	--->

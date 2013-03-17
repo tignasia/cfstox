@@ -105,3 +105,19 @@
 <input type="submit" name="submit" id="submit" value="Run watchlist analysis" />
 </fieldset>
 </form>
+
+<!--- this edits the alerts --->
+<form action="controllers/controller.cfm" method="post" id="alerts_form1">
+<fieldset title="Alert">Edit Alerts
+<input type="hidden" id="actionitem" name="actionitem" value="EditAlerts">
+<input type="submit" name="submit" id="submit" value="Edit Alerts" />
+</fieldset>
+</form>
+
+<!--- this edits the alerts --->
+<form action="controllers/controller.cfm" method="post" id="checkalerts_form1">
+<fieldset title="Alert">Check Alerts
+<input type="hidden" id="actionitem" name="actionitem" value="CheckAlerts">
+<input type="submit" name="submit" id="submit" value="Check Alerts" />
+</fieldset>
+</form>
