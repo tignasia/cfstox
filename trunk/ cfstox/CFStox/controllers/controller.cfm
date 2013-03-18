@@ -1,10 +1,13 @@
 <!--- unload everything - do a reload if requested --->
 <!--- load the controller object if not already loaded and set the controller flag  --->
-<!--- <cfif NOT structKeyExists(session,"controllerLoaded") or StructKeyExists(url,"reload")> --->
+<!--- <cfif NOT structKeyExists(application,"controllerLoaded") or StructKeyExists(url,"reload")> --->
 
 <cfset session.objects.controller = createObject("component","controller").init() />
-<cfset session.controllerLoaded = True />
+<cfset application.controllerLoaded = True />
 <!--- </cfif> --->
+<cfif StructKeyExists(url,"actionitem")>
+	<cfset form.actionitem = url.actionitem >
+</cfif>
 
 <cfinvoke component="#session.objects.controller#" method="#form.actionitem#"  argumentcollection="#form#"  returnvariable="resultData" />
 

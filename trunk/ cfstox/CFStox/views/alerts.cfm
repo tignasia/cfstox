@@ -1,50 +1,60 @@
 <cfoutput>
-<form action="controller.cfm" method="post" id="alerts">
+<form action="controller.cfm" method="post" id="AddAlert">
 
-<fieldset title="Alerts"><legend>Edit Alerts</legend>
-<input type="hidden" id="actionitem" name="actionitem" value="updatealertsTEST">
+<fieldset title="Add Alerts"><legend>Add Alert</legend>
+<input type="hidden" id="actionitem" name="actionitem" value="AddAlert">
 
-<label for="Symbol" style="width=30%" >Symbol:</label>
-<input type="text" name="Symbol" id="Symbol" value="">
+<label for="Symbol" >Symbol:</label>
+<input type="text" style="width:10%" name="Symbol" id="Symbol" value="">
 
-<label for="Action" style="width=30%">Action:</label>
-<input type="text" name="Action" id="Action" value="">
+<label for="Action" >Action:</label>
+<input type="text" style="width:5%"name="Action" id="Action" value="">
 
-<label for="Message" style="width=30%">Message:</label>
-<input type="text" name="Message" id="Message" value="">
+<label for="Message" >Message:</label>
+<input type="text" style="width:20%" name="Message" id="Message" value="">
 
-<label for="Value" style="width=30%">Price:</label>
-<input type="text" name="Value" id="Value" value="">
+<label for="Value" >Price:</label>
+<input type="text" style="width:5%" name="Value" id="Value" value="">
 
-<label for="Strategy" style="width=30%">Strategy:</label>
-<input type="text" name="Strategy" id="Strategy" value="None">
+<label for="Strategy" >Strategy:</label>
+<input type="text" style="width:5%" name="Strategy" id="Strategy" value="None">
+
+<label for="Alerted" >Alerted:</label>
+<input type="text" style="width=5%" name="Alerted" id="Alerted" value="false" >
+
+<label for="Delete" >Delete</label>
+<input type="text" style="width=5%" name="Delete" id="Delete" value="false">
 </br>
-<cfdump var="#request.context.queryAlerts#">
+</fieldset>
+<input type="submit" name="submit" id="submit" value="Submit" />
+</form>
+
+<form action="controller.cfm" method="post" id="UpdateAlerts">
+<fieldset title="Edit Alerts"><legend>Edit Alerts</legend>
+<input type="hidden" id="actionitem" name="actionitem" value="UpdateAlerts">
 <cfloop query="request.context.queryAlerts">
 <cfset ischecked = "">
-<cfif request.context.queryAlerts.alerted EQ "true">
-	<cfset ischecked = "checked">
-</cfif>
-<label for="Symbol" style="width=30%" >Symbol:</label>
-<input type="text" name="Symbol" id="Symbol" value="#request.context.queryAlerts.symbol#">
 
-<label for="Action" style="width=30%">Action:</label>
-<input type="text" name="Action" id="Action" value="#request.context.queryAlerts.action#">
+<label for="Symbol" >Symbol:</label>
+<input type="text" style="width:10%" name="Symbol" id="Symbol" value="#request.context.queryAlerts.symbol#">
 
-<label for="Message" style="width=60%">Message:</label>
-<input type="text" name="Message" id="Message" value="#request.context.queryAlerts.message#">
+<label for="Action" >Action:</label>
+<input type="text" style="width:5%" name="Action" id="Action" value="#request.context.queryAlerts.action#">
 
-<label for="Value" style="width=30%">Price:</label>
-<input type="text" name="Value" id="Value" value="#request.context.queryAlerts.value#">
+<label for="Message"> Message:</label>
+<input type="text" style="width:20%" name="Message" id="Message" value="#request.context.queryAlerts.message#">
 
-<label for="Strategy" style="width=30%">Strategy:</label>
-<input type="text" name="Strategy" id="Strategy" value="#request.context.queryAlerts.strategy#">
+<label for="Value" >Price:</label>
+<input type="text" style="width:5%" name="Value" id="Value" value="#request.context.queryAlerts.value#">
 
-<label for="Alerted" style="width=30%">Alerted:</label>
-<input type="checkbox" name="Alerted" id="Alerted" value="#request.context.queryAlerts.alerted#" #ischecked#>
+<label for="Strategy" >Strategy:</label>
+<input type="text" style="width:5%" name="Strategy" id="Strategy" value="#request.context.queryAlerts.strategy#">
 
-<label for="Delete" style="width=30%">Delete</label>
-<input type="checkbox" name="Delete" id="Delete">
+<label for="Alerted" >Alerted:</label>
+<input type="text" style="width=5%" name="Alerted" id="Alerted" value="#request.context.queryAlerts.alerted#" >
+
+<label for="Delete" >Delete</label>
+<input type="text" style="width=5%" name="Delete" id="Delete" value="false">
 </br>
 </cfloop>
 </fieldset>
