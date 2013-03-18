@@ -191,20 +191,40 @@
 		<cfreturn local />
 	</cffunction>
 
-	<cffunction name="UpdateAlerts" description="check alerts and send email" access="public" displayname="" output="false" returntype="struct">
+	<cffunction name="AddAlert" description="add an alert" access="public" displayname="" output="false" returntype="struct">
 		<cfscript>
 		var local 			= structnew();
-		request.view 		= "dumpalerts";
+		request.view 		= "alerts";
 		request.context 	= structNew();
 		rc = request.context;
 		local.a_symbol = ListtoArray(form.Symbol);
-		// local.a_alerted = ListtoArray(form.alerted);
-		// local.a_delete = ListtoArray(form.delete);
+		local.a_alerted = ListtoArray(form.alerted);
+		local.a_delete = ListtoArray(form.delete);
 		local.a_action = ListtoArray(form.action);
 		local.a_message = ListtoArray(form.message);
 		local.a_value = ListtoArray(form.value);
 		local.a_strategy = ListtoArray(form.strategy);
-		rc.queryAlerts 		= session.objects.AlertService.UpdateAlerts(form);
+		session.objects.AlertService.UpdateAlerts(local);
+		rc.queryAlerts 		= session.objects.AlertService.GetAlerts(); 
+		</cfscript>
+		<cfreturn local />
+	</cffunction>
+	
+	<cffunction name="UpdateAlerts" description="update the stored alerts" access="public" displayname="" output="false" returntype="struct">
+		<cfscript>
+		var local 			= structnew();
+		request.view 		= "alerts";
+		request.context 	= structNew();
+		rc = request.context;
+		local.a_symbol = ListtoArray(form.Symbol);
+		local.a_alerted = ListtoArray(form.alerted);
+		local.a_delete = ListtoArray(form.delete);
+		local.a_action = ListtoArray(form.action);
+		local.a_message = ListtoArray(form.message);
+		local.a_value = ListtoArray(form.value);
+		local.a_strategy = ListtoArray(form.strategy);
+		session.objects.AlertService.DeleteAlerts();
+		session.objects.AlertService.UpdateAlerts(local);
 		rc.queryAlerts 		= session.objects.AlertService.GetAlerts(); 
 		</cfscript>
 		<cfreturn local />

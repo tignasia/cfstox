@@ -209,6 +209,21 @@
 		<cfreturn local.return_value />
 	</cffunction>
 
+	<cffunction name="deleteAlerts" access="public" output="false" returntype="any">
+		<cfset var qryDeleteAlerts = "">
+		<cftry>
+			<cfquery name="qryDeleteAlert" datasource="#application.dsn#">
+				DELETE FROM	ALERTS 
+				WHERE	1=1
+			</cfquery>
+			<cfset local.return_value = true />
+			<cfcatch type="database">
+				<cfset local.return_value = cfcatch />
+			</cfcatch>
+		</cftry>
+		<cfreturn local.return_value />
+	</cffunction>
+
 	<cffunction name="deleteWatchlist" access="public" output="false" returntype="any" >
 		<cfargument name="Symbol" type="string" required="true" />
 		<cfset var qryDeleteWatchlist = "">

@@ -28,11 +28,11 @@ eventually add trade table in database to trake trades, profit/loss
 	<cfset local.AlertList =  checkAlertList(QryCurrentData:local.qryCurrentdata,qryAlerts:local.qryAlerts) />
 	<!--- loop over alerts  --->
 	<cfloop array=#local.AlertList#  index="i" >
-			<cfif i.AlertTriggered>
+		<cfif i.AlertTriggered>
 			<cfset SendAlert(Symbol:i.Symbol,Alert:i.Message,AlertPrice:i.value,CurrPrice:i.Currprice) />
 			<cfset local.AlertBean = GetAlertBean(Symbol:i.symbol) /> 
 			<cfset local.AlertBean.SetAlerted("True") />
-			<cfset UpdateAlert(local.AlertBean) />
+			<cfset UpdateAlert(AlertBean:local.AlertBean,alertStatus:"true") />
 		 </cfif>
 	<!--- end loop over alerts --->
 	</cfloop>
@@ -61,6 +61,12 @@ eventually add trade table in database to trake trades, profit/loss
 	<cfreturn local.AlertArray />
 	</cffunction>
 	
+	<cffunction name="DeleteAlerts" access="public" returntype="any" output="false"
+		hint="This deletes the current alerts.">
+		<cfset var LOCAL = StructNew() />
+		<cfset session.objects.AlertDAO.DeleteAlerts() />
+	</cffunction>
+	
 	<cffunction name="GetAlerts" access="public" returntype="any" output="false"
 		hint="This gets the current alerts.">
 		<cfset var LOCAL = StructNew() />
@@ -86,7 +92,26 @@ eventually add trade table in database to trake trades, profit/loss
 		<cfreturn arguments.alertBean />
 	</cffunction>
 	
-	<cffunction name="SetAlert" access="public" returntype="any" output="false"
+	<cffunction name="UpdateAlerts" access="public" returntype="any" output="false"
+		hint="This updates the current alerts.">
+		<cfargument name="formdata" required="true"  />
+		<cfset var LOCAL = StructNew() />
+		<cfset local.formlen = formdata.a_symbol.Size() />
+		<cfloop from="1" to="#local.formlen#" index="i">
+			<cfset local.AlertBean = GetAlertBean() />
+			<cfset local.AlertBean.SetSymbol(formdata.a_symbol[i]) />
+			<cfset local.AlertBean.SetAction(formdata.a_action[i]) />
+			<cfset local.AlertBean.SetMessage(formdata.a_message[i]) />
+			<cfset local.AlertBean.SetValue(formdata.a_value[i]) />
+			<cfset local.AlertBean.SetAlerted(formdata.a_alerted[i]) />
+			<cfset local.AlertBean.SetStrategy(formdata.a_strategy[i]) />
+			<cfif arguments.formdata.a_delete[i] NEQ "true">
+			<cfset session.objects.AlertDAO.AddAlert(alertBean:local.AlertBean) />
+			</cfif>
+		</cfloop>
+	</cffunction>
+	
+	<cffunction name="AddAlert" access="public" returntype="any" output="false"
 		hint="This updates the current alerts.">
 		<cfargument name="AlertBean" 	required="true"  />
 		<cfargument name="alertStatus" required="false" default="false">
@@ -115,10 +140,10 @@ eventually add trade table in database to trake trades, profit/loss
 	WHERE qryCurrentData.Symbol = '#local.AlertSymbol#'  
 	</cfquery>
 	<cfset local.result.Currprice = local.qryCurrentSymbol.close />
-	<cfif arguments.qryAlert.Action EQ "<" AND local.qryCurrentSymbol.close LT arguments.qryAlert.value >
+	<cfif arguments.qryAlert.Alerted NEQ "true" AND arguments.qryAlert.Action EQ "<" AND local.qryCurrentSymbol.close LT arguments.qryAlert.value >
 		<cfset local.result.AlertTriggered = true />
 	</cfif>
-	<cfif arguments.qryAlert.Action EQ ">" AND local.qryCurrentSymbol.close GT arguments.qryAlert.value >
+	<cfif arguments.qryAlert.Alerted NEQ "true" AND arguments.qryAlert.Action EQ ">" AND local.qryCurrentSymbol.close GT arguments.qryAlert.value >
 		<cfset local.result.AlertTriggered = true />
 	</cfif>
 	<cfreturn local.result />
@@ -159,12 +184,14 @@ eventually add trade table in database to trake trades, profit/loss
 		<cfset local.Alert.ACTION 	= local.qryAlerts.Action  />
 		<cfset local.Alert.ALERTED 	= local.qryAlerts.Alerted  />
 		<cfset local.Alert.MESSAGE 	= local.qryAlerts.Message  />
+		<cfset local.Alert.Strategy 	= local.qryAlerts.Strategy  />
 		<cfset local.AlertBean = createObject("component","cfstox.model.AlertBean").init(argumentcollection:local.Alert) />
-	</cfif>
-	<cfif structKeyExists(arguments,"beanData")>
-		<cfset local.AlertBean = createObject("component","cfstox.model.AlertBean").init(argumentcollection:arguments.beanData) />
 	<cfelse>
-		<cfset local.AlertBean = createObject("component","cfstox.model.AlertBean").init() />
+		<cfif structKeyExists(arguments,"beanData") >
+			<cfset local.AlertBean = createObject("component","cfstox.model.AlertBean").init(argumentcollection:arguments.beanData) />
+		<cfelse>
+			<cfset local.AlertBean = createObject("component","cfstox.model.AlertBean").init() />
+		</cfif>
 	</cfif>
 	<cfreturn  local.AlertBean />
 	</cffunction>
