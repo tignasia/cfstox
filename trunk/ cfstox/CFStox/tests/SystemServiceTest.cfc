@@ -12,23 +12,12 @@
 			this.DataService 	= createObject("component","cfstox.model.DataService").init();
 			this.Utility 		= createObject("component","cfstox.model.Utility").init();
 			this.SystemService 	= createObject("component","cfstox.model.SystemService").init();
-			this.data = this.DataService.GetStockData(symbol:"UA",startdate:"01/01/2012",enddate:"07/20/2012");
+			this.data = this.DataService.GetStockData(symbol:"UA",startdate:"09/01/2012",enddate:"03/20/2013");
 			//debug(data);
 			
 		</cfscript>
 	</cffunction>
-	
-	<cffunction name="testGetBeans" returntype="void" access="public">
-		<cfscript>
-		var local = structNew(); 
-		local.strData = this.Utility.QrytoStruct(query:this.data.qryDataOriginal,rownumber:1);
-		debug(local.strData);
-		makePublic(this.SystemService,"GetBeans");
-		local.Results = this.SystemService.GetBeans(local.strData);
-		debug(local.Results);
-		</cfscript>	
-	</cffunction>
-	
+		
 	<cffunction name="testGetStrData" returntype="void" access="public">
 		<cfscript>
 		var local = structNew(); 
@@ -55,15 +44,38 @@
 		</cfscript>	
 	</cffunction>
 	
+	<cffunction name="testProcessData" returntype="void" access="public">
+		<cfscript>
+		var local = structNew();
+		makePublic(this.SystemService,"ProcessData");
+		local.Results = this.SystemService.ProcessData(qryData:this.data);
+		debug(local.Results);
+		</cfscript>	
+	</cffunction>
+	
+	<cffunction name="testSetUpBeans" returntype="void" access="public">
+		<cfscript>
+		var local = structNew();
+		makePublic(this.SystemService,"ProcessData");
+		local.Data = this.SystemService.ProcessData(qryData:this.data);
+		makePublic(this.SystemService,"SetUpBeans");
+		local.Beans = this.SystemService.SetUpBeans(Data:local.data);
+		debug(local.Beans);
+		</cfscript>	
+	</cffunction>
+	
 	<cffunction name="testFindTrades" returntype="void" access="public">
 		<cfscript>
 		var local = structNew();
-		makePublic(this.SystemService,"SetUpSystem");
-		local.TestData = this.SystemService.SetupSystem(systemName:"BearishCandles",qryData:this.data);
+		makePublic(this.SystemService,"ProcessData");
+		local.Data = this.SystemService.ProcessData(qryData:this.data);
+		makePublic(this.SystemService,"SetUpBeans");
+		local.Beans = this.SystemService.SetupBeans(Data:local.data);
+		local.Beans.TradeBean.Set("SystemName","BearishCandles");
 		makePublic(this.SystemService,"FindTrades");
-		local.Results = this.SystemService.FindTrades(qryData:this.data,TestData:local.TestData	);
+		local.Results = this.SystemService.FindTrades(Data:local.data,Beans:local.Beans);
 		// trades are stored in the tradehistory
-		debug(local.Results.getMemento());
+		debug(local.Results.GetMemento());
 		</cfscript>	
 	</cffunction>
 			

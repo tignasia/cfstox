@@ -38,95 +38,154 @@
 		<cfreturn State />
 	</cffunction>
 	
-	<cffunction name="BearishCandles" description="checks for bearish candles" access="public" displayname="BearishCandles" output="false" returntype="any">
-		<cfargument name="Beans" required="true" />
-		<cfset var local = StructNew() />
-		<!--- todo: this should be a while loop  --->
+	<cffunction name="LowerClose" description="checks for lower close" access="public" displayname="BearishCandles" output="false" returntype="any">
+		<cfargument name="PrevDataBean" required="true" />
+		<cfargument name="CurrDataBean" required="true" />
 		<cfscript>
-		local.bearflag = false;
-		// Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine
-		if (  arguments.beans.DataBeanToday.get("Engulfing") EQ -100 )
-		{local.bearflag = true;
-		local.flagtype = "Engulfing";
-		}
-		if (  arguments.beans.DataBeanToday.get("Hammer") EQ -100 )
-		{local.bearflag = true;
-		local.flagtype = "Hammer";
-		}
-		if (  arguments.beans.DataBeanToday.get("HangingMan") EQ -100 )
-		{local.bearflag = true;
-		local.flagtype = "HangingMan";
-		}
-		if (  arguments.beans.DataBeanToday.get("ThreeInside") EQ -100 )
-		{local.bearflag = true;
-		local.flagtype = "ThreeInside";
-		}
-		if (  arguments.beans.DataBeanToday.get("ThreeOutside") EQ -100 )
-		{local.bearflag = true;
-		local.flagtype = "ThreeOutside";
-		}
-		if (  arguments.beans.DataBeanToday.get("ThreeBlackCrows") EQ -100 )
-		{local.bearflag = true;
-		local.flagtype = "ThreeBlackCrows";}
+		var local = StructNew();
+		local.tradeflag = false;
+		local.IndicatorText = "";
+			
+		if ( arguments.CurrDataBean.get("Low") LT arguments.PrevDataBean.get("Low") )
+		local.IndicatorText = "Weak Lower Low";
 		
-		if ( arguments.beans.DataBeanToday.get("Harami") EQ "-100" )
-		{local.bearflag = true;
-		local.flagtype = "Harami";}
+		if ( arguments.CurrDataBean.get("Low") LT arguments.PrevDataBean.get("Low") 
+		AND arguments.CurrDataBean.get("High") LT arguments.PrevDataBean.get("High") ) 
+		local.IndicatorText = "Strong Lower Low";
 		
-		if (  arguments.beans.DataBeanToday.get("HaramiCross") EQ "-100" )
-		{local.bearflag = true;
-		local.flagtype = "HaramiCross";}
+		if ( arguments.CurrDataBean.get("Close") LT arguments.PrevDataBean.get("Close") 
+		AND NOT (arguments.CurrDataBean.get("Close") LT arguments.PrevDataBean.get("Close") ) )
+		local.IndicatorText &= " " & "Weak Lower Close";
 		
-		if (  arguments.beans.DataBeanToday.get("LongLine") EQ "-100" )
-		{local.bearflag = true;
-		local.flagtype = "LongLine";}
+		if (arguments.CurrDataBean.get("Close") LT arguments.CurrDataBean.get("Open") 
+		AND arguments.CurrDataBean.get("Close") LT arguments.PrevDataBean.get("Close") )
+		local.IndicatorText = "Strong Lower Close";
 		
-		return local ;
+		if (local.IndicatorText NEQ "")		
+		local.tradeflag = true;		
+		return local;
 		</cfscript>
 	</cffunction>
 	
-	<cffunction name="BullishCandles" description="checks for bullish candles" access="public" displayname="BearishCandles" output="false" returntype="boolean">
-		<!--- low below previous low  --->
-		<cfargument name="Beans" required="true" />
+	<cffunction name="HigherClose" description="checks for lower close" access="public" displayname="BearishCandles" output="false" returntype="any">
+		<cfargument name="PrevDataBean" required="true" />
+		<cfargument name="CurrDataBean" required="true" />
 		<cfset var local = StructNew() />
 		<!--- todo: this should be a while loop  --->
 		<cfscript>
-		local.bearflag = false;
+		local.tradeflag = false;
+		local.IndicatorText = "";
+		
+		if ( arguments.CurrDataBean.get("High") GT arguments.PrevDataBean.get("High") )
+		local.IndicatorText = "Weak Higher High";
+		
+		if ( arguments.CurrDataBean.get("High") GT arguments.PrevDataBean.get("High") 
+		AND arguments.CurrDataBean.get("Low") GT arguments.PrevDataBean.get("Low") ) 
+		local.IndicatorText = "Strong Higher High";
+		
+		if ( arguments.CurrDataBean.get("Close") GT arguments.PrevDataBean.get("Close") 
+		AND arguments.CurrDataBean.get("Open") LT arguments.PrevDataBean.get("Open") ) 
+		local.IndicatorText = "Weak Higher Close";
+		
+		if (arguments.CurrDataBean.get("Close") GT arguments.CurrDataBean.get("Open") 
+		AND arguments.CurrDataBean.get("Open") GT arguments.PrevDataBean.get("Open") )
+		local.IndicatorText = "Strong Higher Close";
+		
+		if (local.IndicatorText NEQ "")		
+		local.tradeflag = true;
+		
+		return local;
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="BearishCandles" description="checks for bearish candles" access="public" displayname="BearishCandles" output="false" returntype="any">
+		<cfargument name="DataBean" required="true" />
+		<cfset var local = StructNew() />
+		<!--- todo: this should be a while loop  --->
+		<cfscript>
+		local.tradeflag = false;
+		local.IndicatorText = "";
 		// Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine
-		if (  arguments.beans.DataBeanToday.get("Engulfing") EQ 100 )
-		{local.bearflag = true;
-		local.flagtype = "Engulfing";
+		if (  arguments.DataBean.get("Engulfing") EQ -100 )
+		{local.TradeFlag = true;
+		local.IndicatorText = "Engulfing";
 		}
-		if (  arguments.beans.DataBeanToday.get("Hammer") EQ 100 )
-		{local.bearflag = true;
-		local.flagtype = "Hammer";
+		if (  arguments.DataBean.get("Hammer") EQ -100 )
+		{local.TradeFlag = true;
+		local.IndicatorText = "Hammer";
 		}
-		if (  arguments.beans.DataBeanToday.get("HangingMan") EQ 100 )
-		{local.bearflag = true;
-		local.flagtype = "HangingMan";
+		if (  arguments.DataBean.get("HangingMan") EQ -100 )
+		{local.TradeFlag = true;
+		local.IndicatorText = "HangingMan";
 		}
-		if (  arguments.beans.DataBeanToday.get("ThreeInside") EQ 100 )
-		{local.bearflag = true;
-		local.flagtype = "ThreeInside";
+		if (  arguments.DataBean.get("ThreeInside") EQ -100 )
+		{local.TradeFlag = true;
+		local.IndicatorText = "ThreeInside";
 		}
-		if (  arguments.beans.DataBeanToday.get("ThreeOutside") EQ 100 )
-		{local.bearflag = true;
-		local.flagtype = "ThreeOutside";
+		if (  arguments.DataBean.get("ThreeOutside") EQ -100 )
+		{local.TradeFlag = true;
+		local.IndicatorText = "ThreeOutside";
 		}
-				
-		if ( arguments.beans.DataBeanToday.get("Harami") EQ "100" )
-		{local.bearflag = true;
-		local.flagtype = "Harami";}
+		if (  arguments.DataBean.get("ThreeBlackCrows") EQ -100 )
+		{local.TradeFlag = true;
+		local.IndicatorText = "ThreeBlackCrows";}
 		
-		if (  arguments.beans.DataBeanToday.get("HaramiCross") EQ "100" )
-		{local.bearflag = true;
-		local.flagtype = "HaramiCross";}
+		if ( arguments.DataBean.get("Harami") EQ "-100" )
+		{local.TradeFlag = true;
+		local.IndicatorText = "Harami";}
 		
-		if (  arguments.beans.DataBeanToday.get("LongLine") EQ "100" )
-		{local.bearflag = true;
-		local.flagtype = "LongLine";}
+		if (  arguments.DataBean.get("HaramiCross") EQ "-100" )
+		{local.TradeFlag = true;
+		local.IndicatorText = "HaramiCross";}
 		
-		return local.bearflag ;
+		if (  arguments.DataBean.get("LongLine") EQ "-100" )
+		{local.TradeFlag = true;
+		local.IndicatorText = "LongLine";}
+		
+		return local;
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="BullishCandles" description="checks for bullish candles" access="public" displayname="BearishCandles" output="false" returntype="struct">
+		<!--- low below previous low  --->
+		<cfargument name="DataBean" required="true" />
+		<cfset var local = StructNew() />
+		<!--- todo: this should be a while loop  --->
+		<cfscript>
+		local.TradeFlag = false;
+		local.IndicatorText = "";
+		// Engulfing,Hammer,HangingMan,ThreeInside,ThreeOutside,ThreeBlackCrows,Harami,HaramiCross,LongLine
+		if (  arguments.DataBean.get("Engulfing") EQ 100 )
+		{local.TradeFlag = true;
+		local.IndicatorText = "Engulfing";
+		}
+		if (  arguments.DataBean.get("Hammer") EQ 100 )
+		{local.TradeFlag = true;
+		local.IndicatorText = "Hammer";
+		}
+		if (  arguments.DataBean.get("HangingMan") EQ 100 )
+		{local.TradeFlag = true;
+		local.IndicatorText = "HangingMan";
+		}
+		if (  arguments.DataBean.get("ThreeInside") EQ 100 )
+		{local.TradeFlag = true;
+		local.IndicatorText = "ThreeInside";
+		}
+		if (  arguments.DataBean.get("ThreeOutside") EQ 100 )
+		{local.TradeFlag = true;
+		local.IndicatorText = "ThreeOutside";
+		}
+		if ( arguments.DataBean.get("Harami") EQ "100" )
+		{local.TradeFlag = true;
+		local.IndicatorText = "Harami";}
+		if (  arguments.DataBean.get("HaramiCross") EQ "100" )
+		{local.TradeFlag = true;
+		local.IndicatorText = "HaramiCross";}
+		if (  arguments.DataBean.get("LongLine") EQ "100" )
+		{local.TradeFlag = true;
+		local.IndicatorText = "LongLine";}
+		
+		return local;
 		</cfscript>
 	</cffunction>
 	
@@ -134,7 +193,7 @@
 		<cfargument name="Beans" required="true" />
 		<cfargument name="Overbought" required="false" default=80 />
 		<cfscript>
-		if (ListFind("08/01/2011,08/22/2011,09/12/2011",dateformat(arguments.beans.DataBeanToday.Get("Date"),"mm/dd/yyyy"))) 
+		if (ListFind("08/01/2011,08/22/2011,09/12/2011",dateformat(arguments.beans.Original.DataBeanToday.Get("Date"),"mm/dd/yyyy"))) 
 		{ return true;  }
 		else
 		{ return false; }
@@ -145,7 +204,7 @@
 		<cfargument name="Beans" required="true" />
 		<cfargument name="Overbought" required="false" default=80 />
 		<cfscript>
-		if (ListFind("08/02/2011,08/19/2011,10/04/2011",dateformat(arguments.beans.DataBeanToday.Get("Date"),"mm/dd/yyyy"))) 
+		if (ListFind("08/02/2011,08/19/2011,10/04/2011",dateformat(arguments.beans.Original.DataBeanToday.Get("Date"),"mm/dd/yyyy"))) 
 		{ return true;  }
 		else
 		{ return false; }
@@ -156,7 +215,7 @@
 		<cfargument name="Beans" required="true" />
 		<cfargument name="Overbought" required="false" default=80 />
 		<cfscript>
-		if (ListFind("07/26/2011,08/18/2011,09/14/2011",dateformat(arguments.beans.DataBeanToday.Get("Date"),"mm/dd/yyyy"))) 
+		if (ListFind("07/26/2011,08/18/2011,09/14/2011",dateformat(arguments.beans.Original.DataBeanToday.Get("Date"),"mm/dd/yyyy"))) 
 		{ return true;  }
 		else
 		{ return false; }
@@ -167,7 +226,7 @@
 		<cfargument name="Beans" required="true" />
 		<cfargument name="Overbought" required="false" default=80 />
 		<cfscript>
-		if (ListFind("08/10/2011,09/01/2011,10/11/2011",dateformat(arguments.beans.DataBeanToday.Get("Date"),"mm/dd/yyyy"))) 
+		if (ListFind("08/10/2011,09/01/2011,10/11/2011",dateformat(arguments.beans.Original.DataBeanToday.Get("Date"),"mm/dd/yyyy"))) 
 		{ return true;  }
 		else
 		{ return false; }
@@ -179,7 +238,7 @@
 		<cfargument name="LRSLevel" required="false" default=1 />
 		<cfscript>
 		var local = StructNew(); 
-		if (arguments.beans.get("LinearRegSlope10") GT arguments.LRSLevel) 
+		if (arguments.beans.Original.DataBeanToday.get("LinearRegSlope10") GT arguments.LRSLevel) 
 		{
 		return true;
 		}
@@ -194,7 +253,7 @@
 		<cfargument name="Beans" required="true" />
 		<cfargument name="Overbought" required="false" default=60 />
 		<cfscript>
-		if (arguments.beans.DataBeanToday.get("RSI") GTE arguments.Overbought AND arguments.beans.DataBean1.get("RSI") LT arguments.Overbought) 
+		if (arguments.beans.Original.DataBeanToday.get("RSI") GTE arguments.Overbought AND arguments.DataBean.get("RSI") LT arguments.Overbought) 
 		{ return true;  }
 		else
 		{ return false; }
@@ -204,7 +263,7 @@
 	<cffunction name="S2Break" description="called from system" access="public" displayname="RSIoverbought" output="false" returntype="boolean">
 		<cfargument name="Beans" required="true" />
 		<cfscript>
-		if (arguments.beans.DataBeanToday.get("low") LTE arguments.beans.DataBean1.get("S2") ) 
+		if (argumentsbeans.Original.DataBeanToday.get("low") LTE arguments.DataBean.get("S2") ) 
 		{ return true;  }
 		else
 		{ return false; }
@@ -215,8 +274,8 @@
 		<cfargument name="Beans" required="true" />
 		<cfargument name="Overbought" required="false" default=60 />
 		<cfscript>
-		if (arguments.beans.DataBeanToday.get("High") GTE arguments.beans.DataBean1.get("R2") 
-		OR arguments.beans.DataBean1.get("High") GTE arguments.beans.DataBean2.get("R2") 
+		if (arguments.beans.Original.DataBeanToday.get("High") GTE arguments.beans.Original.DataBean1.get("R2") 
+		OR arguments.beans.Original.DataBean1.get("High") GTE arguments.beans.DataBean2.get("R2") 
 		OR arguments.beans.DataBean2.get("High") GTE arguments.beans.DataBean3.get("R2")
 		OR arguments.beans.DataBean3.get("High") GTE arguments.beans.DataBean4.get("R2")
 		OR arguments.beans.DataBean4.get("High") GTE arguments.beans.DataBean5.get("R2")
@@ -234,8 +293,8 @@
 		<cfargument name="Overbought" required="false" default=80 />
 		<cfscript>
 		if (
-		(arguments.beans.DataBeanToday.get("CCI5") LTE arguments.beans.DataBean1.get("CCI5") ) AND
-		(arguments.beans.DataBean1.get("CCI5") GTE arguments.beans.DataBean2.get("CCI5") ) 
+		(arguments.beans.Original.DataBeanToday.get("CCI5") LTE arguments.beans.Original.DataBean1.get("CCI5") ) AND
+		(arguments.beans.Original.DataBean1.get("CCI5") GTE arguments.beans.DataBean2.get("CCI5") ) 
 		)
 		{ return true;  }
 		else
@@ -248,8 +307,8 @@
 		<cfargument name="Overbought" required="false" default=-80 />
 		<cfscript>
 		if (
-		(arguments.beans.DataBeanToday.get("CCI5") GTE arguments.beans.DataBean1.get("CCI5") ) AND
-		(arguments.beans.DataBean1.get("CCI5") LTE arguments.beans.DataBean2.get("CCI5") ) 
+		(arguments.beans.Original.DataBeanToday.get("CCI5") GTE arguments.beans.Original.DataBean1.get("CCI5") ) AND
+		(arguments.beans.Original.DataBean1.get("CCI5") LTE arguments.beans.DataBean2.get("CCI5") ) 
 		)
 		{ return true;  }
 		else
@@ -261,8 +320,8 @@
 		<cfargument name="Beans" required="true" />
 		<cfargument name="Overbought" required="false" default=80 />
 		<cfscript>
-		if (arguments.beans.DataBeanToday.get("CCI5") GTE arguments.Overbought 
-		OR arguments.beans.DataBean1.get("CCI5") GTE arguments.Overbought 
+		if (arguments.beans.Original.DataBeanToday.get("CCI5") GTE arguments.Overbought 
+		OR arguments.beans.Original.DataBean1.get("CCI5") GTE arguments.Overbought 
 		OR arguments.beans.DataBean2.get("CCI5") GTE arguments.Overbought
 		OR arguments.beans.DataBean3.get("CCI5") GTE arguments.Overbought
 		OR arguments.beans.DataBean4.get("CCI5") GTE arguments.Overbought
@@ -279,7 +338,7 @@
 		<cfargument name="Beans" required="true" />
 		<cfargument name="OverSold" required="false" default=-80 />
 		<cfscript>
-		if (arguments.beans.DataBeanToday.get("CCI5") LTE arguments.OverSold) 
+		if (arguments.beans.Original.DataBeanToday.get("CCI5") LTE arguments.OverSold) 
 		{ return true;  }
 		else
 		{ return false; }
@@ -290,8 +349,8 @@
 		<!--- low below previous low  --->
 		<cfargument name="Beans" required="true" />
 		<cfscript>
-		if (arguments.beans.DataBeanToday.get("low") LTE arguments.beans.DataBean1.get("low")
-		//AND arguments.beans.DataBeanToday.get("close") LTE arguments.beans.DataBeanToday.get("open")
+		if (arguments.beans.Original.DataBeanToday.get("low") LTE arguments.beans.Original.DataBean1.get("low")
+		//AND arguments.beans.Original.DataBeanToday.get("close") LTE arguments.beans.Original.DataBeanToday.get("open")
 		) 
 		{ return true;  }
 		else
@@ -303,8 +362,8 @@
 		<!--- low below previous low  --->
 		<cfargument name="Beans" required="true" />
 		<cfscript>
-		if (arguments.beans.DataBeanToday.get("high") GTE arguments.beans.DataBean1.get("high")
-		//AND arguments.beans.DataBeanToday.get("close") GTE arguments.beans.DataBeanToday.get("open")
+		if (arguments.beans.Original.DataBeanToday.get("high") GTE arguments.beans.Original.DataBean1.get("high")
+		//AND arguments.beans.Original.DataBeanToday.get("close") GTE arguments.beans.Original.DataBeanToday.get("open")
 		) 
 		{ return true;  }
 		else
@@ -316,8 +375,8 @@
 		<!--- low below previous low  --->
 		<cfargument name="Beans" required="true" />
 		<cfscript>
-		if (arguments.beans.DataBeanToday.get("high") GTE (arguments.beans.DataBean1.get("high") + .50)
-		//AND arguments.beans.DataBeanToday.get("close") GTE arguments.beans.DataBeanToday.get("open")
+		if (arguments.beans.Original.DataBeanToday.get("high") GTE (arguments.beans.Original.DataBean1.get("high") + .50)
+		//AND arguments.beans.Original.DataBeanToday.get("close") GTE arguments.beans.Original.DataBeanToday.get("open")
 		) 
 		{ return true;  }
 		else
@@ -330,7 +389,7 @@
 		<cfargument name="Beans" required="true" />
 		<cfargument name="Overbought" required="false" default=80 />
 		<cfscript>
-		if (arguments.beans.DataBeanToday.get("High") GTE arguments.beans.DataBean1.get("open")) 
+		if (arguments.beans.Original.DataBeanToday.get("High") GTE arguments.beans.Original.DataBean1.get("open")) 
 		{ return true;  }
 		else
 		{ return false; }
@@ -344,7 +403,7 @@
 		<cfabort> --->
 		<cfscript>
 		//var local = StructNew(); 
-		if (arguments.beans.DataBeanToday.get("Low") LT arguments.beans.DataBean4.get("S1") ) 
+		if (arguments.beans.Original.DataBeanToday.get("Low") LT arguments.beans.DataBean4.get("S1") ) 
 		{
 		return true;
 		}
@@ -368,15 +427,15 @@
 		//var local = StructNew(); 
 		If (arguments.PivotPoint EQ "R1" OR arguments.PivotPoint EQ "R2")
 			{
-			if (arguments.beans.DataBeanToday.get("High") 
-			GT arguments.beans.DataBean1.get("#arguments.pivotPoint#") ) 
+			if (arguments.beans.Original.DataBeanToday.get("High") 
+			GT arguments.beans.Original.DataBean1.get("#arguments.pivotPoint#") ) 
 			{local.target = true;}
 			}
 			
 		If (arguments.PivotPoint EQ "S1" OR arguments.PivotPoint EQ "S2")	
 			{
-			if (arguments.beans.DataBeanToday.get("low") 
-			LT arguments.beans.DataBean1.get("#arguments.pivotPoint#") ) 
+			if (arguments.beans.Original.DataBeanToday.get("low") 
+			LT arguments.beans.Original.DataBean1.get("#arguments.pivotPoint#") ) 
 			{local.target = true;}
 		}
 		return local.target;
@@ -394,28 +453,28 @@
 				
 		If (arguments.PivotPoint EQ "L_PP") //long position 
 			{
-			if (arguments.beans.DataBeanToday.get("Low") 
-			LT arguments.beans.DataBean1.get("PP") ) 
+			if (arguments.beans.Original.DataBeanToday.get("Low") 
+			LT arguments.beans.Original.DataBean1.get("PP") ) 
 			{local.target = true;}
 			}
 		If (arguments.PivotPoint EQ "S_PP") //short position 
 			{
-			if (arguments.beans.DataBeanToday.get("High") 
-			GT arguments.beans.DataBean1.get("PP") ) 
+			if (arguments.beans.Original.DataBeanToday.get("High") 
+			GT arguments.beans.Original.DataBean1.get("PP") ) 
 			{local.target = true;}
 			}
 			
 		If (arguments.PivotPoint EQ "R1" OR arguments.PivotPoint EQ "R2")
 			{
-			if (arguments.beans.DataBeanToday.get("High") 
-			GT arguments.beans.DataBean1.get("#arguments.pivotPoint#") ) 
+			if (arguments.beans.Original.DataBeanToday.get("High") 
+			GT arguments.beans.Original.DataBean1.get("#arguments.pivotPoint#") ) 
 			{local.target = true;}
 			}
 			
 		If (arguments.PivotPoint EQ "S1" OR arguments.PivotPoint EQ "S2")	
 			{
-			if (arguments.beans.DataBeanToday.get("low") 
-			LT arguments.beans.DataBean1.get("#arguments.pivotPoint#") ) 
+			if (arguments.beans.Original.DataBeanToday.get("low") 
+			LT arguments.beans.Original.DataBean1.get("#arguments.pivotPoint#") ) 
 			{local.target = true;}
 		}
 		return local.target;
@@ -439,7 +498,7 @@
 		local.HKCurrentCandle = "Red";
 		}
 		
-		If ( arguments.HKbeans.DataBean1.get("Open") LT arguments.HKbeans.DataBean1.get("Close") )
+		If ( arguments.HKbeans.Original.DataBean1.get("Open") LT arguments.HKbeans.Original.DataBean1.get("Close") )
 		{
 		local.HKPrevCandle = "Green";
 		}
