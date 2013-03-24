@@ -25,10 +25,11 @@
 		request.method = "Historical";
 		
 		GetData(argumentcollection:arguments);
-		request.qryDataOriginal = session.objects.DataStorage.GetData("qryDataOriginal");
-		request.qryDataHA 		= session.objects.DataStorage.GetData("qryDataHA");
-		request.xmldata 		= session.objects.DataStorage.GetData("XMLDataOriginal");
-		request.xmldataHA 		= session.objects.DataStorage.GetData("XMLDataHA");
+		/* 
+		request.qryDataOriginal 
+		request.qryDataHA 		
+		request.xmldata 		
+		request.xmldataHA */
 		//dump(request);
 		session.objects.ReportService.ReportRunner(reportName:"HistoryReport",data:request.qryDataOriginal,symbol:arguments.symbol);
 		session.objects.ReportService.ReportRunner(reportName:"PivotReport",data:request.qryDataOriginal,symbol:arguments.symbol);
@@ -49,10 +50,11 @@
 		request.symbol = "#arguments.symbol#";
 		request.method = "Historical";
 		GetData(argumentcollection:arguments);
-		request.qryDataOriginal = session.objects.DataStorage.GetData("qryDataOriginal");
-		request.qryDataHA 		= session.objects.DataStorage.GetData("qryDataHA");
-		request.xmldata 		= session.objects.DataStorage.GetData("XMLDataOriginal");
-		request.xmldataHA 		= session.objects.DataStorage.GetData("XMLDataHA");
+		/* 
+		request.qryDataOriginal 
+		request.qryDataHA 		
+		request.xmldata 		
+		request.xmldataHA */
  		local.ReportArray 		= session.objects.StrategyService.Analyse();
 		session.objects.ReportService.AnalyseDataReport(symbol:arguments.symbol,data:local.reportArray,summaryOnly:arguments.summaryOnly);
 		// for unit testing 
@@ -78,7 +80,7 @@
 		</cfscript> 
 	</cffunction>
 	
-	<cffunction name="backtest" description="provide results using given system" access="public" displayname="" output="false" returntype="struct">
+	<cffunction name="Backtest" description="provide results using given system" access="public" displayname="" output="false" returntype="struct">
 		<!---- todo: add entry exit excel output ---->
 		<!--- <cfargument name="argumentData"> --->
 		<!--- the query is loaded with all indicators/rules run. this simplifies the application of a 
@@ -93,13 +95,15 @@
 		var local = structnew(); 
 		local.view = "historical";
 		GetData(argumentcollection:arguments);
-		request.qryDataOriginal = session.objects.DataStorage.GetData("qryDataOriginal");
-		request.qryDataHA 		= session.objects.DataStorage.GetData("qryDataHA");
-		request.xmldata 		= session.objects.DataStorage.GetData("XMLDataOriginal");
-		request.xmldataHA 		= session.objects.DataStorage.GetData("XMLDataHA");
- 		local.ReportArray 		= session.objects.StrategyService.Analyse();
-		local.data = historical(symbol:arguments.symbol,startdate:arguments.startdate,enddate:arguments.enddate);
-		local.result = session.objects.SystemService.RunSystem(SystemName:arguments.SystemName,qryData:request);
+		/* 
+		request.qryDataOriginal 
+		request.qryDataHA 		
+		request.xmldata 		
+		request.xmldataHA */
+		local.data 			= historical(symbol:arguments.symbol,startdate:arguments.startdate,enddate:arguments.enddate);
+		local.ReportArray 	= session.objects.StrategyService.Analyse();
+		local.result 		= session.objects.SystemService.RunSystem(SystemName:arguments.SystemName,qryData:request);
+		// output results of system 
 		session.objects.ReportService.ReportRunner(reportName:"BacktestReport",data:local.result.get("tradeHistory"),symbol:arguments.symbol);
 		request.method = "backtest";  
 		return local;
@@ -245,6 +249,7 @@
 		</cfscript>
 		<cfreturn local />
 	</cffunction>
+	
 	<cffunction name="PopulateData" description="populate the database with stock data" access="public" displayname="" output="false" returntype="struct">
 		<cfargument name="symbol" required="true" />
 		<cfargument name="startdate" required="true" />
@@ -272,6 +277,11 @@
 		session.objects.DataStorage.SetData(DataSet:"Low", theData:session.objects.DataService.GetLow() ); 
 		session.objects.DataStorage.SetData(DataSet:"XMLDataOriginal", theData:session.objects.XMLGenerator.GenerateXML(dataType:"Original") );
 		session.Objects.DataStorage.SetData(DataSet:"XMLDataHA", theData:session.objects.XMLGenerator.GenerateXML(dataType:"HeikenAshi") );
+				
+		request.qryDataOriginal = session.objects.DataStorage.GetData("qryDataOriginal");
+		request.qryDataHA 		= session.objects.DataStorage.GetData("qryDataHA");
+		request.xmldata 		= session.objects.DataStorage.GetData("XMLDataOriginal");
+		request.xmldataHA 		= session.objects.DataStorage.GetData("XMLDataHA");
 		return;
 		</cfscript> 
 	</cffunction>

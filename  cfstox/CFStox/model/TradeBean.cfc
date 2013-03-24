@@ -90,7 +90,6 @@
 		Set("SystemName",arguments.systemName);
 		variables.tracker = StructNew();
 		variables.trackhistory = ArrayNew(1);
-		
 		variables.trade = StructNew();
 		variables.trade.date = "";
 		variables.trade.TradeDescription = "";
@@ -136,38 +135,44 @@
 		local.tracker1.date = arguments.DataBeanToday.get("Date");
 		local.tracker1.tbstatusChange = arguments.DataBeanToday.get("TBStatusChange");
 		local.tracker1.Price = arguments.DataBeanToday.get("Close");		
-				
-		local.TradeType = DataBeanToday.get("TradeType");
+		local.TradeType = arguments.DataBeanToday.get("TradeType");
+		local.tracker1.TradeComment 	= arguments.DataBeanToday.get("TradeComment");
 		switch(local.TradeType){
 			case "OpenLong":
 				set("OpenLong",true);
 				local.tradeType = "OpenLong";
 				local.tracker1.TradeDescription = local.tradeType;
+				local.tracker1.TradeComment 	= arguments.DataBeanToday.get("TradeComment");
 			break;
 			case "OpenShort":
 				set("OpenShort",true);
 				local.tradeType = "OpenShort";
 				local.tracker1.TradeDescription = local.tradeType;
+				local.tracker1.TradeComment 	= arguments.DataBeanToday.get("TradeComment");
 			break;
 			case "CloseLong":
 				set("CloseLong",true);
 				local.tradeType = "CloseLong";
 				local.tracker1.TradeDescription = local.tradeType;
+				local.tracker1.TradeComment 	= arguments.DataBeanToday.get("TradeComment");
 			break;
 			case "CloseShort":
 				set("CloseShort",true);
 				local.tradeType = "CloseShort";
 				local.tracker1.TradeDescription = local.tradeType;
+				local.tracker1.TradeComment 	= arguments.DataBeanToday.get("TradeComment");
 			break;
 			case "OpenLongCloseShort":
 				set("OpenLongCloseShort",true);
 				local.tradeType = "OpenLongCloseShort";
 				local.tracker1.TradeDescription = local.tradeType;
+				local.tracker1.TradeComment 	= arguments.DataBeanToday.get("TradeComment");
 			break;
 			case "OpenShortCloseLong":
 				set("OpenShortCloseLong",true);
 				local.tradeType = "OpenShortCloseLong";
 				local.tracker1.TradeDescription = local.tradeType;
+				local.tracker1.TradeComment 	= arguments.DataBeanToday.get("TradeComment");
 			break;
 			}
 				
@@ -176,6 +181,7 @@
 		local.trade1 		= Duplicate(variables.trade);
 		local.trade1.date 	= arguments.DataBeanToday.get("Date");
 		local.trade1.TradeDescription = local.tradeType;
+		local.trade1.TradeComment 	= arguments.DataBeanToday.get("TradeComment");
 		local.trade1.TradePrice = arguments.DataBeanToday.get("TradePrice") ;
 		local.trade1.Price 	= arguments.DataBeanToday.get("Close") ;
 		local.nextindex = variables.tradeHistory.size();

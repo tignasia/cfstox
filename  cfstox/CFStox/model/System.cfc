@@ -25,7 +25,7 @@ The triggers are granular conditions such as RSI above a certain amount
 		</cfscript>
 	</cffunction>
 	
-	<cffunction name="SetTrades" description="run the system" access="private" displayname="SetTrades" output="false" returntype="Any">
+	<cffunction name="SetTrades" description="run the system" access="private" displayname="SetTrades" output="true" returntype="Any">
 		<cfargument name="Beans" required="true" />
 		<cfargument name="SystemName" required="true" />
 		<!--- 
@@ -36,16 +36,17 @@ The triggers are granular conditions such as RSI above a certain amount
 		--->
 		<cfset var local = StructNew() />
 		<cfscript>
-		local.HKdatabeantoday 	= arguments.beans.Databeans.HA_DataBeans.DataBeanToday;
-		local.HKbeans 			= arguments.beans.Databeans.HA_DataBeans;
-		local.databeantoday 	= arguments.beans.Databeans.original_databeans.DataBeanToday;
-		local.beans 			= arguments.beans.Databeans.original_databeans;
+		local.beans.HA 					= arguments.beans.HA;
+		local.Beans.HA.DataBeanToday 	= arguments.beans.HA.DataBeanToday;
+		local.beans.Original			= arguments.beans.Original;
+		local.Beans.Original.DataBeanToday 	= arguments.beans.Original.DataBeanToday;
 		local.TrackingBean 		= arguments.beans.TrackingBean;
 		local.triggers 			= StructNew();
 		local.triggers.boolOpenShort 	= false;
 		local.triggers.boolCloseShort 	= false;
 		local.triggers.boolOpenLong 	= false;
 		local.triggers.boolCloseLong 	= false;
+		local.triggers.TradeComment	 	= "";
 		local.triggers.ShortEntryPoint 	= "";
 		local.triggers.ShortExitPoint 	= "";
 		local.triggers.LongEntryPoint 	= "";
@@ -53,33 +54,40 @@ The triggers are granular conditions such as RSI above a certain amount
 		</cfscript>
 		<cfinvoke method="#arguments.SystemName#"  argumentcollection="#local#"  returnvariable="triggers" />
 		<cfscript>
+		local.Beans.Original.DataBeanToday.Set("TradeComment",local.triggers.TradeComment);	
 		local.strStatus = StructNew();
 		local.strStatus.initialStatus = arguments.beans.TrackingBean.Get("Status");
 		SetEntryExit(beans:local.beans,triggers:local.triggers);			
 		if (arguments.beans.TrackingBean.Get("Status") EQ "Short" AND local.triggers.boolCloseShort)
 		{	// short exit
-			local.databeantoday.Set("TradeType","CloseShort");	
+			local.Beans.Original.DataBeanToday.Set("TradeType","CloseShort");
 			arguments.beans.TrackingBean.Set("Status","");
 			local.strStatus.Status1 = arguments.beans.TrackingBean.Get("Status");
 		}
-				
-		if (local.strStatus.initialStatus EQ "" AND NOT local.triggers.boolCloseShort AND local.triggers.boolOpenShort)
-		{ // short entry
-			local.databeantoday.Set("tradeType","OpenShort");	
+		</cfscript>
+		
+		<cfscript>	
+		if (local.strStatus.initialStatus EQ ""){ 
+			if(NOT local.triggers.boolCloseShort AND local.triggers.boolOpenShort)
+			{ // short entry
+			local.Beans.Original.DataBeanToday.Set("tradeType","OpenShort");
+			local.Beans.Original.DataBeanToday.Set("TradeComment",local.triggers.TradeComment);		
 			arguments.beans.TrackingBean.Set("Status","Short");
 			local.strStatus.Status2 = arguments.beans.TrackingBean.Get("Status");
+			}
 		}
-		
 		if (arguments.beans.TrackingBean.Get("Status") EQ "Long" AND local.triggers.boolCloseLong)
 			{ //long exit
-			local.databeantoday.Set("TradeType","CloseLong");	
+			local.Beans.Original.DataBeanToday.Set("TradeType","CloseLong");
+			local.Beans.Original.DataBeanToday.Set("TradeComment",local.triggers.TradeComment);		
 			arguments.beans.TrackingBean.Set("Status","");
 			local.strStatus.Status3 = arguments.beans.TrackingBean.Get("Status");
 			}
 			
 		if (arguments.beans.TrackingBean.Get("Status") EQ "" AND NOT local.triggers.boolCloseLong AND local.triggers.boolOpenLong)
 			{
-			local.databeantoday.Set("TradeType","OpenLong");	
+			local.Beans.Original.DataBeanToday.Set("TradeType","OpenLong");
+			local.Beans.Original.DataBeanToday.Set("TradeComment",local.triggers.TradeComment);		
 			arguments.beans.TrackingBean.Set("Status","Long");
 			local.strStatus.Status4 = arguments.beans.TrackingBean.Get("Status");
 			}
@@ -87,30 +95,31 @@ The triggers are granular conditions such as RSI above a certain amount
 		// check for close long and open short
 		if (local.triggers.boolOpenLong AND local.triggers.boolCloseShort AND arguments.beans.TrackingBean.Get("Status") NEQ "Long")
 		{
-		local.databeantoday.Set("TradeType","OpenLongCloseShort");	
+		local.Beans.Original.DataBeanToday.Set("TradeType","OpenLongCloseShort");
+		local.Beans.Original.DataBeanToday.Set("TradeComment",local.triggers.TradeComment);		
 		arguments.beans.TrackingBean.Set("Status","Long");
 		local.strStatus.Status5 = arguments.beans.TrackingBean.Get("Status");
 		} 
-			// check for close long and open short 
+		// check for close long and open short 
 		if (local.triggers.boolOpenShort AND local.triggers.boolCloseLong AND arguments.beans.TrackingBean.Get("Status") NEQ "Short")
 		{
-		local.databeantoday.Set("TradeType","OpenShortCloseLong");	
+		local.Beans.Original.DataBeanToday.Set("TradeType","OpenShortCloseLong");
+		local.Beans.Original.DataBeanToday.Set("TradeComment",local.triggers.TradeComment);		
 		arguments.beans.TrackingBean.Set("Status","Short");
+		arguments.beans.TrackingBean.Set("TradeComment", local.triggers.TradeComment );
 		local.strStatus.Status6 = arguments.beans.TrackingBean.Get("Status");
 		}
-		
 		if (local.strStatus.initialStatus EQ arguments.beans.TrackingBean.Get("Status"))
-		{
-			local.tradelength = arguments.beans.TrackingBean.Get("Tradelength");
+		{	local.tradelength = arguments.beans.TrackingBean.Get("Tradelength");
 			arguments.beans.TrackingBean.Set("Tradelength",local.tradelength + 1);
 		}
 		else
 		{
 		arguments.beans.TrackingBean.Set("Tradelength",0);
 		}
-		local.databeantoday.Set("TBStatusChange",local.strStatus);			
+		local.Beans.Original.DataBeanToday.Set("TBStatusChange",local.strStatus);			
 		</cfscript>
-		<cfreturn local.databeantoday />	
+		<cfreturn local.Beans.Original.DataBeanToday />	
 	</cffunction>
 	
 	<cffunction name="ShortEntryRVBD" description="Max profit from riverbed drops" access="public" displayname="test" output="false" returntype="Any">
@@ -150,11 +159,22 @@ The triggers are granular conditions such as RSI above a certain amount
 		var local = StructNew();
 		local.triggers 	=	arguments.triggers;
 		local.beans 	=	arguments.Beans;
-		local.triggers.boolOpenShort = session.objects.SystemTriggers.BearishCandles(beans:local.beans);	
-		local.triggers.boolCloseShort = session.objects.SystemTriggers.BullishCandles(beans:local.beans,PivotPoint:"R1");
+		local.Setup 	= session.objects.SystemTriggers.BearishCandles(DataBean:local.beans.Original.DataBean1);	
+		local.confirm 	= session.objects.SystemTriggers.LowerClose(PrevDataBean:local.beans.Original.DataBean1,CurrDataBean:local.beans.Original.DataBeanToday);
+		local.triggers.TradeComment &= local.Setup.IndicatorText;
+		local.triggers.TradeComment &= " " & local.Confirm.IndicatorText;
+		if (local.Setup.TradeFlag and local.confirm.TradeFlag ) {
+		local.triggers.boolCloseShort = false;
+		local.triggers.boolOpenShort = true;
+		}
+		if (NOT (local.Setup.TradeFlag and local.confirm.TradeFlag) )
+		local.triggers.boolCloseShort = true;
+		/* local.Confirm = session.objects.SystemTriggers.HigherClose(PrevDataBean:local.beans.Original.DataBean1,CurrDataBean:local.beans.Original.DataBeanToday);
+		if (local.Confirm.TradeFlag )
+		local.triggers.boolCloseShort = true;
+		local.triggers.TradeComment &= local.confirm.IndicatorText;	*/
 		//local.triggers.boolCloseLong = session.objects.SystemTriggers.BearishCandles(beans:local.beans);	
 		//local.triggers.boolOpenLong = session.objects.SystemTriggers.BullishCandles(beans:local.beans,PivotPoint:"R1");
-		
 		return local.triggers;
 		</cfscript> 
 	</cffunction>
@@ -270,12 +290,8 @@ The triggers are granular conditions such as RSI above a certain amount
 		<cfargument name="beans" required="true" />
 		<cfscript>
 		var local = StructNew();
-		//</cfscript>
-		//<cfdump label="beans" var="#arguments.beans#">
-		//<cfabort>
-		//<cfscript> 
-		local.triggers 	= arguments.triggers;
-		local.beans 	=    arguments.Beans;	
+		local.triggers 		= arguments.triggers;
+		local.beans 		= arguments.Beans;	
 		local.TradePrice 	= "";
 			
 		if(local.triggers.ShortEntryPoint NEQ "")
@@ -957,11 +973,14 @@ The triggers are granular conditions such as RSI above a certain amount
 	
 	<cffunction name="Dump" description="utility" access="public" displayname="test" output="false" returntype="Any">
 		<!--- Takes TradeBeans as arguments --->
-		<!--- Returns the hekien-ashi candlestick open high low and close for past 5 days--->
 		<cfargument name="error" required="true" />
-		<cfargument name="object" required="true" />
+		<!--- <cfargument name="object" required="true" /> --->
 		<cfdump label="error:" var="#arguments.error#">
-		<cfdump label="bean:" var="#arguments.object.GetMemento()#">
-		<cfabort>
+		<!--- <cfdump label="bean:" var="#arguments.object.GetMemento()#"> --->
 	</cffunction>
+	
+	<cffunction name="Abort" description="utility" access="public" displayname="test" output="false" returntype="Any">
+		<cfabort>		
+	</cffunction>
+	
 </cfcomponent>
