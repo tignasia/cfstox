@@ -142,6 +142,10 @@
 		{local.TradeFlag = true;
 		local.IndicatorText = "LongLine";}
 		
+		if (  arguments.DataBean.get("Doji") EQ "-100" )
+		{local.TradeFlag = true;
+		local.IndicatorText = "Doji";}
+		
 		return local;
 		</cfscript>
 	</cffunction>

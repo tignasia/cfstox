@@ -9,6 +9,11 @@
 	<cfset form.actionitem = url.actionitem >
 </cfif>
 
+<cfif StructkeyExists(form,"ActionItem") >
+<cfelse>
+	<cflocation url="../index.cfm">
+</cfif>
+
 <cfinvoke component="#session.objects.controller#" method="#form.actionitem#"  argumentcollection="#form#"  returnvariable="resultData" />
 
 <cfif request.view EQ "home">
