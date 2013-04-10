@@ -24,8 +24,8 @@ eventually add trade table in database to trake trades, profit/loss
 	<!--- get alerts --->
 	<cfset local.qryAlerts 			= GetAlerts() />
 	<cfset local.AlertSymbolList	= GetAlertList(local.qryAlerts) />
-	<cfset local.qryCurrentdata = session.objects.dataService.getCurrentData(SymbolList:local.AlertSymbolList) />
-	<cfset local.AlertList =  checkAlertList(QryCurrentData:local.qryCurrentdata,qryAlerts:local.qryAlerts) />
+	<cfset local.qryCurrentdata 	= session.objects.dataService.getCurrentData(SymbolList:local.AlertSymbolList) />
+	<cfset local.AlertList 			= checkAlertList(QryCurrentData:local.qryCurrentdata,qryAlerts:local.qryAlerts) />
 	<!--- loop over alerts  --->
 	<cfloop array=#local.AlertList#  index="i" >
 		<cfif i.AlertTriggered>
@@ -51,12 +51,11 @@ eventually add trade table in database to trake trades, profit/loss
 		<cfset local.AlertArray[arguments.qryAlerts.currentRow].SYMBOL 	= arguments.qryAlerts.symbol />
 		<cfset local.AlertArray[arguments.qryAlerts.currentRow].VALUE 	= arguments.qryAlerts.value />
 		<cfset local.AlertArray[arguments.qryAlerts.currentRow].ACTION 	= arguments.qryAlerts.Action  />
-		<cfset local.AlertArray[arguments.qryAlerts.currentRow].ALERTED 	= arguments.qryAlerts.Alerted  />
-		<cfset local.AlertArray[arguments.qryAlerts.currentRow].MESSAGE 	= arguments.qryAlerts.Message  />
+		<cfset local.AlertArray[arguments.qryAlerts.currentRow].ALERTED = arguments.qryAlerts.Alerted  />
+		<cfset local.AlertArray[arguments.qryAlerts.currentRow].MESSAGE = arguments.qryAlerts.Message  />
 		<cfset local.results = checkAlert(QryCurrentData:arguments.qryCurrentdata,qryAlert:arguments.qryAlerts) />
 		<cfset local.AlertArray[arguments.qryAlerts.currentRow].AlertTriggered = local.results.AlertTriggered />
 		<cfset local.AlertArray[arguments.qryAlerts.currentRow].Currprice = local.results.Currprice />
-		
 	</cfloop>
 	<cfreturn local.AlertArray />
 	</cffunction>
@@ -113,8 +112,8 @@ eventually add trade table in database to trake trades, profit/loss
 	
 	<cffunction name="AddAlert" access="public" returntype="any" output="false"
 		hint="This updates the current alerts.">
-		<cfargument name="AlertBean" 	required="true"  />
-		<cfargument name="alertStatus" required="false" default="false">
+		<cfargument name="AlertBean"	required="true"  />
+		<cfargument name="alertStatus"	required="false" default="false">
 		<cfset var LOCAL = StructNew() />
 		<cfset arguments.AlertBean.SetAlerted(arguments.AlertStatus)>
 		<cfset local.qryAlerts = session.objects.AlertDAO.AddAlert(alertBean:arguments.AlertBean) />

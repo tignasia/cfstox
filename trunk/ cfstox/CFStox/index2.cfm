@@ -75,6 +75,7 @@ select * from results order by DateOne
 
 <!--- loop and calculate momentum and ROC --->
 
-
+jimancestry@hushmail.com
+ancestry01
 
 
