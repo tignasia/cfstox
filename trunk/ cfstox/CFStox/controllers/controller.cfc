@@ -220,13 +220,24 @@
 		request.view 		= "alerts";
 		request.context 	= structNew();
 		rc = request.context;
-		local.a_symbol 		= ListtoArray(form.Symbol);
-		local.a_alerted 	= ListtoArray(form.alerted);
-		local.a_delete 		= ListtoArray(form.delete);
-		local.a_action 		= ListtoArray(form.action);
-		local.a_message 	= ListtoArray(form.message);
-		local.a_value 		= ListtoArray(form.value);
-		local.a_strategy 	= ListtoArray(form.strategy);
+		local.requestMap 	= getPageContext().getRequest().getParameterMap();
+		local.skl = StructKeyList(local.requestMap);
+		local.ska = StructKeyArray(local.requestMap);
+			
+		local.a_symbol 		= local.requestMap["Symbol"];
+		local.a_action 		= local.requestmap["Action"];
+		local.a_message 	= local.requestmap["Message"];
+		local.a_value 		= local.requestmap["Value"];
+		local.a_strategy 	= local.requestmap["Strategy"];
+		local.Counter 		= local.requestmap["itemcount"][1];
+		local.a_alerted		= ArrayNew(1);
+		local.a_delete		= ArrayNew(1);
+		//dump(local,"struct");	
+		for(i=1;i LTE local.Counter;i++){
+		local.a_alerted[i] = local.requestmap["Alerted#i#"][1];	
+		local.a_delete[i] = local.requestmap["Delete#i#"][1];
+		}
+		//dump(local,"struct");	
 		session.objects.AlertService.DeleteAlerts();
 		session.objects.AlertService.UpdateAlerts(local);
 		rc.queryAlerts 		= session.objects.AlertService.GetAlerts(); 
