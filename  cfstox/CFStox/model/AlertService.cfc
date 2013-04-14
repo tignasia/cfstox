@@ -95,7 +95,7 @@ eventually add trade table in database to trake trades, profit/loss
 		hint="This updates the current alerts.">
 		<cfargument name="formdata" required="true"  />
 		<cfset var LOCAL = StructNew() />
-		<cfset local.formlen = formdata.a_symbol.Size() />
+		<cfset local.formlen = formdata.Counter />
 		<cfloop from="1" to="#local.formlen#" index="i">
 			<cfset local.AlertBean = GetAlertBean() />
 			<cfset local.AlertBean.SetSymbol(formdata.a_symbol[i]) />
@@ -105,9 +105,10 @@ eventually add trade table in database to trake trades, profit/loss
 			<cfset local.AlertBean.SetAlerted(formdata.a_alerted[i]) />
 			<cfset local.AlertBean.SetStrategy(formdata.a_strategy[i]) />
 			<cfif arguments.formdata.a_delete[i] NEQ "true">
-			<cfset session.objects.AlertDAO.AddAlert(alertBean:local.AlertBean) />
+			<cfset session.objects.AlertDAO.AddAlert(alertBean:local.AlertBean) /> 
 			</cfif>
 		</cfloop>
+		<cfreturn/>
 	</cffunction>
 	
 	<cffunction name="AddAlert" access="public" returntype="any" output="false"
