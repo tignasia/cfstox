@@ -208,6 +208,7 @@
 		local.a_message 	= ListtoArray(form.message);
 		local.a_value 		= ListtoArray(form.value);
 		local.a_strategy 	= ListtoArray(form.strategy);
+		local.Counter 		= form.counter;
 		session.objects.AlertService.UpdateAlerts(local);
 		rc.queryAlerts 		= session.objects.AlertService.GetAlerts(); 
 		</cfscript>
@@ -219,27 +220,88 @@
 		var local 			= structnew();
 		request.view 		= "alerts";
 		request.context 	= structNew();
-		rc = request.context;
-		local.requestMap 	= getPageContext().getRequest().getParameterMap();
-		local.skl = StructKeyList(local.requestMap);
-		local.ska = StructKeyArray(local.requestMap);
-			
-		local.a_symbol 		= local.requestMap["Symbol"];
-		local.a_action 		= local.requestmap["Action"];
-		local.a_message 	= local.requestmap["Message"];
-		local.a_value 		= local.requestmap["Value"];
-		local.a_strategy 	= local.requestmap["Strategy"];
-		local.Counter 		= local.requestmap["itemcount"][1];
-		local.a_alerted		= ArrayNew(1);
-		local.a_delete		= ArrayNew(1);
-		//dump(local,"struct");	
-		for(i=1;i LTE local.Counter;i++){
-		local.a_alerted[i] = local.requestmap["Alerted#i#"][1];	
-		local.a_delete[i] = local.requestmap["Delete#i#"][1];
+		rc 					= request.context;
+		local.formdata		= StructNew(); 
+		if(application.server EQ  "ColdFusion Server"){
+			// this is a struct of arrays 
+			local.requestMap 	= getPageContext().getRequest().getParameterMap();
+			//dump(local.requestmap);	
+			local.formdata.a_symbol 	= local.requestMap["SYMBOL"];
+			local.formdata.a_action 	= local.requestmap["Action"];
+			local.formdata.a_message 	= local.requestmap["Message"];
+			local.formdata.a_value 		= local.requestmap["Value"];
+			local.formdata.a_strategy 	= local.requestmap["Strategy"];
+			local.formdata.Counter 		= local.requestmap["counter"][1];
+			local.formdata.a_alerted	= ArrayNew(1);
+			local.formdata.a_delete		= ArrayNew(1);
+			for(i=1;i LTE local.FormData.Counter;i++){
+			local.formdata.a_alerted[i] = local.requestmap["Alerted#i#"][1];	
+			local.formdata.a_delete[i] = local.requestmap["Delete#i#"][1];
+			}
+			//dump(local.formdata);
 		}
-		//dump(local,"struct");	
+		if(application.server EQ  "Railo"){
+		// loop over the array and populate the local.formdata struct
+			local.formdata.a_symbol 	= arrayNew(1);
+			local.formdata.a_action 	= arrayNew(1);
+			local.formdata.a_message 	= arrayNew(1);
+			local.formdata.a_value 		= arrayNew(1);
+			local.formdata.a_strategy 	= arrayNew(1);
+			local.formdata.Counter 		= form.counter;
+			local.formdata.a_alerted	= ArrayNew(1);
+			local.formdata.a_delete		= ArrayNew(1);
+			loc 		= StructNew() ;
+			loc.data	= ArrayNew(1);
+			// array of objects one for each form element
+			RawArray 	= form.getRaw();
+			for(loc.i = 1; loc.i LTE ArrayLen(rawArray); loc.i = loc.i + 1){
+				// Symbol Action Message Value Strategy Alerted Delete
+				KeyVal 			= StructNew();
+				KeyVal.key 		= rawArray[loc.i].getName();
+				KeyVal.value 	= rawArray[loc.i].getValue();
+				
+				switch (KeyVal.key){
+				case "Symbol":
+				local.formdata.a_symbol.add(KeyVal.value);
+				break;
+				case "Action":
+				local.formdata.a_action.add(KeyVal.value);
+				break;
+				case "Message":
+				local.formdata.a_message.add(KeyVal.value);
+				break;
+				case "Value":
+				local.formdata.a_value.add(KeyVal.value);
+				break;
+				case "Strategy":
+				local.formdata.a_strategy.add(KeyVal.value);
+				break;
+				}
+				if(left(KeyVal.key,7) EQ "Alerted")
+				local.formdata.a_alerted.add(KeyVal.value);
+				if(left(KeyVal.key,6) EQ "Delete")
+				local.formdata.a_delete.add(KeyVal.value);
+			}
+			//dump(local.formdata);
+			//dump(loc.data);
+			/* symLoc = loc.data.size() -1;
+			symCount = 1;
+			SymElements = loc.data[symLoc].Value * 7;
+			for(loc.i = 2; loc.i LTE SymElements; loc.i = loc.i + 7){
+			// Symbol Action Message Value Strategy Alerted Delete
+			local.formdata.a_symbol[symCount] 	= loc.data[loc.i]["Symbol"];
+			local.formdata.a_action[symCount] 	= loc.data[loc.i+1];
+			local.formdata.a_message[symCount]	= loc.data[loc.i+2];
+			local.formdata.a_value[symCount] 	= loc.data[loc.i+3];
+			local.formdata.a_strategy[symCount]	= loc.data[loc.i+4];
+			local.formdata.a_alerted[symCount]	= loc.data[loc.i+5];
+			local.formdata.a_delete[symCount]	= loc.data[loc.i+6];
+			symCount = Symcount + 1; 
+			}  */
+			
+		}	
 		session.objects.AlertService.DeleteAlerts();
-		session.objects.AlertService.UpdateAlerts(local);
+		session.objects.AlertService.UpdateAlerts(local.formdata);
 		rc.queryAlerts 		= session.objects.AlertService.GetAlerts(); 
 		</cfscript>
 		<cfreturn local />
