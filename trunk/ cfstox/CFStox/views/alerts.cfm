@@ -26,12 +26,15 @@
 <label for="Delete" >Delete</label>
 <input type="radio" style="width=5%" name="Delete" id="Delete" value="false" checked>
 <input type="radio" style="width=5%" name="Delete" id="Delete" value="true">
+
+<input type="hidden" id="counter" name="counter" value="1">
 </br>
 </fieldset>
 <input type="submit" name="submit" id="submit" value="Submit" />
 </form>
 
-<form action="controller.cfm" method="post" id="UpdateAlerts">
+<form action="controller.cfm" method="post" id="UpdateAlerts" 
+	<cfif application.server EQ "Railo"> enctype="multipart/form-data" </cfif> >
 <fieldset title="Edit Alerts"><legend>Edit Alerts</legend>
 <input type="hidden" id="actionitem" name="actionitem" value="UpdateAlerts">
 <cfloop query="request.context.queryAlerts">
@@ -39,7 +42,7 @@
 <cfset curritem = request.context.queryAlerts.currentrow />
 
 <label for="Symbol" >Symbol:</label>
-<input type="text" style="width:10%" name="Symbol" id="Symbol" value="#request.context.queryAlerts.symbol#">
+<input type="text" style="width:10%" name="SYMBOL" id="SYMBOL" value="#request.context.queryAlerts.symbol#">
 
 <label for="Action" >Action:</label>
 <input type="text" style="width:5%" name="Action" id="Action" value="#request.context.queryAlerts.action#">
@@ -65,7 +68,7 @@
 <input type="radio" style="width=5%" name="Delete#curritem#" id="Delete" value="true">
 </br>
 </cfloop>
-<input type="hidden" id="itemcount" name="itemcount" value="#curritem#">
+<input type="hidden" id="counter" name="counter" value="#curritem#">
 </fieldset>
 <input type="submit" name="submit" id="submit" value="Submit" />
 </form>
