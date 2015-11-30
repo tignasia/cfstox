@@ -1,0 +1,1 @@
+Coldfusion port of the ta-lib techical analysis library
